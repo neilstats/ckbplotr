@@ -1,0 +1,22 @@
+Package: ckbplotr
+Title: Create CKB Plots
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Neil",
+           family = "Wright",
+           role = c("aut", "cre"),
+           email = "neil.wright@ndph.ox.ac.uk")
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    ggplot2
+Imports: 
+    magrittr,
+    dplyr,
+    tibble,
+    rlang,
+    readr,
+    purrr
+RoxygenNote: 6.1.1
+Suggests: 
+    Jasper

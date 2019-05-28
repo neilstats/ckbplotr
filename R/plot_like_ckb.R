@@ -1,0 +1,77 @@
+#' Make a ggplot into CKB style
+#'
+#' @param plot A ggplot2 plot object.
+#' @param xlims A numeric vector of length two. The limits of the x-axis.
+#' @param ylims A numeric vector of length two. The limits of the y-axis.
+#' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
+#' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
+#' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
+#'
+#' @return A ggplot2 plot.
+#'
+#' @import ggplot2
+#' @export
+
+plot_like_ckb <- function(
+  plot,
+  xlims,
+  ylims,
+  gap=c(0.025,0.025),
+  ext=c(0.025,0.025),
+  ratio=1.5
+){
+
+  # get plot axis transformations
+  tf_x    <- ggplot_build(plot)$layout$panel_scales_x[[1]]$trans$transform
+  invtf_x <- ggplot_build(plot)$layout$panel_scales_x[[1]]$trans$inverse
+  tf_y    <- ggplot_build(plot)$layout$panel_scales_y[[1]]$trans$transform
+  invtf_y <- ggplot_build(plot)$layout$panel_scales_y[[1]]$trans$inverse
+  tf_x    <- ifelse(is.null(tf_x), identity, tf_x)
+  invtf_x <- ifelse(is.null(invtf_x), identity, invtf_x)
+  tf_y    <- ifelse(is.null(tf_y), identity, tf_y)
+  invtf_y <- ifelse(is.null(invtf_y), identity, invtf_y)
+
+  # calculate plot limits
+  limits <- list(xaxis = xlims, yaxis = ylims)
+  addtox <- c(gap[[1]]*diff(range(tf_x(limits[["xaxis"]]))),
+              ext[[1]]*diff(range(tf_x(limits[["xaxis"]]))))
+  addtoy <- c((1/ratio)*gap[[2]]*diff(range(tf_y(limits[["yaxis"]]))),
+              (1/ratio)*ext[[2]]*diff(range(tf_y(limits[["yaxis"]]))))
+  limits[["x"]] <- invtf_x(tf_x(limits[["xaxis"]]) + c(-1, 1)*addtox)
+  limits[["y"]] <- invtf_y(tf_y(limits[["yaxis"]]) + c(-1, 1)*addtoy)
+  limits[["ratio"]] <- ratio*diff(range(tf_x(limits[["xaxis"]])))/diff(range(tf_y(limits[["yaxis"]])))
+
+  plot +
+    coord_fixed(ratio  = limits[["ratio"]],
+                xlim   = limits[["x"]],
+                ylim   = limits[["y"]],
+                expand = FALSE,
+                clip = "off") +
+    geom_segment(aes(x    = limits[["x"]][[1]],
+                     xend = limits[["x"]][[1]],
+                     y    = limits[["yaxis"]][[1]],
+                     yend = limits[["yaxis"]][[2]]),
+                 lwd  = 0.5,
+                 lineend = "round",
+                 colour = "black") +
+    geom_segment(aes(x    = limits[["xaxis"]][[1]],
+                     xend = limits[["xaxis"]][[2]],
+                     y    = limits[["y"]][[1]],
+                     yend = limits[["y"]][[1]]),
+                 lwd  = 0.5,
+                 lineend = "round",
+                 colour = "black") +
+    theme_bw() +
+    theme(panel.grid       = element_blank(),
+          panel.border     = element_blank(),
+          axis.ticks       = element_line(colour = "black"),
+          axis.text        = element_text(colour = "black"),
+          axis.title       = element_text(face = "bold"),
+          axis.title.x     = element_text(margin = unit(c(1,0,0,0), "lines")),
+          axis.title.y     = element_text(margin = unit(c(0,1,0,0), "lines"), angle = 90),
+          axis.line        = element_blank(),
+          plot.margin      = unit( c(0,0,0.5,0), "lines"),
+          plot.background  = element_blank(),
+          plot.title       = element_text(hjust = 0.5, face = "bold")
+    )
+}
