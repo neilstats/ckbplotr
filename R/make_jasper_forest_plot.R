@@ -2,6 +2,8 @@
 #'
 #' \code{make_jasper_forest_plot} creates a forest plot with Jasper
 #'
+#' This function requires the in-house Jasper package.
+#'
 #' The function creates a suitable csv, then runs the Jasper::ForestFromCSV
 #' to create a forest plot.
 #'
