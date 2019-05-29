@@ -1,0 +1,172 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+# ckbplotr
+
+`ckbplotr` provides functions to help create and style plots in R. It is being
+developed by, and primarily for, [China Kadoorie Biobank](http://www.ckbiobank.org) 
+researchers.
+
+## Installation
+The latest development version of `ckbplotr` can be installed directly from 
+github using devtools.
+```{r, eval = FALSE}
+install.packages('devtools')
+devtools::install_github('neilstats/ckbplotr')
+```
+
+`ckbplotr` can also be installed from its source package. The R packages 
+`ggplot2`, `magrittr`, `readr`, `tibble`, `dplyr`, `purrr` and `rlang` must 
+first be installed. These are part of the collection of tidyverse packages.
+```{r, eval = FALSE}
+# The easiest way is to install the whole tidyverse:
+install.package("tidyverse")
+
+# # Or install just these packages:
+# install.packages(c("ggplot2", "readr", "dplyr", "purrr"))
+```
+Then `ckbplotr` can be installed from its source package using the code:
+```{r, eval = FALSE}
+install.packages("ckbplotr.tar.gz", repos = NULL, type = "source")
+```
+Or, in RStudio, open the "Tools" menu and select "Install Packages...".
+In the "Install from..." box select "Package Archive File", and in the
+"Package archive" box browse to the ckbplotr.tar.gz file.
+
+
+
+
+## The make_shape_plot function
+
+The `make_shape_plot` function creates a plot of estimates and CIs against risk
+factor levels using the `ggplot2` package.
+
+The function returns a named list containing:
+
+* plot: the plot
+* code: ggplot2 code to generate the plot
+
+The function uses the `plot_like_ckb` function to modify the theme and control
+the look of the plot.
+
+In RStudio, the ggplot2 code used to generate the plot will be shown in the 'Viewer'
+pane. This code can be copied and further edited to adapt the plot.
+
+
+### Examples
+Given a data frame of estimates and standard errors (to be plotted on the y axis),
+and risk factor levels (to be plotted on the x axis), a plot can be created.
+```{r}
+library(ggplot2)
+library(ckbplotr)
+
+results <- data.frame(
+  est = c(1, 1.25, 1.5, 1.75, 1.1, 1.35, 1.75, 2),
+  se = c(0.08, 0.02, 0.07, 0.15, 0.05, 0.02, 0.07, 0.1),
+  rf = c(20, 28, 35, 50, 18.5, 25, 32, 47),
+  n = c(109, 103, 143, 104, 140, 134, 127, 99),
+  is_female = c(0, 0, 0, 0, 1, 1, 1, 1)
+)
+
+plot <- make_shape_plot(results[results$is_female == 1,],
+                        col.x        = "rf",
+                        col.estimate = "est",
+                        col.stderr   = "se",
+                        col.n        = "n",
+                        xlims        = c(15,50),
+                        ylims        = c(0.5, 3),
+                        scalepoints  = TRUE,
+                        title        = NULL)
+```
+
+The `col.group` argument can be supplied to plot results for different groups (in
+shades of grey).
+```{r}
+plot <- make_shape_plot(results,
+                        col.x        = "rf",
+                        col.estimate = "est",
+                        col.stderr   = "se",
+                        col.n        = "n",
+                        col.group    = "is_female",
+                        xlims        = c(15,50),
+                        ylims        = c(0.5, 3),
+                        scalepoints  = TRUE,
+                        title        = NULL)
+```
+
+
+
+
+## The plot_like_ckb function
+
+The `plot_like_ckb` function does three things to a ggplot2 plot:
+
+1. modifies the theme (i.e. the overall appearance)
+2. extends the plotting area, hides the default axis lines and manually adds 
+axis lines (so that you can have a custom sized gap between the plotting area and the axes)
+3. applies a fixed aspect ratio
+
+### Examples
+
+Make a scatter plot with `ggplot`.
+```{r}
+library(ggplot2)
+library(ckbplotr)
+
+plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
+plot
+```
+
+Then apply the `plot_like_ckb` function to the plot.
+```{r}
+plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
+```
+
+If you do not want a gap between the axes, set `gap = c(0, 0)`.
+```{r}
+plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), gap = c(0, 0))
+```
+
+If you wish to override some aspect of the theme applied by `plot_like_ckb`, 
+then this can be done by adding a theme after the function.
+```{r}
+plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50)) +
+  theme(axis.title = element_text(colour = "red", face = "plain"))
+```
+
+If any data points you are plotting fall outside the axes, then they will still
+be drawn and may show up in places such as the axes, the legend, the plot title, 
+or the plot margins. There is also no warning if data points fall outside the whole plot area.
+
+So it is best to check that your `xlim` and `ylim` values are suitable for your 
+data before using the function.
+```{r}
+# The xlim and ylim ranges are too narrow
+plot_like_ckb(plot = plot, xlims = c(0, 4), ylims = c(20, 50))
+```
+
+
+A bar chart.
+```{r}
+barplot <- ggplot(mpg, aes(class)) + geom_bar()
+plot_like_ckb(barplot, xlims = c(0.5, 7.5), ylims = c(0, 70), gap = c(0.025, 0.005), ratio = 0.5) +
+  theme(axis.ticks.x = element_blank())
+```
+
+
+
+## make_jasper_forest_plot function
+The `make_jasper_forest_plot` function requires the in-house Jasper package, 
+which is not publicly available.
+
