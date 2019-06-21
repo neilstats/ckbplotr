@@ -46,7 +46,7 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.pval}{Currently does nothing.}
 
-\item{col.left}{Name of additional column to be printed to the left of the plot.}
+\item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
 
 \item{col.right}{Name of additional column to be printed to the right of the plot.
 Currently this is not added to the plot, but will be in the data frame.}

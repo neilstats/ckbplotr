@@ -46,7 +46,7 @@ use log scale on the axis, and add a line at null effect. (Default: TRUE)}
 
 \item{col.uci}{Name of column that provides upper limit of confidence intervals.}
 
-\item{col.left}{Name of additional column to be printed to the left of the plot.}
+\item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
 
 \item{col.right}{Name of additional column to be printed to the right of the plot.}
 

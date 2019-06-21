@@ -27,7 +27,7 @@
 #' @param col.lci Name of column that provides lower limit of confidence intervals.
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
 #' @param col.pval Currently does nothing.
-#' @param col.left Name of additional column to be printed to the left of the plot.
+#' @param col.left A character vector of names of columns to be printed to the left of the plot.
 #' @param col.right Name of additional column to be printed to the right of the plot.
 #'   Currently this is not added to the plot, but will be in the data frame.
 #' @param ci.delim Character string to separate lower and upper limits of
@@ -400,10 +400,11 @@ make_forest_data <- function(
 #'
 #'
 #' @inheritParams make_forest_data
-#' @param col.left.space Size of the gap between the plot and col.left column. As
-#' a multiple of the length of the x-axis. (Default: 0)
+#' @param col.left.space A numeric vector. Sizes of the gaps between the plot
+#' and col.left columns. As a multiple of the length of the x-axis. (Default: 0)
 #' @param col.right.space Size of the gap between the plot and column to the
 #' right of the plot. As a multiple of the length of the x-axis. (Default: 0)
+#' @param col.left.heading A character vector of titles for col.left columns. (Default: "")
 #' @param title Title to appear at the top of the plot.
 #' @param xlab Label to appear below the x-axis and above the text showing
 #'             estimates and CIs. (Default: "HR (95\% CI)")
@@ -442,6 +443,7 @@ make_forest_plot <- function(
   col.uci       = NULL,
   col.left      = NULL,
   col.right     = NULL,
+  col.left.heading = "",
   col.left.space  = 0,
   col.right.space = 0,
   col.pval      = NULL,
@@ -525,15 +527,16 @@ make_forest_plot <- function(
   if (is.null(col.left)) {
     col.left.line <- ""
   } else {
-    col.left.line <- paste0('geom_text(aes(x = -row, y = ', tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space),', label = `',col.left,'`),
+    col.left.line <- paste(paste0('  ## column ', col.left ,'
+  geom_text(aes(x = -row, y = ', tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space),', label = `',col.left,'`),
             hjust = 1,
             size = 3,
             na.rm = TRUE) +
   annotate(geom = "text",
            x = 0, y = ', tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space),',
-           label = "',col.left,'",
+           label = "',col.left.heading,'",
            hjust = 1,
-           size  = 3) +')
+           size  = 3) +'), collapse = "\n")
   }
 
 
@@ -619,8 +622,8 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
             size = 3,
             parse = TRUE) +
 
-  # Add column of text to left side of plots
-  ', col.left.line, '
+  # Add columns to left side of plots
+', col.left.line, '
 
   # Add xlab above the estimates and CIs on the right of each plot
   annotate(geom = "text",
