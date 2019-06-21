@@ -411,6 +411,10 @@ make_forest_data <- function(
 #' @param xticks A numeric vector. The tick points of the x axis.
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
+#' @param heading.space Size of the gap between headings and the first plot.
+#' Unit is "lines". (Default: 4)
+#' @param plot.space Size of the gap between forest plots.
+#' Unit is "lines". (Default: 8)
 #'
 #' @return A list:
 #' \describe{
@@ -451,7 +455,9 @@ make_forest_plot <- function(
   diamond       = NULL,
   scalepoints   = FALSE,
   pointsize     = 3,
-  addtext       = NULL
+  addtext       = NULL,
+  heading.space = 4,
+  plot.space    = 8
 ){
 
 
@@ -657,9 +663,9 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
                                         size   = 8,
                                         colour = "black",
                                         face   = boldheadings,
-                                        margin = margin(r = 25)),
+                                        margin = margin(r = ', heading.space,', unit = "lines")),
         panel.border     = element_blank(),
-        panel.spacing    = unit(8, "lines"),
+        panel.spacing    = unit(', plot.space,', "lines"),
         strip.background = element_blank(),
         strip.placement  = "outside",
         strip.text       = element_text(face = "bold"),

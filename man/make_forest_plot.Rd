@@ -12,7 +12,7 @@ make_forest_plot(headings = NULL, rows = NULL, cols,
   ci.delim = ", ", title = "", xlab = "HR (95\% CI)", xlim = NULL,
   xticks = NULL, blankrows = c(1, 1, 0, 0), whiteci = NULL,
   diamond = NULL, scalepoints = FALSE, pointsize = 3,
-  addtext = NULL)
+  addtext = NULL, heading.space = 4, plot.space = 8)
 }
 \arguments{
 \item{headings}{A data frame that contains the headings to be used for the
@@ -103,6 +103,12 @@ estimates. (Default: 3)}
   The character strings (for 'text'), heterogeneity or trend test results will
   be plotted to the right of each forest plot below the key specified in the
   col.key column.}
+
+\item{heading.space}{Size of the gap between headings and the first plot.
+Unit is "lines". (Default: 4)}
+
+\item{plot.space}{Size of the gap between forest plots.
+Unit is "lines". (Default: 8)}
 }
 \value{
 A list:
