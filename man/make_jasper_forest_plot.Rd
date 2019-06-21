@@ -70,6 +70,8 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 \code{make_jasper_forest_plot} creates a forest plot with Jasper
 }
 \details{
+This function requires the in-house Jasper package.
+
 The function creates a suitable csv, then runs the Jasper::ForestFromCSV
 to create a forest plot.
 }

@@ -332,7 +332,7 @@ make_forest_data <- function(
 
   datatoplot <- datatoplot %>%
     dplyr::mutate(textresult = dplyr::case_when(
-      !is.na(estimate) ~ paste0("'\u2003",format(round(estimate_transformed, 2), nsmall = 2),
+      !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, 2), nsmall = 2),
                                 " (",
                                 format(round(lci_transformed, 2), nsmall = 2),
                                 ci.delim,
@@ -400,6 +400,10 @@ make_forest_data <- function(
 #'
 #'
 #' @inheritParams make_forest_data
+#' @param col.left.space Size of the gap between the plot and col.left column. As
+#' a multiple of the length of the x-axis. (Default: 0)
+#' @param col.right.space Size of the gap between the plot and column to the
+#' right of the plot. As a multiple of the length of the x-axis. (Default: 0)
 #' @param title Title to appear at the top of the plot.
 #' @param xlab Label to appear below the x-axis and above the text showing
 #'             estimates and CIs. (Default: "HR (95\% CI)")
@@ -434,6 +438,8 @@ make_forest_plot <- function(
   col.uci       = NULL,
   col.left      = NULL,
   col.right     = NULL,
+  col.left.space  = 0,
+  col.right.space = 0,
   col.pval      = NULL,
   ci.delim      = ", ",
   title         = "",
@@ -513,12 +519,12 @@ make_forest_plot <- function(
   if (is.null(col.left)) {
     col.left.line <- ""
   } else {
-    col.left.line <- paste0('geom_text(aes(x = -row, y = ', xfrom,', label = `',col.left,'`),
+    col.left.line <- paste0('geom_text(aes(x = -row, y = ', tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space),', label = `',col.left,'`),
             hjust = 1,
             size = 3,
             na.rm = TRUE) +
   annotate(geom = "text",
-           x = 0, y = ', xfrom,',
+           x = 0, y = ', tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space),',
            label = "',col.left,'",
            hjust = 1,
            size  = 3) +')
@@ -601,9 +607,7 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
              ylim = c(',xfrom,',',xto,'),) +
 
   # Plot estimates and confidence intervals (textresult) on the right edge of each forest plot
-  ## An Em Space ("\u2003") has been put at the start of these strings, adding a small gap between the plot and this text
-  ## You could also set hjust as negative to move the text right
-  geom_text(aes(x = -row, y = Inf, label = textresult),
+  geom_text(aes(x = -row, y = ', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space),', label = textresult),
             hjust = 0,
             vjust = 0.5,
             size = 3,
@@ -614,8 +618,8 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
 
   # Add xlab above the estimates and CIs on the right of each plot
   annotate(geom = "text",
-           x = 0, y = Inf,
-           label = paste0("\u2003", "',xlab,'"),
+           x = 0, y = ', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space),',
+           label = "',xlab,'",
            hjust = 0,
            size  = 3) +
 

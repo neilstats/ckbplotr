@@ -8,10 +8,11 @@ make_forest_plot(headings = NULL, rows = NULL, cols,
   exponentiate = TRUE, colnames = NULL, col.key = "key",
   col.estimate = "estimate", col.stderr = "stderr", col.lci = NULL,
   col.uci = NULL, col.left = NULL, col.right = NULL,
-  col.pval = NULL, ci.delim = ", ", title = "",
-  xlab = "HR (95\% CI)", xlim = NULL, xticks = NULL,
-  blankrows = c(1, 1, 0, 0), whiteci = NULL, diamond = NULL,
-  scalepoints = FALSE, pointsize = 3, addtext = NULL)
+  col.left.space = 0, col.right.space = 0, col.pval = NULL,
+  ci.delim = ", ", title = "", xlab = "HR (95\% CI)", xlim = NULL,
+  xticks = NULL, blankrows = c(1, 1, 0, 0), whiteci = NULL,
+  diamond = NULL, scalepoints = FALSE, pointsize = 3,
+  addtext = NULL)
 }
 \arguments{
 \item{headings}{A data frame that contains the headings to be used for the
@@ -53,6 +54,12 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.right}{Name of additional column to be printed to the right of the plot.
 Currently this is not added to the plot, but will be in the data frame.}
+
+\item{col.left.space}{Size of the gap between the plot and col.left column. As
+a multiple of the length of the x-axis. (Default: 0)}
+
+\item{col.right.space}{Size of the gap between the plot and column to the
+right of the plot. As a multiple of the length of the x-axis. (Default: 0)}
 
 \item{col.pval}{Currently does nothing.}
 
