@@ -597,7 +597,8 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
   geom_polygon(data = diamonds, aes(x = x, y = y), colour="black", fill = "white") +
 
   # Flip x and y coordinates
-  coord_flip(clip = "off") +
+  coord_flip(clip = "off",
+             ylim = c(',xfrom,',',xto,'),) +
 
   # Plot estimates and confidence intervals (textresult) on the right edge of each forest plot
   ## An Em Space ("\u2003") has been put at the start of these strings, adding a small gap between the plot and this text
@@ -609,7 +610,7 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
             parse = TRUE) +
 
   # Add column of text to left side of plots
-', col.left.line, '
+  ', col.left.line, '
 
   # Add xlab above the estimates and CIs on the right of each plot
   annotate(geom = "text",
@@ -628,7 +629,6 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
 
   # Set the scale for the y axis (the estimates and CIs)
   scale_y_continuous(trans  = "',scale,'",
-                     limits = c(',xfrom,',',xto,'),
                      ',xticksline,'
                      expand = c(0,0),
                      name   = "',xlab,'") +
