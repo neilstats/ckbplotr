@@ -658,6 +658,8 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
         panel.grid.minor = element_blank(),
         axis.line.x      = element_line(size = 0.5),
         axis.title.x     = element_blank(),
+        axis.ticks.x     = element_line(colour = "black"),
+        axis.text.x      = element_text(colour = "black"),
         axis.ticks.y     = element_blank(),
         axis.text.y      = element_text(hjust  = 0,
                                         size   = 8,
