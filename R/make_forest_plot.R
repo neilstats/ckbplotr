@@ -182,7 +182,7 @@ make_forest_data <- function(
         out <- tibble::add_row(out, Heading = head1, key = headings %>% dplyr::filter(heading1 == head1) %>% dplyr::pull(key))
 
         # Add extra row for addtext
-        if (headings[[heading == head1]]$key %in% extrarowkeys) {
+        if (headings[[heading1 == head1]]$key %in% extrarowkeys) {
           out <- tibble::add_row(out,
                                  Heading = "",
                                  extrarowkey = paste0(headings[[headeading == head1]]$key))
