@@ -106,21 +106,22 @@ make_forest_data <- function(
       addtext[[i]] <- dplyr::bind_rows(addtextcols, addtext[[i]]) %>%
         dplyr::mutate(extratext = dplyr::case_when(
           !is.na(text) ~ paste0("'", text, "'"),
-          !is.na(het_stat) ~ paste0("paste('\u2003Heterogeneity: ', chi[",
+          !is.na(het_stat) ~ paste0("paste('Heterogeneity: ', chi[",
                                    het_dof,
                                    "]^2,'=",
                                    het_stat,
                                    " (p=",
                                    het_p,
                                    ")', sep='')"),
-          !is.na(trend_stat) ~ paste0("paste('\u2003Trend: ', chi[1]^2,'=",
+          !is.na(trend_stat) ~ paste0("paste('Trend: ', chi[1]^2,'=",
                                    trend_stat,
                                    " (p=",
                                    trend_p,
                                    ")', sep='')")
         )) %>%
         dplyr::select(key = !!rlang::sym(col.key),
-                      extratext)
+                      extratext) %>%
+        dplyr::mutate(key = as.character(key))
 
       extrarowkeys <- c(extrarowkeys, addtext[[i]][["key"]])
     }
