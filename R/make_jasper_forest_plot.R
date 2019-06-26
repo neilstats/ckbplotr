@@ -100,7 +100,9 @@ make_jasper_forest_plot <- function(
     dplyr::arrange(row) %>%
     dplyr::select(-row, -key)
 
-  readr::write_csv(out2, file.path(getwd(), paste0(filestem, "_csv_for_jasper_forest.csv")))
+  readr::write_csv(out2,
+                   file.path(getwd(),paste0(filestem, "_csv_for_jasper_forest.csv")),
+                   na = "")
 
   Jasper::ForestFromCSV(
     file                   = file.path(getwd(), paste0(filestem, "_csv_for_jasper_forest.csv")),
