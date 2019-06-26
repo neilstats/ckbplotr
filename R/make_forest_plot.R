@@ -552,7 +552,7 @@ headings <- datatoplot %>%
 # Get a character vector of the style for headings
 boldheadings <- datatoplot %>%
                   dplyr::group_by(row) %>%
-                  dplyr::summarise(bold = dplyr::first(bold)) %>%
+                  dplyr::summarise(bold = dplyr::if_else(all(bold == "bold"), "bold", "plain")) %>%
                   dplyr::arrange(row) %>%
                   dplyr::pull(bold)
 
