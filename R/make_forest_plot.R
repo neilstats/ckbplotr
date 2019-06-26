@@ -289,7 +289,7 @@ make_forest_data <- function(
 
 
     datatoplot <- dplyr::bind_rows(datatoplot, out1) %>%
-      dplyr::mutate(bold = dplyr::if_else(is.na(estimate), "bold", "plain"))
+      dplyr::mutate(bold = dplyr::if_else(is.na(estimate) | diamond, "bold", "plain"))
   }
 
 
