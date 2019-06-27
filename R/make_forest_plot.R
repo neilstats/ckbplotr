@@ -406,9 +406,10 @@ make_forest_data <- function(
 #' @param col.right.space Size of the gap between the plot and column to the
 #' right of the plot. As a multiple of the length of the x-axis. (Default: 0)
 #' @param col.left.heading A character vector of titles for col.left columns. (Default: "")
+#' @param col.right.heading Label to appear above the text showing estimates and
+#' CIs. (Default: "HR (95\% CI)")
 #' @param title Title to appear at the top of the plot.
-#' @param xlab Label to appear below the x-axis and above the text showing
-#'             estimates and CIs. (Default: "HR (95\% CI)")
+#' @param xlab Label to appear below the x-axis. (Default: "HR (95\% CI)")
 #' @param xlim A numeric vector. The limits of the x axis.
 #' @param xticks A numeric vector. The tick points of the x axis.
 #' @param pointsize The (largest) size of box to use for plotting point
@@ -445,6 +446,7 @@ make_forest_plot <- function(
   col.left      = NULL,
   col.right     = NULL,
   col.left.heading = "",
+  col.right.heading = "HR (95% CI)",
   col.left.space  = 0,
   col.right.space = 0,
   col.pval      = NULL,
@@ -537,7 +539,8 @@ make_forest_plot <- function(
            x = 0, y = ', tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space),',
            label = "',col.left.heading,'",
            hjust = 1,
-           size  = 3) +'), collapse = "\n")
+           size  = 3,
+           fontface = "bold") +'), collapse = "\n")
   }
 
 
@@ -629,9 +632,10 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
   # Add xlab above the estimates and CIs on the right of each plot
   annotate(geom = "text",
            x = 0, y = ', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space),',
-           label = "',xlab,'",
+           label = "',col.right.heading,'",
            hjust = 0,
-           size  = 3) +
+           size  = 3,
+           fontface = "bold") +
 
   # Add xlab below each axis
   annotate(geom = "text",
@@ -639,7 +643,8 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
            label = "',xlab,'",
            hjust = 0.5,
            size  = 3,
-           vjust = 4) +
+           vjust = 4,
+           fontface = "bold") +
 
   # Set the scale for the y axis (the estimates and CIs)
   scale_y_continuous(trans  = "',scale,'",

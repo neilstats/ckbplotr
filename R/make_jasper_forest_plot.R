@@ -9,7 +9,8 @@
 #'
 #' @inheritParams make_forest_data
 #' @param filestem String to use for file names. (Default: "_test")
-#' @param xlab Label to appear below the x-axis and above the text showing
+#' @param xlab Label to appear below the x-axis. (Default: "HR (95\% CI)")
+#' @param ValueLabelsHeader Label to appear above the text showing
 #'             estimates and CIs. (Default: "HR (95\% CI)")
 #' @param forest.xlim A numeric vector. The limits of the x axis.
 #' @param forest.xticks A numeric vector. The tick points of the x axis.
@@ -35,6 +36,7 @@ make_jasper_forest_plot <- function(
   col.right     = NULL,
   col.pval      = NULL,
   xlab          = "HR (95% CI)",
+  ValueLabelsHeader = "HR (95% CI)",
   forest.xlim   = NULL,
   forest.xticks = NULL,
   blankrows     = c(1, 1, 0, 0),
@@ -114,7 +116,7 @@ make_jasper_forest_plot <- function(
     forest.xlim            = forest.xlim,
     forest.xticks          = forest.xticks,
     xlab                   = xlab,
-    ValueLabelsHeader      = xlab,
+    ValueLabelsHeader      = ValueLabelsHeader,
     FormatPValue           = col.pval,
     ...
   )
