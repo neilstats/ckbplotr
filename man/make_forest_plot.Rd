@@ -8,12 +8,12 @@ make_forest_plot(headings = NULL, rows = NULL, cols,
   exponentiate = TRUE, colnames = NULL, col.key = "key",
   col.estimate = "estimate", col.stderr = "stderr", col.lci = NULL,
   col.uci = NULL, col.left = NULL, col.right = NULL,
-  col.left.heading = "", col.left.space = 0, col.right.space = 0,
-  col.pval = NULL, ci.delim = ", ", title = "",
-  xlab = "HR (95\% CI)", xlim = NULL, xticks = NULL,
-  blankrows = c(1, 1, 0, 0), whiteci = NULL, diamond = NULL,
-  scalepoints = FALSE, pointsize = 3, addtext = NULL,
-  heading.space = 4, plot.space = 8)
+  col.left.heading = "", col.right.heading = "HR (95\% CI)",
+  col.left.space = 0, col.right.space = 0, col.pval = NULL,
+  ci.delim = ", ", title = "", xlab = "HR (95\% CI)", xlim = NULL,
+  xticks = NULL, blankrows = c(1, 1, 0, 0), whiteci = NULL,
+  diamond = NULL, scalepoints = FALSE, pointsize = 3,
+  addtext = NULL, heading.space = 4, plot.space = 8)
 }
 \arguments{
 \item{headings}{A data frame that contains the headings to be used for the
@@ -58,6 +58,9 @@ Currently this is not added to the plot, but will be in the data frame.}
 
 \item{col.left.heading}{A character vector of titles for col.left columns. (Default: "")}
 
+\item{col.right.heading}{Label to appear above the text showing estimates and
+CIs. (Default: "HR (95\% CI)")}
+
 \item{col.left.space}{A numeric vector. Sizes of the gaps between the plot
 and col.left columns. As a multiple of the length of the x-axis. (Default: 0)}
 
@@ -71,8 +74,7 @@ confidence interval. (Default: ", ")}
 
 \item{title}{Title to appear at the top of the plot.}
 
-\item{xlab}{Label to appear below the x-axis and above the text showing
-estimates and CIs. (Default: "HR (95\% CI)")}
+\item{xlab}{Label to appear below the x-axis. (Default: "HR (95\% CI)")}
 
 \item{xlim}{A numeric vector. The limits of the x axis.}
 

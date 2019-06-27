@@ -8,7 +8,8 @@ make_jasper_forest_plot(filestem = "_test", headings = NULL,
   rows = NULL, cols, exponentiate = TRUE, col.key = "key",
   col.estimate = "estimate", col.stderr = "stderr", col.lci = NULL,
   col.uci = NULL, col.left = NULL, col.right = NULL,
-  col.pval = NULL, xlab = "HR (95\% CI)", forest.xlim = NULL,
+  col.pval = NULL, xlab = "HR (95\% CI)",
+  ValueLabelsHeader = "HR (95\% CI)", forest.xlim = NULL,
   forest.xticks = NULL, blankrows = c(1, 1, 0, 0), ...)
 }
 \arguments{
@@ -53,7 +54,9 @@ use log scale on the axis, and add a line at null effect. (Default: TRUE)}
 \item{col.pval}{Name of additional column to be printed to the right of the plot,
 and formatted as P value.}
 
-\item{xlab}{Label to appear below the x-axis and above the text showing
+\item{xlab}{Label to appear below the x-axis. (Default: "HR (95\% CI)")}
+
+\item{ValueLabelsHeader}{Label to appear above the text showing
 estimates and CIs. (Default: "HR (95\% CI)")}
 
 \item{forest.xlim}{A numeric vector. The limits of the x axis.}
