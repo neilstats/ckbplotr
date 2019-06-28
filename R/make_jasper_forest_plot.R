@@ -66,6 +66,11 @@ make_jasper_forest_plot <- function(
     dplyr::summarise(Heading = dplyr::first(Heading),
                      key = dplyr::first(key))
 
+  # drop first and last rows (which are blank)
+  out <- out %>%
+    dplyr::filter(!row %in% c(min(row), max(row))) %>%
+    dplyr::mutate(row = row - 1)
+
   col.right <- c(col.pval, col.right)
 
   tres <- list()
