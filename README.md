@@ -163,6 +163,119 @@ plot_like_ckb(barplot, xlims = c(0.5, 7.5), ylims = c(0, 70), gap = c(0.025, 0.0
 
 <img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
 
+The make\_forest\_plot function
+-------------------------------
+
+The `make_forest_plot` function creates a forest plot using the `ggplot2` graphics package. It is available as part of the `ckbplotr` package.
+
+The function returns a named list containg:
+
+-   plot: the plot
+-   data: a data frame from which the plot is generated
+-   code: ggplot2 code to generate the plot
+
+In RStudio the ggplot2 code used to generate the plot will be shown in the 'Viewer' pane. If modifications are needed to the plot, then this code can be copied, edited, and run as needed.
+
+### The headings data frame
+
+The data frame specified in the `headings` argument allows the use of headings to label the rows of the forest plot.
+
+This must data frame contain columns 'heading1', 'heading2' and 'heading3', which can be set to NA if not needed for a particular row. For example, if you do not need a third level of heading for a particular row, then set `heading3=NA` for that row. If you only need one level of headings, then set `heading2=NA` and `heading3=NA` for every row.
+
+The data set must also contain a column with the same name as a column in each of the results data sets. This column is used to match headings to the correct results, and is specified in the argument `col.key`.
+
+The argument `rows` specifies which results should be included in the plot, by giving some headings from the heading1 column of the headings data frame.
+
+(The order given in the `rows` argument decides the order in which the heading1 labels will be in the plot (top to bottom). The heading2 and heading3 labels will be in the order that they are in the headings data frame.)
+
+### Examples
+
+First of all, do your analyses and put the results into data frames (one data frame for each forest plot column). Here we generate some example results.
+
+``` r
+set.seed(57911624)
+exampleresults <- function(){
+  data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
+                          'nmr_idl_p',
+                          'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
+                          'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
+                          'nmr_idl_tg',
+                          'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
+                          'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
+                          'nmr_idl_c',
+                          'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
+             estimate = rnorm(21, 0, 0.02),
+             stderr   = 0.012 + abs(rnorm(21, 0, 0.015)),
+             n        = round(runif(21, 100, 2000)),
+             nb       = round(runif(21, 100, 2000)))
+}
+resultsA <- exampleresults()
+resultsB <- exampleresults()
+resultsC <- exampleresults()
+resultsD <- exampleresults()
+resultsE <- exampleresults()
+```
+
+``` r
+library(ckbplotr)
+
+forestplot <- make_forest_plot(cols         = list(resultsA, resultsB),
+                               exponentiate = TRUE,
+                               colnames     = c("Analysis A", "Analysis B"),
+                               col.key      = "variable")
+```
+
+<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+
+To use headings, create a data frame of headings and specify arguments `headings` and `rows`.
+
+    #>                              heading1 heading2 heading3      variable
+    #> 1  Lipoprotein particle concentration     VLDL    Large  nmr_l_vldl_p
+    #> 2  Lipoprotein particle concentration     VLDL   Medium  nmr_m_vldl_p
+    #> 3  Lipoprotein particle concentration     VLDL    Small  nmr_s_vldl_p
+    #> 4  Lipoprotein particle concentration      IDL     <NA>     nmr_idl_p
+    #> 5  Lipoprotein particle concentration      LDL    Large   nmr_l_ldl_p
+    #> 6  Lipoprotein particle concentration      LDL   Medium   nmr_m_ldl_p
+    #> 7  Lipoprotein particle concentration      LDL    Small   nmr_s_ldl_p
+    #> 8         Triglycerides concentration     VLDL    Large nmr_l_vldl_tg
+    #> 9         Triglycerides concentration     VLDL   Medium nmr_m_vldl_tg
+    #> 10        Triglycerides concentration     VLDL    Small nmr_s_vldl_tg
+    #> 11        Triglycerides concentration      IDL     <NA>    nmr_idl_tg
+    #> 12        Triglycerides concentration      LDL    Large  nmr_l_ldl_tg
+    #> 13        Triglycerides concentration      LDL   Medium  nmr_m_ldl_tg
+    #> 14        Triglycerides concentration      LDL    Small  nmr_s_ldl_tg
+    #> 15          Cholesterol concentration     VLDL    Large  nmr_l_vldl_c
+    #> 16          Cholesterol concentration     VLDL   Medium  nmr_m_vldl_c
+    #> 17          Cholesterol concentration     VLDL    Small  nmr_s_vldl_c
+    #> 18          Cholesterol concentration      IDL     <NA>     nmr_idl_c
+    #> 19          Cholesterol concentration      LDL    Large   nmr_l_ldl_c
+    #> 20          Cholesterol concentration      LDL   Medium   nmr_m_ldl_c
+    #> 21          Cholesterol concentration      LDL    Small   nmr_s_ldl_c
+
+``` r
+forestplot <- make_forest_plot(headings         = headings,
+                               rows             = c("Lipoprotein particle concentration",
+                                                    "Triglycerides concentration"),
+                               cols             = list(resultsA, resultsB),
+                               exponentiate     = TRUE,
+                               colnames         = c("Analysis A", "Analysis B"),
+                               col.key          = "variable",
+                               ci.delim         = " - ",
+                               xlim             = c(0.9, 1.1),
+                               xticks           = c(0.9, 1, 1.1),
+                               blankrows        = c(1, 1, 0, 1),
+                               scalepoints      = TRUE,
+                               pointsize        = 3,
+                               col.left         = c("n"),
+                               col.left.space   = c(0.02),
+                               col.left.heading = c("No. of\nevents"),
+                               col.right.space  = 0.02,
+                               heading.space    = 2,
+                               plot.space       = 8)
+```
+
+<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
+
 make\_jasper\_forest\_plot function
 -----------------------------------
 
