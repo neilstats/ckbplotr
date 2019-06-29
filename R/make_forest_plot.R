@@ -135,7 +135,7 @@ make_forest_data <- function(
                     extrarowkey = "") %>%
       dplyr::select(Heading, key, extrarowkey) %>%
       dplyr::add_row(Heading = "") %>%
-      dplyr::mutate(row = 1:n())
+      dplyr::mutate(row = 1:dplyr::n())
 
     # Add extra rows for addtext
     if (!is.null(addtext)) {
@@ -146,7 +146,7 @@ make_forest_data <- function(
       }
     }
     out <- out %>%
-      dplyr::mutate(row = 1:n())
+      dplyr::mutate(row = 1:dplyr::n())
 
 
   } else {
@@ -248,7 +248,7 @@ make_forest_data <- function(
     }
 
     out <- out %>%
-      dplyr::mutate(row = 1:n())
+      dplyr::mutate(row = 1:dplyr::n())
   }
 
 
