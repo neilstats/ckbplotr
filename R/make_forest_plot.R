@@ -523,7 +523,7 @@ make_forest_plot <- function(
   if (is.null(xticks)) {
     xticksline <- ""
   } else {
-    xticksline <- paste0("breaks = ",deparse(xticks),",")
+    xticksline <- paste0("breaks = ",paste(deparse(xticks), collapse = ""),",")
   }
 
 
