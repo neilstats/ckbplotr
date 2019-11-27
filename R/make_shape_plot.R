@@ -23,6 +23,8 @@
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
+#' @param printplot Print the plot. (Default: TRUE)
+#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #'
 #' @return A list:
 #' \describe{
@@ -55,7 +57,9 @@ make_shape_plot <- function(data,
                             ybreaks       = NULL,
                             xlab          = "Risk factor",
                             ylab          = "Estimate (95% CI)",
-                            title         = "Figure"){
+                            title         = "Figure",
+                            printplot     = TRUE,
+                            showcode      = TRUE){
 
   # Check arguments
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
@@ -194,16 +198,20 @@ plot_like_ckb(plot  = plot,
               ratio = ', ratio,')')
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
-  writeLines(paste("# ggplot2 code ------------------",
-                   plotcode,
-                   sep = "\n\n"),
-             file.path(tempdir(), "plotcode.txt"))
-  viewer <- getOption("viewer", default = function(url){})
-  viewer(file.path(tempdir(), "plotcode.txt"))
+  if (showcode){
+    writeLines(paste("# ggplot2 code ------------------",
+                     plotcode,
+                     sep = "\n\n"),
+               file.path(tempdir(), "plotcode.txt"))
+    viewer <- getOption("viewer", default = function(url){})
+    viewer(file.path(tempdir(), "plotcode.txt"))
+  }
 
   # Create the plot
   plot <- eval(parse(text = plotcode), parent.frame())
-  print(plot)
+  if (printplot){
+    print(plot)
+  }
 
 
   return(list(plot = plot,

@@ -418,6 +418,8 @@ make_forest_data <- function(
 #' Unit is "lines". (Default: 4)
 #' @param plot.space Size of the gap between forest plots.
 #' Unit is "lines". (Default: 8)
+#' @param printplot Print the plot. (Default: TRUE)
+#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #'
 #' @return A list:
 #' \describe{
@@ -462,7 +464,9 @@ make_forest_plot <- function(
   pointsize     = 3,
   addtext       = NULL,
   heading.space = 4,
-  plot.space    = 8
+  plot.space    = 8,
+  printplot     = TRUE,
+  showcode      = TRUE
 ){
 
 
@@ -685,16 +689,20 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
 ')
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
-  writeLines(paste("# ggplot2 code ------------------",
-                   "# Assign the data returned by the function to 'datatoplot' \ndatatoplot <- plot$data",
-                   plotcode,
-                   sep = "\n\n"),
-             file.path(tempdir(), "plotcode.txt"))
-  viewer <- getOption("viewer", default = function(url){})
-  viewer(file.path(tempdir(), "plotcode.txt"))
+  if (showcode){
+    writeLines(paste("# ggplot2 code ------------------",
+                     "# Assign the data returned by the function to 'datatoplot' \ndatatoplot <- plot$data",
+                     plotcode,
+                     sep = "\n\n"),
+               file.path(tempdir(), "plotcode.txt"))
+    viewer <- getOption("viewer", default = function(url){})
+    viewer(file.path(tempdir(), "plotcode.txt"))
+  }
 
   plot <- eval(parse(text = plotcode), parent.frame())
-  print(plot)
+  if (printplot){
+    print(plot)
+  }
 
   return(list(plot = plot,
               data = datatoplot,
