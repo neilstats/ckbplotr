@@ -10,7 +10,7 @@ make_shape_plot(data, col.x = "x", col.estimate = "estimate",
   scalepoints = FALSE, pointsize = 3, xlims, ylims, gap = c(0.025,
   0.025), ext = c(0.025, 0.025), ratio = 1.5, xbreaks = NULL,
   ybreaks = NULL, xlab = "Risk factor", ylab = "Estimate (95\% CI)",
-  title = "Figure")
+  title = "Figure", printplot = TRUE, showcode = TRUE)
 }
 \arguments{
 \item{data}{The data frame containing estimates to be plotted.}
@@ -51,6 +51,10 @@ error? (Default: FALSE)}
 \item{ylab}{Label for y-axis. (Default: "Estimate (95\% CI)")}
 
 \item{title}{Plot title. (Default: "Figure")}
+
+\item{printplot}{Print the plot. (Default: TRUE)}
+
+\item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
 }
 \value{
 A list:

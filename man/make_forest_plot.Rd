@@ -13,7 +13,8 @@ make_forest_plot(headings = NULL, rows = NULL, cols,
   ci.delim = ", ", title = "", xlab = "HR (95\% CI)", xlim = NULL,
   xticks = NULL, blankrows = c(1, 1, 0, 0), whiteci = NULL,
   diamond = NULL, scalepoints = FALSE, pointsize = 3,
-  addtext = NULL, heading.space = 4, plot.space = 8)
+  addtext = NULL, heading.space = 4, plot.space = 8,
+  printplot = TRUE, showcode = TRUE)
 }
 \arguments{
 \item{headings}{A data frame that contains the headings to be used for the
@@ -114,6 +115,10 @@ Unit is "lines". (Default: 4)}
 
 \item{plot.space}{Size of the gap between forest plots.
 Unit is "lines". (Default: 8)}
+
+\item{printplot}{Print the plot. (Default: TRUE)}
+
+\item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
 }
 \value{
 A list:
