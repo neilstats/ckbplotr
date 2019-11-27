@@ -202,7 +202,7 @@ plot_like_ckb(plot  = plot,
   viewer(file.path(tempdir(), "plotcode.txt"))
 
   # Create the plot
-  plot <- eval(parse(text = plotcode))
+  plot <- eval(parse(text = plotcode), parent.frame())
   print(plot)
 
 

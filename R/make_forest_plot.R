@@ -693,7 +693,7 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
   viewer <- getOption("viewer", default = function(url){})
   viewer(file.path(tempdir(), "plotcode.txt"))
 
-  plot <- eval(parse(text = plotcode))
+  plot <- eval(parse(text = plotcode), parent.frame())
   print(plot)
 
   return(list(plot = plot,
