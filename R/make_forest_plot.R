@@ -698,6 +698,6 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
 
   return(list(plot = plot,
               data = datatoplot,
-              code = parse(text = plotcode)) )
+              code = plotcode) )
 
 }

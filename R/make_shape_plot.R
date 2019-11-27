@@ -207,6 +207,6 @@ plot_like_ckb(plot  = plot,
 
 
   return(list(plot = plot,
-              code = parse(text = plotcode)) )
+              code = plotcode) )
 }
 
