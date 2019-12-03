@@ -107,17 +107,17 @@ make_forest_data <- function(
         dplyr::mutate(extratext = dplyr::case_when(
           !is.na(text) ~ paste0("'", text, "'"),
           !is.na(het_stat) ~ paste0("paste('Heterogeneity: ', chi[",
-                                   het_dof,
-                                   "]^2,'=",
-                                   het_stat,
-                                   " (p=",
-                                   het_p,
-                                   ")', sep='')"),
+                                    het_dof,
+                                    "]^2,'=",
+                                    het_stat,
+                                    " (p=",
+                                    het_p,
+                                    ")', sep='')"),
           !is.na(trend_stat) ~ paste0("paste('Trend: ', chi[1]^2,'=",
-                                   trend_stat,
-                                   " (p=",
-                                   trend_p,
-                                   ")', sep='')")
+                                      trend_stat,
+                                      " (p=",
+                                      trend_p,
+                                      ")', sep='')")
         )) %>%
         dplyr::select(key = !!rlang::sym(col.key),
                       extratext) %>%
@@ -474,12 +474,12 @@ make_forest_plot <- function(
     tf       <- exp
     inv_tf   <- log
     scale    <- "log"
-    nullline <- "geom_segment(aes(x=-1, xend=-Inf, y=1, yend=1)) +"
+    nullline <- "  geom_segment(aes(x=-1, xend=-Inf, y=1, yend=1)) +"
   } else {
     tf       <- identity
     inv_tf   <- identity
     scale    <- "identity"
-    nullline <- ""
+    nullline <- NULL
   }
 
 
@@ -534,172 +534,172 @@ make_forest_plot <- function(
   if (is.null(col.left)) {
     col.left.line <- ""
   } else {
-    col.left.line <- paste(paste0('  ## column ', col.left ,'
-  geom_text(aes(x = -row, y = ', tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space),', label = `',col.left,'`),
-            hjust = 1,
-            size = 3,
-            na.rm = TRUE) +
-  annotate(geom = "text",
-           x = 0, y = ', tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space),',
-           label = "',col.left.heading,'",
-           hjust = 1,
-           size  = 3,
-           fontface = "bold") +'), collapse = "\n")
+    col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading),
+                                        ~ c(sprintf('  ## column %s', ..1),
+                                            sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`),',
+                                                    tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
+                                            '            hjust = 1,',
+                                            '            size = 3,',
+                                            '            na.rm = TRUE) +',
+                                            '  annotate(geom = "text",',
+                                            sprintf('           x = 0, y = %s,',
+                                                    tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                            sprintf('           label = "%s",', ..3),
+                                            '           hjust = 1,',
+                                            '           size  = 3,',
+                                            '           fontface = "bold") +')))
   }
 
 
-  plotcode <- paste0('
+  plotcode <- c('# Get a character vector of the headings, so these can be used in the plot',
+                'headings <- datatoplot %>%',
+                '              dplyr::group_by(row) %>%',
+                '              dplyr::summarise(Heading = dplyr::first(Heading)) %>%',
+                '              dplyr::arrange(row) %>%',
+                '              dplyr::pull(Heading)',
+                '',
+                '# Get a character vector of the style for headings',
+                'boldheadings <- datatoplot %>%',
+                '                  dplyr::group_by(row) %>%',
+                '                  dplyr::summarise(bold = dplyr::if_else(all(bold == "bold"), "bold", "plain")) %>%',
+                '                  dplyr::arrange(row) %>%',
+                '                  dplyr::pull(bold)',
+                '',
+                '# Create data frame for diamonds to be plotted',
+                'diamonds <- datatoplot %>%',
+                '  dplyr::filter(diamond == TRUE) %>%',
+                '  dplyr::mutate(y1 = lci_transformed,',
+                '                y2 = estimate_transformed,',
+                '                y3 = uci_transformed,',
+                '                y4 = estimate_transformed) %>%',
+                '  tidyr::gather(part, y, y1:y4) %>%',
+                '  dplyr::arrange(column, part) %>%',
+                '  dplyr::mutate(x = - row + rep(c(0, -0.25, 0, 0.25), times = sum(datatoplot$diamond)))',
+                '',
+                '# Remove plotting of points if a diamond is to be used',
+                'if (any(datatoplot$diamond)) {',
+                '  datatoplot[datatoplot$diamond,]$estimate_transformed <- NA',
+                '  datatoplot[datatoplot$diamond,]$lci_transformed <- NA',
+                '  datatoplot[datatoplot$diamond,]$uci_transformed <- NA',
+                '}',
+                '',
+                '# Create the ggplot',
+                'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
+                '  # Put the different columns in side-by-side plots using facets',
+                '  facet_wrap(~column) +',
+                '',
+                '  # Add a line at null effect (only if exponentiate=TRUE)',
+                nullline,
+                '',
+                '  # Plot points at the transformed estimates as squares',
+                '  ## Scale squares by inverse of the SE',
+                '  geom_point(aes(size = size),',
+                '             shape = 15,',
+                '             na.rm = TRUE) +',
+                '',
+                '  # Scale the size of squares by their side length',
+                '  # and make the scale range from zero upwards',
+                '  scale_radius(limits = c(0, NA),',
+                sprintf('               range = c(0, %s)) +', pointsize),
+                '',
+                '  # Plot CIs',
+                '  geom_linerange(aes(ymin = lci_transformed, ymax = uci_transformed, colour = linecolour),',
+                '                 na.rm = TRUE) +',
+                '  scale_colour_identity() +',
+                '',
+                '  # Add tiny segments with arrows when the CIs go outside axis limits',
+                '  geom_segment(data = datatoplot %>% dplyr::filter(cioverright == TRUE),',
+                '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed),',
+                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
+                '  geom_segment(data = datatoplot %>% dplyr::filter(cioverleft == TRUE),',
+                '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed),',
+                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
+                '',
+                '  # Add diamonds',
+                '  geom_polygon(data = diamonds, aes(x = x, y = y), colour="black", fill = "white") +',
+                '',
+                '  # Flip x and y coordinates',
+                '  coord_flip(clip = "off",',
+                sprintf('              ylim = c(%s, %s)) +', xfrom, xto),
+                '',
+                '  # Plot estimates and confidence intervals (textresult) on the right edge of each forest plot',
+                sprintf('  geom_text(aes(x = -row, y = %s, label = textresult),', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space)),
+                '            hjust = 0,',
+                '            vjust = 0.5,',
+                '            size = 3,',
+                '            parse = TRUE) +',
+                '',
+                '  # Add columns to left side of plots',
+                col.left.line,
+                '',
+                '  # Add xlab above the estimates and CIs on the right of each plot',
+                '  annotate(geom = "text",',
+                sprintf('           x = 0, y = %s,', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space)),
+                sprintf('           label = "%s",', col.right.heading),
+                '           hjust = 0,',
+                '           size  = 3,',
+                '           fontface = "bold") +',
+                '',
+                '  # Add xlab below each axis',
+                '  annotate(geom = "text",',
+                sprintf('           x = -Inf, y = %s,', xmid),
+                sprintf('           label = "%s",', xlab),
+                '           hjust = 0.5,',
+                '           size  = 3,',
+                '           vjust = 4,',
+                '           fontface = "bold") +',
+                '',
+                '  # Set the scale for the y axis (the estimates and CIs)',
+                sprintf('  scale_y_continuous(trans  = "%s",', scale),
+                xticksline,
+                '                     expand = c(0,0),',
+                sprintf('                     name   = "%s") +', xlab),
+                '',
+                '  # Set the scale for the x axis (the rows)',
+                '  scale_x_continuous(breaks = -1:-max(datatoplot$row),',
+                '                     labels = headings,',
+                '                     name   = "",',
+                '                     expand = c(0,0)) +',
+                '  # Add the title',
+                sprintf('  labs(title = "%s") +', title),
+                '',
+                '  # Control the overall looks of the plots',
+                '  theme(panel.background = element_rect(fill = "white", colour = NA),',
+                '        panel.grid.major = element_blank(),',
+                '        panel.grid.minor = element_blank(),',
+                '        axis.line.x      = element_line(size = 0.5),',
+                '        axis.title.x     = element_blank(),',
+                '        axis.ticks.x     = element_line(colour = "black"),',
+                '        axis.text.x      = element_text(colour = "black"),',
+                '        axis.ticks.y     = element_blank(),',
+                '        axis.text.y      = element_text(hjust  = 0,',
+                '                                        size   = 8,',
+                '                                        colour = "black",',
+                '                                        face   = boldheadings,',
+                sprintf('                                        margin = margin(r = %s, unit = "lines")),', heading.space),
+                '        panel.border     = element_blank(),',
+                sprintf('        panel.spacing    = unit(%s, "lines"),', plot.space),
+                '        strip.background = element_blank(),',
+                '        strip.placement  = "outside",',
+                '        strip.text       = element_text(face = "bold"),',
+                '        legend.position  = "none",',
+                '        plot.margin      = unit(c(2,6,2,0), "lines"))')
 
-# Get a character vector of the headings, so these can be used in the plot
-headings <- datatoplot %>%
-              dplyr::group_by(row) %>%
-              dplyr::summarise(Heading = dplyr::first(Heading)) %>%
-              dplyr::arrange(row) %>%
-              dplyr::pull(Heading)
-
-# Get a character vector of the style for headings
-boldheadings <- datatoplot %>%
-                  dplyr::group_by(row) %>%
-                  dplyr::summarise(bold = dplyr::if_else(all(bold == "bold"), "bold", "plain")) %>%
-                  dplyr::arrange(row) %>%
-                  dplyr::pull(bold)
-
-# Create data frame for diamonds to be plotted
-diamonds <- datatoplot %>%
-  dplyr::filter(diamond == TRUE) %>%
-  dplyr::mutate(y1 = lci_transformed,
-                y2 = estimate_transformed,
-                y3 = uci_transformed,
-                y4 = estimate_transformed) %>%
-  tidyr::gather(part, y, y1:y4) %>%
-  dplyr::arrange(column, part) %>%
-  dplyr::mutate(x = - row + rep(c(0, -0.25, 0, 0.25), times = sum(datatoplot$diamond)))
-
-# Remove plotting of points if a diamond is to be used
-if (any(datatoplot$diamond)) {
-  datatoplot[datatoplot$diamond,]$estimate_transformed <- NA
-  datatoplot[datatoplot$diamond,]$lci_transformed <- NA
-  datatoplot[datatoplot$diamond,]$uci_transformed <- NA
-}
-
-
-# Create the ggplot
-ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
-
-  # Put the different columns in side-by-side plots using facets
-  facet_wrap(~column) +
-
-  # Add a line at null effect (only if exponentiate=TRUE)
-  ', nullline ,'
-
-  # Plot points at the transformed estimates as squares
-  ## Scale squares by inverse of the SE
-  geom_point(aes(size = size),
-             shape = 15,
-             na.rm = TRUE) +
-
-  # Scale the size of squares by their side length
-  # and make the scale range from zero upwards
-  scale_radius(limits = c(0, NA),
-               range = c(0, ', pointsize,')) +
-
-  # Plot CIs
-  geom_linerange(aes(ymin = lci_transformed, ymax = uci_transformed, colour = linecolour),
-                 na.rm = TRUE) +
-  scale_colour_identity() +
-
-  # Add tiny segments with arrows when the CIs go outside axis limits
-  geom_segment(data = datatoplot %>% dplyr::filter(cioverright == TRUE),
-               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed),
-               arrow = arrow(type = "closed", length = unit(6, "pt"))) +
-  geom_segment(data = datatoplot %>% dplyr::filter(cioverleft == TRUE),
-               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed),
-               arrow = arrow(type = "closed", length = unit(6, "pt"))) +
-
-  # Add diamonds
-  geom_polygon(data = diamonds, aes(x = x, y = y), colour="black", fill = "white") +
-
-  # Flip x and y coordinates
-  coord_flip(clip = "off",
-             ylim = c(',xfrom,',',xto,'),) +
-
-  # Plot estimates and confidence intervals (textresult) on the right edge of each forest plot
-  geom_text(aes(x = -row, y = ', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space),', label = textresult),
-            hjust = 0,
-            vjust = 0.5,
-            size = 3,
-            parse = TRUE) +
-
-  # Add columns to left side of plots
-', col.left.line, '
-
-  # Add xlab above the estimates and CIs on the right of each plot
-  annotate(geom = "text",
-           x = 0, y = ', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space),',
-           label = "',col.right.heading,'",
-           hjust = 0,
-           size  = 3,
-           fontface = "bold") +
-
-  # Add xlab below each axis
-  annotate(geom = "text",
-           x = -Inf, y = ',xmid,',
-           label = "',xlab,'",
-           hjust = 0.5,
-           size  = 3,
-           vjust = 4,
-           fontface = "bold") +
-
-  # Set the scale for the y axis (the estimates and CIs)
-  scale_y_continuous(trans  = "',scale,'",
-                     ',xticksline,'
-                     expand = c(0,0),
-                     name   = "',xlab,'") +
-
-  # Set the scale for the x axis (the rows)
-  scale_x_continuous(breaks = -1:-max(datatoplot$row),
-                     labels = headings,
-                     name   = "",
-                     expand = c(0,0)) +
-
-  # Add the title
-  labs(title = "', title,'") +
-
-  # Control the overall looks of the plots
-  theme(panel.background = element_rect(fill = "white", colour = NA),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.line.x      = element_line(size = 0.5),
-        axis.title.x     = element_blank(),
-        axis.ticks.x     = element_line(colour = "black"),
-        axis.text.x      = element_text(colour = "black"),
-        axis.ticks.y     = element_blank(),
-        axis.text.y      = element_text(hjust  = 0,
-                                        size   = 8,
-                                        colour = "black",
-                                        face   = boldheadings,
-                                        margin = margin(r = ', heading.space,', unit = "lines")),
-        panel.border     = element_blank(),
-        panel.spacing    = unit(', plot.space,', "lines"),
-        strip.background = element_blank(),
-        strip.placement  = "outside",
-        strip.text       = element_text(face = "bold"),
-        legend.position  = "none",
-        plot.margin      = unit(c(2,6,2,0), "lines"))
-')
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
   if (showcode){
-    writeLines(paste("# ggplot2 code ------------------",
-                     "# Assign the data returned by the function to 'datatoplot' \ndatatoplot <- plot$data",
-                     plotcode,
-                     sep = "\n\n"),
+    writeLines(paste(c('# ggplot2 code ------------------',
+                       '# Assign the data returned by the function to datatoplot',
+                       'datatoplot <- plot$data',
+                       '',
+                       plotcode),
+                     collapse = "\n"),
                file.path(tempdir(), "plotcode.txt"))
     viewer <- getOption("viewer", default = function(url){})
     viewer(file.path(tempdir(), "plotcode.txt"))
   }
 
-  plot <- eval(parse(text = plotcode), parent.frame())
+  plot <- eval(parse(text = plotcode))
   if (printplot){
     print(plot)
   }

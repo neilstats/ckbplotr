@@ -81,16 +81,14 @@ make_shape_plot <- function(data,
   # Create strings for axis breaks
   scale_x_string <- NULL
   if (!is.null(xbreaks)){
-    scale_x_string <- paste0('
-  # Set the x-axis scale
-  scale_x_continuous(breaks = ', deparse(xbreaks),') +
-')
+    scale_x_string <- c('',
+                        '  # Set the x-axis scale',
+                        sprintf('scale_x_continuous(breaks = %s) +', deparse(xbreaks)))
   }
 
-  y_breaks_string <- NULL
+  y_breaks_string <- ''
   if (!is.null(ybreaks)){
-    y_breaks_string <- paste0(',
-                     breaks = ', deparse(ybreaks))
+    y_breaks_string <- sprintf(', breaks = %s', deparse(ybreaks))
   }
 
   # Create strings for y-axis scale, estimates and CIs
@@ -120,16 +118,14 @@ make_shape_plot <- function(data,
 
   # Create string for setting fill colour by group
   if (!is.null(col.group)) {
-    group_string <- paste0(',
-                   fill = as.factor(`', col.group,'`)')
-    scale_fill_string <- '
-  # Set the scale for fill colours
-  scale_fill_grey(start = 0, end = 1, guide = FALSE) +
-'
+    group_string <- sprintf(', fill = as.factor(`%s`)', col.group)
+    scale_fill_string <- c('',
+                           '  # Set the scale for fill colours',
+                           '  scale_fill_grey(start = 0, end = 1, guide = FALSE) +')
     fill_string <- ''
   } else {
     group_string <- ''
-    scale_fill_string <- ''
+    scale_fill_string <- NULL
     fill_string <- ', fill = "black"'
   }
 
@@ -146,69 +142,70 @@ make_shape_plot <- function(data,
 
   # Create string for plotting col.n under CIs
   if (!is.null(col.n)){
-    n_events_string <- paste0('
-  # Plot n events text
-  geom_text(aes(y = ', lci_string, ',
-            label = ', col.n, '),
-            vjust = 1.8,
-            size  = 3) +
-')
+    n_events_string <- c('',
+                         '  # Plot n events text',
+                         sprintf('  geom_text(aes(y = %s,', lci_string),
+                         sprintf('            label = %s),', col.n),
+                         '            vjust = 1.8,',
+                         '            size  = 3) +')
   } else {
-    n_events_string = ''
+    n_events_string <- NULL
   }
 
   # Put together plot code with strings created above
-  plotcode <- paste0('
-# Create the ggplot
-plot <- ggplot(data = ', deparse(substitute(data)),',
-               aes(x = ', col.x, ', y = ', est_string, group_string, ')) +
-
-  # Plot the CIs
-  geom_linerange(aes(ymin = ', lci_string,',
-                     ymax = ', uci_string,')) +
-
-  # Plot the point estimates
-  ', geom_point_string,' +
-
-  # Plot point estimates text
-  geom_text(aes(y = ', uci_string, ',
-            label = format(round(', est_string, ', 2), nsmall = 2)),
-            vjust = -0.8,
-            size  = 3) +
-  ', n_events_string, '
-  # Set the scale for the size of boxes
-  scale_radius(guide = "none",
-               limits = c(0, NA),
-               range = c(0, ', pointsize,')) +
-  ', scale_fill_string, '
-  # Set the y-axis scale
-  scale_y_continuous(trans = "', scale,'"', y_breaks_string, ') +
-  ', scale_x_string,'
-  # Add titles
-  xlab("', xlab,'") +
-  ylab("', ylab,'") +
-  ggtitle("', title,'")
-
-# Plot like a CKB plot
-plot_like_ckb(plot  = plot,
-              xlims = ', xlims,',
-              ylims = ', ylims,',
-              gap   = ', gap,',
-              ext   = ', ext,',
-              ratio = ', ratio,')')
+  plotcode <- c('# Create the ggplot',
+                sprintf('plot <- ggplot(data = %s,', deparse(substitute(data))),
+                sprintf('               aes(x = %s, y = %s%s)) +', col.x, est_string, group_string),
+                '',
+                '  # Plot the CIs',
+                sprintf('  geom_linerange(aes(ymin = %s,', lci_string),
+                sprintf('                     ymax = %s)) +', uci_string),
+                '',
+                '  # Plot the point estimates',
+                sprintf('  %s +', geom_point_string),
+                '',
+                '  # Plot point estimates text',
+                sprintf('  geom_text(aes(y = %s,', uci_string),
+                sprintf('            label = format(round(%s, 2), nsmall = 2)),', est_string),
+                '            vjust = -0.8,',
+                '            size  = 3) +',
+                n_events_string,
+                '',
+                '  # Set the scale for the size of boxes',
+                '  scale_radius(guide  = "none",',
+                '               limits = c(0, NA),',
+                sprintf('               range  = c(0, %s)) +', pointsize),
+                scale_fill_string,
+                '',
+                '  # Set the y-axis scale',
+                sprintf('  scale_y_continuous(trans = "%s"%s) +', scale, y_breaks_string),
+                scale_x_string,
+                '',
+                '  # Add titles',
+                sprintf('  xlab("%s") +', xlab),
+                sprintf('  ylab("%s")', ylab),
+                sprintf('  + ggtitle("%s")', title),
+                '',
+                '',
+                '# Plot like a CKB plot',
+                'plot_like_ckb(plot  = plot,',
+                sprintf('              xlims = %s,', xlims),
+                sprintf('              ylims = %s,', ylims),
+                sprintf('              gap   = %s,', gap),
+                sprintf('              ext   = %s,', ext),
+                sprintf('              ratio = %s)', ratio))
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
   if (showcode){
-    writeLines(paste("# ggplot2 code ------------------",
-                     plotcode,
-                     sep = "\n\n"),
+    writeLines(paste(plotcode,
+                     collapse = "\n"),
                file.path(tempdir(), "plotcode.txt"))
     viewer <- getOption("viewer", default = function(url){})
     viewer(file.path(tempdir(), "plotcode.txt"))
   }
 
   # Create the plot
-  plot <- eval(parse(text = plotcode), parent.frame())
+  plot <- eval(parse(text = plotcode))
   if (printplot){
     print(plot)
   }
