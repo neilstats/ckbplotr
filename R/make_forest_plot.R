@@ -508,6 +508,10 @@ make_forest_plot <- function(
 
   if (is.null(xlim)) {
     xlim <- range(pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed)))
+    ## check for zero as axis limit when using exponential
+    if (exponentiate & isTRUE(all.equal(0, xlim[[1]]))){
+      xlim[[1]] <- min(c(datatoplot$lci_transformed, datatoplot$uci_transformed), na.rm = TRUE)
+    }
   }
 
   xfrom <- min(xlim)
@@ -523,7 +527,7 @@ make_forest_plot <- function(
 
 
   if (is.null(xticks)) {
-    xticks <- pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed))
+    xticks <- pretty(c(xfrom, xto))
   }
   xticksline <- paste0("breaks = ",paste(deparse(xticks), collapse = ""),",")
 
