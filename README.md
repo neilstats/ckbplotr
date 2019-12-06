@@ -53,7 +53,6 @@ Given a data frame of estimates and standard errors (to be plotted on the y axis
 
 ``` r
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 3.5.1
 library(ckbplotr)
 
 results <- data.frame(

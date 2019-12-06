@@ -4,8 +4,8 @@
 \alias{plot_like_ckb}
 \title{Make a ggplot into CKB style}
 \usage{
-plot_like_ckb(plot, xlims, ylims, gap = c(0.025, 0.025), ext = c(0.025,
-  0.025), ratio = 1.5)
+plot_like_ckb(plot, xlims = NULL, ylims = NULL, gap = c(0.025,
+  0.025), ext = c(0.025, 0.025), ratio = 1.5)
 }
 \arguments{
 \item{plot}{A ggplot2 plot object.}
