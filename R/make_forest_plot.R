@@ -507,13 +507,11 @@ make_forest_plot <- function(
 
 
   if (is.null(xlim)) {
-    xfrom <- floor(min(tf(datatoplot$estimate - 1.96*datatoplot$stderr), na.rm = TRUE)*10)/10
-    xto   <- ceiling(max(tf(datatoplot$estimate + 1.96*datatoplot$stderr), na.rm = TRUE)*10)/10
-  } else {
-    xfrom <- min(xlim)
-    xto   <- max(xlim)
+    xlim <- range(pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed)))
   }
 
+  xfrom <- min(xlim)
+  xto   <- max(xlim)
   xmid  <- tf((inv_tf(xfrom) + inv_tf(xto)) / 2)
 
   ## check if any cis are outside limits of x-axis
@@ -525,10 +523,9 @@ make_forest_plot <- function(
 
 
   if (is.null(xticks)) {
-    xticksline <- ""
-  } else {
-    xticksline <- paste0("breaks = ",paste(deparse(xticks), collapse = ""),",")
+    xticks <- pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed))
   }
+  xticksline <- paste0("breaks = ",paste(deparse(xticks), collapse = ""),",")
 
 
   if (is.null(col.left)) {
