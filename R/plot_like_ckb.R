@@ -14,8 +14,8 @@
 
 plot_like_ckb <- function(
   plot,
-  xlims,
-  ylims,
+  xlims=NULL,
+  ylims=NULL,
   gap=c(0.025,0.025),
   ext=c(0.025,0.025),
   ratio=1.5
@@ -30,6 +30,25 @@ plot_like_ckb <- function(
   invtf_x <- ifelse(is.null(invtf_x), identity, invtf_x)
   tf_y    <- ifelse(is.null(tf_y), identity, tf_y)
   invtf_y <- ifelse(is.null(invtf_y), identity, invtf_y)
+
+  # if xlims or ylims not given as argument, get axis limits from range in ggplot plot
+  if (is.null(xlims)){
+    if (!is.null(ggplot_build(plot)$layout$panel_scales_x[[1]]$limits)){
+      xlims <- ggplot_build(plot)$layout$panel_scales_x[[1]]$limits
+    } else {
+      xlims <- ggplot_build(plot)$layout$panel_scales_x[[1]]$range$range
+    }
+    xlims <- range(pretty(xlims))
+  }
+
+  if (is.null(ylims)){
+    if (!is.null(ggplot_build(plot)$layout$panel_scales_y[[1]]$limits)){
+      ylims <- ggplot_build(plot)$layout$panel_scales_y[[1]]$limits
+    } else {
+      ylims <- ggplot_build(plot)$layout$panel_scales_y[[1]]$range$range
+    }
+    ylims <- range(pretty(ylims))
+  }
 
   # calculate plot limits
   limits <- list(xaxis = xlims, yaxis = ylims)
