@@ -28,8 +28,7 @@
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
 #' @param col.pval Currently does nothing.
 #' @param col.left A character vector of names of columns to be printed to the left of the plot.
-#' @param col.right Name of additional column to be printed to the right of the plot.
-#'   Currently this is not added to the plot, but will be in the data frame.
+#' @param col.right A character vector of names of columns to be printed to the right of the plot.
 #' @param ci.delim Character string to separate lower and upper limits of
 #'   confidence interval. (Default: ", ")
 #' @param whiteci A list of character vectors. List must be the same length as cols.
@@ -401,13 +400,15 @@ make_forest_data <- function(
 #'
 #'
 #' @inheritParams make_forest_data
+#' @param estcolumn Include column of estimates and confidence intervals to the
+#' right of each plot. (Default: TRUE)
 #' @param col.left.space A numeric vector. Sizes of the gaps between the plot
 #' and col.left columns. As a multiple of the length of the x-axis. (Default: 0)
 #' @param col.right.space Size of the gap between the plot and column to the
 #' right of the plot. As a multiple of the length of the x-axis. (Default: 0)
 #' @param col.left.heading A character vector of titles for col.left columns. (Default: "")
-#' @param col.right.heading Label to appear above the text showing estimates and
-#' CIs. (Default: "HR (95\% CI)")
+#' @param col.right.heading A character vector of titles for the column of estimates
+#' (if estcolumn = TRUE) and col.right columns. (Default: "HR (95\% CI)")
 #' @param title Title to appear at the top of the plot.
 #' @param xlab Label to appear below the x-axis. (Default: "HR (95\% CI)")
 #' @param xlim A numeric vector. The limits of the x axis.
@@ -451,6 +452,7 @@ make_forest_plot <- function(
   col.right.heading = "HR (95% CI)",
   col.left.space  = 0,
   col.right.space = 0,
+  estcolumn     = TRUE,
   col.pval      = NULL,
   ci.delim      = ", ",
   title         = "",
@@ -532,6 +534,36 @@ make_forest_plot <- function(
   xticksline <- paste0("breaks = ",paste(deparse(xticks), collapse = ""),",")
 
 
+  # columns to right of plots
+  if (is.null(col.right) & !estcolumn) {
+    col.right.line <- ""
+  } else {
+
+    if (estcolumn){
+      col.right <- c("textresult", col.right)
+    }
+
+    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading),
+                                         ~ c(sprintf('  ## column %s', ..1),
+                                             sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`),',
+                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
+                                             '            hjust = 0,',
+                                             '            size = 3,',
+                                             '            na.rm = TRUE,',
+                                             '            parse = TRUE) +',
+                                             '  annotate(geom = "text",',
+                                             sprintf('           x = 0, y = %s,',
+                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                             sprintf('           label = "%s",', ..3),
+                                             '           hjust = 0,',
+                                             '           size  = 3,',
+                                             '           fontface = "bold") +')))
+  }
+
+
+
+
+  # columns to left of plots
   if (is.null(col.left)) {
     col.left.line <- ""
   } else {
@@ -623,23 +655,11 @@ make_forest_plot <- function(
                 '  coord_flip(clip = "off",',
                 sprintf('              ylim = c(%s, %s)) +', xfrom, xto),
                 '',
-                '  # Plot estimates and confidence intervals (textresult) on the right edge of each forest plot',
-                sprintf('  geom_text(aes(x = -row, y = %s, label = textresult),', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space)),
-                '            hjust = 0,',
-                '            vjust = 0.5,',
-                '            size = 3,',
-                '            parse = TRUE) +',
+                '  # Add columns to right side of plots',
+                col.right.line,
                 '',
                 '  # Add columns to left side of plots',
                 col.left.line,
-                '',
-                '  # Add xlab above the estimates and CIs on the right of each plot',
-                '  annotate(geom = "text",',
-                sprintf('           x = 0, y = %s,', tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space)),
-                sprintf('           label = "%s",', col.right.heading),
-                '           hjust = 0,',
-                '           size  = 3,',
-                '           fontface = "bold") +',
                 '',
                 '  # Add xlab below each axis',
                 '  annotate(geom = "text",',

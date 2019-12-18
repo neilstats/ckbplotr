@@ -9,12 +9,13 @@ make_forest_plot(headings = NULL, rows = NULL, cols,
   col.estimate = "estimate", col.stderr = "stderr", col.lci = NULL,
   col.uci = NULL, col.left = NULL, col.right = NULL,
   col.left.heading = "", col.right.heading = "HR (95\% CI)",
-  col.left.space = 0, col.right.space = 0, col.pval = NULL,
-  ci.delim = ", ", title = "", xlab = "HR (95\% CI)", xlim = NULL,
-  xticks = NULL, blankrows = c(1, 1, 0, 0), whiteci = NULL,
-  diamond = NULL, scalepoints = FALSE, pointsize = 3,
-  addtext = NULL, heading.space = 4, plot.space = 8,
-  printplot = TRUE, showcode = TRUE)
+  col.left.space = 0, col.right.space = 0, estcolumn = TRUE,
+  col.pval = NULL, ci.delim = ", ", title = "",
+  xlab = "HR (95\% CI)", xlim = NULL, xticks = NULL,
+  blankrows = c(1, 1, 0, 0), whiteci = NULL, diamond = NULL,
+  scalepoints = FALSE, pointsize = 3, addtext = NULL,
+  heading.space = 4, plot.space = 8, printplot = TRUE,
+  showcode = TRUE)
 }
 \arguments{
 \item{headings}{A data frame that contains the headings to be used for the
@@ -54,19 +55,21 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
 
-\item{col.right}{Name of additional column to be printed to the right of the plot.
-Currently this is not added to the plot, but will be in the data frame.}
+\item{col.right}{A character vector of names of columns to be printed to the right of the plot.}
 
 \item{col.left.heading}{A character vector of titles for col.left columns. (Default: "")}
 
-\item{col.right.heading}{Label to appear above the text showing estimates and
-CIs. (Default: "HR (95\% CI)")}
+\item{col.right.heading}{A character vector of titles for the column of estimates
+(if estcolumn = TRUE) and col.right columns. (Default: "HR (95\% CI)")}
 
 \item{col.left.space}{A numeric vector. Sizes of the gaps between the plot
 and col.left columns. As a multiple of the length of the x-axis. (Default: 0)}
 
 \item{col.right.space}{Size of the gap between the plot and column to the
 right of the plot. As a multiple of the length of the x-axis. (Default: 0)}
+
+\item{estcolumn}{Include column of estimates and confidence intervals to the
+right of each plot. (Default: TRUE)}
 
 \item{col.pval}{Currently does nothing.}
 
