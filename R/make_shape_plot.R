@@ -65,6 +65,8 @@ make_shape_plot <- function(data,
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
 
+  # Add empty string title if it is null
+  if (is.null(title)) title <- ""
 
   # Put column names in ``
   col.x        <- paste0("`", col.x, "`")
@@ -183,8 +185,8 @@ make_shape_plot <- function(data,
                 '',
                 '  # Add titles',
                 sprintf('  xlab("%s") +', xlab),
-                sprintf('  ylab("%s")', ylab),
-                sprintf('  + ggtitle("%s")', title),
+                sprintf('  ylab("%s") +', ylab),
+                sprintf('  ggtitle("%s")', title),
                 '',
                 '',
                 '# Plot like a CKB plot',
