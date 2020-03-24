@@ -476,7 +476,7 @@ make_forest_plot <- function(
     tf       <- exp
     inv_tf   <- log
     scale    <- "log"
-    nullline <- "  geom_segment(aes(x=-1, xend=-Inf, y=1, yend=1)) +"
+    nullline <- '  annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1) +'
   } else {
     tf       <- identity
     inv_tf   <- identity
@@ -636,15 +636,16 @@ make_forest_plot <- function(
                 sprintf('               range = c(0, %s)) +', pointsize),
                 '',
                 '  # Plot CIs',
-                '  geom_linerange(aes(ymin = lci_transformed, ymax = uci_transformed, colour = linecolour),',
+                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
+                '                 aes(ymin = lci_transformed, ymax = uci_transformed, colour = linecolour),',
                 '                 na.rm = TRUE) +',
                 '  scale_colour_identity() +',
                 '',
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
-                '  geom_segment(data = datatoplot %>% dplyr::filter(cioverright == TRUE),',
+                '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
                 '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed),',
                 '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
-                '  geom_segment(data = datatoplot %>% dplyr::filter(cioverleft == TRUE),',
+                '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
                 '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed),',
                 '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
                 '',
