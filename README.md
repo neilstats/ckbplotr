@@ -53,7 +53,6 @@ Given a data frame of estimates and standard errors (to be plotted on the y axis
 
 ``` r
 library(ggplot2)
-#> Warning: package 'ggplot2' was built under R version 3.5.3
 library(ckbplotr)
 
 results <- data.frame(
@@ -223,6 +222,8 @@ forestplot <- make_forest_plot(cols         = list(resultsA, resultsB),
                                exponentiate = TRUE,
                                colnames     = c("Analysis A", "Analysis B"),
                                col.key      = "variable")
+#> Warning: Vectorized input to `element_text()` is not officially supported.
+#> Results may be unexpected or may change in future versions of ggplot2.
 ```
 
 <img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
@@ -272,6 +273,8 @@ forestplot <- make_forest_plot(headings         = headings,
                                col.right.space  = 0.02,
                                heading.space    = 2,
                                plot.space       = 8)
+#> Warning: Vectorized input to `element_text()` is not officially supported.
+#> Results may be unexpected or may change in future versions of ggplot2.
 ```
 
 <img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
