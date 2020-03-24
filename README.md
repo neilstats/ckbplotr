@@ -19,7 +19,7 @@ devtools::install_github('neilstats/ckbplotr')
 
 ``` r
 # The easiest way is to install the whole tidyverse:
-install.package("tidyverse")
+install.packages("tidyverse")
 
 # # Or install just these packages:
 # install.packages(c("ggplot2", "readr", "dplyr", "purrr"))
