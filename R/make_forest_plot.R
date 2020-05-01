@@ -650,7 +650,7 @@ make_forest_plot <- function(
                 '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
                 '',
                 '  # Add diamonds',
-                '  geom_polygon(data = diamonds, aes(x = x, y = y), colour="black", fill = "white") +',
+                '  geom_polygon(data = diamonds, aes(x = x, y = y, group = row), colour="black", fill = "white") +',
                 '',
                 '  # Flip x and y coordinates',
                 '  coord_flip(clip = "off",',
