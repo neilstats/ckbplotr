@@ -721,13 +721,18 @@ make_forest_plot <- function(
     viewer(file.path(tempdir(), "plotcode.txt"))
   }
 
+
+  # Make copy of datatoplot before running plot code
+  datatoplot_clean <- datatoplot
+
+  # Create plot and print
   plot <- eval(parse(text = plotcode))
   if (printplot){
     print(plot)
   }
 
   return(list(plot = plot,
-              data = datatoplot,
+              data = datatoplot_clean,
               code = plotcode) )
 
 }
