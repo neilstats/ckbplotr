@@ -606,7 +606,7 @@ make_forest_plot <- function(
                 '                y3 = uci_transformed,',
                 '                y4 = estimate_transformed) %>%',
                 '  tidyr::gather(part, y, y1:y4) %>%',
-                '  dplyr::arrange(column, part) %>%',
+                '  dplyr::arrange(column, row, part) %>%',
                 '  dplyr::mutate(x = - row + rep(c(0, -0.25, 0, 0.25), times = sum(datatoplot$diamond)))',
                 '',
                 '# Remove plotting of points if a diamond is to be used',
