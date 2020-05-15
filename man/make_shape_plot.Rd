@@ -4,13 +4,31 @@
 \alias{make_shape_plot}
 \title{Make a shape plot with ggplot2}
 \usage{
-make_shape_plot(data, col.x = "x", col.estimate = "estimate",
-  col.stderr = "stderr", col.lci = NULL, col.uci = NULL,
-  col.n = NULL, col.group = NULL, exponentiate = FALSE,
-  scalepoints = FALSE, pointsize = 3, xlims, ylims, gap = c(0.025,
-  0.025), ext = c(0.025, 0.025), ratio = 1.5, xbreaks = NULL,
-  ybreaks = NULL, xlab = "Risk factor", ylab = "Estimate (95\% CI)",
-  title = "Figure", printplot = TRUE, showcode = TRUE)
+make_shape_plot(
+  data,
+  col.x = "x",
+  col.estimate = "estimate",
+  col.stderr = "stderr",
+  col.lci = NULL,
+  col.uci = NULL,
+  col.n = NULL,
+  col.group = NULL,
+  exponentiate = FALSE,
+  scalepoints = FALSE,
+  pointsize = 3,
+  xlims,
+  ylims,
+  gap = c(0.025, 0.025),
+  ext = c(0.025, 0.025),
+  ratio = 1.5,
+  xbreaks = NULL,
+  ybreaks = NULL,
+  xlab = "Risk factor",
+  ylab = "Estimate (95\% CI)",
+  title = "Figure",
+  printplot = TRUE,
+  showcode = TRUE
+)
 }
 \arguments{
 \item{data}{The data frame containing estimates to be plotted.}

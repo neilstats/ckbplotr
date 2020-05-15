@@ -1,2 +1,5 @@
 .Rproj.user
 Thumbs.db
+inst/doc
+*.DS_Store
+docs

@@ -1,5 +1,7 @@
 ---
-output: github_document
+output:
+  github_document:
+    html_preview: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -22,6 +24,8 @@ developed by, and primarily for, [China Kadoorie Biobank](http://www.ckbiobank.o
 researchers.
 
 ## Installation
+
+### Directly from github
 The latest development version of `ckbplotr` can be installed directly from 
 github using devtools.
 ```{r, eval = FALSE}
@@ -29,6 +33,7 @@ install.packages('devtools')
 devtools::install_github('neilstats/ckbplotr')
 ```
 
+### Or from source package
 `ckbplotr` can also be installed from its source package. The R packages 
 `ggplot2`, `magrittr`, `readr`, `tibble`, `dplyr`, `purrr` and `rlang` must 
 first be installed. These are part of the collection of tidyverse packages.
@@ -47,8 +52,7 @@ Or, in RStudio, open the "Tools" menu and select "Install Packages...".
 In the "Install from..." box select "Package Archive File", and in the
 "Package archive" box browse to the ckbplotr.tar.gz file.
 
-
-
+The source package for the latest release version is available [here](https://github.com/neilstats/ckbplotr/releases/latest).
 
 ## The make_shape_plot function
 
@@ -182,6 +186,17 @@ The function returns a named list containg:
 In RStudio the ggplot2 code used to generate the plot will be shown in the 
 'Viewer' pane. If modifications are needed to the plot, then this code can be
 copied, edited, and run as needed.
+
+
+### Expected warning
+You may get the following warning when using this function.
+
+> Vectorized input to `element_text()` is not officially supported.
+> Results may be unexpected or may change in future versions of ggplot2. 
+
+This is related to how some headings used to label the rows of the forest plot are
+made bold. This should not be a problem if the forest plot produced appears as expected.
+(This hack is discussed [here](https://github.com/tidyverse/ggplot2/issues/3492).)
 
 
 ### The headings data frame

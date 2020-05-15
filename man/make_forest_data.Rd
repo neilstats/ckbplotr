@@ -4,12 +4,27 @@
 \alias{make_forest_data}
 \title{Prepares data set for a forest plot}
 \usage{
-make_forest_data(headings = NULL, rows = NULL, cols, colnames = NULL,
-  col.key = "key", col.estimate = "estimate", col.stderr = "stderr",
-  col.lci = NULL, col.uci = NULL, col.pval = NULL, col.left = NULL,
-  col.right = NULL, ci.delim = ", ", whiteci = NULL,
-  diamond = NULL, exponentiate = TRUE, blankrows = c(1, 1, 0, 0),
-  scalepoints = FALSE, addtext = NULL)
+make_forest_data(
+  headings = NULL,
+  rows = NULL,
+  cols,
+  colnames = NULL,
+  col.key = "key",
+  col.estimate = "estimate",
+  col.stderr = "stderr",
+  col.lci = NULL,
+  col.uci = NULL,
+  col.pval = NULL,
+  col.left = NULL,
+  col.right = NULL,
+  ci.delim = ", ",
+  whiteci = NULL,
+  diamond = NULL,
+  exponentiate = TRUE,
+  blankrows = c(1, 1, 0, 0),
+  scalepoints = FALSE,
+  addtext = NULL
+)
 }
 \arguments{
 \item{headings}{A data frame that contains the headings to be used for the

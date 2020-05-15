@@ -4,13 +4,27 @@
 \alias{make_jasper_forest_plot}
 \title{Make forest plot with Jasper}
 \usage{
-make_jasper_forest_plot(filestem = "_test", headings = NULL,
-  rows = NULL, cols, exponentiate = TRUE, col.key = "key",
-  col.estimate = "estimate", col.stderr = "stderr", col.lci = NULL,
-  col.uci = NULL, col.left = NULL, col.right = NULL,
-  col.pval = NULL, xlab = "HR (95\% CI)",
-  ValueLabelsHeader = "HR (95\% CI)", forest.xlim = NULL,
-  forest.xticks = NULL, blankrows = c(1, 1, 0, 0), ...)
+make_jasper_forest_plot(
+  filestem = "_test",
+  headings = NULL,
+  rows = NULL,
+  cols,
+  exponentiate = TRUE,
+  col.key = "key",
+  col.estimate = "estimate",
+  col.stderr = "stderr",
+  col.lci = NULL,
+  col.uci = NULL,
+  col.left = NULL,
+  col.right = NULL,
+  col.pval = NULL,
+  xlab = "HR (95\% CI)",
+  ValueLabelsHeader = "HR (95\% CI)",
+  forest.xlim = NULL,
+  forest.xticks = NULL,
+  blankrows = c(1, 1, 0, 0),
+  ...
+)
 }
 \arguments{
 \item{filestem}{String to use for file names. (Default: "_test")}

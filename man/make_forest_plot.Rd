@@ -4,18 +4,41 @@
 \alias{make_forest_plot}
 \title{Make forest plot with ggplot2}
 \usage{
-make_forest_plot(headings = NULL, rows = NULL, cols,
-  exponentiate = TRUE, colnames = NULL, col.key = "key",
-  col.estimate = "estimate", col.stderr = "stderr", col.lci = NULL,
-  col.uci = NULL, col.left = NULL, col.right = NULL,
-  col.left.heading = "", col.right.heading = "HR (95\% CI)",
-  col.left.space = 0, col.right.space = 0, estcolumn = TRUE,
-  col.pval = NULL, ci.delim = ", ", title = "",
-  xlab = "HR (95\% CI)", xlim = NULL, xticks = NULL,
-  blankrows = c(1, 1, 0, 0), whiteci = NULL, diamond = NULL,
-  scalepoints = FALSE, pointsize = 3, addtext = NULL,
-  heading.space = 4, plot.space = 8, printplot = TRUE,
-  showcode = TRUE)
+make_forest_plot(
+  headings = NULL,
+  rows = NULL,
+  cols,
+  exponentiate = TRUE,
+  colnames = NULL,
+  col.key = "key",
+  col.estimate = "estimate",
+  col.stderr = "stderr",
+  col.lci = NULL,
+  col.uci = NULL,
+  col.left = NULL,
+  col.right = NULL,
+  col.left.heading = "",
+  col.right.heading = "HR (95\% CI)",
+  col.left.space = 0,
+  col.right.space = 0,
+  estcolumn = TRUE,
+  col.pval = NULL,
+  ci.delim = ", ",
+  title = "",
+  xlab = "HR (95\% CI)",
+  xlim = NULL,
+  xticks = NULL,
+  blankrows = c(1, 1, 0, 0),
+  whiteci = NULL,
+  diamond = NULL,
+  scalepoints = FALSE,
+  pointsize = 3,
+  addtext = NULL,
+  heading.space = 4,
+  plot.space = 8,
+  printplot = TRUE,
+  showcode = TRUE
+)
 }
 \arguments{
 \item{headings}{A data frame that contains the headings to be used for the
