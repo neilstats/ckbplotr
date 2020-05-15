@@ -23,3 +23,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/neilstats/ckbplotr
+BugReports: https://github.com/neilstats/ckbplotr/issues
