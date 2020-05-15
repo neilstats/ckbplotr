@@ -16,11 +16,14 @@ Imports:
     tibble,
     rlang,
     readr,
-    purrr
+    purrr,
+    tidyr
 RoxygenNote: 7.1.0
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    grid,
+    gridExtra
 VignetteBuilder: knitr
 URL: https://github.com/neilstats/ckbplotr
 BugReports: https://github.com/neilstats/ckbplotr/issues
