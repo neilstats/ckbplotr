@@ -145,6 +145,8 @@
   <span class='kw'>ci.delim</span> <span class='kw'>=</span> <span class='st'>", "</span>,
   <span class='kw'>whiteci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>diamond</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>bold</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>boldheadings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>blankrows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
   <span class='kw'>scalepoints</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -228,6 +230,17 @@ Identify the rows (using the key values) for which the CI should be plotted in w
       <th>diamond</th>
       <td><p>A list of character vectors. List must be the same length as cols.
 Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)</p></td>
+    </tr>
+    <tr>
+      <th>bold</th>
+      <td><p>A list of character vectors. List must be the same length as cols.
+Identify the rows (using the key values) for which text should be bold.
+If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)</p></td>
+    </tr>
+    <tr>
+      <th>boldheadings</th>
+      <td><p>A character vector. Identify headings (using key values)
+which should additionally be bold. (Default: NULL)</p></td>
     </tr>
     <tr>
       <th>exponentiate</th>
