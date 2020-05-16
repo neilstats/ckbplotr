@@ -21,6 +21,9 @@ make_forest_plot(
   col.right.heading = "HR (95\% CI)",
   col.left.space = 0,
   col.right.space = 0,
+  col.left.hjust = 1,
+  col.right.hjust = 0,
+  col.heading.space = 0,
   estcolumn = TRUE,
   col.pval = NULL,
   ci.delim = ", ",
@@ -90,6 +93,15 @@ and col.left columns. As a multiple of the length of the x-axis. (Default: 0)}
 
 \item{col.right.space}{Size of the gap between the plot and column to the
 right of the plot. As a multiple of the length of the x-axis. (Default: 0)}
+
+\item{col.left.hjust}{A numeric vector. The horizontal justification of
+col.left columns. (Default: 1)}
+
+\item{col.right.hjust}{A numeric vector. The horizontal justification of
+col.right columns. (Default: 0)}
+
+\item{col.heading.space}{Position of the titles given by col.left.heading and
+col.right.heading. Increase to move them up. (Default: 0)}
 
 \item{estcolumn}{Include column of estimates and confidence intervals to the
 right of each plot. (Default: TRUE)}

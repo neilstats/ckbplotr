@@ -169,7 +169,7 @@ make_forest_data <- function(
                     heading3 = heading3,
                     key = !!rlang::sym(col.key))
 
-    out <- tibble::tibble(Heading = "", key = "", extrarowkey = "")
+    out <- tibble::tibble(Heading = "", key = "", extrarowkey = "", removelater = TRUE)
 
     for (head1 in rows) {
       #    print(paste0("now working on: ", head1))
@@ -179,7 +179,7 @@ make_forest_data <- function(
         dplyr::distinct(heading2, .keep_all = TRUE)
 
       if (is.na(l2headings[[1, "heading2"]])) {
-        out <- tibble::add_row(out, Heading = head1, key = headings %>% dplyr::filter(heading1 == head1) %>% dplyr::pull(key))
+        if (head1 != "") {out <- tibble::add_row(out, Heading = head1, key = headings %>% dplyr::filter(heading1 == head1) %>% dplyr::pull(key))}
 
         # Add extra row for addtext
         if (headings[[which(headings$heading1 == head1),"key"]] %in% extrarowkeys) {
@@ -192,7 +192,7 @@ make_forest_data <- function(
 
 
 
-        out <- tibble::add_row(out, Heading = head1)
+        if (head1 != "") {out <- tibble::add_row(out, Heading = head1)}
 
         if (blankrows[[1]] > 0) {for (i in 1:blankrows[[1]]) { out <- tibble::add_row(out, Heading = "") }}
 
@@ -208,7 +208,7 @@ make_forest_data <- function(
           #     print(l3headings)
 
           if (is.na(l3headings[[1, "heading3"]])) {
-            out <- tibble::add_row(out, Heading = l2headings[[head2, "heading2"]], key = l2headings[[head2, "key"]])
+            if (head2 != "") {out <- tibble::add_row(out, Heading = l2headings[[head2, "heading2"]], key = l2headings[[head2, "key"]])}
 
             # Add extra row for addtext
             if (l2headings[[head2, "key"]] %in% extrarowkeys) {
@@ -218,7 +218,7 @@ make_forest_data <- function(
             }
           }
           else{
-            out <- tibble::add_row(out, Heading = l2headings[[head2, "heading2"]])
+            if (head2 != "") {out <- tibble::add_row(out, Heading = l2headings[[head2, "heading2"]])}
             if (blankrows[[3]] > 0) {for (i in 1:blankrows[[3]]) { out <- tibble::add_row(out, Heading = "") }}
             for (head3 in 1:nrow(l3headings)) {
               out <- tibble::add_row(out,
@@ -247,6 +247,8 @@ make_forest_data <- function(
     }
 
     out <- out %>%
+      dplyr::filter(is.na(removelater) | !removelater) %>%
+      dplyr::select(-removelater) %>%
       dplyr::mutate(row = 1:dplyr::n())
   }
 
@@ -406,9 +408,15 @@ make_forest_data <- function(
 #' and col.left columns. As a multiple of the length of the x-axis. (Default: 0)
 #' @param col.right.space Size of the gap between the plot and column to the
 #' right of the plot. As a multiple of the length of the x-axis. (Default: 0)
+#' @param col.left.hjust A numeric vector. The horizontal justification of
+#' col.left columns. (Default: 1)
+#' @param col.right.hjust A numeric vector. The horizontal justification of
+#' col.right columns. (Default: 0)
 #' @param col.left.heading A character vector of titles for col.left columns. (Default: "")
 #' @param col.right.heading A character vector of titles for the column of estimates
 #' (if estcolumn = TRUE) and col.right columns. (Default: "HR (95\% CI)")
+#' @param col.heading.space Position of the titles given by col.left.heading and
+#' col.right.heading. Increase to move them up. (Default: 0)
 #' @param title Title to appear at the top of the plot.
 #' @param xlab Label to appear below the x-axis. (Default: "HR (95\% CI)")
 #' @param xlim A numeric vector. The limits of the x axis.
@@ -448,10 +456,13 @@ make_forest_plot <- function(
   col.uci       = NULL,
   col.left      = NULL,
   col.right     = NULL,
-  col.left.heading = "",
+  col.left.heading  = "",
   col.right.heading = "HR (95% CI)",
-  col.left.space  = 0,
-  col.right.space = 0,
+  col.left.space    = 0,
+  col.right.space   = 0,
+  col.left.hjust    = 1,
+  col.right.hjust   = 0,
+  col.heading.space = 0,
   estcolumn     = TRUE,
   col.pval      = NULL,
   ci.delim      = ", ",
@@ -543,19 +554,20 @@ make_forest_plot <- function(
       col.right <- c("textresult", col.right)
     }
 
-    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading),
+    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading, col.right.hjust),
                                          ~ c(sprintf('  ## column %s', ..1),
                                              sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`),',
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
-                                             '            hjust = 0,',
+                                             sprintf('           hjust = %s,', ..4),
                                              '            size = 3,',
                                              '            na.rm = TRUE,',
                                              '            parse = TRUE) +',
                                              '  annotate(geom = "text",',
-                                             sprintf('           x = 0, y = %s,',
+                                             sprintf('           x = %s, y = %s,',
+                                                     col.heading.space,
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                              sprintf('           label = "%s",', ..3),
-                                             '           hjust = 0,',
+                                             sprintf('           hjust = %s,', ..4),
                                              '           size  = 3,',
                                              '           fontface = "bold") +')))
   }
@@ -567,18 +579,19 @@ make_forest_plot <- function(
   if (is.null(col.left)) {
     col.left.line <- ""
   } else {
-    col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading),
+    col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust),
                                         ~ c(sprintf('  ## column %s', ..1),
                                             sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`),',
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
-                                            '            hjust = 1,',
+                                            sprintf('           hjust = %s,', ..4),
                                             '            size = 3,',
                                             '            na.rm = TRUE) +',
                                             '  annotate(geom = "text",',
-                                            sprintf('           x = 0, y = %s,',
+                                            sprintf('           x = %s, y = %s,',
+                                                    col.heading.space,
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                             sprintf('           label = "%s",', ..3),
-                                            '           hjust = 1,',
+                                            sprintf('           hjust = %s,', ..4),
                                             '           size  = 3,',
                                             '           fontface = "bold") +')))
   }
