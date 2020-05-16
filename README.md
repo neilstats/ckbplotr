@@ -93,7 +93,7 @@ plot <- make_shape_plot(results[results$is_female == 1,],
                         title        = NULL)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-make_shape_plot-example-1-1.png" width="100%" />
 
 The `col.group` argument can be supplied to plot results for different
 groups (in shades of grey).
@@ -111,7 +111,7 @@ plot <- make_shape_plot(results,
                         title        = NULL)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-make_shape_plot-example-2-1.png" width="100%" />
 
 ## The plot\_like\_ckb function
 
@@ -135,7 +135,7 @@ plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
 plot
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-a-plot-1.png" width="100%" />
 
 Then apply the `plot_like_ckb` function to the plot.
 
@@ -143,7 +143,7 @@ Then apply the `plot_like_ckb` function to the plot.
 plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-plot_like_ckb-example-1-1.png" width="100%" />
 
 If you do not want a gap between the axes, set `gap = c(0, 0)`.
 
@@ -151,7 +151,7 @@ If you do not want a gap between the axes, set `gap = c(0, 0)`.
 plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), gap = c(0, 0))
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-plot_like_ckb-example-2-1.png" width="100%" />
 
 If you wish to override some aspect of the theme applied by
 `plot_like_ckb`, then this can be done by adding a theme after the
@@ -162,7 +162,7 @@ plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50)) +
   theme(axis.title = element_text(colour = "red", face = "plain"))
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-plot_like_ckb-example-3-1.png" width="100%" />
 
 If any data points you are plotting fall outside the axes, then they
 will still be drawn and may show up in places such as the axes, the
@@ -177,7 +177,7 @@ for your data before using the function.
 plot_like_ckb(plot = plot, xlims = c(0, 4), ylims = c(20, 50))
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-plot_like_ckb-example-4-1.png" width="100%" />
 
 A bar chart.
 
@@ -187,7 +187,7 @@ plot_like_ckb(barplot, xlims = c(0.5, 7.5), ylims = c(0, 70), gap = c(0.025, 0.0
   theme(axis.ticks.x = element_blank())
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-bar-chart-example-1.png" width="100%" />
 
 ## The make\_forest\_plot function
 
@@ -283,7 +283,7 @@ forestplot <- make_forest_plot(cols         = list(resultsA, resultsB),
 #> Results may be unexpected or may change in future versions of ggplot2.
 ```
 
-<img src="man/figures/README-unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/README-make_forest_plot-example-1-1.png" width="100%" />
 
 To use headings, create a data frame of headings and specify arguments
 `headings` and `rows`.
@@ -329,13 +329,14 @@ forestplot <- make_forest_plot(headings         = headings,
                                col.left.space   = c(0.02),
                                col.left.heading = c("No. of\nevents"),
                                col.right.space  = 0.02,
+                               col.heading.space = 1.5,
                                heading.space    = 2,
                                plot.space       = 8)
 #> Warning: Vectorized input to `element_text()` is not officially supported.
 #> Results may be unexpected or may change in future versions of ggplot2.
 ```
 
-<img src="man/figures/README-unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/README-make_forest_plot-example-2-1.png" width="100%" />
 
 ## make\_jasper\_forest\_plot function
 

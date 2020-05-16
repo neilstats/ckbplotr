@@ -1,7 +1,7 @@
 ---
 output:
   github_document:
-    html_preview: true
+    html_preview: false
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -28,7 +28,7 @@ researchers.
 ### Directly from github
 The latest development version of `ckbplotr` can be installed directly from 
 github using devtools.
-```{r, eval = FALSE}
+```{r install from github, eval = FALSE}
 install.packages('devtools')
 devtools::install_github('neilstats/ckbplotr')
 ```
@@ -37,7 +37,7 @@ devtools::install_github('neilstats/ckbplotr')
 `ckbplotr` can also be installed from its source package. The R packages 
 `ggplot2`, `magrittr`, `readr`, `tibble`, `dplyr`, `purrr` and `rlang` must 
 first be installed. These are part of the collection of tidyverse packages.
-```{r, eval = FALSE}
+```{r install tidyverse, eval = FALSE}
 # The easiest way is to install the whole tidyverse:
 install.packages("tidyverse")
 
@@ -45,7 +45,7 @@ install.packages("tidyverse")
 # install.packages(c("ggplot2", "readr", "dplyr", "purrr"))
 ```
 Then `ckbplotr` can be installed from its source package using the code:
-```{r, eval = FALSE}
+```{r install from source, eval = FALSE}
 install.packages("ckbplotr.tar.gz", repos = NULL, type = "source")
 ```
 Or, in RStudio, open the "Tools" menu and select "Install Packages...".
@@ -74,7 +74,7 @@ pane. This code can be copied and further edited to adapt the plot.
 ### Examples
 Given a data frame of estimates and standard errors (to be plotted on the y axis),
 and risk factor levels (to be plotted on the x axis), a plot can be created.
-```{r}
+```{r make_shape_plot-example-1}
 library(ggplot2)
 library(ckbplotr)
 
@@ -99,7 +99,7 @@ plot <- make_shape_plot(results[results$is_female == 1,],
 
 The `col.group` argument can be supplied to plot results for different groups (in
 shades of grey).
-```{r}
+```{r make_shape_plot-example-2}
 plot <- make_shape_plot(results,
                         col.x        = "rf",
                         col.estimate = "est",
@@ -127,7 +127,7 @@ axis lines (so that you can have a custom sized gap between the plotting area an
 ### Examples
 
 Make a scatter plot with `ggplot`.
-```{r}
+```{r a-plot}
 library(ggplot2)
 library(ckbplotr)
 
@@ -136,18 +136,18 @@ plot
 ```
 
 Then apply the `plot_like_ckb` function to the plot.
-```{r}
+```{r plot_like_ckb-example-1}
 plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
 ```
 
 If you do not want a gap between the axes, set `gap = c(0, 0)`.
-```{r}
+```{r plot_like_ckb-example-2}
 plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), gap = c(0, 0))
 ```
 
 If you wish to override some aspect of the theme applied by `plot_like_ckb`, 
 then this can be done by adding a theme after the function.
-```{r}
+```{r plot_like_ckb-example-3}
 plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50)) +
   theme(axis.title = element_text(colour = "red", face = "plain"))
 ```
@@ -158,14 +158,14 @@ or the plot margins. There is also no warning if data points fall outside the wh
 
 So it is best to check that your `xlim` and `ylim` values are suitable for your 
 data before using the function.
-```{r}
+```{r plot_like_ckb-example-4}
 # The xlim and ylim ranges are too narrow
 plot_like_ckb(plot = plot, xlims = c(0, 4), ylims = c(20, 50))
 ```
 
 
 A bar chart.
-```{r}
+```{r bar-chart-example}
 barplot <- ggplot(mpg, aes(class)) + geom_bar()
 plot_like_ckb(barplot, xlims = c(0.5, 7.5), ylims = c(0, 70), gap = c(0.025, 0.005), ratio = 0.5) +
   theme(axis.ticks.x = element_blank())
@@ -225,7 +225,7 @@ will be in the order that they are in the headings data frame.)
 
 First of all, do your analyses and put the results into data frames 
 (one data frame for each forest plot column). Here we generate some example results.
-```{r}
+```{r example forest plot results}
 set.seed(57911624)
 exampleresults <- function(){
   data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
@@ -249,7 +249,7 @@ resultsD <- exampleresults()
 resultsE <- exampleresults()
 ```
 
-```{r}
+```{r make_forest_plot-example-1}
 library(ckbplotr)
 
 forestplot <- make_forest_plot(cols         = list(resultsA, resultsB),
@@ -260,7 +260,7 @@ forestplot <- make_forest_plot(cols         = list(resultsA, resultsB),
 
 To use headings, create a data frame of headings and specify arguments `headings` and
 `rows`.
-```{r, eval=TRUE, echo=FALSE}
+```{r forest plot headings, eval=TRUE, echo=FALSE}
 # Example headings for every row
 # This could be loaded from a csv containing headings that you use often
 headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
@@ -284,7 +284,7 @@ headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
 headings
 ```
 
-```{r}
+```{r make_forest_plot-example-2}
 forestplot <- make_forest_plot(headings         = headings,
                                rows             = c("Lipoprotein particle concentration",
                                                     "Triglycerides concentration"),
@@ -302,10 +302,10 @@ forestplot <- make_forest_plot(headings         = headings,
                                col.left.space   = c(0.02),
                                col.left.heading = c("No. of\nevents"),
                                col.right.space  = 0.02,
+                               col.heading.space = 1.5,
                                heading.space    = 2,
                                plot.space       = 8)
 ```
-
 
 
 ## make_jasper_forest_plot function
