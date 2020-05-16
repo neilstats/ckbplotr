@@ -35,6 +35,11 @@
 #'   Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)
 #' @param diamond A list of character vectors. List must be the same length as cols.
 #'   Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)
+#' @param bold A list of character vectors. List must be the same length as cols.
+#'   Identify the rows (using the key values) for which text should be bold.
+#'   If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)
+#' @param boldheadings A character vector. Identify headings (using key values)
+#'   which should additionally be bold. (Default: NULL)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
 #'   use log scale on the axis, and add a line at null effect. (Default: TRUE)
 #' @param blankrows A numeric vector of length 4 specifying the number of blank rows
@@ -78,6 +83,8 @@ make_forest_data <- function(
   ci.delim      = ", ",
   whiteci       = NULL,
   diamond       = NULL,
+  bold          = NULL,
+  boldheadings  = NULL,
   exponentiate  = TRUE,
   blankrows     = c(1, 1, 0, 0),
   scalepoints   = FALSE,
@@ -279,7 +286,8 @@ make_forest_data <- function(
     out1 <- merge(out, cols[[i]], by = "key", all.x = TRUE) %>%
       dplyr::mutate(column = colnames[[i]],
                     linecolour = dplyr::if_else(key %in% whiteci[[i]], "white", "black"),
-                    diamond = key %in% diamond[[i]])
+                    diamond = key %in% diamond[[i]],
+                    addbold = key %in% bold[[i]])
 
     if (!is.null(addtext)){
       out1 <- merge(out1, addtext[[i]], by.x = "extrarowkey", by.y = "key", all.x = TRUE)
@@ -290,7 +298,7 @@ make_forest_data <- function(
 
 
     datatoplot <- dplyr::bind_rows(datatoplot, out1) %>%
-      dplyr::mutate(bold = dplyr::if_else(is.na(estimate) | diamond, "bold", "plain"))
+      dplyr::mutate(bold = dplyr::if_else(is.na(estimate) | diamond | addbold, "bold", "plain"))
   }
 
 
@@ -334,6 +342,12 @@ make_forest_data <- function(
 
   datatoplot <- datatoplot %>%
     dplyr::mutate(textresult = dplyr::case_when(
+      !is.na(estimate) & bold == "bold" ~ paste0("bold('",format(round(estimate_transformed, 2), nsmall = 2),
+                                                 " (",
+                                                 format(round(lci_transformed, 2), nsmall = 2),
+                                                 ci.delim,
+                                                 format(round(uci_transformed, 2), nsmall = 2),
+                                                 ")')"),
       !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, 2), nsmall = 2),
                                 " (",
                                 format(round(lci_transformed, 2), nsmall = 2),
@@ -341,7 +355,8 @@ make_forest_data <- function(
                                 format(round(uci_transformed, 2), nsmall = 2),
                                 ")'"),
       !is.na(extratext) ~ extratext,
-      TRUE              ~ "''"))
+      TRUE              ~ "''"),
+      boldheading = key %in% boldheadings)
 
 
   if (!scalepoints) {
@@ -473,6 +488,8 @@ make_forest_plot <- function(
   blankrows     = c(1, 1, 0, 0),
   whiteci       = NULL,
   diamond       = NULL,
+  bold          = NULL,
+  boldheadings  = NULL,
   scalepoints   = FALSE,
   pointsize     = 3,
   addtext       = NULL,
@@ -512,6 +529,8 @@ make_forest_plot <- function(
     ci.delim      = ci.delim,
     whiteci       = whiteci,
     diamond       = diamond,
+    bold          = bold,
+    boldheadings  = boldheadings,
     exponentiate  = exponentiate,
     blankrows     = blankrows,
     scalepoints   = scalepoints,
@@ -556,7 +575,7 @@ make_forest_plot <- function(
 
     col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading, col.right.hjust),
                                          ~ c(sprintf('  ## column %s', ..1),
-                                             sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`),',
+                                             sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`, fontface = bold),',
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
                                              sprintf('           hjust = %s,', ..4),
                                              '            size = 3,',
@@ -581,7 +600,7 @@ make_forest_plot <- function(
   } else {
     col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust),
                                         ~ c(sprintf('  ## column %s', ..1),
-                                            sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`),',
+                                            sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`, fontface = bold),',
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
                                             sprintf('           hjust = %s,', ..4),
                                             '            size = 3,',
@@ -607,7 +626,7 @@ make_forest_plot <- function(
                 '# Get a character vector of the style for headings',
                 'boldheadings <- datatoplot %>%',
                 '                  dplyr::group_by(row) %>%',
-                '                  dplyr::summarise(bold = dplyr::if_else(all(bold == "bold"), "bold", "plain")) %>%',
+                '                  dplyr::summarise(bold = dplyr::if_else(all(bold == "bold") | all(boldheading), "bold", "plain")) %>%',
                 '                  dplyr::arrange(row) %>%',
                 '                  dplyr::pull(bold)',
                 '',
