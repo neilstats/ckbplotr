@@ -41,7 +41,7 @@ estimates, and standard errors or confidence interval limits. If you
 specify a headings data frame, then they must also all contain a key column
 with the same name (which can be specified by col.key).}
 
-\item{colnames}{A character vector. The titles to be used for each forest plot.
+\item{colnames}{A character vector. The names to be used for each forest plot.
 If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.key}{Name of column that links the headings provided in headings

@@ -10,6 +10,7 @@ make_forest_plot(
   cols,
   exponentiate = TRUE,
   colnames = NULL,
+  colheadings = colnames,
   col.key = "key",
   col.estimate = "estimate",
   col.stderr = "stderr",
@@ -61,8 +62,10 @@ with the same name (which can be specified by col.key).}
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
 use log scale on the axis, and add a line at null effect. (Default: TRUE)}
 
-\item{colnames}{A character vector. The titles to be used for each forest plot.
+\item{colnames}{A character vector. The names to be used for each forest plot.
 If none provided, then they will be numbered 1, 2, 3 ...}
+
+\item{colheadings}{Titles to be placed above each forest plot. (Default: colnames)}
 
 \item{col.key}{Name of column that links the headings provided in headings
   and the results given in each data frame provided in cols.
