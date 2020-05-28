@@ -12,7 +12,7 @@
 #'   estimates, and standard errors or confidence interval limits. If you
 #'   specify a headings data frame, then they must also all contain a key column
 #'   with the same name (which can be specified by col.key).
-#' @param colnames A character vector. The titles to be used for each forest plot.
+#' @param colnames A character vector. The names to be used for each forest plot.
 #'   If none provided, then they will be numbered 1, 2, 3 ...
 #' @param col.key Name of column that links the headings provided in headings
 #'   and the results given in each data frame provided in cols.
@@ -417,6 +417,7 @@ make_forest_data <- function(
 #'
 #'
 #' @inheritParams make_forest_data
+#' @param colheadings Titles to be placed above each forest plot. (Default: colnames)
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
 #' @param col.left.space A numeric vector. Sizes of the gaps between the plot
@@ -464,6 +465,7 @@ make_forest_plot <- function(
   cols,
   exponentiate  = TRUE,
   colnames      = NULL,
+  colheadings   = colnames,
   col.key       = "key",
   col.estimate  = "estimate",
   col.stderr    = "stderr",
@@ -708,6 +710,20 @@ make_forest_plot <- function(
                 '                                  xlab = %s)) +',
                 paste(deparse(xlab))),
                 '',
+                '  # Add column name above each column',
+                sprintf(
+                '   geom_text(aes(x = %s, y = %s, label = title),',
+                col.heading.space + 2, xmid),
+                '             hjust = 0.5,',
+                '             size  = 3,',
+                '             fontface = "bold",',
+                sprintf(
+                '             data = dplyr::tibble(column = %s,',
+                paste(deparse(colnames))),
+                sprintf(
+                '                                  title = %s)) +',
+                paste(deparse(colheadings))),
+                '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
                 sprintf('  scale_y_continuous(trans  = "%s",', scale),
                 xticksline,
@@ -741,7 +757,7 @@ make_forest_plot <- function(
                 sprintf('        panel.spacing    = unit(%s, "lines"),', plot.space),
                 '        strip.background = element_blank(),',
                 '        strip.placement  = "outside",',
-                '        strip.text       = element_text(face = "bold"),',
+                '        strip.text       = element_blank(),',
                 '        legend.position  = "none",',
                 '        plot.margin      = unit(c(2,6,2,0), "lines"))')
 
