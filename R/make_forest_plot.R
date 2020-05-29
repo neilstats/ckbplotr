@@ -439,6 +439,8 @@ make_forest_data <- function(
 #' @param xticks A numeric vector. The tick points of the x axis.
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
+#' @param pointshape The shape used for plotting point estimates. Can be a vector.
+#'                   (Default: 15)
 #' @param heading.space Size of the gap between headings and the first plot.
 #' Unit is "lines". (Default: 4)
 #' @param plot.space Size of the gap between forest plots.
@@ -494,6 +496,7 @@ make_forest_plot <- function(
   boldheadings  = NULL,
   scalepoints   = FALSE,
   pointsize     = 3,
+  pointshape    = 15,
   addtext       = NULL,
   heading.space = 4,
   plot.space    = 8,
@@ -551,6 +554,15 @@ make_forest_plot <- function(
   xfrom <- min(xlim)
   xto   <- max(xlim)
   xmid  <- tf((inv_tf(xfrom) + inv_tf(xto)) / 2)
+
+  ## add shape column
+  datatoplot <- datatoplot %>%
+    dplyr::left_join(dplyr::tibble(column = factor(colnames,
+                                                   levels = colnames,
+                                                   labels = colnames,
+                                                   ordered = TRUE),
+                                   shape  = pointshape),
+                     by = "column")
 
   ## check if any cis are outside limits of x-axis
   datatoplot <- datatoplot %>%
@@ -658,10 +670,15 @@ make_forest_plot <- function(
                 '  # Add a line at null effect (only if exponentiate=TRUE)',
                 nullline,
                 '',
+                '  # Plot CIs',
+                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
+                '                 aes(ymin = lci_transformed, ymax = uci_transformed, colour = linecolour),',
+                '                 na.rm = TRUE) +',
+                '  scale_colour_identity() +',
+                '',
                 '  # Plot points at the transformed estimates as squares',
                 '  ## Scale squares by inverse of the SE',
-                '  geom_point(aes(size = size),',
-                '             shape = 15,',
+                '  geom_point(aes(size = size, shape = shape, fill = "white"),',
                 '             na.rm = TRUE) +',
                 '',
                 '  # Scale the size of squares by their side length',
@@ -669,11 +686,9 @@ make_forest_plot <- function(
                 '  scale_radius(limits = c(0, NA),',
                 sprintf('               range = c(0, %s)) +', pointsize),
                 '',
-                '  # Plot CIs',
-                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-                '                 aes(ymin = lci_transformed, ymax = uci_transformed, colour = linecolour),',
-                '                 na.rm = TRUE) +',
-                '  scale_colour_identity() +',
+                '  # Use shape in shape column',
+                '  scale_shape_identity() +',
+                '  scale_fill_identity() +',
                 '',
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',

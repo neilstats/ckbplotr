@@ -39,6 +39,7 @@ make_forest_plot(
   boldheadings = NULL,
   scalepoints = FALSE,
   pointsize = 3,
+  pointshape = 15,
   addtext = NULL,
   heading.space = 4,
   plot.space = 8,
@@ -146,6 +147,9 @@ error? (Default: FALSE)}
 
 \item{pointsize}{The (largest) size of box to use for plotting point
 estimates. (Default: 3)}
+
+\item{pointshape}{The shape used for plotting point estimates. Can be a vector.
+(Default: 15)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
   Data frames should contain a col.key column, and one or more of:
