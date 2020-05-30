@@ -31,15 +31,6 @@
 #' @param col.right A character vector of names of columns to be printed to the right of the plot.
 #' @param ci.delim Character string to separate lower and upper limits of
 #'   confidence interval. (Default: ", ")
-#' @param whiteci A list of character vectors. List must be the same length as cols.
-#'   Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)
-#' @param diamond A list of character vectors. List must be the same length as cols.
-#'   Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)
-#' @param bold A list of character vectors. List must be the same length as cols.
-#'   Identify the rows (using the key values) for which text should be bold.
-#'   If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)
-#' @param boldheadings A character vector. Identify headings (using key values)
-#'   which should additionally be bold. (Default: NULL)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
 #'   use log scale on the axis, and add a line at null effect. (Default: TRUE)
 #' @param blankrows A numeric vector of length 4 specifying the number of blank rows
@@ -80,11 +71,8 @@ make_forest_data <- function(
   col.pval      = NULL,
   col.left      = NULL,
   col.right     = NULL,
+  col.keep      = NULL,
   ci.delim      = ", ",
-  whiteci       = NULL,
-  diamond       = NULL,
-  bold          = NULL,
-  boldheadings  = NULL,
   exponentiate  = TRUE,
   blankrows     = c(1, 1, 0, 0),
   scalepoints   = FALSE,
@@ -272,22 +260,21 @@ make_forest_data <- function(
                       estimate = !!rlang::sym(col.estimate),
                       lci      = !!rlang::sym(col.lci),
                       uci      = !!rlang::sym(col.uci),
-                      !!!rlang::syms(col.right))
+                      !!!rlang::syms(col.right),
+                      !!!rlang::syms(col.keep))
     } else {
       cols[[i]] <- cols[[i]] %>%
         dplyr::select(key = !!rlang::sym(col.key),
                       !!!rlang::syms(col.left),
                       estimate = !!rlang::sym(col.estimate),
                       stderr   = !!rlang::sym(col.stderr),
-                      !!!rlang::syms(col.right))
+                      !!!rlang::syms(col.right),
+                      !!!rlang::syms(col.keep))
 
     }
 
     out1 <- merge(out, cols[[i]], by = "key", all.x = TRUE) %>%
-      dplyr::mutate(column = colnames[[i]],
-                    linecolour = dplyr::if_else(key %in% whiteci[[i]], "white", "black"),
-                    diamond = key %in% diamond[[i]],
-                    addbold = key %in% bold[[i]])
+      dplyr::mutate(column = colnames[[i]])
 
     if (!is.null(addtext)){
       out1 <- merge(out1, addtext[[i]], by.x = "extrarowkey", by.y = "key", all.x = TRUE)
@@ -297,8 +284,7 @@ make_forest_data <- function(
 
 
 
-    datatoplot <- dplyr::bind_rows(datatoplot, out1) %>%
-      dplyr::mutate(bold = dplyr::if_else(is.na(estimate) | diamond | addbold, "bold", "plain"))
+    datatoplot <- dplyr::bind_rows(datatoplot, out1)
   }
 
 
@@ -342,12 +328,6 @@ make_forest_data <- function(
 
   datatoplot <- datatoplot %>%
     dplyr::mutate(textresult = dplyr::case_when(
-      !is.na(estimate) & bold == "bold" ~ paste0("bold('",format(round(estimate_transformed, 2), nsmall = 2),
-                                                 " (",
-                                                 format(round(lci_transformed, 2), nsmall = 2),
-                                                 ci.delim,
-                                                 format(round(uci_transformed, 2), nsmall = 2),
-                                                 ")')"),
       !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, 2), nsmall = 2),
                                 " (",
                                 format(round(lci_transformed, 2), nsmall = 2),
@@ -355,8 +335,7 @@ make_forest_data <- function(
                                 format(round(uci_transformed, 2), nsmall = 2),
                                 ")'"),
       !is.na(extratext) ~ extratext,
-      TRUE              ~ "''"),
-      boldheading = key %in% boldheadings)
+      TRUE              ~ "''"))
 
 
   if (!scalepoints) {
@@ -439,8 +418,6 @@ make_forest_data <- function(
 #' @param xticks A numeric vector. The tick points of the x axis.
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
-#' @param pointshape The shape used for plotting point estimates. Can be a vector.
-#'                   (Default: 15)
 #' @param heading.space Size of the gap between headings and the first plot.
 #' Unit is "lines". (Default: 4)
 #' @param plot.space Size of the gap between forest plots.
@@ -490,13 +467,14 @@ make_forest_plot <- function(
   xlim          = NULL,
   xticks        = NULL,
   blankrows     = c(1, 1, 0, 0),
-  whiteci       = NULL,
-  diamond       = NULL,
-  bold          = NULL,
+  col.diamond   = NULL,
+  col.bold      = NULL,
   boldheadings  = NULL,
   scalepoints   = FALSE,
   pointsize     = 3,
-  pointshape    = 15,
+  col.shape     = NULL,
+  col.colour    = NULL,
+  col.fill      = NULL,
   addtext       = NULL,
   heading.space = 4,
   plot.space    = 8,
@@ -531,17 +509,18 @@ make_forest_plot <- function(
     col.pval      = col.pval,
     col.left      = col.left,
     col.right     = col.right,
+    col.keep      = c(col.shape, col.colour, col.fill, col.diamond, col.bold),
     ci.delim      = ci.delim,
-    whiteci       = whiteci,
-    diamond       = diamond,
-    bold          = bold,
-    boldheadings  = boldheadings,
     exponentiate  = exponentiate,
     blankrows     = blankrows,
     scalepoints   = scalepoints,
     addtext       = addtext
   )
 
+  if (is.null(col.shape)) { col.shape <- 15 } else {col.shape <- paste0("`", col.shape, "`")}
+  if (is.null(col.colour)) { col.colour <- "\"black\"" } else {col.colour <- paste0("`", col.colour, "`")}
+  if (is.null(col.fill)) { col.fill <- "\"white\"" } else {col.fill <- paste0("`", col.fill, "`")}
+  if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
 
   if (is.null(xlim)) {
     xlim <- range(pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed)))
@@ -554,15 +533,6 @@ make_forest_plot <- function(
   xfrom <- min(xlim)
   xto   <- max(xlim)
   xmid  <- tf((inv_tf(xfrom) + inv_tf(xto)) / 2)
-
-  ## add shape column
-  datatoplot <- datatoplot %>%
-    dplyr::left_join(dplyr::tibble(column = factor(colnames,
-                                                   levels = colnames,
-                                                   labels = colnames,
-                                                   ordered = TRUE),
-                                   shape  = pointshape),
-                     by = "column")
 
   ## check if any cis are outside limits of x-axis
   datatoplot <- datatoplot %>%
@@ -587,11 +557,17 @@ make_forest_plot <- function(
       col.right <- c("textresult", col.right)
     }
 
-    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading, col.right.hjust),
+    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading, col.right.hjust, col.bold),
                                          ~ c(sprintf('  ## column %s', ..1),
-                                             sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`, fontface = bold),',
-                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
-                                             sprintf('           hjust = %s,', ..4),
+                                             sprintf('  geom_text(aes(x = -row, y = %s,',
+                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                             if(is.character(..5)){
+                                               sprintf('            label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
+                                                       ..5, ..5, ..1, ..1)
+                                               } else {
+                                                sprintf('            label = %s),', ..1)
+                                                       },
+                                             sprintf('            hjust = %s,', ..4),
                                              '            size = 3,',
                                              '            na.rm = TRUE,',
                                              '            parse = TRUE) +',
@@ -612,10 +588,21 @@ make_forest_plot <- function(
   if (is.null(col.left)) {
     col.left.line <- ""
   } else {
-    col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust),
+    col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust, col.bold),
                                         ~ c(sprintf('  ## column %s', ..1),
-                                            sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`, fontface = bold),',
-                                                    tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
+                                            sprintf(
+                                            '  geom_text(aes(x = -row, y = %s,',
+                                            tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                            sprintf(
+                                            '                label = `%s`,',
+                                            ..1
+                                            ),
+                                            if(is.character(..5)){
+                                            sprintf(
+                                            '            fontface = dplyr::if_else(!is.na(%s) & %s, "bold", "plain")),',
+                                            ..5, ..5)} else {
+                                            '            fontface = "plain"),'
+                                            },
                                             sprintf('           hjust = %s,', ..4),
                                             '            size = 3,',
                                             '            na.rm = TRUE) +',
@@ -629,6 +616,41 @@ make_forest_plot <- function(
                                             '           fontface = "bold") +')))
   }
 
+  diamondscode <- NULL
+  plotdiamondscode <- NULL
+  if(!is.null(col.diamond)){
+    diamondscode <- c(
+      '# Create data frame for diamonds to be plotted',
+      'diamonds <- datatoplot %>%',
+      sprintf(
+      '  dplyr::filter(`%s` == TRUE) %%>%%', col.diamond),
+      '  dplyr::mutate(y1 = lci_transformed,',
+      '                y2 = estimate_transformed,',
+      '                y3 = uci_transformed,',
+      '                y4 = estimate_transformed) %>%',
+      '  tidyr::gather(part, y, y1:y4) %>%',
+      '  dplyr::arrange(column, row, part) %>%',
+      sprintf(
+        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))', col.diamond),
+      '',
+      '# Remove plotting of points if a diamond is to be used',
+      sprintf('if (any(datatoplot[["%s"]])) {', col.diamond),
+      sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$estimate_transformed <- NA', col.diamond, col.diamond),
+      sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$lci_transformed <- NA', col.diamond, col.diamond),
+      sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$uci_transformed <- NA', col.diamond, col.diamond),
+      '}',
+      ''
+    )
+
+    plotdiamondscode <- c(
+      '  # Add diamonds',
+      '  geom_polygon(data = diamonds,',
+      '               aes(x = x, y = y, group = row,',
+      sprintf(
+      '                   colour = %s, fill = %s)) +', col.colour, col.fill),
+      ''
+    )
+  }
 
   plotcode <- c('# Get a character vector of the headings, so these can be used in the plot',
                 'headings <- datatoplot %>%',
@@ -640,28 +662,13 @@ make_forest_plot <- function(
                 '# Get a character vector of the style for headings',
                 'boldheadings <- datatoplot %>%',
                 '                  dplyr::group_by(row) %>%',
-                '                  dplyr::summarise(bold = dplyr::if_else(all(bold == "bold") | all(boldheading), "bold", "plain")) %>%',
+                sprintf(
+                '                  dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %%in%% %s)), "bold", "plain")) %%>%%',
+                paste(deparse(boldheadings))),
                 '                  dplyr::arrange(row) %>%',
                 '                  dplyr::pull(bold)',
                 '',
-                '# Create data frame for diamonds to be plotted',
-                'diamonds <- datatoplot %>%',
-                '  dplyr::filter(diamond == TRUE) %>%',
-                '  dplyr::mutate(y1 = lci_transformed,',
-                '                y2 = estimate_transformed,',
-                '                y3 = uci_transformed,',
-                '                y4 = estimate_transformed) %>%',
-                '  tidyr::gather(part, y, y1:y4) %>%',
-                '  dplyr::arrange(column, row, part) %>%',
-                '  dplyr::mutate(x = - row + rep(c(0, -0.25, 0, 0.25), times = sum(datatoplot$diamond)))',
-                '',
-                '# Remove plotting of points if a diamond is to be used',
-                'if (any(datatoplot$diamond)) {',
-                '  datatoplot[datatoplot$diamond,]$estimate_transformed <- NA',
-                '  datatoplot[datatoplot$diamond,]$lci_transformed <- NA',
-                '  datatoplot[datatoplot$diamond,]$uci_transformed <- NA',
-                '}',
-                '',
+                diamondscode,
                 '# Create the ggplot',
                 'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
                 '  # Put the different columns in side-by-side plots using facets',
@@ -672,13 +679,18 @@ make_forest_plot <- function(
                 '',
                 '  # Plot CIs',
                 '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-                '                 aes(ymin = lci_transformed, ymax = uci_transformed, colour = linecolour),',
+                '                 aes(ymin = lci_transformed,',
+                '                     ymax = uci_transformed,',
+                sprintf(
+                '                     colour = %s),', col.colour),
                 '                 na.rm = TRUE) +',
                 '  scale_colour_identity() +',
                 '',
                 '  # Plot points at the transformed estimates as squares',
                 '  ## Scale squares by inverse of the SE',
-                '  geom_point(aes(size = size, shape = shape, fill = "white"),',
+                sprintf(
+                '  geom_point(aes(size = size, shape = %s, colour = %s, fill = %s),',
+                col.shape, col.colour, col.fill),
                 '             na.rm = TRUE) +',
                 '',
                 '  # Scale the size of squares by their side length',
@@ -692,15 +704,17 @@ make_forest_plot <- function(
                 '',
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
-                '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed),',
+                '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed,',
+                sprintf(
+                '                   colour = %s),', col.colour),
                 '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
-                '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed),',
+                '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed,',
+                sprintf(
+                '                   colour = %s),', col.colour),
                 '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
                 '',
-                '  # Add diamonds',
-                '  geom_polygon(data = diamonds, aes(x = x, y = y, group = row), colour="black", fill = "white") +',
-                '',
+                plotdiamondscode,
                 '  # Flip x and y coordinates',
                 '  coord_flip(clip = "off",',
                 sprintf('              ylim = c(%s, %s)) +', xfrom, xto),
