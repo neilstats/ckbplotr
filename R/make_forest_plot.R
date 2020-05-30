@@ -475,6 +475,7 @@ make_forest_plot <- function(
   col.shape     = NULL,
   col.colour    = NULL,
   col.fill      = NULL,
+  col.ciunder   = NULL,
   addtext       = NULL,
   heading.space = 4,
   plot.space    = 8,
@@ -509,7 +510,7 @@ make_forest_plot <- function(
     col.pval      = col.pval,
     col.left      = col.left,
     col.right     = col.right,
-    col.keep      = c(col.shape, col.colour, col.fill, col.diamond, col.bold),
+    col.keep      = c(col.shape, col.colour, col.fill, col.diamond, col.bold, col.ciunder),
     ci.delim      = ci.delim,
     exponentiate  = exponentiate,
     blankrows     = blankrows,
@@ -521,6 +522,7 @@ make_forest_plot <- function(
   if (is.null(col.colour)) { col.colour <- "\"black\"" } else {col.colour <- paste0("`", col.colour, "`")}
   if (is.null(col.fill)) { col.fill <- "\"white\"" } else {col.fill <- paste0("`", col.fill, "`")}
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
+  if (is.null(col.ciunder)) { col.ciunder <- FALSE } else {col.ciunder <- paste0("`", col.ciunder, "`")}
 
   if (is.null(xlim)) {
     xlim <- range(pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed)))
@@ -677,30 +679,39 @@ make_forest_plot <- function(
                 '  # Add a line at null effect (only if exponentiate=TRUE)',
                 nullline,
                 '',
-                '  # Plot CIs',
-                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
+                if (is.character(col.ciunder)){
+                  c(
+                '  # Plot CIs - before plotting points',
+                sprintf(
+                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s),',
+                col.ciunder),
                 '                 aes(ymin = lci_transformed,',
                 '                     ymax = uci_transformed,',
                 sprintf(
                 '                     colour = %s),', col.colour),
                 '                 na.rm = TRUE) +',
-                '  scale_colour_identity() +',
-                '',
-                '  # Plot points at the transformed estimates as squares',
-                '  ## Scale squares by inverse of the SE',
+                '')},
+                '  # Plot points at the transformed estimates',
+                '  ## Scale by inverse of the SE',
                 sprintf(
                 '  geom_point(aes(size = size, shape = %s, colour = %s, fill = %s),',
                 col.shape, col.colour, col.fill),
                 '             na.rm = TRUE) +',
                 '',
-                '  # Scale the size of squares by their side length',
+                '  # Scale the size of points by their side length',
                 '  # and make the scale range from zero upwards',
                 '  scale_radius(limits = c(0, NA),',
                 sprintf('               range = c(0, %s)) +', pointsize),
                 '',
-                '  # Use shape in shape column',
-                '  scale_shape_identity() +',
-                '  scale_fill_identity() +',
+                '  # Plot CIs - after plotting points',
+                sprintf(
+                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s),',
+                col.ciunder),
+                '                 aes(ymin = lci_transformed,',
+                '                     ymax = uci_transformed,',
+                sprintf(
+                  '                     colour = %s),', col.colour),
+                '                 na.rm = TRUE) +',
                 '',
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
@@ -715,6 +726,11 @@ make_forest_plot <- function(
                 '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
                 '',
                 plotdiamondscode,
+                '  # Use identity for aesthetic scales',
+                '  scale_shape_identity() +',
+                '  scale_fill_identity() +',
+                '  scale_colour_identity() +',
+                '',
                 '  # Flip x and y coordinates',
                 '  coord_flip(clip = "off",',
                 sprintf('              ylim = c(%s, %s)) +', xfrom, xto),
