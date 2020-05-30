@@ -99,6 +99,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
@@ -135,6 +138,7 @@
   <span class='no'>cols</span>,
   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>colnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>colheadings</span> <span class='kw'>=</span> <span class='no'>colnames</span>,
   <span class='kw'>col.key</span> <span class='kw'>=</span> <span class='st'>"key"</span>,
   <span class='kw'>col.estimate</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
   <span class='kw'>col.stderr</span> <span class='kw'>=</span> <span class='st'>"stderr"</span>,
@@ -163,6 +167,7 @@
   <span class='kw'>boldheadings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>scalepoints</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>pointsize</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>pointshape</span> <span class='kw'>=</span> <span class='fl'>15</span>,
   <span class='kw'>addtext</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>heading.space</span> <span class='kw'>=</span> <span class='fl'>4</span>,
   <span class='kw'>plot.space</span> <span class='kw'>=</span> <span class='fl'>8</span>,
@@ -198,8 +203,12 @@ use log scale on the axis, and add a line at null effect. (Default: TRUE)</p></t
     </tr>
     <tr>
       <th>colnames</th>
-      <td><p>A character vector. The titles to be used for each forest plot.
+      <td><p>A character vector. The names to be used for each forest plot.
 If none provided, then they will be numbered 1, 2, 3 ...</p></td>
+    </tr>
+    <tr>
+      <th>colheadings</th>
+      <td><p>Titles to be placed above each forest plot. (Default: colnames)</p></td>
     </tr>
     <tr>
       <th>col.key</th>
@@ -334,6 +343,11 @@ error? (Default: FALSE)</p></td>
       <th>pointsize</th>
       <td><p>The (largest) size of box to use for plotting point
 estimates. (Default: 3)</p></td>
+    </tr>
+    <tr>
+      <th>pointshape</th>
+      <td><p>The shape used for plotting point estimates. Can be a vector.
+(Default: 15)</p></td>
     </tr>
     <tr>
       <th>addtext</th>
