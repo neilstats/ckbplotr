@@ -714,16 +714,18 @@ make_forest_plot <- function(
                 '                 na.rm = TRUE) +',
                 '',
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
+                if(any(datatoplot$cioverright, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
                 '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed,',
                 sprintf(
                 '                   colour = %s),', col.colour),
-                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
+                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +')},
+                if(any(datatoplot$cioverleft, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
                 '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed,',
                 sprintf(
                 '                   colour = %s),', col.colour),
-                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
+                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +')},
                 '',
                 plotdiamondscode,
                 '  # Use identity for aesthetic scales',
