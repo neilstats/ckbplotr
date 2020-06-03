@@ -474,6 +474,7 @@ make_forest_plot <- function(
   pointsize     = 3,
   col.shape     = NULL,
   col.colour    = NULL,
+  col.cicolour  = col.colour,
   col.fill      = NULL,
   col.ciunder   = NULL,
   addtext       = NULL,
@@ -510,7 +511,7 @@ make_forest_plot <- function(
     col.pval      = col.pval,
     col.left      = col.left,
     col.right     = col.right,
-    col.keep      = c(col.shape, col.colour, col.fill, col.diamond, col.bold, col.ciunder),
+    col.keep      = c(col.shape, col.colour, col.cicolour, col.fill, col.diamond, col.bold, col.ciunder),
     ci.delim      = ci.delim,
     exponentiate  = exponentiate,
     blankrows     = blankrows,
@@ -520,6 +521,7 @@ make_forest_plot <- function(
 
   if (is.null(col.shape)) { col.shape <- 15 } else {col.shape <- paste0("`", col.shape, "`")}
   if (is.null(col.colour)) { col.colour <- "\"black\"" } else {col.colour <- paste0("`", col.colour, "`")}
+  if (is.null(col.cicolour)) { col.cicolour <- "\"black\"" } else {col.cicolour <- paste0("`", col.cicolour, "`")}
   if (is.null(col.fill)) { col.fill <- "\"white\"" } else {col.fill <- paste0("`", col.fill, "`")}
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
   if (is.null(col.ciunder)) { col.ciunder <- FALSE } else {col.ciunder <- paste0("`", col.ciunder, "`")}
@@ -649,7 +651,7 @@ make_forest_plot <- function(
       '  geom_polygon(data = diamonds,',
       '               aes(x = x, y = y, group = row,',
       sprintf(
-      '                   colour = %s, fill = %s)) +', col.colour, col.fill),
+      '                   colour = %s, fill = %s)) +', col.cicolour, col.fill),
       ''
     )
   }
@@ -688,7 +690,7 @@ make_forest_plot <- function(
                 '                 aes(ymin = lci_transformed,',
                 '                     ymax = uci_transformed,',
                 sprintf(
-                '                     colour = %s),', col.colour),
+                '                     colour = %s),', col.cicolour),
                 '                 na.rm = TRUE) +',
                 '')},
                 '  # Plot points at the transformed estimates',
@@ -710,7 +712,7 @@ make_forest_plot <- function(
                 '                 aes(ymin = lci_transformed,',
                 '                     ymax = uci_transformed,',
                 sprintf(
-                  '                     colour = %s),', col.colour),
+                  '                     colour = %s),', col.cicolour),
                 '                 na.rm = TRUE) +',
                 '',
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
@@ -718,13 +720,13 @@ make_forest_plot <- function(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
                 '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed,',
                 sprintf(
-                '                   colour = %s),', col.colour),
+                '                   colour = %s),', col.cicolour),
                 '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +')},
                 if(any(datatoplot$cioverleft, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
                 '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed,',
                 sprintf(
-                '                   colour = %s),', col.colour),
+                '                   colour = %s),', col.cicolour),
                 '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +')},
                 '',
                 plotdiamondscode,
