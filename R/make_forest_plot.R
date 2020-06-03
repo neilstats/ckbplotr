@@ -751,7 +751,7 @@ make_forest_plot <- function(
                 '             vjust = 4.4,',
                 '             fontface = "bold",',
                 sprintf(
-                '             data = dplyr::tibble(column = %s,',
+                '             data = dplyr::tibble(column = factor(%s),',
                 paste(deparse(colnames))),
                 sprintf(
                 '                                  xlab = %s)) +',
@@ -765,7 +765,7 @@ make_forest_plot <- function(
                 '             size  = 3,',
                 '             fontface = "bold",',
                 sprintf(
-                '             data = dplyr::tibble(column = %s,',
+                '             data = dplyr::tibble(column = factor(%s),',
                 paste(deparse(colnames))),
                 sprintf(
                 '                                  title = %s)) +',
