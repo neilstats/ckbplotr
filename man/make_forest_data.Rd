@@ -17,11 +17,8 @@ make_forest_data(
   col.pval = NULL,
   col.left = NULL,
   col.right = NULL,
+  col.keep = NULL,
   ci.delim = ", ",
-  whiteci = NULL,
-  diamond = NULL,
-  bold = NULL,
-  boldheadings = NULL,
   exponentiate = TRUE,
   blankrows = c(1, 1, 0, 0),
   scalepoints = FALSE,
@@ -69,19 +66,6 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}
-
-\item{whiteci}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)}
-
-\item{diamond}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)}
-
-\item{bold}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which text should be bold.
-If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)}
-
-\item{boldheadings}{A character vector. Identify headings (using key values)
-which should additionally be bold. (Default: NULL)}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
 use log scale on the axis, and add a line at null effect. (Default: TRUE)}

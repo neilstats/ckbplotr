@@ -33,13 +33,15 @@ make_forest_plot(
   xlim = NULL,
   xticks = NULL,
   blankrows = c(1, 1, 0, 0),
-  whiteci = NULL,
-  diamond = NULL,
-  bold = NULL,
+  col.diamond = NULL,
+  col.bold = NULL,
   boldheadings = NULL,
   scalepoints = FALSE,
   pointsize = 3,
-  pointshape = 15,
+  col.shape = NULL,
+  col.colour = NULL,
+  col.fill = NULL,
+  col.ciunder = NULL,
   addtext = NULL,
   heading.space = 4,
   plot.space = 8,
@@ -129,27 +131,11 @@ confidence interval. (Default: ", ")}
 after a heading1, at the end of a heading1 'section', after
 a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
-\item{whiteci}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)}
-
-\item{diamond}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)}
-
-\item{bold}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which text should be bold.
-If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)}
-
-\item{boldheadings}{A character vector. Identify headings (using key values)
-which should additionally be bold. (Default: NULL)}
-
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
 
 \item{pointsize}{The (largest) size of box to use for plotting point
 estimates. (Default: 3)}
-
-\item{pointshape}{The shape used for plotting point estimates. Can be a vector.
-(Default: 15)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
   Data frames should contain a col.key column, and one or more of:

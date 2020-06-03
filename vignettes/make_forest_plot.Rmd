@@ -21,15 +21,9 @@ knitr::opts_chunk$set(
 ```{r setup, include = FALSE}
 library(ckbplotr)
 ```
+## Prepare example data
 
-## Different limits and ticks on each plot
-
-The `make_forest_plot` function uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales (or limits or ticks) applied, so it's not directly possible to have different limits and ticks on each forest plot.
-
-However, one approach to work around this is to use `make_forest_plot` for each plot you need, remove the labels from all but the first, then arrange them side-by-side. The `gridExtra` package can be used for this last step.
-
-Step 1: Use `make_forest_plot` for each plot.
-```{r}
+```{r prep data}
 set.seed(57911624)
 exampleresults <- function(){
   data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
@@ -44,13 +38,28 @@ exampleresults <- function(){
              estimate = rnorm(21, 0, 0.02),
              stderr   = 0.012 + abs(rnorm(21, 0, 0.015)),
              n        = round(runif(21, 100, 2000)),
-             nb       = round(runif(21, 100, 2000)))
+             nb       = round(runif(21, 100, 2000)),
+             shape    = rep(15, 21),
+             colour   = "black",
+             fill     = "black",
+             bold     = FALSE,
+             diamond  = FALSE,
+             ciunder  = FALSE,
+             stringsAsFactors = FALSE)
 }
 resultsA <- exampleresults()
 resultsB <- exampleresults()
 resultsC <- exampleresults()
 resultsD <- exampleresults()
 resultsE <- exampleresults()
+
+resultsA[9,"shape"] <- 16
+resultsA[10, "bold"] <- TRUE
+resultsA[11, "colour"] <- "red"
+resultsA[12, "diamond"] <- TRUE
+resultsA[13, "ciunder"] <- TRUE
+resultsA[13, "shape"] <- 22
+resultsA[13, "fill"] <- "white"
 
 headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
                                         "Triglycerides concentration",
@@ -70,8 +79,60 @@ headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
                                     'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
                                     'nmr_idl_c',
                                     'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'))
+```
 
 
+## Setting colours and shapes, bold text and diamonds
+
+The shape and fill colour of points, colour of points and confidence interval lines, bold text, and which estimates/CIs should be plotted as diamonds can be set on a per-point basis. This is done by including appropriate columns in the data frames which are provided in `cols`, then setting parameters `col.shape`, `col.colour`, `col.fill`, `col.bold`, `col.diamond`, and `col.ciunder` as the column names.
+
+The parameters/columns, what they control, and the column type:
+
+| column      | controls                                          | type      |
+|-------------|---------------------------------------------------|-----------|
+| col.shape   | plotting character for points                     | integer   |
+| col.colour  | colour of points and lines                        | character |
+| col.fill    | fill colour of points                             | character |
+| col.bold    | if text is bold                                   | logical   |
+| col.diamond | if a diamond should be plotted                    | logical   |
+| col.ciunder | if the CI line should be plotted before the point | logical   |
+
+```{r}
+forestplot1 <- make_forest_plot(headings         = headings,
+                                rows             = c("Triglycerides concentration"),
+                                cols             = list(resultsA),
+                                exponentiate     = TRUE,
+                                colnames         = c("Analysis A"),
+                                col.key          = "variable",
+                                ci.delim         = " - ",
+                                xlim             = c(0.9, 1.1),
+                                xticks           = c(0.9, 1, 1.1),
+                                blankrows        = c(0, 1, 0, 1),
+                                scalepoints      = TRUE,
+                                pointsize        = 3,
+                                col.left         = c("n"),
+                                col.left.space   = c(0.02),
+                                col.left.heading = c("No. of\nevents"),
+                                col.right.space  = 0.02,
+                                heading.space    = 2,
+                                plot.space       = 8,
+                                col.shape        = "shape",
+                                col.colour       = "colour",
+                                col.bold         = "bold",
+                                col.diamond      = "diamond",
+                                col.ciunder      = "ciunder")
+```
+
+If a parameter is not set, then default values are used for these aesthetics. If a parameter is set, then every data frame provided in `cols` must contain a column with that name.
+
+## Different limits and ticks on each plot
+
+The `make_forest_plot` function uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales (or limits or ticks) applied, so it's not directly possible to have different limits and ticks on each forest plot.
+
+However, one approach to work around this is to use `make_forest_plot` for each plot you need, remove the labels from all but the first, then arrange them side-by-side. The `gridExtra` package can be used for this last step.
+
+Step 1: Use `make_forest_plot` for each plot.
+```{r}
 forestplot1 <- make_forest_plot(headings         = headings,
                                 rows             = c("Lipoprotein particle concentration",
                                                      "Triglycerides concentration"),
