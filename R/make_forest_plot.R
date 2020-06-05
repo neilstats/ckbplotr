@@ -480,6 +480,8 @@ make_forest_plot <- function(
   addtext       = NULL,
   heading.space = 4,
   plot.space    = 8,
+  base_size     = 11,
+  base_line_size = base_size/22,
   printplot     = TRUE,
   showcode      = TRUE
 ){
@@ -489,7 +491,7 @@ make_forest_plot <- function(
     tf       <- exp
     inv_tf   <- log
     scale    <- "log"
-    nullline <- '  annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1) +'
+    nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1, size = %s) +', base_line_size)
   } else {
     tf       <- identity
     inv_tf   <- identity
@@ -572,7 +574,7 @@ make_forest_plot <- function(
                                                 sprintf('            label = %s),', ..1)
                                                        },
                                              sprintf('            hjust = %s,', ..4),
-                                             '            size = 3,',
+                                             sprintf('            size = %s,', base_size/(11/3)),
                                              '            na.rm = TRUE,',
                                              '            parse = TRUE) +',
                                              '  annotate(geom = "text",',
@@ -581,7 +583,7 @@ make_forest_plot <- function(
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                              sprintf('           label = "%s",', ..3),
                                              sprintf('           hjust = %s,', ..4),
-                                             '           size  = 3,',
+                                             sprintf('            size = %s,', base_size/(11/3)),
                                              '           fontface = "bold") +')))
   }
 
@@ -608,7 +610,7 @@ make_forest_plot <- function(
                                             '            fontface = "plain"),'
                                             },
                                             sprintf('           hjust = %s,', ..4),
-                                            '            size = 3,',
+                                            sprintf('            size = %s,', base_size/(11/3)),
                                             '            na.rm = TRUE) +',
                                             '  annotate(geom = "text",',
                                             sprintf('           x = %s, y = %s,',
@@ -616,7 +618,7 @@ make_forest_plot <- function(
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                             sprintf('           label = "%s",', ..3),
                                             sprintf('           hjust = %s,', ..4),
-                                            '           size  = 3,',
+                                            sprintf('            size = %s,', base_size/(11/3)),
                                             '           fontface = "bold") +')))
   }
 
@@ -691,6 +693,8 @@ make_forest_plot <- function(
                 '                     ymax = uci_transformed,',
                 sprintf(
                 '                     colour = %s),', col.cicolour),
+                sprintf(
+                '                     size = %s,', base_line_size),
                 '                 na.rm = TRUE) +',
                 '')},
                 '  # Plot points at the transformed estimates',
@@ -712,7 +716,9 @@ make_forest_plot <- function(
                 '                 aes(ymin = lci_transformed,',
                 '                     ymax = uci_transformed,',
                 sprintf(
-                  '                     colour = %s),', col.cicolour),
+                '                     colour = %s),', col.cicolour),
+                sprintf(
+                '                     size = %s,', base_line_size),
                 '                 na.rm = TRUE) +',
                 '',
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
@@ -749,7 +755,7 @@ make_forest_plot <- function(
                 sprintf(
                 '   geom_text(aes(x = -Inf, y = %s, label = xlab),', xmid),
                 '             hjust = 0.5,',
-                '             size  = 3,',
+                sprintf('             size  = %s,', base_size/(11/3)),
                 '             vjust = 4.4,',
                 '             fontface = "bold",',
                 sprintf(
@@ -762,15 +768,15 @@ make_forest_plot <- function(
                 '  # Add column name above each column',
                 sprintf(
                 '   geom_text(aes(x = %s, y = %s, label = title),',
-                col.heading.space + 2, xmid),
+                col.heading.space , xmid),
                 '             hjust = 0.5,',
-                '             size  = 3,',
+                sprintf('             size  = %s,', base_size/(11/3)),
                 '             fontface = "bold",',
                 sprintf(
                 '             data = dplyr::tibble(column = factor(%s),',
                 paste(deparse(colnames))),
                 sprintf(
-                '                                  title = %s)) +',
+                '                                  title = paste0(%s, "\\n\\n"))) +',
                 paste(deparse(colheadings))),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
@@ -787,18 +793,21 @@ make_forest_plot <- function(
                 sprintf('  labs(title = "%s") +', title),
                 '',
                 '  # Control the overall looks of the plots',
-                '  theme(panel.background = element_rect(fill = "white", colour = NA),',
+                sprintf('  theme(text             = element_text(size = %s),', base_size),
+                sprintf('        line             = element_line(size = %s),', base_line_size),
+                '        panel.background = element_rect(fill = "white", colour = NA),',
                 '        panel.grid.major = element_blank(),',
                 '        panel.grid.minor = element_blank(),',
-                '        axis.line.x      = element_line(size = 0.5),',
+                '        axis.line.x      = element_line(size = rel(1)),',
                 '        axis.title.x     = element_blank(),',
                 '        axis.ticks.x     = element_line(colour = "black"),',
                 '        axis.text.x      = element_text(colour = "black",',
-                '                                        margin = margin(t = 4.4),',
+                sprintf(
+                '                                        margin = margin(t = %s),', base_size/(11/4.4)),
                 '                                        vjust  = 1),',
                 '        axis.ticks.y     = element_blank(),',
                 '        axis.text.y      = element_text(hjust  = 0,',
-                '                                        size   = 8,',
+                '                                        size   = rel(1),',
                 '                                        colour = "black",',
                 '                                        face   = boldheadings,',
                 sprintf('                                        margin = margin(r = %s, unit = "lines")),', heading.space),

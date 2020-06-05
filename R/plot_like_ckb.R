@@ -18,7 +18,9 @@ plot_like_ckb <- function(
   ylims=NULL,
   gap=c(0.025,0.025),
   ext=c(0.025,0.025),
-  ratio=1.5
+  ratio=1.5,
+  base_size = 11,
+  base_line_size = base_size/22
 ){
 
   # get plot axis transformations
@@ -71,7 +73,7 @@ plot_like_ckb <- function(
              xend = limits[["x"]][[1]],
              y    = limits[["yaxis"]][[1]],
              yend = limits[["yaxis"]][[2]],
-             lwd  = 0.5,
+             lwd  = base_line_size,
              lineend = "round",
              colour = "black") +
     annotate(geom = "segment",
@@ -79,10 +81,11 @@ plot_like_ckb <- function(
              xend = limits[["xaxis"]][[2]],
              y    = limits[["y"]][[1]],
              yend = limits[["y"]][[1]],
-             lwd  = 0.5,
+             lwd  = base_line_size,
              lineend = "round",
              colour = "black") +
-    theme_bw() +
+    theme_bw(base_size = base_size,
+             base_line_size = base_line_size) +
     theme(panel.grid        = element_blank(),
           panel.border      = element_blank(),
           axis.ticks        = element_line(colour = "black"),
