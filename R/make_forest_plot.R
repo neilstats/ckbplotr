@@ -653,7 +653,9 @@ make_forest_plot <- function(
       '  geom_polygon(data = diamonds,',
       '               aes(x = x, y = y, group = row,',
       sprintf(
-      '                   colour = %s, fill = %s)) +', col.cicolour, col.fill),
+      '                   colour = %s, fill = %s),', col.cicolour, col.fill),
+      sprintf(
+      '               size = %s) +', base_line_size),
       ''
     )
   }
@@ -798,7 +800,8 @@ make_forest_plot <- function(
                 '        panel.background = element_rect(fill = "white", colour = NA),',
                 '        panel.grid.major = element_blank(),',
                 '        panel.grid.minor = element_blank(),',
-                '        axis.line.x      = element_line(size = rel(1)),',
+                sprintf(
+                '        axis.line.x      = element_line(size = %s),', base_line_size),
                 '        axis.title.x     = element_blank(),',
                 '        axis.ticks.x     = element_line(colour = "black"),',
                 '        axis.text.x      = element_text(colour = "black",',
