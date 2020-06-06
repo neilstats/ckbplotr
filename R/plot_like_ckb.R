@@ -1,3 +1,36 @@
+#' CKB ggplot theme
+#'
+#' Based on theme_bw
+#'
+#' @param base_size base font size, given in pts.
+#' @param base_line_size base size for line elements
+#'
+#' @export
+
+theme_ckb <- function(base_size = 11,
+                      base_line_size = base_size/22){
+  theme_bw(base_size = base_size,
+           base_line_size = base_line_size) %+replace%
+    theme(panel.grid        = element_blank(),
+          panel.border      = element_blank(),
+          axis.ticks        = element_line(colour = "black"),
+          axis.text         = element_text(colour = "black"),
+          axis.text.x       = element_text(margin = margin(t = base_size/(11/4.4)), vjust = 1),
+          axis.text.x.top   = element_text(margin = margin(b = base_size/(11/4.4)), vjust = 0),
+          axis.text.y       = element_text(margin = margin(r = base_size/(11/4.4)), hjust = 1),
+          axis.text.y.right = element_text(margin = margin(l = base_size/(11/4.4)), hjust = 0),
+          axis.title        = element_text(face = "bold"),
+          axis.title.x      = element_text(margin = unit(c(1,0,0,0), "lines")),
+          axis.title.y      = element_text(margin = unit(c(0,1,0,0), "lines"), angle = 90),
+          plot.margin       = unit(c(0,0,0.5,0), "lines"),
+          plot.background   = element_blank(),
+          plot.title        = element_text(hjust = 0.5, face = "bold"),
+          complete          = TRUE)
+}
+
+
+
+
 #' Make a ggplot into CKB style
 #'
 #' @param plot A ggplot2 plot object.
@@ -84,22 +117,5 @@ plot_like_ckb <- function(
              lwd  = base_line_size,
              lineend = "round",
              colour = "black") +
-    theme_bw(base_size = base_size,
-             base_line_size = base_line_size) +
-    theme(panel.grid        = element_blank(),
-          panel.border      = element_blank(),
-          axis.ticks        = element_line(colour = "black"),
-          axis.text         = element_text(colour = "black"),
-          axis.text.x       = element_text(margin = margin(t = base_size/(11/4.4)), vjust = 1),
-          axis.text.x.top   = element_text(margin = margin(b = base_size/(11/4.4)), vjust = 0),
-          axis.text.y       = element_text(margin = margin(r = base_size/(11/4.4)), hjust = 1),
-          axis.text.y.right = element_text(margin = margin(l = base_size/(11/4.4)), hjust = 0),
-          axis.title        = element_text(face = "bold"),
-          axis.title.x      = element_text(margin = unit(c(1,0,0,0), "lines")),
-          axis.title.y      = element_text(margin = unit(c(0,1,0,0), "lines"), angle = 90),
-          axis.line         = element_blank(),
-          plot.margin       = unit(c(0,0,0.5,0), "lines"),
-          plot.background   = element_blank(),
-          plot.title        = element_text(hjust = 0.5, face = "bold")
-    )
+    theme_ckb(base_size = base_size, base_line_size = base_line_size)
 }
