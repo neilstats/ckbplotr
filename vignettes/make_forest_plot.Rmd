@@ -84,19 +84,23 @@ headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
 
 ## Setting colours and shapes, bold text and diamonds
 
-The shape and fill colour of points, colour of points and confidence interval lines, bold text, and which estimates/CIs should be plotted as diamonds can be set on a per-point basis. This is done by including appropriate columns in the data frames which are provided in `cols`, then setting parameters `col.shape`, `col.colour`, `col.fill`, `col.bold`, `col.diamond`, and `col.ciunder` as the column names.
+The shape and fill colour of points, colour of points and confidence interval lines, bold text, and which estimates/CIs should be plotted as diamonds can be set overall or on a per-point basis. This is done by 
+setting arguments `shape`, `colour`, `fill`, `ciunder`, `col.bold`, and `col.diamond` to appropriate values, or to the name of a column containing values for each point.
 
-The parameters/columns, what they control, and the column type:
+The argument/columns, what they control, and the type:
 
-| column      | controls                                          | type      |
+| argument    | controls                                          | type      |
 |-------------|---------------------------------------------------|-----------|
-| col.shape   | plotting character for points                     | integer   |
-| col.colour  | colour of points and lines                        | character |
-| col.fill    | fill colour of points                             | character |
+| shape       | plotting character for points                     | integer   |
+| colour      | colour of points and lines                        | character |
+| fill        | fill colour of points                             | character |
+| ciunder     | if the CI line should be plotted before the point | logical   |
 | col.bold    | if text is bold                                   | logical   |
 | col.diamond | if a diamond should be plotted                    | logical   |
-| col.ciunder | if the CI line should be plotted before the point | logical   |
 
+Note that `col.bold`, and `col.diamond` must be column names in the supplied data frames, while the others can be fixed values or column names.
+
+### Using values
 ```{r}
 forestplot1 <- make_forest_plot(headings         = headings,
                                 rows             = c("Triglycerides concentration"),
@@ -116,14 +120,42 @@ forestplot1 <- make_forest_plot(headings         = headings,
                                 col.right.space  = 0.02,
                                 heading.space    = 2,
                                 plot.space       = 8,
-                                col.shape        = "shape",
-                                col.colour       = "colour",
+                                shape            = 16,
+                                colour           = "red",
+                                cicolour         = "black",
+                                ciunder          = TRUE)
+```
+
+### Using column names
+```{r}
+forestplot1 <- make_forest_plot(headings         = headings,
+                                rows             = c("Triglycerides concentration"),
+                                cols             = list(resultsA),
+                                exponentiate     = TRUE,
+                                colnames         = c("Analysis A"),
+                                col.key          = "variable",
+                                ci.delim         = " - ",
+                                xlim             = c(0.9, 1.1),
+                                xticks           = c(0.9, 1, 1.1),
+                                blankrows        = c(0, 1, 0, 1),
+                                scalepoints      = TRUE,
+                                pointsize        = 3,
+                                col.left         = c("n"),
+                                col.left.space   = c(0.02),
+                                col.left.heading = c("No. of\nevents"),
+                                col.right.space  = 0.02,
+                                heading.space    = 2,
+                                plot.space       = 8,
+                                shape            = "shape",
+                                colour           = "colour",
                                 col.bold         = "bold",
                                 col.diamond      = "diamond",
-                                col.ciunder      = "ciunder")
+                                ciunder          = "ciunder")
 ```
 
 If a parameter is not set, then default values are used for these aesthetics. If a parameter is set, then every data frame provided in `cols` must contain a column with that name.
+
+
 
 ## Different limits and ticks on each plot
 

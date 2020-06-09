@@ -472,11 +472,11 @@ make_forest_plot <- function(
   boldheadings  = NULL,
   scalepoints   = FALSE,
   pointsize     = 3,
-  col.shape     = NULL,
-  col.colour    = NULL,
-  col.cicolour  = col.colour,
-  col.fill      = NULL,
-  col.ciunder   = NULL,
+  shape     = NULL,
+  colour    = NULL,
+  cicolour  = colour,
+  fill      = NULL,
+  ciunder   = NULL,
   addtext       = NULL,
   heading.space = 4,
   plot.space    = 8,
@@ -499,6 +499,10 @@ make_forest_plot <- function(
     nullline <- NULL
   }
 
+  col.keep <- c(col.diamond, col.bold)
+  for (x in c(shape, cicolour, colour, fill, ciunder)){
+    if (x %in% names(cols[[1]])){ col.keep <- append(col.keep, x) }
+  }
 
   datatoplot <- make_forest_data(
     headings      = headings,
@@ -513,7 +517,7 @@ make_forest_plot <- function(
     col.pval      = col.pval,
     col.left      = col.left,
     col.right     = col.right,
-    col.keep      = c(col.shape, col.colour, col.cicolour, col.fill, col.diamond, col.bold, col.ciunder),
+    col.keep      = col.keep,
     ci.delim      = ci.delim,
     exponentiate  = exponentiate,
     blankrows     = blankrows,
@@ -521,10 +525,38 @@ make_forest_plot <- function(
     addtext       = addtext
   )
 
-  if (is.null(col.shape)) { col.shape <- 15 } else {col.shape <- paste0("`", col.shape, "`")}
-  if (is.null(col.cicolour)) { col.cicolour <- "\"black\"" } else {col.cicolour <- paste0("`", col.cicolour, "`")}
-  if (is.null(col.colour)) { col.colour <- "\"black\"" } else {col.colour <- paste0("`", col.colour, "`")}
-  if (is.null(col.fill)) { col.fill <- "\"white\"" } else {col.fill <- paste0("`", col.fill, "`")}
+  # aesthetics: default value, match column name, or use argument itself
+  if (is.null(shape)) {
+    shape <- 15
+  } else if (shape %in% names(cols[[1]])){
+    shape <- paste0("`", shape, "`")
+  }
+
+  if (is.null(cicolour)) {
+    cicolour <- '\"black\"'
+  }
+  else if (cicolour %in% names(cols[[1]])){
+    cicolour <- paste0("`", cicolour, "`")
+  } else {
+    cicolour <- paste0('\"', cicolour, '\"')
+  }
+
+  if (is.null(colour)) {
+    colour <- '\"black\"'
+  } else if (colour %in% names(cols[[1]])){
+    colour <- paste0("`", colour, "`")
+  } else {
+    colour <- paste0('\"', colour, '\"')
+  }
+
+  if (is.null(fill)) {
+    fill <- '\"black\"'
+  } else if (fill %in% names(cols[[1]])){
+    fill <- paste0("`", fill, "`")
+  } else {
+    fill <- paste0('\"', fill, '\"')
+  }
+
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
 
   if (is.null(xlim)) {
@@ -652,7 +684,7 @@ make_forest_plot <- function(
       '  geom_polygon(data = diamonds,',
       '               aes(x = x, y = y, group = row,',
       sprintf(
-      '                   colour = %s, fill = %s),', col.cicolour, col.fill),
+      '                   colour = %s, fill = %s),', cicolour, fill),
       sprintf(
       '               size = %s) +', base_line_size),
       ''
@@ -684,25 +716,38 @@ make_forest_plot <- function(
                 '  # Add a line at null effect (only if exponentiate=TRUE)',
                 nullline,
                 '',
-                if (is.character(col.ciunder) && any(datatoplot[[col.ciunder]], na.rm = TRUE)){
+                if (isTRUE(ciunder)){
+                  c(
+                    '  # Plot the CIs',
+                    '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
+                    '                 aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                    '                     colour = %s), ', cicolour),
+                    sprintf(
+                    '                 size = %s,', base_line_size),
+                    '                 na.rm = TRUE) +',
+                    '')
+                } else if (is.character(ciunder) && any(datatoplot[[ciunder]], na.rm = TRUE)){
                   c(
                     '  # Plot CIs - before plotting points',
                     sprintf(
                       '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s),',
-                      col.ciunder),
+                      ciunder),
                     '                 aes(ymin = lci_transformed,',
                     '                     ymax = uci_transformed,',
                     sprintf(
-                      '                     colour = %s),', col.cicolour),
+                    '                     colour = %s),', cicolour),
                     sprintf(
-                      '                     size = %s,', base_line_size),
+                    '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
-                    '')},
+                    '')
+                },
                 '  # Plot points at the transformed estimates',
                 '  ## Scale by inverse of the SE',
                 sprintf(
                 '  geom_point(aes(size = size, shape = %s, colour = %s, fill = %s),',
-                col.shape, col.colour, col.fill),
+                shape, colour, fill),
                 '             na.rm = TRUE) +',
                 '',
                 '  # Scale the size of points by their side length',
@@ -710,29 +755,31 @@ make_forest_plot <- function(
                 '  scale_radius(limits = c(0, NA),',
                 sprintf('               range = c(0, %s)) +', pointsize),
                 '',
-                if (is.character(col.ciunder) && !all(datatoplot[[col.ciunder]], na.rm = TRUE)){
+                if (isFALSE(ciunder) || is.null(ciunder)){
+                  c(
+                    '  # Plot the CIs',
+                    '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
+                    '                 aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                    '                     colour = %s), ', cicolour),
+                    sprintf(
+                    '                 size = %s,', base_line_size),
+                    '                 na.rm = TRUE) +',
+                    '')
+                } else if (is.character(ciunder) && !all(datatoplot[[ciunder]], na.rm = TRUE)){
                   c(
                     '  # Plot CIs - after plotting points',
                     sprintf(
                     '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s),',
-                    col.ciunder),
+                    ciunder),
                     '                 aes(ymin = lci_transformed,',
                     '                     ymax = uci_transformed,',
                     sprintf(
-                    '                     colour = %s),', col.cicolour),
+                    '                     colour = %s),', cicolour),
                     sprintf(
-                    '                     size = %s,', base_line_size),
+                    '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
-                    '')},
-                if (is.null(col.ciunder)){
-                  c(
-                    '  # Plot the CIs',
-                    '  geom_linerange(aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
-                    sprintf(
-                    '                     colour = %s), ', col.cicolour),
-                    sprintf(
-                    '                     size = %s) +', base_line_size),
                     '')
                 },
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
@@ -740,20 +787,22 @@ make_forest_plot <- function(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
                 '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed,',
                 sprintf(
-                '                   colour = %s),', col.cicolour),
+                '                   colour = %s),', cicolour),
                 sprintf(
                 '               size = %s,', base_line_size),
                 sprintf(
-                '               arrow = arrow(type = "closed", length = unit(%s, "pt"))) +', 12 * base_line_size))},
+                '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 12 * base_line_size),
+                '               na.rm = TRUE) +')},
                 if(any(datatoplot$cioverleft, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
                 '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed,',
                 sprintf(
-                '                   colour = %s),', col.cicolour),
+                '                   colour = %s),', cicolour),
                 sprintf(
                 '               size = %s,', base_line_size),
                 sprintf(
-                '               arrow = arrow(type = "closed", length = unit(%s, "pt"))) +', 12 * base_line_size))},
+                '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 12 * base_line_size),
+                '               na.rm = TRUE) +')},
                 '',
                 plotdiamondscode,
                 '  # Use identity for aesthetic scales',

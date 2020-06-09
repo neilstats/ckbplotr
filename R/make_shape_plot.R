@@ -48,11 +48,11 @@ make_shape_plot <- function(data,
                             scalepoints   = FALSE,
                             pointsize     = 3,
                             col.group     = NULL,
-                            col.shape     = NULL,
-                            col.colour    = NULL,
-                            col.cicolour  = col.colour,
-                            col.fill      = NULL,
-                            col.ciunder   = NULL,
+                            shape         = NULL,
+                            colour        = NULL,
+                            cicolour      = colour,
+                            fill          = NULL,
+                            ciunder       = NULL,
                             xlims,
                             ylims,
                             gap           = c(0.025, 0.025),
@@ -71,7 +71,7 @@ make_shape_plot <- function(data,
   # Check arguments
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
-  if (!is.null(col.group) && !is.null(col.fill)) stop("col.group and col.fill both control fill, so do not specify both")
+  if (!is.null(col.group) && !is.null(fill)) stop("col.group and fill both control fill, so do not specify both")
 
   # Add empty string title if it is null
   if (is.null(title)) title <- ""
@@ -88,11 +88,37 @@ make_shape_plot <- function(data,
   ext   <- deparse(ext)
   ratio <- deparse(ratio)
 
-  # default values for aesthetics
-  if (is.null(col.shape)) { col.shape <- 22 } else {col.shape <- paste0("`", col.shape, "`")}
-  if (is.null(col.cicolour)) { col.cicolour <- "\"black\"" } else {col.cicolour <- paste0("`", col.cicolour, "`")}
-  if (is.null(col.colour)) { col.colour <- "\"black\"" } else {col.colour <- paste0("`", col.colour, "`")}
-  if (is.null(col.fill)) { col.fill <- "\"black\"" } else {col.fill <- paste0("`", col.fill, "`")}
+  # aesthetics: default value, match column name, or use argument itself
+  if (is.null(shape)) {
+    shape <- 22
+  } else if (shape %in% names(data)){
+    shape <- paste0("`", shape, "`")
+  }
+
+  if (is.null(cicolour)) {
+    cicolour <- '\"black\"'
+  }
+  else if (cicolour %in% names(data)){
+    cicolour <- paste0("`", cicolour, "`")
+  } else {
+    cicolour <- paste0('\"', cicolour, '\"')
+  }
+
+  if (is.null(colour)) {
+    colour <- '\"black\"'
+  } else if (colour %in% names(data)){
+      colour <- paste0("`", colour, "`")
+  } else {
+      colour <- paste0('\"', colour, '\"')
+  }
+
+  if (is.null(fill)) {
+    fill <- '\"black\"'
+  } else if (fill %in% names(data)){
+    fill <- paste0("`", fill, "`")
+  } else {
+    fill <- paste0('\"', fill, '\"')
+  }
 
   # Create strings for axis breaks
   scale_x_string <- NULL
@@ -142,7 +168,7 @@ make_shape_plot <- function(data,
   } else {
     group_string <- ''
     scale_fill_string <- '  scale_fill_identity() +'
-    fill_string <- sprintf('fill = %s', col.fill)
+    fill_string <- sprintf('fill = %s', fill)
   }
 
   # Create string for plotting point estimates using geom_point
@@ -151,9 +177,9 @@ make_shape_plot <- function(data,
       geom_point_string <- c(sprintf(
                              '  geom_point(aes(size = 1/(%s - %s),', col.estimate, col.lci),
                              sprintf(
-                               '                 shape = %s,', col.shape),
+                               '                 shape = %s,', shape),
                              sprintf(
-                               '                 colour = %s,', col.colour),
+                               '                 colour = %s,', colour),
                              sprintf(
                                '                 %s)) +', fill_string)
       )
@@ -161,9 +187,9 @@ make_shape_plot <- function(data,
       geom_point_string <- c(sprintf(
         '  geom_point(aes(size = 1/%s,', col.stderr),
         sprintf(
-          '                 shape = %s,', col.shape),
+          '                 shape = %s,', shape),
         sprintf(
-          '                 colour = %s,', col.colour),
+          '                 colour = %s,', colour),
         sprintf(
           '                 %s)) +', fill_string)
       )
@@ -171,9 +197,9 @@ make_shape_plot <- function(data,
   } else {
     geom_point_string <- c('  geom_point(aes(size = 1,',
                            sprintf(
-                           '                 shape = %s,', col.shape),
+                           '                 shape = %s,', shape),
                            sprintf(
-                           '                 colour = %s,', col.colour),
+                           '                 colour = %s,', colour),
                            sprintf(
                            '                 %s)) +', fill_string)
                            )
@@ -196,13 +222,21 @@ make_shape_plot <- function(data,
                 sprintf('plot <- ggplot(data = %s,', deparse(substitute(data))),
                 sprintf('               aes(x = %s, y = %s%s)) +', col.x, est_string, group_string),
                 '',
-                if (is.character(col.ciunder) && any(data[[col.ciunder]], na.rm = TRUE)){
+                if (isTRUE(ciunder)){
+                  c(
+                    '  # Plot the CIs',
+                    sprintf('  geom_linerange(aes(ymin = %s,', lci_string),
+                    sprintf('                     ymax = %s,', uci_string),
+                    sprintf('                     colour = %s), ', cicolour),
+                    sprintf('                     lwd = %s) +', base_line_size),
+                    '')
+                } else if (isTRUE(ciunder) || (is.character(ciunder) && any(data[[ciunder]], na.rm = TRUE))){
                   c(
                     '  # Plot the CIs - before plotting points',
-                    sprintf('  geom_linerange(data = ~ dplyr::filter(.x, `%s`),',col.ciunder),
+                    sprintf('  geom_linerange(data = ~ dplyr::filter(.x, `%s`),',ciunder),
                     sprintf('                 aes(ymin = %s,', lci_string),
                     sprintf('                     ymax = %s,', uci_string),
-                    sprintf('                     colour = %s), ', col.cicolour),
+                    sprintf('                     colour = %s), ', cicolour),
                     sprintf('                     lwd = %s) +', base_line_size),
                     '')},
                 '  # Plot the point estimates',
@@ -220,24 +254,23 @@ make_shape_plot <- function(data,
                 '               limits = c(0, NA),',
                 sprintf('               range  = c(0, %s)) +', pointsize),
                 '',
-                if (is.character(col.ciunder) && !all(data[[col.ciunder]], na.rm = TRUE)){
-                  c(
-                    '  # Plot the CIs - after plotting points',
-                    sprintf('  geom_linerange(data = ~ dplyr::filter(.x, !`%s`),',col.ciunder),
-                    sprintf('                 aes(ymin = %s,', lci_string),
-                    sprintf('                     ymax = %s,', uci_string),
-                    sprintf('                     colour = %s), ', col.cicolour),
-                    sprintf('                     lwd = %s) +', base_line_size),
-                    '')},
-                if (is.null(col.ciunder)){
+                if (isFALSE(ciunder) || is.null(ciunder)){
                   c(
                     '  # Plot the CIs',
                     sprintf('  geom_linerange(aes(ymin = %s,', lci_string),
                     sprintf('                     ymax = %s,', uci_string),
-                    sprintf('                     colour = %s), ', col.cicolour),
+                    sprintf('                     colour = %s), ', cicolour),
                     sprintf('                     lwd = %s) +', base_line_size),
                     '')
-                },
+                } else if (is.character(ciunder) && !all(data[[ciunder]], na.rm = TRUE)){
+                  c(
+                    '  # Plot the CIs - after plotting points',
+                    sprintf('  geom_linerange(data = ~ dplyr::filter(.x, !`%s`),',ciunder),
+                    sprintf('                 aes(ymin = %s,', lci_string),
+                    sprintf('                     ymax = %s,', uci_string),
+                    sprintf('                     colour = %s), ', cicolour),
+                    sprintf('                     lwd = %s) +', base_line_size),
+                    '')},
                 '  # Use identity for aesthetic scales',
                 '  scale_shape_identity() +',
                 '  scale_colour_identity() +',
