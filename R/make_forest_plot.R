@@ -522,11 +522,10 @@ make_forest_plot <- function(
   )
 
   if (is.null(col.shape)) { col.shape <- 15 } else {col.shape <- paste0("`", col.shape, "`")}
-  if (is.null(col.colour)) { col.colour <- "\"black\"" } else {col.colour <- paste0("`", col.colour, "`")}
   if (is.null(col.cicolour)) { col.cicolour <- "\"black\"" } else {col.cicolour <- paste0("`", col.cicolour, "`")}
+  if (is.null(col.colour)) { col.colour <- "\"black\"" } else {col.colour <- paste0("`", col.colour, "`")}
   if (is.null(col.fill)) { col.fill <- "\"white\"" } else {col.fill <- paste0("`", col.fill, "`")}
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
-  if (is.null(col.ciunder)) { col.ciunder <- FALSE } else {col.ciunder <- paste0("`", col.ciunder, "`")}
 
   if (is.null(xlim)) {
     xlim <- range(pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed)))
@@ -685,20 +684,20 @@ make_forest_plot <- function(
                 '  # Add a line at null effect (only if exponentiate=TRUE)',
                 nullline,
                 '',
-                if (is.character(col.ciunder)){
+                if (is.character(col.ciunder) && any(datatoplot[[col.ciunder]], na.rm = TRUE)){
                   c(
-                '  # Plot CIs - before plotting points',
-                sprintf(
-                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s),',
-                col.ciunder),
-                '                 aes(ymin = lci_transformed,',
-                '                     ymax = uci_transformed,',
-                sprintf(
-                '                     colour = %s),', col.cicolour),
-                sprintf(
-                '                     size = %s,', base_line_size),
-                '                 na.rm = TRUE) +',
-                '')},
+                    '  # Plot CIs - before plotting points',
+                    sprintf(
+                      '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s),',
+                      col.ciunder),
+                    '                 aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                      '                     colour = %s),', col.cicolour),
+                    sprintf(
+                      '                     size = %s,', base_line_size),
+                    '                 na.rm = TRUE) +',
+                    '')},
                 '  # Plot points at the transformed estimates',
                 '  ## Scale by inverse of the SE',
                 sprintf(
@@ -711,18 +710,31 @@ make_forest_plot <- function(
                 '  scale_radius(limits = c(0, NA),',
                 sprintf('               range = c(0, %s)) +', pointsize),
                 '',
-                '  # Plot CIs - after plotting points',
-                sprintf(
-                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s),',
-                col.ciunder),
-                '                 aes(ymin = lci_transformed,',
-                '                     ymax = uci_transformed,',
-                sprintf(
-                '                     colour = %s),', col.cicolour),
-                sprintf(
-                '                     size = %s,', base_line_size),
-                '                 na.rm = TRUE) +',
-                '',
+                if (is.character(col.ciunder) && !all(datatoplot[[col.ciunder]], na.rm = TRUE)){
+                  c(
+                    '  # Plot CIs - after plotting points',
+                    sprintf(
+                    '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s),',
+                    col.ciunder),
+                    '                 aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                    '                     colour = %s),', col.cicolour),
+                    sprintf(
+                    '                     size = %s,', base_line_size),
+                    '                 na.rm = TRUE) +',
+                    '')},
+                if (is.null(col.ciunder)){
+                  c(
+                    '  # Plot the CIs',
+                    '  geom_linerange(aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                    '                     colour = %s), ', col.cicolour),
+                    sprintf(
+                    '                     size = %s) +', base_line_size),
+                    '')
+                },
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
                 if(any(datatoplot$cioverright, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
