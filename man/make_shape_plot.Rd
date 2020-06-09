@@ -59,6 +59,9 @@ use log scale on the axis. (Default: TRUE)}
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
 
+\item{pointsize}{The (largest) size of box to use for plotting point
+estimates. (Default: 3)}
+
 \item{col.group}{Name of column that groups the estimates. (Default: NULL)}
 
 \item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)}
@@ -84,6 +87,10 @@ error? (Default: FALSE)}
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
+
+\item{xbreaks}{Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)}
+
+\item{ybreaks}{Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)}
 
 \item{xlab}{Label for x-axis. (Default: "Risk factor")}
 

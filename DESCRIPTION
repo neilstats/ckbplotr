@@ -20,7 +20,8 @@ Imports:
     rlang,
     readr,
     purrr,
-    tidyr
+    tidyr,
+    utils
 RoxygenNote: 7.1.0
 Suggests: 
     knitr,

@@ -236,7 +236,7 @@ make_forest_data <- function(
 
 
     # add a blank heading at bottom if needed
-    if (tail(out$Heading, 1) != "") {
+    if (utils::tail(out$Heading, 1) != "") {
       out <- out %>%
         tibble::add_row(Heading = "")
     }
@@ -426,6 +426,7 @@ make_forest_data <- function(
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
 #' @param col.bold Plot text as bold. Name of a column of logical values.
+#' @param boldheadings A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)
 #' @param heading.space Size of the gap between headings and the first plot.
 #' Unit is "lines". (Default: 4)
 #' @param plot.space Size of the gap between forest plots.

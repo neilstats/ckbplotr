@@ -21,11 +21,15 @@
 #'   use log scale on the axis. (Default: TRUE)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
+#' @param pointsize The (largest) size of box to use for plotting point
+#'                  estimates. (Default: 3)
 #' @param xlab Label for x-axis. (Default: "Risk factor")
 #' @param ylab Label for y-axis. (Default: "Estimate (95\% CI)")
 #' @param title Plot title. (Default: "Figure")
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
+#' @param xbreaks Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)
+#' @param ybreaks Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)

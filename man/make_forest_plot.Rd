@@ -138,6 +138,8 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
 \item{col.bold}{Plot text as bold. Name of a column of logical values.}
 
+\item{boldheadings}{A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)}
+
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
 
