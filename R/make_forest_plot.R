@@ -868,7 +868,7 @@ make_forest_plot <- function(
                 '        panel.grid.major = element_blank(),',
                 '        panel.grid.minor = element_blank(),',
                 sprintf(
-                '        axis.line.x      = element_line(size = %s),', base_line_size),
+                '        axis.line.x      = element_line(size = %s, lineend = "round"),', base_line_size),
                 '        axis.title.x     = element_blank(),',
                 '        axis.ticks.x     = element_line(colour = "black"),',
                 '        axis.text.x      = element_text(colour = "black",',
