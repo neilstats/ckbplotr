@@ -741,13 +741,19 @@ make_forest_plot <- function(
                 '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed,',
                 sprintf(
                 '                   colour = %s),', col.cicolour),
-                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +')},
+                sprintf(
+                '               size = %s,', base_line_size),
+                sprintf(
+                '               arrow = arrow(type = "closed", length = unit(%s, "pt"))) +', 12 * base_line_size))},
                 if(any(datatoplot$cioverleft, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
                 '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed,',
                 sprintf(
                 '                   colour = %s),', col.cicolour),
-                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +')},
+                sprintf(
+                '               size = %s,', base_line_size),
+                sprintf(
+                '               arrow = arrow(type = "closed", length = unit(%s, "pt"))) +', 12 * base_line_size))},
                 '',
                 plotdiamondscode,
                 '  # Use identity for aesthetic scales',
