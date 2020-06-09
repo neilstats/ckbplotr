@@ -11,8 +11,8 @@ Biobank](http://www.ckbiobank.org) researchers.
 
 ### Directly from github
 
-The latest development version of `ckbplotr` can be installed directly
-from github using devtools.
+The latest version of `ckbplotr` can be installed directly from github
+using devtools.
 
 ``` r
 install.packages('devtools')
@@ -108,7 +108,8 @@ plot <- make_shape_plot(results,
                         xlims        = c(15,50),
                         ylims        = c(0.5, 3),
                         scalepoints  = TRUE,
-                        title        = NULL)
+                        title        = NULL,
+                        ciunder      = TRUE)
 ```
 
 <img src="man/figures/README-make_shape_plot-example-2-1.png" width="100%" />
@@ -117,10 +118,9 @@ plot <- make_shape_plot(results,
 
 The `plot_like_ckb` function does three things to a ggplot2 plot:
 
-1.  modifies the theme (i.e. the overall appearance)
-2.  extends the plotting area, hides the default axis lines and manually
-    adds axis lines (so that you can have a custom sized gap between the
-    plotting area and the axes)
+1.  applies a CKB theme (i.e. change the overall appearance)
+2.  extends the plotting area and manually adds axis lines (so that you
+    can have a custom sized gap between the plotting area and the axes)
 3.  applies a fixed aspect ratio
 
 ### Examples

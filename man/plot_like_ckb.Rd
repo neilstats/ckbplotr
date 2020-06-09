@@ -10,7 +10,9 @@ plot_like_ckb(
   ylims = NULL,
   gap = c(0.025, 0.025),
   ext = c(0.025, 0.025),
-  ratio = 1.5
+  ratio = 1.5,
+  base_size = 11,
+  base_line_size = base_size/22
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ plot_like_ckb(
 \item{ext}{A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))}
 
 \item{ratio}{The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)}
+
+\item{base_size}{base font size, given in pts.}
+
+\item{base_line_size}{base size for line elements}
 }
 \value{
 A ggplot2 plot.

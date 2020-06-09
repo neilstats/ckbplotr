@@ -33,6 +33,7 @@ theme_ckb <- function(base_size = 11,
 
 #' Make a ggplot into CKB style
 #'
+#' @inheritParams theme_ckb
 #' @param plot A ggplot2 plot object.
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.

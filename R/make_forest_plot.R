@@ -396,6 +396,7 @@ make_forest_data <- function(
 #'
 #'
 #' @inheritParams make_forest_data
+#' @inheritParams theme_ckb
 #' @param colheadings Titles to be placed above each forest plot. (Default: colnames)
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
@@ -418,6 +419,13 @@ make_forest_data <- function(
 #' @param xticks A numeric vector. The tick points of the x axis.
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
+#' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
+#' @param col.bold Plot text as bold. Name of a column of logical values.
 #' @param heading.space Size of the gap between headings and the first plot.
 #' Unit is "lines". (Default: 4)
 #' @param plot.space Size of the gap between forest plots.

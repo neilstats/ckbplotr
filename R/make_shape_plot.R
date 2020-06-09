@@ -1,6 +1,7 @@
 
 #' Make a shape plot with ggplot2
 #'
+#' @inheritParams plot_like_ckb
 #'
 #' @param data The data frame containing estimates to be plotted.
 #' @param col.x Name of column that provides the x-axis value (e.g. exposure, risk factor, dependent variable). (Default: "x")
@@ -11,6 +12,11 @@
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
 #' @param col.n Name of column that provides number to be plotted below CIs.
 #' @param col.group Name of column that groups the estimates. (Default: NULL)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
 #'   use log scale on the axis. (Default: TRUE)
 #' @param scalepoints Should the points be scaled by inverse of the standard

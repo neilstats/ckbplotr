@@ -38,14 +38,16 @@ make_forest_plot(
   boldheadings = NULL,
   scalepoints = FALSE,
   pointsize = 3,
-  col.shape = NULL,
-  col.colour = NULL,
-  col.cicolour = col.colour,
-  col.fill = NULL,
-  col.ciunder = NULL,
+  shape = NULL,
+  colour = NULL,
+  cicolour = colour,
+  fill = NULL,
+  ciunder = NULL,
   addtext = NULL,
   heading.space = 4,
   plot.space = 8,
+  base_size = 11,
+  base_line_size = base_size/22,
   printplot = TRUE,
   showcode = TRUE
 )
@@ -132,11 +134,25 @@ confidence interval. (Default: ", ")}
 after a heading1, at the end of a heading1 'section', after
 a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
+\item{col.diamond}{Plot estimates and CIs as diamonds. Name of a column of logical values.}
+
+\item{col.bold}{Plot text as bold. Name of a column of logical values.}
+
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
 
 \item{pointsize}{The (largest) size of box to use for plotting point
 estimates. (Default: 3)}
+
+\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)}
+
+\item{colour}{Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{cicolour}{Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{fill}{Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
   Data frames should contain a col.key column, and one or more of:
@@ -156,6 +172,10 @@ Unit is "lines". (Default: 4)}
 
 \item{plot.space}{Size of the gap between forest plots.
 Unit is "lines". (Default: 8)}
+
+\item{base_size}{base font size, given in pts.}
+
+\item{base_line_size}{base size for line elements}
 
 \item{printplot}{Print the plot. (Default: TRUE)}
 
