@@ -800,7 +800,7 @@ make_forest_plot <- function(
                 sprintf(
                 '               size = %s,', base_line_size),
                 sprintf(
-                '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 12 * base_line_size),
+                '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
                 '               na.rm = TRUE) +')},
                 if(any(datatoplot$cioverleft, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
@@ -810,7 +810,7 @@ make_forest_plot <- function(
                 sprintf(
                 '               size = %s,', base_line_size),
                 sprintf(
-                '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 12 * base_line_size),
+                '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
                 '               na.rm = TRUE) +')},
                 '',
                 plotdiamondscode,
@@ -885,8 +885,8 @@ make_forest_plot <- function(
                 '                                        margin = margin(t = %s),', base_size/(11/4.4)),
                 '                                        vjust  = 1),',
                 '        axis.ticks.y     = element_blank(),',
+                '        axis.line.y      = element_blank(),',
                 '        axis.text.y      = element_text(hjust  = 0,',
-                '                                        size   = rel(1),',
                 '                                        colour = "black",',
                 '                                        face   = boldheadings,',
                 sprintf('                                        margin = margin(r = %s, unit = "lines")),', heading.space),
