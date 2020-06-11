@@ -14,7 +14,6 @@
 #'             estimates and CIs. (Default: "HR (95\% CI)")
 #' @param forest.xlim A numeric vector. The limits of the x axis.
 #' @param forest.xticks A numeric vector. The tick points of the x axis.
-#' @param col.right Name of additional column to be printed to the right of the plot.
 #' @param col.pval Name of additional column to be printed to the right of the plot,
 #'   and formatted as P value.
 #' @param ... Other parameters will be passed to the Jasper::ForestFromCSV function.
@@ -52,7 +51,7 @@ make_jasper_forest_plot <- function(
     headings      = headings,
     rows          = rows,
     cols          = cols,
-    col.key  = col.key,
+    col.key       = col.key,
     col.estimate  = col.estimate,
     col.stderr    = col.stderr,
     col.lci       = col.lci,
@@ -66,9 +65,9 @@ make_jasper_forest_plot <- function(
     dplyr::summarise(Heading = dplyr::first(Heading),
                      key = dplyr::first(key))
 
-  # drop first and last rows (which are blank)
+  # drop last row (which is blank)
   out <- out %>%
-    dplyr::filter(!row %in% c(min(row), max(row))) %>%
+    dplyr::filter(!row %in% c(max(row))) %>%
     dplyr::mutate(row = row - 1)
 
   col.right <- c(col.pval, col.right)
