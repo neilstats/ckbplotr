@@ -335,7 +335,9 @@ make_forest_data <- function(
                                 format(round(uci_transformed, 2), nsmall = 2),
                                 ")'"),
       !is.na(extratext) ~ extratext,
-      TRUE              ~ "''"))
+      TRUE              ~ "''")) %>%
+    dplyr::select(-extrarowkey, -extratext) %>%
+    dplyr::arrange(column, row)
 
 
   if (!scalepoints) {
