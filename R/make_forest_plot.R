@@ -477,6 +477,7 @@ make_forest_plot <- function(
   xticks        = NULL,
   blankrows     = c(1, 1, 0, 0),
   col.diamond   = NULL,
+  diamond       = NULL,
   col.bold      = NULL,
   boldheadings  = NULL,
   scalepoints   = FALSE,
@@ -495,6 +496,11 @@ make_forest_plot <- function(
   showcode      = TRUE
 ){
 
+  # check arguments
+  if (!missing(col.diamond) &&  !missing(diamond)) stop("Use either col.diamond or diamond, not both.")
+
+  # take first element if diamond is a list
+  if (is.list(diamond)){ diamond <- diamond[[1]] }
 
   if (exponentiate == TRUE) {
     tf       <- exp
@@ -664,29 +670,54 @@ make_forest_plot <- function(
 
   diamondscode <- NULL
   plotdiamondscode <- NULL
-  if(!is.null(col.diamond)){
-    diamondscode <- c(
-      '# Create data frame for diamonds to be plotted',
-      'diamonds <- datatoplot %>%',
-      sprintf(
-      '  dplyr::filter(`%s` == TRUE) %%>%%', col.diamond),
-      '  dplyr::mutate(y1 = lci_transformed,',
-      '                y2 = estimate_transformed,',
-      '                y3 = uci_transformed,',
-      '                y4 = estimate_transformed) %>%',
-      '  tidyr::gather(part, y, y1:y4) %>%',
-      '  dplyr::arrange(column, row, part) %>%',
-      sprintf(
-        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))', col.diamond),
-      '',
-      '# Remove plotting of points if a diamond is to be used',
-      sprintf('if (any(datatoplot[["%s"]])) {', col.diamond),
-      sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$estimate_transformed <- NA', col.diamond, col.diamond),
-      sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$lci_transformed <- NA', col.diamond, col.diamond),
-      sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$uci_transformed <- NA', col.diamond, col.diamond),
-      '}',
-      ''
-    )
+  if(!is.null(col.diamond) || !is.null(diamond)){
+    if (!is.null(diamond)){
+      diamondscode <- c(
+        '# Create data frame for diamonds to be plotted',
+        'diamonds <- datatoplot %>%',
+        sprintf(
+        '  dplyr::filter(key %%in%% %s) %%>%%', deparse(diamond)),
+        '  dplyr::mutate(y1 = lci_transformed,',
+        '                y2 = estimate_transformed,',
+        '                y3 = uci_transformed,',
+        '                y4 = estimate_transformed) %>%',
+        '  tidyr::gather(part, y, y1:y4) %>%',
+        '  dplyr::arrange(column, row, part) %>%',
+        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))',
+        '',
+        '# Remove plotting of points if a diamond is to be used',
+        'datatoplot <- datatoplot %>% ',
+        sprintf(
+        '  dplyr::mutate(estimate_transformed = dplyr::if_else(key %%in%% %s, as.numeric(NA), estimate_transformed),', deparse(diamond)),
+        sprintf(
+        '                lci_transformed = dplyr::if_else(key %%in%% %s, as.numeric(NA), lci_transformed),', deparse(diamond)),
+        sprintf(
+        '                uci_transformed = dplyr::if_else(key %%in%% %s, as.numeric(NA), uci_transformed))', deparse(diamond)),
+        ''
+      )
+    } else {
+      diamondscode <- c(
+        '# Create data frame for diamonds to be plotted',
+        'diamonds <- datatoplot %>%',
+        sprintf(
+          '  dplyr::filter(`%s` == TRUE) %%>%%', col.diamond),
+        '  dplyr::mutate(y1 = lci_transformed,',
+        '                y2 = estimate_transformed,',
+        '                y3 = uci_transformed,',
+        '                y4 = estimate_transformed) %>%',
+        '  tidyr::gather(part, y, y1:y4) %>%',
+        '  dplyr::arrange(column, row, part) %>%',
+        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))',
+        '',
+        '# Remove plotting of points if a diamond is to be used',
+        sprintf('if (any(datatoplot[["%s"]])) {', col.diamond),
+        sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$estimate_transformed <- NA', col.diamond, col.diamond),
+        sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$lci_transformed <- NA', col.diamond, col.diamond),
+        sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$uci_transformed <- NA', col.diamond, col.diamond),
+        '}',
+        ''
+      )
+    }
 
     plotdiamondscode <- c(
       '  # Add diamonds',
