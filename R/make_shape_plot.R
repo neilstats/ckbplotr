@@ -18,7 +18,8 @@
 #' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
-#'   use log scale on the axis. (Default: TRUE)
+#'   use log scale on the axis. (Default: FALSE)
+#' @param logscale Use log scale for vertical axis. (Default: exponentiate)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param pointsize The (largest) size of box to use for plotting point
@@ -55,6 +56,7 @@ make_shape_plot <- function(data,
                             col.uci       = NULL,
                             col.n         = NULL,
                             exponentiate  = FALSE,
+                            logscale      = exponentiate,
                             scalepoints   = FALSE,
                             pointsize     = 3,
                             col.group     = NULL,
@@ -144,10 +146,13 @@ make_shape_plot <- function(data,
   }
 
   # Create strings for y-axis scale, estimates and CIs
-  if (exponentiate == TRUE) {
+  if (logscale == TRUE){
     scale    <- "log"
+  } else {
+    scale    <- "identity"
+  }
+  if (exponentiate == TRUE) {
     est_string <- paste0('exp(', col.estimate, ')')
-
     if (!is.null(col.lci)) {
       lci_string <- paste0('exp(`', col.lci,'`)')
       uci_string <- paste0('exp(`', col.uci,'`)')
@@ -155,9 +160,7 @@ make_shape_plot <- function(data,
       lci_string <- paste0('exp(', col.estimate,'-1.96*', col.stderr,')')
       uci_string <- paste0('exp(', col.estimate,'+1.96*', col.stderr,')')
     }
-
   } else {
-    scale    <- "identity"
     est_string <- col.estimate
     if (!is.null(col.lci)) {
       lci_string <- paste0("`", col.lci, "`")
