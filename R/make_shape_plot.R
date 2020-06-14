@@ -65,6 +65,7 @@ make_shape_plot <- function(data,
                             cicolour      = colour,
                             fill          = NULL,
                             ciunder       = NULL,
+                            lines         = FALSE,
                             xlims,
                             ylims,
                             gap           = c(0.025, 0.025),
@@ -184,11 +185,32 @@ make_shape_plot <- function(data,
     fill_string <- sprintf('fill = %s', fill)
   }
 
+  # Create string for plotting lines
+  lines_string <- NULL
+  if(lines) {
+    lines_string <- c(
+      '  # Plot lines (linear fit through estimates, weighted by inverse variance)',
+      '  stat_smooth(method   = "glm",',
+      '              formula  = y ~ x,',
+      if (!is.null(col.lci)) {
+        sprintf(
+        '              aes(weight = 1/((%s - `%s`)^2)),', col.estimate, col.lci)
+      } else {
+        sprintf(
+        '              aes(weight = 1/(%s^2)),', col.stderr)
+      },
+      '              se       = FALSE,',
+      '              colour   = "black",',
+      '              linetype = "dashed",',
+      '              size     = 0.25) +',
+      '')
+  }
+
   # Create string for plotting point estimates using geom_point
   if (scalepoints) {
     if (!is.null(col.lci)) {
       geom_point_string <- c(sprintf(
-                             '  geom_point(aes(size = 1/(%s - %s),', col.estimate, col.lci),
+                             '  geom_point(aes(size = 1/(%s - `%s`),', col.estimate, col.lci),
                              sprintf(
                                '                 shape = %s,', shape),
                              sprintf(
@@ -235,6 +257,7 @@ make_shape_plot <- function(data,
                 sprintf('plot <- ggplot(data = %s,', deparse(substitute(data))),
                 sprintf('               aes(x = %s, y = %s%s)) +', col.x, est_string, group_string),
                 '',
+                lines_string,
                 if (isTRUE(ciunder)){
                   c(
                     '  # Plot the CIs',
