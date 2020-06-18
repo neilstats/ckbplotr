@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -94,20 +94,26 @@
 <h3 class="hasAnchor">
 <a href="#directly-from-github" class="anchor"></a>Directly from github</h3>
 <p>The latest development version of <code>ckbplotr</code> can be installed directly from github using devtools.</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'devtools'</span>)
-<span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu">install_github</span>(<span class="st">'neilstats/ckbplotr'</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'devtools'</span>)
+<span class="kw">devtools</span>::<span class="fu">install_github</span>(<span class="st">'neilstats/ckbplotr'</span>)
+</pre></div>
 </div>
 <div id="or-from-source-package" class="section level3">
 <h3 class="hasAnchor">
 <a href="#or-from-source-package" class="anchor"></a>Or from source package</h3>
 <p><code>ckbplotr</code> can also be installed from its source package. The R packages <code>ggplot2</code>, <code>magrittr</code>, <code>readr</code>, <code>tibble</code>, <code>dplyr</code>, <code>purrr</code> and <code>rlang</code> must first be installed. These are part of the collection of tidyverse packages.</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="co"># The easiest way is to install the whole tidyverse:</span>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co"># The easiest way is to install the whole tidyverse:</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"tidyverse"</span>)
 
 <span class="co"># # Or install just these packages:</span>
-<span class="co"># install.packages(c("ggplot2", "readr", "dplyr", "purrr"))</span></pre></div>
+<span class="co"># install.packages(c("ggplot2", "readr", "dplyr", "purrr"))</span>
+</pre></div>
 <p>Then <code>ckbplotr</code> can be installed from its source package using the code:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ckbplotr.tar.gz"</span>, <span class="kw">repos</span> <span class="kw">=</span> <span class="kw">NULL</span>, <span class="kw">type</span> <span class="kw">=</span> <span class="st">"source"</span>)</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ckbplotr.tar.gz"</span>, repos = <span class="kw">NULL</span>, type = <span class="st">"source"</span>)
+</pre></div>
 <p>Or, in RStudio, open the “Tools” menu and select “Install Packages…”. In the “Install from…” box select “Package Archive File”, and in the “Package archive” box browse to the ckbplotr.tar.gz file.</p>
 <p>The source package for the latest release version is available <a href="https://github.com/neilstats/ckbplotr/releases/latest">here</a>.</p>
 </div>
@@ -127,38 +133,42 @@
 <h3 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h3>
 <p>Given a data frame of estimates and standard errors (to be plotted on the y axis), and risk factor levels (to be plotted on the x axis), a plot can be created.</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ckbplotr</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/neilstats/ckbplotr">ckbplotr</a></span>)
 
-<span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-  <span class="kw">est</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span>, <span class="fl">1.75</span>, <span class="fl">1.1</span>, <span class="fl">1.35</span>, <span class="fl">1.75</span>, <span class="fl">2</span>),
-  <span class="kw">se</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.08</span>, <span class="fl">0.02</span>, <span class="fl">0.07</span>, <span class="fl">0.15</span>, <span class="fl">0.05</span>, <span class="fl">0.02</span>, <span class="fl">0.07</span>, <span class="fl">0.1</span>),
-  <span class="kw">rf</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">20</span>, <span class="fl">28</span>, <span class="fl">35</span>, <span class="fl">50</span>, <span class="fl">18.5</span>, <span class="fl">25</span>, <span class="fl">32</span>, <span class="fl">47</span>),
-  <span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">109</span>, <span class="fl">103</span>, <span class="fl">143</span>, <span class="fl">104</span>, <span class="fl">140</span>, <span class="fl">134</span>, <span class="fl">127</span>, <span class="fl">99</span>),
-  <span class="kw">is_female</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>)
+<span class="kw">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
+  est = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span>, <span class="fl">1.75</span>, <span class="fl">1.1</span>, <span class="fl">1.35</span>, <span class="fl">1.75</span>, <span class="fl">2</span>),
+  se = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.08</span>, <span class="fl">0.02</span>, <span class="fl">0.07</span>, <span class="fl">0.15</span>, <span class="fl">0.05</span>, <span class="fl">0.02</span>, <span class="fl">0.07</span>, <span class="fl">0.1</span>),
+  rf = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">20</span>, <span class="fl">28</span>, <span class="fl">35</span>, <span class="fl">50</span>, <span class="fl">18.5</span>, <span class="fl">25</span>, <span class="fl">32</span>, <span class="fl">47</span>),
+  n = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">109</span>, <span class="fl">103</span>, <span class="fl">143</span>, <span class="fl">104</span>, <span class="fl">140</span>, <span class="fl">134</span>, <span class="fl">127</span>, <span class="fl">99</span>),
+  is_female = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>)
 )
 
-<span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>[<span class="no">results</span>$<span class="no">is_female</span> <span class="kw">==</span> <span class="fl">1</span>,],
-                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
-                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
-                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
-                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
-                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
-                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>)</pre></div>
+<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>[<span class="kw">results</span><span class="op">$</span><span class="kw">is_female</span> <span class="op">==</span> <span class="fl">1</span>,],
+                        col.x        = <span class="st">"rf"</span>,
+                        col.estimate = <span class="st">"est"</span>,
+                        col.stderr   = <span class="st">"se"</span>,
+                        col.n        = <span class="st">"n"</span>,
+                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
+                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
+                        scalepoints  = <span class="fl">TRUE</span>,
+                        title        = <span class="kw">NULL</span>)
+</pre></div>
 <p><img src="reference/figures/README-make_shape_plot-example-1-1.png" width="100%"></p>
 <p>The <code>col.group</code> argument can be supplied to plot results for different groups (in shades of grey).</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>,
-                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
-                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
-                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
-                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
-                        <span class="kw">col.group</span>    <span class="kw">=</span> <span class="st">"is_female"</span>,
-                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
-                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>)</pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>,
+                        col.x        = <span class="st">"rf"</span>,
+                        col.estimate = <span class="st">"est"</span>,
+                        col.stderr   = <span class="st">"se"</span>,
+                        col.n        = <span class="st">"n"</span>,
+                        col.group    = <span class="st">"is_female"</span>,
+                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
+                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
+                        scalepoints  = <span class="fl">TRUE</span>,
+                        title        = <span class="kw">NULL</span>)
+</pre></div>
 <p><img src="reference/figures/README-make_shape_plot-example-2-1.png" width="100%"></p>
 </div>
 </div>
@@ -175,31 +185,43 @@
 <h3 class="hasAnchor">
 <a href="#examples-1" class="anchor"></a>Examples</h3>
 <p>Make a scatter plot with <code>ggplot</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ckbplotr</span>)
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/neilstats/ckbplotr">ckbplotr</a></span>)
 
-<span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">displ</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">hwy</span>)) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1</span>)
-<span class="no">plot</span></pre></div>
+<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(data = <span class="kw">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">displ</span>, y = <span class="kw">hwy</span>)) <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(size = <span class="fl">1</span>)
+<span class="kw">plot</span>
+</pre></div>
 <p><img src="reference/figures/README-a-plot-1.png" width="100%"></p>
 <p>Then apply the <code>plot_like_ckb</code> function to the plot.</p>
-<div class="sourceCode" id="cb7"><pre class="r"><span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>))</pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>))
+</pre></div>
 <p><img src="reference/figures/README-plot_like_ckb-example-1-1.png" width="100%"></p>
 <p>If you do not want a gap between the axes, set <code>gap = c(0, 0)</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>), <span class="kw">gap</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>))</pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>), gap = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>))
+</pre></div>
 <p><img src="reference/figures/README-plot_like_ckb-example-2-1.png" width="100%"></p>
 <p>If you wish to override some aspect of the theme applied by <code>plot_like_ckb</code>, then this can be done by adding a theme after the function.</p>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>)) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">axis.title</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(<span class="kw">colour</span> <span class="kw">=</span> <span class="st">"red"</span>, <span class="kw">face</span> <span class="kw">=</span> <span class="st">"plain"</span>))</pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>)) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(axis.title = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(colour = <span class="st">"red"</span>, face = <span class="st">"plain"</span>))
+</pre></div>
 <p><img src="reference/figures/README-plot_like_ckb-example-3-1.png" width="100%"></p>
 <p>If any data points you are plotting fall outside the axes, then they will still be drawn and may show up in places such as the axes, the legend, the plot title, or the plot margins. There is also no warning if data points fall outside the whole plot area.</p>
 <p>So it is best to check that your <code>xlim</code> and <code>ylim</code> values are suitable for your data before using the function.</p>
-<div class="sourceCode" id="cb10"><pre class="r"><span class="co"># The xlim and ylim ranges are too narrow</span>
-<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">4</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">20</span>, <span class="fl">50</span>))</pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="co"># The xlim and ylim ranges are too narrow</span>
+<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">4</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">20</span>, <span class="fl">50</span>))
+</pre></div>
 <p><img src="reference/figures/README-plot_like_ckb-example-4-1.png" width="100%"></p>
 <p>A bar chart.</p>
-<div class="sourceCode" id="cb11"><pre class="r"><span class="no">barplot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="no">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="no">class</span>)) + <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>()
-<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="no">barplot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">7.5</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">70</span>), <span class="kw">gap</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.025</span>, <span class="fl">0.005</span>), <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">0.5</span>) +
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(<span class="kw">axis.ticks.x</span> <span class="kw">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span>())</pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="kw">barplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">class</span>)) <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>()
+<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">barplot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">7.5</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">70</span>), gap = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.025</span>, <span class="fl">0.005</span>), ratio = <span class="fl">0.5</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(axis.ticks.x = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span>())
+</pre></div>
 <p><img src="reference/figures/README-bar-chart-example-1.png" width="100%"></p>
 </div>
 </div>
@@ -236,9 +258,10 @@
 <h3 class="hasAnchor">
 <a href="#examples-2" class="anchor"></a>Examples</h3>
 <p>First of all, do your analyses and put the results into data frames (one data frame for each forest plot column). Here we generate some example results.</p>
-<div class="sourceCode" id="cb12"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">57911624</span>)
-<span class="no">exampleresults</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(){
-  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">variable</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'nmr_l_vldl_p'</span>, <span class="st">'nmr_m_vldl_p'</span>, <span class="st">'nmr_s_vldl_p'</span>,
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">57911624</span>)
+<span class="kw">exampleresults</span> <span class="op">&lt;-</span> <span class="fu">function</span>(){
+  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(variable = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'nmr_l_vldl_p'</span>, <span class="st">'nmr_m_vldl_p'</span>, <span class="st">'nmr_s_vldl_p'</span>,
                           <span class="st">'nmr_idl_p'</span>,
                           <span class="st">'nmr_l_ldl_p'</span>, <span class="st">'nmr_m_ldl_p'</span>, <span class="st">'nmr_s_ldl_p'</span>,
                           <span class="st">'nmr_l_vldl_tg'</span>, <span class="st">'nmr_m_vldl_tg'</span>, <span class="st">'nmr_s_vldl_tg'</span>,
@@ -247,24 +270,27 @@
                           <span class="st">'nmr_l_vldl_c'</span>, <span class="st">'nmr_m_vldl_c'</span>, <span class="st">'nmr_s_vldl_c'</span>,
                           <span class="st">'nmr_idl_c'</span>,
                           <span class="st">'nmr_l_ldl_c'</span>, <span class="st">'nmr_m_ldl_c'</span>, <span class="st">'nmr_s_ldl_c'</span>),
-             <span class="kw">estimate</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">0.02</span>),
-             <span class="kw">stderr</span>   <span class="kw">=</span> <span class="fl">0.012</span> + <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">0.015</span>)),
-             <span class="kw">n</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)),
-             <span class="kw">nb</span>       <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)))
+             estimate = <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">0.02</span>),
+             stderr   = <span class="fl">0.012</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">0.015</span>)),
+             n        = <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)),
+             nb       = <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)))
 }
-<span class="no">resultsA</span> <span class="kw">&lt;-</span> <span class="fu">exampleresults</span>()
-<span class="no">resultsB</span> <span class="kw">&lt;-</span> <span class="fu">exampleresults</span>()
-<span class="no">resultsC</span> <span class="kw">&lt;-</span> <span class="fu">exampleresults</span>()
-<span class="no">resultsD</span> <span class="kw">&lt;-</span> <span class="fu">exampleresults</span>()
-<span class="no">resultsE</span> <span class="kw">&lt;-</span> <span class="fu">exampleresults</span>()</pre></div>
-<div class="sourceCode" id="cb13"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ckbplotr</span>)
+<span class="kw">resultsA</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
+<span class="kw">resultsB</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
+<span class="kw">resultsC</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
+<span class="kw">resultsD</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
+<span class="kw">resultsE</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
+</pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/neilstats/ckbplotr">ckbplotr</a></span>)
 
-<span class="no">forestplot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/make_forest_plot.html">make_forest_plot</a></span>(<span class="kw">cols</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">resultsA</span>, <span class="no">resultsB</span>),
-                               <span class="kw">exponentiate</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">colnames</span>     <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                               <span class="kw">col.key</span>      <span class="kw">=</span> <span class="st">"variable"</span>)
+<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_forest_plot.html">make_forest_plot</a></span>(cols         = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
+                               exponentiate = <span class="fl">TRUE</span>,
+                               colnames     = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                               col.key      = <span class="st">"variable"</span>)
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
 <p><img src="reference/figures/README-make_forest_plot-example-1-1.png" width="100%"></p>
 <p>To use headings, create a data frame of headings and specify arguments <code>headings</code> and <code>rows</code>.</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#&gt;                              heading1 heading2 heading3      variable</span></span>
@@ -289,28 +315,30 @@
 <span id="cb14-20"><a href="#cb14-20"></a><span class="co">#&gt; 19          Cholesterol concentration      LDL    Large   nmr_l_ldl_c</span></span>
 <span id="cb14-21"><a href="#cb14-21"></a><span class="co">#&gt; 20          Cholesterol concentration      LDL   Medium   nmr_m_ldl_c</span></span>
 <span id="cb14-22"><a href="#cb14-22"></a><span class="co">#&gt; 21          Cholesterol concentration      LDL    Small   nmr_s_ldl_c</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="r"><span class="no">forestplot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/make_forest_plot.html">make_forest_plot</a></span>(<span class="kw">headings</span>         <span class="kw">=</span> <span class="no">headings</span>,
-                               <span class="kw">rows</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Lipoprotein particle concentration"</span>,
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
+                               rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Lipoprotein particle concentration"</span>,
                                                     <span class="st">"Triglycerides concentration"</span>),
-                               <span class="kw">cols</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">resultsA</span>, <span class="no">resultsB</span>),
-                               <span class="kw">exponentiate</span>     <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">colnames</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                               <span class="kw">col.key</span>          <span class="kw">=</span> <span class="st">"variable"</span>,
-                               <span class="kw">ci.delim</span>         <span class="kw">=</span> <span class="st">" - "</span>,
-                               <span class="kw">xlim</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
-                               <span class="kw">xticks</span>           <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
-                               <span class="kw">blankrows</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
-                               <span class="kw">scalepoints</span>      <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">pointsize</span>        <span class="kw">=</span> <span class="fl">3</span>,
-                               <span class="kw">col.left</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
-                               <span class="kw">col.left.space</span>   <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
-                               <span class="kw">col.left.heading</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
-                               <span class="kw">col.right.space</span>  <span class="kw">=</span> <span class="fl">0.02</span>,
-                               <span class="kw">col.heading.space</span> <span class="kw">=</span> <span class="fl">1.5</span>,
-                               <span class="kw">heading.space</span>    <span class="kw">=</span> <span class="fl">2</span>,
-                               <span class="kw">plot.space</span>       <span class="kw">=</span> <span class="fl">8</span>)
+                               cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
+                               exponentiate     = <span class="fl">TRUE</span>,
+                               colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                               col.key          = <span class="st">"variable"</span>,
+                               ci.delim         = <span class="st">" - "</span>,
+                               xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                               xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                               blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                               scalepoints      = <span class="fl">TRUE</span>,
+                               pointsize        = <span class="fl">3</span>,
+                               col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                               col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                               col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                               col.right.space  = <span class="fl">0.02</span>,
+                               col.heading.space = <span class="fl">1.5</span>,
+                               heading.space    = <span class="fl">2</span>,
+                               plot.space       = <span class="fl">8</span>)
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
 <p><img src="reference/figures/README-make_forest_plot-example-2-1.png" width="100%"></p>
 </div>
 </div>

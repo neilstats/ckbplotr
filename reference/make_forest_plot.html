@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -132,47 +132,47 @@
     <p><code>make_forest_plot</code> creates a forest plot with ggplot</p>
     </div>
 
-    <pre class="usage"><span class='fu'>make_forest_plot</span>(
-  <span class='kw'>headings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>cols</span>,
-  <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>colnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>colheadings</span> <span class='kw'>=</span> <span class='no'>colnames</span>,
-  <span class='kw'>col.key</span> <span class='kw'>=</span> <span class='st'>"key"</span>,
-  <span class='kw'>col.estimate</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
-  <span class='kw'>col.stderr</span> <span class='kw'>=</span> <span class='st'>"stderr"</span>,
-  <span class='kw'>col.lci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>col.uci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>col.left</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>col.right</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>col.left.heading</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>col.right.heading</span> <span class='kw'>=</span> <span class='st'>"HR (95% CI)"</span>,
-  <span class='kw'>col.left.space</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>col.right.space</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>col.left.hjust</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>col.right.hjust</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>col.heading.space</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>estcolumn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>col.pval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ci.delim</span> <span class='kw'>=</span> <span class='st'>", "</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"HR (95% CI)"</span>,
-  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>xticks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>blankrows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
-  <span class='kw'>whiteci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>diamond</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>bold</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>boldheadings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>scalepoints</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>pointsize</span> <span class='kw'>=</span> <span class='fl'>3</span>,
-  <span class='kw'>pointshape</span> <span class='kw'>=</span> <span class='fl'>15</span>,
-  <span class='kw'>addtext</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>heading.space</span> <span class='kw'>=</span> <span class='fl'>4</span>,
-  <span class='kw'>plot.space</span> <span class='kw'>=</span> <span class='fl'>8</span>,
-  <span class='kw'>printplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>showcode</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/ckbplotr/man/make_forest_plot.html'>make_forest_plot</a></span>(
+  headings = <span class='kw'>NULL</span>,
+  rows = <span class='kw'>NULL</span>,
+  <span class='kw'>cols</span>,
+  exponentiate = <span class='fl'>TRUE</span>,
+  colnames = <span class='kw'>NULL</span>,
+  colheadings = <span class='kw'>colnames</span>,
+  col.key = <span class='st'>"key"</span>,
+  col.estimate = <span class='st'>"estimate"</span>,
+  col.stderr = <span class='st'>"stderr"</span>,
+  col.lci = <span class='kw'>NULL</span>,
+  col.uci = <span class='kw'>NULL</span>,
+  col.left = <span class='kw'>NULL</span>,
+  col.right = <span class='kw'>NULL</span>,
+  col.left.heading = <span class='st'>""</span>,
+  col.right.heading = <span class='st'>"HR (95% CI)"</span>,
+  col.left.space = <span class='fl'>0</span>,
+  col.right.space = <span class='fl'>0</span>,
+  col.left.hjust = <span class='fl'>1</span>,
+  col.right.hjust = <span class='fl'>0</span>,
+  col.heading.space = <span class='fl'>0</span>,
+  estcolumn = <span class='fl'>TRUE</span>,
+  col.pval = <span class='kw'>NULL</span>,
+  ci.delim = <span class='st'>", "</span>,
+  title = <span class='st'>""</span>,
+  xlab = <span class='st'>"HR (95% CI)"</span>,
+  xlim = <span class='kw'>NULL</span>,
+  xticks = <span class='kw'>NULL</span>,
+  blankrows = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
+  whiteci = <span class='kw'>NULL</span>,
+  diamond = <span class='kw'>NULL</span>,
+  bold = <span class='kw'>NULL</span>,
+  boldheadings = <span class='kw'>NULL</span>,
+  scalepoints = <span class='fl'>FALSE</span>,
+  pointsize = <span class='fl'>3</span>,
+  pointshape = <span class='fl'>15</span>,
+  addtext = <span class='kw'>NULL</span>,
+  heading.space = <span class='fl'>4</span>,
+  plot.space = <span class='fl'>8</span>,
+  printplot = <span class='fl'>TRUE</span>,
+  showcode = <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
