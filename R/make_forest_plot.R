@@ -665,7 +665,7 @@ make_forest_plot <- function(
                 '# Create the ggplot',
                 'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
                 '  # Put the different columns in side-by-side plots using facets',
-                '  facet_wrap(~column) +',
+                '  facet_wrap(~column, nrow = 1) +',
                 '',
                 '  # Add a line at null effect (only if exponentiate=TRUE)',
                 nullline,
