@@ -720,10 +720,10 @@ make_forest_plot <- function(
                 '             fontface = "bold",',
                 sprintf(
                 '             data = dplyr::tibble(column = %s,',
-                paste(deparse(colnames))),
+                paste(deparse(colnames), collapse = '')),
                 sprintf(
                 '                                  xlab = %s)) +',
-                paste(deparse(xlab))),
+                paste(deparse(xlab), collapse = '')),
                 '',
                 '  # Add column name above each column',
                 sprintf(
@@ -734,10 +734,10 @@ make_forest_plot <- function(
                 '             fontface = "bold",',
                 sprintf(
                 '             data = dplyr::tibble(column = %s,',
-                paste(deparse(colnames))),
+                paste(deparse(colnames), collapse = '')),
                 sprintf(
                 '                                  title = %s)) +',
-                paste(deparse(colheadings))),
+                paste(deparse(colheadings), collapse = '')),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
                 sprintf('  scale_y_continuous(trans  = "%s",', scale),
