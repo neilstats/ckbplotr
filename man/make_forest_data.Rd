@@ -78,7 +78,8 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 error? (Default: FALSE)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
-  Data frames should contain a col.key column, and one or more of:
+  Data frames should contain a column with the name specified in col.key,
+  and one or more of:
 
   1. a column named 'text' containing character strings
 
@@ -86,9 +87,9 @@ error? (Default: FALSE)}
 
   3. columns names 'trend_stat' and 'trend_p' containing character strings
 
-  The character strings (for 'text'), heterogeneity or trend test results will
-  be plotted to the right of each forest plot below the key specified in the
-  col.key column.}
+  The character strings, heterogeneity test, and trend test results will
+  be plotted in the column of estimates and CIs, below the row with the key
+  given in the col.key column.}
 }
 \value{
 A dataset from which the plot is generated.

@@ -39,7 +39,8 @@
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param addtext A list of data frames. List must be the same length as cols.
-#'   Data frames should contain a col.key column, and one or more of:
+#'   Data frames should contain a column with the name specified in col.key,
+#'   and one or more of:
 #'
 #'   1. a column named 'text' containing character strings
 #'
@@ -47,9 +48,9 @@
 #'
 #'   3. columns names 'trend_stat' and 'trend_p' containing character strings
 #'
-#'   The character strings (for 'text'), heterogeneity or trend test results will
-#'   be plotted to the right of each forest plot below the key specified in the
-#'   col.key column.
+#'   The character strings, heterogeneity test, and trend test results will
+#'   be plotted in the column of estimates and CIs, below the row with the key
+#'   given in the col.key column.
 #'
 #'
 #' @return A dataset from which the plot is generated.
@@ -427,6 +428,8 @@ make_forest_data <- function(
 #' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
+#' @param diamond Alternative to col.diamond. A character vectors identify the rows
+#'                (using the key values) for which the estimate and CI should be plotted using a diamond.
 #' @param col.bold Plot text as bold. Name of a column of logical values.
 #' @param boldheadings A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)
 #' @param heading.space Size of the gap between headings and the first plot.

@@ -63,7 +63,7 @@ use log scale on the axis, and add a line at null effect. (Default: TRUE)}
 
 \item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
 
-\item{col.right}{Name of additional column to be printed to the right of the plot.}
+\item{col.right}{A character vector of names of columns to be printed to the right of the plot.}
 
 \item{col.pval}{Name of additional column to be printed to the right of the plot,
 and formatted as P value.}

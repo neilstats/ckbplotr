@@ -13,6 +13,7 @@ make_shape_plot(
   col.uci = NULL,
   col.n = NULL,
   exponentiate = FALSE,
+  logscale = exponentiate,
   scalepoints = FALSE,
   pointsize = 3,
   col.group = NULL,
@@ -21,6 +22,7 @@ make_shape_plot(
   cicolour = colour,
   fill = NULL,
   ciunder = NULL,
+  lines = FALSE,
   xlims,
   ylims,
   gap = c(0.025, 0.025),
@@ -54,7 +56,9 @@ make_shape_plot(
 \item{col.n}{Name of column that provides number to be plotted below CIs.}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis. (Default: TRUE)}
+use log scale on the axis. (Default: FALSE)}
+
+\item{logscale}{Use log scale for vertical axis. (Default: exponentiate)}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}

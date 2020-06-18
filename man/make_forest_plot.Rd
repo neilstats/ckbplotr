@@ -34,6 +34,7 @@ make_forest_plot(
   xticks = NULL,
   blankrows = c(1, 1, 0, 0),
   col.diamond = NULL,
+  diamond = NULL,
   col.bold = NULL,
   boldheadings = NULL,
   scalepoints = FALSE,
@@ -136,6 +137,9 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
 \item{col.diamond}{Plot estimates and CIs as diamonds. Name of a column of logical values.}
 
+\item{diamond}{Alternative to col.diamond. A character vectors identify the rows
+(using the key values) for which the estimate and CI should be plotted using a diamond.}
+
 \item{col.bold}{Plot text as bold. Name of a column of logical values.}
 
 \item{boldheadings}{A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)}
@@ -157,7 +161,8 @@ estimates. (Default: 3)}
 \item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
-  Data frames should contain a col.key column, and one or more of:
+  Data frames should contain a column with the name specified in col.key,
+  and one or more of:
 
   1. a column named 'text' containing character strings
 
@@ -165,9 +170,9 @@ estimates. (Default: 3)}
 
   3. columns names 'trend_stat' and 'trend_p' containing character strings
 
-  The character strings (for 'text'), heterogeneity or trend test results will
-  be plotted to the right of each forest plot below the key specified in the
-  col.key column.}
+  The character strings, heterogeneity test, and trend test results will
+  be plotted in the column of estimates and CIs, below the row with the key
+  given in the col.key column.}
 
 \item{heading.space}{Size of the gap between headings and the first plot.
 Unit is "lines". (Default: 4)}
