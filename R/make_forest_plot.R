@@ -517,6 +517,8 @@ make_forest_plot <- function(
     nullline <- NULL
   }
 
+  # make deault colnames
+  if (is.null(colnames)) { colnames <- as.character(1:length(cols)) }
 
   datatoplot <- make_forest_data(
     headings      = headings,
