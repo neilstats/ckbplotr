@@ -31,24 +31,15 @@
 #' @param col.right A character vector of names of columns to be printed to the right of the plot.
 #' @param ci.delim Character string to separate lower and upper limits of
 #'   confidence interval. (Default: ", ")
-#' @param whiteci A list of character vectors. List must be the same length as cols.
-#'   Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)
-#' @param diamond A list of character vectors. List must be the same length as cols.
-#'   Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)
-#' @param bold A list of character vectors. List must be the same length as cols.
-#'   Identify the rows (using the key values) for which text should be bold.
-#'   If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)
-#' @param boldheadings A character vector. Identify headings (using key values)
-#'   which should additionally be bold. (Default: NULL)
-#' @param exponentiate Exponentiate estimates (and CIs) before plotting,
-#'   use log scale on the axis, and add a line at null effect. (Default: TRUE)
+#' @param exponentiate Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
 #' @param blankrows A numeric vector of length 4 specifying the number of blank rows
 #'   after a heading1, at the end of a heading1 'section', after
 #'   a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param addtext A list of data frames. List must be the same length as cols.
-#'   Data frames should contain a col.key column, and one or more of:
+#'   Data frames should contain a column with the name specified in col.key,
+#'   and one or more of:
 #'
 #'   1. a column named 'text' containing character strings
 #'
@@ -56,9 +47,9 @@
 #'
 #'   3. columns names 'trend_stat' and 'trend_p' containing character strings
 #'
-#'   The character strings (for 'text'), heterogeneity or trend test results will
-#'   be plotted to the right of each forest plot below the key specified in the
-#'   col.key column.
+#'   The character strings, heterogeneity test, and trend test results will
+#'   be plotted in the column of estimates and CIs, below the row with the key
+#'   given in the col.key column.
 #'
 #'
 #' @return A dataset from which the plot is generated.
@@ -80,11 +71,8 @@ make_forest_data <- function(
   col.pval      = NULL,
   col.left      = NULL,
   col.right     = NULL,
+  col.keep      = NULL,
   ci.delim      = ", ",
-  whiteci       = NULL,
-  diamond       = NULL,
-  bold          = NULL,
-  boldheadings  = NULL,
   exponentiate  = TRUE,
   blankrows     = c(1, 1, 0, 0),
   scalepoints   = FALSE,
@@ -248,7 +236,7 @@ make_forest_data <- function(
 
 
     # add a blank heading at bottom if needed
-    if (tail(out$Heading, 1) != "") {
+    if (utils::tail(out$Heading, 1) != "") {
       out <- out %>%
         tibble::add_row(Heading = "")
     }
@@ -272,22 +260,21 @@ make_forest_data <- function(
                       estimate = !!rlang::sym(col.estimate),
                       lci      = !!rlang::sym(col.lci),
                       uci      = !!rlang::sym(col.uci),
-                      !!!rlang::syms(col.right))
+                      !!!rlang::syms(col.right),
+                      !!!rlang::syms(col.keep))
     } else {
       cols[[i]] <- cols[[i]] %>%
         dplyr::select(key = !!rlang::sym(col.key),
                       !!!rlang::syms(col.left),
                       estimate = !!rlang::sym(col.estimate),
                       stderr   = !!rlang::sym(col.stderr),
-                      !!!rlang::syms(col.right))
+                      !!!rlang::syms(col.right),
+                      !!!rlang::syms(col.keep))
 
     }
 
     out1 <- merge(out, cols[[i]], by = "key", all.x = TRUE) %>%
-      dplyr::mutate(column = colnames[[i]],
-                    linecolour = dplyr::if_else(key %in% whiteci[[i]], "white", "black"),
-                    diamond = key %in% diamond[[i]],
-                    addbold = key %in% bold[[i]])
+      dplyr::mutate(column = colnames[[i]])
 
     if (!is.null(addtext)){
       out1 <- merge(out1, addtext[[i]], by.x = "extrarowkey", by.y = "key", all.x = TRUE)
@@ -297,8 +284,7 @@ make_forest_data <- function(
 
 
 
-    datatoplot <- dplyr::bind_rows(datatoplot, out1) %>%
-      dplyr::mutate(bold = dplyr::if_else(is.na(estimate) | diamond | addbold, "bold", "plain"))
+    datatoplot <- dplyr::bind_rows(datatoplot, out1)
   }
 
 
@@ -306,11 +292,9 @@ make_forest_data <- function(
   if (exponentiate == TRUE) {
     tf       <- exp
     inv_tf   <- log
-    scale    <- "log"
   } else {
     tf       <- identity
     inv_tf   <- identity
-    scale    <- "identity"
   }
 
   # Make 'column' a factor, so that facets will be in the correct order
@@ -342,12 +326,6 @@ make_forest_data <- function(
 
   datatoplot <- datatoplot %>%
     dplyr::mutate(textresult = dplyr::case_when(
-      !is.na(estimate) & bold == "bold" ~ paste0("bold('",format(round(estimate_transformed, 2), nsmall = 2),
-                                                 " (",
-                                                 format(round(lci_transformed, 2), nsmall = 2),
-                                                 ci.delim,
-                                                 format(round(uci_transformed, 2), nsmall = 2),
-                                                 ")')"),
       !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, 2), nsmall = 2),
                                 " (",
                                 format(round(lci_transformed, 2), nsmall = 2),
@@ -355,8 +333,9 @@ make_forest_data <- function(
                                 format(round(uci_transformed, 2), nsmall = 2),
                                 ")'"),
       !is.na(extratext) ~ extratext,
-      TRUE              ~ "''"),
-      boldheading = key %in% boldheadings)
+      TRUE              ~ "''")) %>%
+    dplyr::select(-extrarowkey, -extratext) %>%
+    dplyr::arrange(column, row)
 
 
   if (!scalepoints) {
@@ -417,6 +396,8 @@ make_forest_data <- function(
 #'
 #'
 #' @inheritParams make_forest_data
+#' @inheritParams theme_ckb
+#' @param logscale Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
 #' @param colheadings Titles to be placed above each forest plot. (Default: colnames)
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
@@ -439,8 +420,16 @@ make_forest_data <- function(
 #' @param xticks A numeric vector. The tick points of the x axis.
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
-#' @param pointshape The shape used for plotting point estimates. Can be a vector.
-#'                   (Default: 15)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
+#' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
+#' @param diamond Alternative to col.diamond. A character vectors identify the rows
+#'                (using the key values) for which the estimate and CI should be plotted using a diamond.
+#' @param col.bold Plot text as bold. Name of a column of logical values.
+#' @param boldheadings A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)
 #' @param heading.space Size of the gap between headings and the first plot.
 #' Unit is "lines". (Default: 4)
 #' @param plot.space Size of the gap between forest plots.
@@ -466,6 +455,7 @@ make_forest_plot <- function(
   rows          = NULL,
   cols,
   exponentiate  = TRUE,
+  logscale      = exponentiate,
   colnames      = NULL,
   colheadings   = colnames,
   col.key       = "key",
@@ -477,8 +467,8 @@ make_forest_plot <- function(
   col.right     = NULL,
   col.left.heading  = "",
   col.right.heading = "HR (95% CI)",
-  col.left.space    = 0,
-  col.right.space   = 0,
+  col.left.space    = 0.02,
+  col.right.space   = 0.02,
   col.left.hjust    = 1,
   col.right.hjust   = 0,
   col.heading.space = 0,
@@ -490,31 +480,47 @@ make_forest_plot <- function(
   xlim          = NULL,
   xticks        = NULL,
   blankrows     = c(1, 1, 0, 0),
-  whiteci       = NULL,
+  col.diamond   = NULL,
   diamond       = NULL,
-  bold          = NULL,
+  col.bold      = NULL,
   boldheadings  = NULL,
   scalepoints   = FALSE,
   pointsize     = 3,
-  pointshape    = 15,
+  shape     = NULL,
+  colour    = NULL,
+  cicolour  = colour,
+  fill      = NULL,
+  ciunder   = NULL,
   addtext       = NULL,
   heading.space = 4,
   plot.space    = 8,
+  base_size     = 11,
+  base_line_size = base_size/22,
   printplot     = TRUE,
   showcode      = TRUE
 ){
 
+  # check arguments
+  if (!missing(col.diamond) &&  !missing(diamond)) stop("Use either col.diamond or diamond, not both.")
 
-  if (exponentiate == TRUE) {
+  # take first element if diamond is a list
+  if (is.list(diamond)){ diamond <- diamond[[1]] }
+
+  if (logscale == TRUE) {
     tf       <- exp
     inv_tf   <- log
     scale    <- "log"
-    nullline <- '  annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1) +'
+    nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1, size = %s) +', base_line_size)
   } else {
     tf       <- identity
     inv_tf   <- identity
     scale    <- "identity"
     nullline <- NULL
+  }
+
+  col.keep <- c(col.diamond, col.bold)
+  for (x in c(shape, cicolour, colour, fill, ciunder)){
+    if (x %in% names(cols[[1]])){ col.keep <- append(col.keep, x) }
   }
 
   # make deault colnames
@@ -533,17 +539,47 @@ make_forest_plot <- function(
     col.pval      = col.pval,
     col.left      = col.left,
     col.right     = col.right,
+    col.keep      = col.keep,
     ci.delim      = ci.delim,
-    whiteci       = whiteci,
-    diamond       = diamond,
-    bold          = bold,
-    boldheadings  = boldheadings,
     exponentiate  = exponentiate,
     blankrows     = blankrows,
     scalepoints   = scalepoints,
     addtext       = addtext
   )
 
+  # aesthetics: default value, match column name, or use argument itself
+  if (is.null(shape)) {
+    shape <- 15
+  } else if (shape %in% names(cols[[1]])){
+    shape <- paste0("`", shape, "`")
+  }
+
+  if (is.null(cicolour)) {
+    cicolour <- '\"black\"'
+  }
+  else if (cicolour %in% names(cols[[1]])){
+    cicolour <- paste0("`", cicolour, "`")
+  } else {
+    cicolour <- paste0('\"', cicolour, '\"')
+  }
+
+  if (is.null(colour)) {
+    colour <- '\"black\"'
+  } else if (colour %in% names(cols[[1]])){
+    colour <- paste0("`", colour, "`")
+  } else {
+    colour <- paste0('\"', colour, '\"')
+  }
+
+  if (is.null(fill)) {
+    fill <- '\"black\"'
+  } else if (fill %in% names(cols[[1]])){
+    fill <- paste0("`", fill, "`")
+  } else {
+    fill <- paste0('\"', fill, '\"')
+  }
+
+  if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
 
   if (is.null(xlim)) {
     xlim <- range(pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed)))
@@ -556,15 +592,6 @@ make_forest_plot <- function(
   xfrom <- min(xlim)
   xto   <- max(xlim)
   xmid  <- tf((inv_tf(xfrom) + inv_tf(xto)) / 2)
-
-  ## add shape column
-  datatoplot <- datatoplot %>%
-    dplyr::left_join(dplyr::tibble(column = factor(colnames,
-                                                   levels = colnames,
-                                                   labels = colnames,
-                                                   ordered = TRUE),
-                                   shape  = pointshape),
-                     by = "column")
 
   ## check if any cis are outside limits of x-axis
   datatoplot <- datatoplot %>%
@@ -589,12 +616,18 @@ make_forest_plot <- function(
       col.right <- c("textresult", col.right)
     }
 
-    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading, col.right.hjust),
+    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading, col.right.hjust, col.bold),
                                          ~ c(sprintf('  ## column %s', ..1),
-                                             sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`, fontface = bold),',
-                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
-                                             sprintf('           hjust = %s,', ..4),
-                                             '            size = 3,',
+                                             sprintf('  geom_text(aes(x = -row, y = %s,',
+                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                             if(is.character(..5)){
+                                               sprintf('            label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
+                                                       ..5, ..5, ..1, ..1)
+                                               } else {
+                                                sprintf('            label = %s),', ..1)
+                                                       },
+                                             sprintf('            hjust = %s,', ..4),
+                                             sprintf('            size = %s,', base_size/(11/3)),
                                              '            na.rm = TRUE,',
                                              '            parse = TRUE) +',
                                              '  annotate(geom = "text",',
@@ -603,7 +636,7 @@ make_forest_plot <- function(
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                              sprintf('           label = "%s",', ..3),
                                              sprintf('           hjust = %s,', ..4),
-                                             '           size  = 3,',
+                                             sprintf('            size = %s,', base_size/(11/3)),
                                              '           fontface = "bold") +')))
   }
 
@@ -614,12 +647,23 @@ make_forest_plot <- function(
   if (is.null(col.left)) {
     col.left.line <- ""
   } else {
-    col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust),
+    col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust, col.bold),
                                         ~ c(sprintf('  ## column %s', ..1),
-                                            sprintf('  geom_text(aes(x = -row, y = %s, label = `%s`, fontface = bold),',
-                                                    tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), ..1),
+                                            sprintf(
+                                            '  geom_text(aes(x = -row, y = %s,',
+                                            tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                            sprintf(
+                                            '                label = `%s`,',
+                                            ..1
+                                            ),
+                                            if(is.character(..5)){
+                                            sprintf(
+                                            '            fontface = dplyr::if_else(!is.na(%s) & %s, "bold", "plain")),',
+                                            ..5, ..5)} else {
+                                            '            fontface = "plain"),'
+                                            },
                                             sprintf('           hjust = %s,', ..4),
-                                            '            size = 3,',
+                                            sprintf('            size = %s,', base_size/(11/3)),
                                             '            na.rm = TRUE) +',
                                             '  annotate(geom = "text",',
                                             sprintf('           x = %s, y = %s,',
@@ -627,10 +671,72 @@ make_forest_plot <- function(
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                             sprintf('           label = "%s",', ..3),
                                             sprintf('           hjust = %s,', ..4),
-                                            '           size  = 3,',
+                                            sprintf('            size = %s,', base_size/(11/3)),
                                             '           fontface = "bold") +')))
   }
 
+  diamondscode <- NULL
+  plotdiamondscode <- NULL
+  if(!is.null(col.diamond) || !is.null(diamond)){
+    if (!is.null(diamond)){
+      diamondscode <- c(
+        '# Create data frame for diamonds to be plotted',
+        'diamonds <- datatoplot %>%',
+        sprintf(
+        '  dplyr::filter(key %%in%% %s) %%>%%', deparse(diamond)),
+        '  dplyr::mutate(y1 = lci_transformed,',
+        '                y2 = estimate_transformed,',
+        '                y3 = uci_transformed,',
+        '                y4 = estimate_transformed) %>%',
+        '  tidyr::gather(part, y, y1:y4) %>%',
+        '  dplyr::arrange(column, row, part) %>%',
+        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))',
+        '',
+        '# Remove plotting of points if a diamond is to be used',
+        'datatoplot <- datatoplot %>% ',
+        sprintf(
+        '  dplyr::mutate(estimate_transformed = dplyr::if_else(key %%in%% %s, as.numeric(NA), estimate_transformed),', deparse(diamond)),
+        sprintf(
+        '                lci_transformed = dplyr::if_else(key %%in%% %s, as.numeric(NA), lci_transformed),', deparse(diamond)),
+        sprintf(
+        '                uci_transformed = dplyr::if_else(key %%in%% %s, as.numeric(NA), uci_transformed))', deparse(diamond)),
+        ''
+      )
+    } else {
+      diamondscode <- c(
+        '# Create data frame for diamonds to be plotted',
+        'diamonds <- datatoplot %>%',
+        sprintf(
+          '  dplyr::filter(`%s` == TRUE) %%>%%', col.diamond),
+        '  dplyr::mutate(y1 = lci_transformed,',
+        '                y2 = estimate_transformed,',
+        '                y3 = uci_transformed,',
+        '                y4 = estimate_transformed) %>%',
+        '  tidyr::gather(part, y, y1:y4) %>%',
+        '  dplyr::arrange(column, row, part) %>%',
+        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))',
+        '',
+        '# Remove plotting of points if a diamond is to be used',
+        sprintf('if (any(datatoplot[["%s"]])) {', col.diamond),
+        sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$estimate_transformed <- NA', col.diamond, col.diamond),
+        sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$lci_transformed <- NA', col.diamond, col.diamond),
+        sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$uci_transformed <- NA', col.diamond, col.diamond),
+        '}',
+        ''
+      )
+    }
+
+    plotdiamondscode <- c(
+      '  # Add diamonds',
+      '  geom_polygon(data = diamonds,',
+      '               aes(x = x, y = y, group = row,',
+      sprintf(
+      '                   colour = %s, fill = %s),', cicolour, fill),
+      sprintf(
+      '               size = %s) +', base_line_size),
+      ''
+    )
+  }
 
   plotcode <- c('# Get a character vector of the headings, so these can be used in the plot',
                 'headings <- datatoplot %>%',
@@ -642,28 +748,13 @@ make_forest_plot <- function(
                 '# Get a character vector of the style for headings',
                 'boldheadings <- datatoplot %>%',
                 '                  dplyr::group_by(row) %>%',
-                '                  dplyr::summarise(bold = dplyr::if_else(all(bold == "bold") | all(boldheading), "bold", "plain")) %>%',
+                sprintf(
+                '                  dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %%in%% %s)), "bold", "plain")) %%>%%',
+                paste(deparse(boldheadings))),
                 '                  dplyr::arrange(row) %>%',
                 '                  dplyr::pull(bold)',
                 '',
-                '# Create data frame for diamonds to be plotted',
-                'diamonds <- datatoplot %>%',
-                '  dplyr::filter(diamond == TRUE) %>%',
-                '  dplyr::mutate(y1 = lci_transformed,',
-                '                y2 = estimate_transformed,',
-                '                y3 = uci_transformed,',
-                '                y4 = estimate_transformed) %>%',
-                '  tidyr::gather(part, y, y1:y4) %>%',
-                '  dplyr::arrange(column, row, part) %>%',
-                '  dplyr::mutate(x = - row + rep(c(0, -0.25, 0, 0.25), times = sum(datatoplot$diamond)))',
-                '',
-                '# Remove plotting of points if a diamond is to be used',
-                'if (any(datatoplot$diamond)) {',
-                '  datatoplot[datatoplot$diamond,]$estimate_transformed <- NA',
-                '  datatoplot[datatoplot$diamond,]$lci_transformed <- NA',
-                '  datatoplot[datatoplot$diamond,]$uci_transformed <- NA',
-                '}',
-                '',
+                diamondscode,
                 '# Create the ggplot',
                 'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
                 '  # Put the different columns in side-by-side plots using facets',
@@ -672,36 +763,99 @@ make_forest_plot <- function(
                 '  # Add a line at null effect (only if exponentiate=TRUE)',
                 nullline,
                 '',
-                '  # Plot points at the transformed estimates as squares',
-                '  ## Scale squares by inverse of the SE',
-                '  geom_point(aes(size = size, shape = shape, fill = "white"),',
+                if (isTRUE(ciunder)){
+                  c(
+                    '  # Plot the CIs',
+                    '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
+                    '                 aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                    '                     colour = %s), ', cicolour),
+                    sprintf(
+                    '                 size = %s,', base_line_size),
+                    '                 na.rm = TRUE) +',
+                    '')
+                } else if (is.character(ciunder) && any(datatoplot[[ciunder]], na.rm = TRUE)){
+                  c(
+                    '  # Plot CIs - before plotting points',
+                    sprintf(
+                      '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s),',
+                      ciunder),
+                    '                 aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                    '                     colour = %s),', cicolour),
+                    sprintf(
+                    '                 size = %s,', base_line_size),
+                    '                 na.rm = TRUE) +',
+                    '')
+                },
+                '  # Plot points at the transformed estimates',
+                '  ## Scale by inverse of the SE',
+                sprintf(
+                '  geom_point(aes(size = size, shape = %s, colour = %s, fill = %s),',
+                shape, colour, fill),
                 '             na.rm = TRUE) +',
                 '',
-                '  # Scale the size of squares by their side length',
+                '  # Scale the size of points by their side length',
                 '  # and make the scale range from zero upwards',
                 '  scale_radius(limits = c(0, NA),',
                 sprintf('               range = c(0, %s)) +', pointsize),
                 '',
-                '  # Plot CIs',
-                '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-                '                 aes(ymin = lci_transformed, ymax = uci_transformed, colour = linecolour),',
-                '                 na.rm = TRUE) +',
-                '  scale_colour_identity() +',
+                if (isFALSE(ciunder) || is.null(ciunder)){
+                  c(
+                    '  # Plot the CIs',
+                    '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
+                    '                 aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                    '                     colour = %s), ', cicolour),
+                    sprintf(
+                    '                 size = %s,', base_line_size),
+                    '                 na.rm = TRUE) +',
+                    '')
+                } else if (is.character(ciunder) && !all(datatoplot[[ciunder]], na.rm = TRUE)){
+                  c(
+                    '  # Plot CIs - after plotting points',
+                    sprintf(
+                    '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s),',
+                    ciunder),
+                    '                 aes(ymin = lci_transformed,',
+                    '                     ymax = uci_transformed,',
+                    sprintf(
+                    '                     colour = %s),', cicolour),
+                    sprintf(
+                    '                 size = %s,', base_line_size),
+                    '                 na.rm = TRUE) +',
+                    '')
+                },
+                '  # Add tiny segments with arrows when the CIs go outside axis limits',
+                if(any(datatoplot$cioverright, na.rm = TRUE)){c(
+                '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
+                '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed,',
+                sprintf(
+                '                   colour = %s),', cicolour),
+                sprintf(
+                '               size = %s,', base_line_size),
+                sprintf(
+                '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
+                '               na.rm = TRUE) +')},
+                if(any(datatoplot$cioverleft, na.rm = TRUE)){c(
+                '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
+                '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed,',
+                sprintf(
+                '                   colour = %s),', cicolour),
+                sprintf(
+                '               size = %s,', base_line_size),
+                sprintf(
+                '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
+                '               na.rm = TRUE) +')},
                 '',
-                '  # Use shape in shape column',
+                plotdiamondscode,
+                '  # Use identity for aesthetic scales',
                 '  scale_shape_identity() +',
                 '  scale_fill_identity() +',
-                '',
-                '  # Add tiny segments with arrows when the CIs go outside axis limits',
-                '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
-                '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed),',
-                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
-                '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
-                '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed),',
-                '               arrow = arrow(type = "closed", length = unit(6, "pt"))) +',
-                '',
-                '  # Add diamonds',
-                '  geom_polygon(data = diamonds, aes(x = x, y = y, group = row), colour="black", fill = "white") +',
+                '  scale_colour_identity() +',
                 '',
                 '  # Flip x and y coordinates',
                 '  coord_flip(clip = "off",',
@@ -717,7 +871,7 @@ make_forest_plot <- function(
                 sprintf(
                 '   geom_text(aes(x = -Inf, y = %s, label = xlab),', xmid),
                 '             hjust = 0.5,',
-                '             size  = 3,',
+                sprintf('             size  = %s,', base_size/(11/3)),
                 '             vjust = 4.4,',
                 '             fontface = "bold",',
                 sprintf(
@@ -734,9 +888,9 @@ make_forest_plot <- function(
                 '  # Add column name above each column',
                 sprintf(
                 '   geom_text(aes(x = %s, y = %s, label = title),',
-                col.heading.space + 2, xmid),
+                col.heading.space , xmid),
                 '             hjust = 0.5,',
-                '             size  = 3,',
+                sprintf('             size  = %s,', base_size/(11/3)),
                 '             fontface = "bold",',
                 sprintf(
                 '             data = dplyr::tibble(column = factor(%s,',
@@ -746,7 +900,7 @@ make_forest_plot <- function(
                 paste(deparse(colnames), collapse = '')),
                 '                                                  ordered = TRUE),',
                 sprintf(
-                '                                  title = %s)) +',
+                '                                  title = paste0(%s, "\\n\\n"))) +',
                 paste(deparse(colheadings), collapse = '')),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
@@ -763,18 +917,22 @@ make_forest_plot <- function(
                 sprintf('  labs(title = "%s") +', title),
                 '',
                 '  # Control the overall looks of the plots',
-                '  theme(panel.background = element_rect(fill = "white", colour = NA),',
+                sprintf('  theme(text             = element_text(size = %s),', base_size),
+                sprintf('        line             = element_line(size = %s),', base_line_size),
+                '        panel.background = element_rect(fill = "white", colour = NA),',
                 '        panel.grid.major = element_blank(),',
                 '        panel.grid.minor = element_blank(),',
-                '        axis.line.x      = element_line(size = 0.5),',
+                sprintf(
+                '        axis.line.x      = element_line(size = %s, lineend = "round"),', base_line_size),
                 '        axis.title.x     = element_blank(),',
                 '        axis.ticks.x     = element_line(colour = "black"),',
                 '        axis.text.x      = element_text(colour = "black",',
-                '                                        margin = margin(t = 4.4),',
+                sprintf(
+                '                                        margin = margin(t = %s),', base_size/(11/4.4)),
                 '                                        vjust  = 1),',
                 '        axis.ticks.y     = element_blank(),',
+                '        axis.line.y      = element_blank(),',
                 '        axis.text.y      = element_text(hjust  = 0,',
-                '                                        size   = 8,',
                 '                                        colour = "black",',
                 '                                        face   = boldheadings,',
                 sprintf('                                        margin = margin(r = %s, unit = "lines")),', heading.space),

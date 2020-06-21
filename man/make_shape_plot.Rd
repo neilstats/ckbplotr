@@ -12,15 +12,24 @@ make_shape_plot(
   col.lci = NULL,
   col.uci = NULL,
   col.n = NULL,
-  col.group = NULL,
   exponentiate = FALSE,
+  logscale = exponentiate,
   scalepoints = FALSE,
   pointsize = 3,
+  col.group = NULL,
+  shape = NULL,
+  colour = NULL,
+  cicolour = colour,
+  fill = NULL,
+  ciunder = NULL,
+  lines = FALSE,
   xlims,
   ylims,
   gap = c(0.025, 0.025),
   ext = c(0.025, 0.025),
   ratio = 1.5,
+  base_size = 11,
+  base_line_size = base_size/22,
   xbreaks = NULL,
   ybreaks = NULL,
   xlab = "Risk factor",
@@ -46,13 +55,30 @@ make_shape_plot(
 
 \item{col.n}{Name of column that provides number to be plotted below CIs.}
 
-\item{col.group}{Name of column that groups the estimates. (Default: NULL)}
-
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis. (Default: TRUE)}
+use log scale on the axis. (Default: FALSE)}
+
+\item{logscale}{Use log scale for vertical axis. (Default: exponentiate)}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
+
+\item{pointsize}{The (largest) size of box to use for plotting point
+estimates. (Default: 3)}
+
+\item{col.group}{Name of column that groups the estimates. (Default: NULL)}
+
+\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)}
+
+\item{colour}{Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{cicolour}{Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{fill}{Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
+
+\item{lines}{Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)}
 
 \item{xlims}{A numeric vector of length two. The limits of the x-axis.}
 
@@ -63,6 +89,14 @@ error? (Default: FALSE)}
 \item{ext}{A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))}
 
 \item{ratio}{The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)}
+
+\item{base_size}{base font size, given in pts.}
+
+\item{base_line_size}{base size for line elements}
+
+\item{xbreaks}{Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)}
+
+\item{ybreaks}{Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)}
 
 \item{xlab}{Label for x-axis. (Default: "Risk factor")}
 

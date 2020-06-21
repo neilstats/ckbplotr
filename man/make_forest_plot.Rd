@@ -9,6 +9,7 @@ make_forest_plot(
   rows = NULL,
   cols,
   exponentiate = TRUE,
+  logscale = exponentiate,
   colnames = NULL,
   colheadings = colnames,
   col.key = "key",
@@ -20,8 +21,8 @@ make_forest_plot(
   col.right = NULL,
   col.left.heading = "",
   col.right.heading = "HR (95\% CI)",
-  col.left.space = 0,
-  col.right.space = 0,
+  col.left.space = 0.02,
+  col.right.space = 0.02,
   col.left.hjust = 1,
   col.right.hjust = 0,
   col.heading.space = 0,
@@ -33,16 +34,22 @@ make_forest_plot(
   xlim = NULL,
   xticks = NULL,
   blankrows = c(1, 1, 0, 0),
-  whiteci = NULL,
+  col.diamond = NULL,
   diamond = NULL,
-  bold = NULL,
+  col.bold = NULL,
   boldheadings = NULL,
   scalepoints = FALSE,
   pointsize = 3,
-  pointshape = 15,
+  shape = NULL,
+  colour = NULL,
+  cicolour = colour,
+  fill = NULL,
+  ciunder = NULL,
   addtext = NULL,
   heading.space = 4,
   plot.space = 8,
+  base_size = 11,
+  base_line_size = base_size/22,
   printplot = TRUE,
   showcode = TRUE
 )
@@ -60,8 +67,9 @@ estimates, and standard errors or confidence interval limits. If you
 specify a headings data frame, then they must also all contain a key column
 with the same name (which can be specified by col.key).}
 
-\item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis, and add a line at null effect. (Default: TRUE)}
+\item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
+
+\item{logscale}{Use log scale on the axis, and add a line at null effect. (Default: exponentiate)}
 
 \item{colnames}{A character vector. The names to be used for each forest plot.
 If none provided, then they will be numbered 1, 2, 3 ...}
@@ -129,18 +137,14 @@ confidence interval. (Default: ", ")}
 after a heading1, at the end of a heading1 'section', after
 a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
-\item{whiteci}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)}
+\item{col.diamond}{Plot estimates and CIs as diamonds. Name of a column of logical values.}
 
-\item{diamond}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)}
+\item{diamond}{Alternative to col.diamond. A character vectors identify the rows
+(using the key values) for which the estimate and CI should be plotted using a diamond.}
 
-\item{bold}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which text should be bold.
-If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)}
+\item{col.bold}{Plot text as bold. Name of a column of logical values.}
 
-\item{boldheadings}{A character vector. Identify headings (using key values)
-which should additionally be bold. (Default: NULL)}
+\item{boldheadings}{A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
@@ -148,11 +152,19 @@ error? (Default: FALSE)}
 \item{pointsize}{The (largest) size of box to use for plotting point
 estimates. (Default: 3)}
 
-\item{pointshape}{The shape used for plotting point estimates. Can be a vector.
-(Default: 15)}
+\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)}
+
+\item{colour}{Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{cicolour}{Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{fill}{Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)}
+
+\item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
-  Data frames should contain a col.key column, and one or more of:
+  Data frames should contain a column with the name specified in col.key,
+  and one or more of:
 
   1. a column named 'text' containing character strings
 
@@ -160,15 +172,19 @@ estimates. (Default: 3)}
 
   3. columns names 'trend_stat' and 'trend_p' containing character strings
 
-  The character strings (for 'text'), heterogeneity or trend test results will
-  be plotted to the right of each forest plot below the key specified in the
-  col.key column.}
+  The character strings, heterogeneity test, and trend test results will
+  be plotted in the column of estimates and CIs, below the row with the key
+  given in the col.key column.}
 
 \item{heading.space}{Size of the gap between headings and the first plot.
 Unit is "lines". (Default: 4)}
 
 \item{plot.space}{Size of the gap between forest plots.
 Unit is "lines". (Default: 8)}
+
+\item{base_size}{base font size, given in pts.}
+
+\item{base_line_size}{base size for line elements}
 
 \item{printplot}{Print the plot. (Default: TRUE)}
 
