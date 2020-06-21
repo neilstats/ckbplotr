@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/make_forest_plot.html">Making forest plots</a>
+    </li>
+    <li>
+      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+    </li>
+    <li>
+      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
     </li>
   </ul>
 </li>
@@ -132,7 +138,7 @@
     <p><code>make_jasper_forest_plot</code> creates a forest plot with Jasper</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/ckbplotr/man/make_jasper_forest_plot.html'>make_jasper_forest_plot</a></span>(
+    <pre class="usage"><span class='fu'>make_jasper_forest_plot</span>(
   filestem = <span class='st'>"_test"</span>,
   headings = <span class='kw'>NULL</span>,
   rows = <span class='kw'>NULL</span>,
@@ -181,8 +187,7 @@ with the same name (which can be specified by col.key).</p></td>
     </tr>
     <tr>
       <th>exponentiate</th>
-      <td><p>Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis, and add a line at null effect. (Default: TRUE)</p></td>
+      <td><p>Exponentiate estimates (and CIs) before plotting. (Default: TRUE)</p></td>
     </tr>
     <tr>
       <th>col.key</th>
@@ -215,7 +220,7 @@ use log scale on the axis, and add a line at null effect. (Default: TRUE)</p></t
     </tr>
     <tr>
       <th>col.right</th>
-      <td><p>Name of additional column to be printed to the right of the plot.</p></td>
+      <td><p>A character vector of names of columns to be printed to the right of the plot.</p></td>
     </tr>
     <tr>
       <th>col.pval</th>

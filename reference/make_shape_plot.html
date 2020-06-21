@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/make_forest_plot.html">Making forest plots</a>
+    </li>
+    <li>
+      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+    </li>
+    <li>
+      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
     </li>
   </ul>
 </li>
@@ -132,7 +138,7 @@
     <p>Make a shape plot with ggplot2</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/ckbplotr/man/make_shape_plot.html'>make_shape_plot</a></span>(
+    <pre class="usage"><span class='fu'>make_shape_plot</span>(
   <span class='kw'>data</span>,
   col.x = <span class='st'>"x"</span>,
   col.estimate = <span class='st'>"estimate"</span>,
@@ -140,15 +146,24 @@
   col.lci = <span class='kw'>NULL</span>,
   col.uci = <span class='kw'>NULL</span>,
   col.n = <span class='kw'>NULL</span>,
-  col.group = <span class='kw'>NULL</span>,
   exponentiate = <span class='fl'>FALSE</span>,
+  logscale = <span class='kw'>exponentiate</span>,
   scalepoints = <span class='fl'>FALSE</span>,
   pointsize = <span class='fl'>3</span>,
+  col.group = <span class='kw'>NULL</span>,
+  shape = <span class='kw'>NULL</span>,
+  colour = <span class='kw'>NULL</span>,
+  cicolour = <span class='kw'>colour</span>,
+  fill = <span class='kw'>NULL</span>,
+  ciunder = <span class='kw'>NULL</span>,
+  lines = <span class='fl'>FALSE</span>,
   <span class='kw'>xlims</span>,
   <span class='kw'>ylims</span>,
   gap = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.025</span>, <span class='fl'>0.025</span>),
   ext = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.025</span>, <span class='fl'>0.025</span>),
   ratio = <span class='fl'>1.5</span>,
+  base_size = <span class='fl'>11</span>,
+  base_line_size = <span class='kw'>base_size</span><span class='op'>/</span><span class='fl'>22</span>,
   xbreaks = <span class='kw'>NULL</span>,
   ybreaks = <span class='kw'>NULL</span>,
   xlab = <span class='st'>"Risk factor"</span>,
@@ -191,18 +206,51 @@
       <td><p>Name of column that provides number to be plotted below CIs.</p></td>
     </tr>
     <tr>
-      <th>col.group</th>
-      <td><p>Name of column that groups the estimates. (Default: NULL)</p></td>
-    </tr>
-    <tr>
       <th>exponentiate</th>
       <td><p>Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis. (Default: TRUE)</p></td>
+use log scale on the axis. (Default: FALSE)</p></td>
+    </tr>
+    <tr>
+      <th>logscale</th>
+      <td><p>Use log scale for vertical axis. (Default: exponentiate)</p></td>
     </tr>
     <tr>
       <th>scalepoints</th>
       <td><p>Should the points be scaled by inverse of the standard
 error? (Default: FALSE)</p></td>
+    </tr>
+    <tr>
+      <th>pointsize</th>
+      <td><p>The (largest) size of box to use for plotting point
+estimates. (Default: 3)</p></td>
+    </tr>
+    <tr>
+      <th>col.group</th>
+      <td><p>Name of column that groups the estimates. (Default: NULL)</p></td>
+    </tr>
+    <tr>
+      <th>shape</th>
+      <td><p>Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)</p></td>
+    </tr>
+    <tr>
+      <th>colour</th>
+      <td><p>Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)</p></td>
+    </tr>
+    <tr>
+      <th>cicolour</th>
+      <td><p>Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)</p></td>
+    </tr>
+    <tr>
+      <th>fill</th>
+      <td><p>Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)</p></td>
+    </tr>
+    <tr>
+      <th>ciunder</th>
+      <td><p>Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)</p></td>
+    </tr>
+    <tr>
+      <th>lines</th>
+      <td><p>Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)</p></td>
     </tr>
     <tr>
       <th>xlims</th>
@@ -223,6 +271,22 @@ error? (Default: FALSE)</p></td>
     <tr>
       <th>ratio</th>
       <td><p>The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)</p></td>
+    </tr>
+    <tr>
+      <th>base_size</th>
+      <td><p>base font size, given in pts.</p></td>
+    </tr>
+    <tr>
+      <th>base_line_size</th>
+      <td><p>base size for line elements</p></td>
+    </tr>
+    <tr>
+      <th>xbreaks</th>
+      <td><p>Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)</p></td>
+    </tr>
+    <tr>
+      <th>ybreaks</th>
+      <td><p>Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)</p></td>
     </tr>
     <tr>
       <th>xlab</th>

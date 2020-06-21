@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -55,6 +55,12 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="../articles/make_forest_plot.html">Making forest plots</a>
+    </li>
+    <li>
+      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+    </li>
+    <li>
+      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
     </li>
   </ul>
 </li>
@@ -92,12 +98,27 @@
 
     
     
-<div id="different-limits-and-ticks-on-each-plot" class="section level2">
+<p>The <code>make_forest_plot</code> function creates a forest plot using the <code>ggplot2</code> graphics package. It is available as part of the <code>ckbplotr</code> package.</p>
+<p>The function returns a named list containg:</p>
+<ul>
+<li>plot: the plot</li>
+<li>data: a data frame from which the plot is generated</li>
+<li>code: ggplot2 code to generate the plot</li>
+</ul>
+<p>In RStudio the ggplot2 code used to generate the plot will be shown in the ‘Viewer’ pane. If modifications are needed to the plot, then this code can be copied, edited, and run as needed.</p>
+<div id="expected-warning" class="section level2">
 <h2 class="hasAnchor">
-<a href="#different-limits-and-ticks-on-each-plot" class="anchor"></a>Different limits and ticks on each plot</h2>
-<p>The <code>make_forest_plot</code> function uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales (or limits or ticks) applied, so it’s not directly possible to have different limits and ticks on each forest plot.</p>
-<p>However, one approach to work around this is to use <code>make_forest_plot</code> for each plot you need, remove the labels from all but the first, then arrange them side-by-side. The <code>gridExtra</code> package can be used for this last step.</p>
-<p>Step 1: Use <code>make_forest_plot</code> for each plot.</p>
+<a href="#expected-warning" class="anchor"></a>Expected warning</h2>
+<p>You may get the following warning when using this function.</p>
+<blockquote>
+<p>Vectorized input to <code>element_text()</code> is not officially supported. Results may be unexpected or may change in future versions of ggplot2.</p>
+</blockquote>
+<p>This is related to how some headings used to label the rows of the forest plot are made bold. This should not be a problem if the forest plot produced appears as expected. (This hack is discussed <a href="https://github.com/tidyverse/ggplot2/issues/3492">here</a>.)</p>
+</div>
+<div id="prepare-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#prepare-data" class="anchor"></a>Prepare data</h2>
+<p>First of all, do your analyses and put the results into data frames (one data frame for each forest plot column). Here we generate some example results.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">57911624</span>)
 <span class="kw">exampleresults</span> <span class="op">&lt;-</span> <span class="fu">function</span>(){
@@ -113,7 +134,14 @@
              estimate = <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">0.02</span>),
              stderr   = <span class="fl">0.012</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">0.015</span>)),
              n        = <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)),
-             nb       = <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)))
+             nb       = <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)),
+             shape    = <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">15</span>, <span class="fl">21</span>),
+             colour   = <span class="st">"black"</span>,
+             fill     = <span class="st">"black"</span>,
+             bold     = <span class="fl">FALSE</span>,
+             diamond  = <span class="fl">FALSE</span>,
+             ciunder  = <span class="fl">FALSE</span>,
+             stringsAsFactors = <span class="fl">FALSE</span>)
 }
 <span class="kw">resultsA</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
 <span class="kw">resultsB</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
@@ -121,26 +149,282 @@
 <span class="kw">resultsD</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
 <span class="kw">resultsE</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
 
-<span class="kw">headings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(heading1 = <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Lipoprotein particle concentration"</span>,
-                                        <span class="st">"Triglycerides concentration"</span>,
-                                        <span class="st">"Cholesterol concentration"</span>), each = <span class="fl">7</span>),
-                       heading2 = <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"VLDL"</span>, <span class="st">"VLDL"</span>, <span class="st">"VLDL"</span>,
-                                        <span class="st">"IDL"</span>,
-                                        <span class="st">"LDL"</span>, <span class="st">"LDL"</span>, <span class="st">"LDL"</span>), times = <span class="fl">3</span>),
-                       heading3 = <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Large"</span>, <span class="st">"Medium"</span>, <span class="st">"Small"</span>,
-                                        <span class="fl">NA</span>,
-                                        <span class="st">"Large"</span>, <span class="st">"Medium"</span>, <span class="st">"Small"</span>) , times = <span class="fl">3</span>),
-                       variable = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'nmr_l_vldl_p'</span>, <span class="st">'nmr_m_vldl_p'</span>, <span class="st">'nmr_s_vldl_p'</span>,
-                                    <span class="st">'nmr_idl_p'</span>,
-                                    <span class="st">'nmr_l_ldl_p'</span>, <span class="st">'nmr_m_ldl_p'</span>, <span class="st">'nmr_s_ldl_p'</span>,
-                                    <span class="st">'nmr_l_vldl_tg'</span>, <span class="st">'nmr_m_vldl_tg'</span>, <span class="st">'nmr_s_vldl_tg'</span>,
-                                    <span class="st">'nmr_idl_tg'</span>,
-                                    <span class="st">'nmr_l_ldl_tg'</span>, <span class="st">'nmr_m_ldl_tg'</span>, <span class="st">'nmr_s_ldl_tg'</span>,
-                                    <span class="st">'nmr_l_vldl_c'</span>, <span class="st">'nmr_m_vldl_c'</span>, <span class="st">'nmr_s_vldl_c'</span>,
-                                    <span class="st">'nmr_idl_c'</span>,
-                                    <span class="st">'nmr_l_ldl_c'</span>, <span class="st">'nmr_m_ldl_c'</span>, <span class="st">'nmr_s_ldl_c'</span>))
+<span class="kw">resultsA</span>[<span class="fl">9</span>,<span class="st">"shape"</span>] <span class="op">&lt;-</span> <span class="fl">16</span>
+<span class="kw">resultsA</span>[<span class="fl">10</span>, <span class="st">"bold"</span>] <span class="op">&lt;-</span> <span class="fl">TRUE</span>
+<span class="kw">resultsA</span>[<span class="fl">11</span>, <span class="st">"colour"</span>] <span class="op">&lt;-</span> <span class="st">"red"</span>
+<span class="kw">resultsA</span>[<span class="fl">12</span>, <span class="st">"diamond"</span>] <span class="op">&lt;-</span> <span class="fl">TRUE</span>
+<span class="kw">resultsA</span>[<span class="fl">13</span>, <span class="st">"ciunder"</span>] <span class="op">&lt;-</span> <span class="fl">TRUE</span>
+<span class="kw">resultsA</span>[<span class="fl">13</span>, <span class="st">"shape"</span>] <span class="op">&lt;-</span> <span class="fl">22</span>
+<span class="kw">resultsA</span>[<span class="fl">13</span>, <span class="st">"fill"</span>] <span class="op">&lt;-</span> <span class="st">"white"</span>
+</pre></div>
+</div>
+<div id="simple-forest-plot" class="section level2">
+<h2 class="hasAnchor">
+<a href="#simple-forest-plot" class="anchor"></a>Simple forest plot</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/neilstats/ckbplotr">ckbplotr</a></span>)
 
+<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(cols         = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
+                               exponentiate = <span class="fl">TRUE</span>,
+                               colnames     = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                               col.key      = <span class="st">"variable"</span>)
+<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
+<p><img src="make_forest_plot_files/figure-html/make_forest_plot-example-1-1.png" width="672" style="display: block; margin: auto;"></p>
+</div>
+<div id="forest-plot-with-row-headings" class="section level2">
+<h2 class="hasAnchor">
+<a href="#forest-plot-with-row-headings" class="anchor"></a>Forest plot with row headings</h2>
+<p>To use headings, create a data frame of headings and specify arguments <code>headings</code> and <code>rows</code>.</p>
+<p>This must data frame contain columns ‘heading1’, ‘heading2’ and ‘heading3’, which can be set to NA if not needed for a particular row. For example, if you do not need a third level of heading for a particular row, then set <code>heading3=NA</code> for that row. If you only need one level of headings, then set <code>heading2=NA</code> and <code>heading3=NA</code> for every row.</p>
+<p>The data set must also contain a column with the same name as a column in each of the results data sets. This column is used to match headings to the correct results, and is specified in the argument <code>col.key</code>.</p>
+<p>The argument <code>rows</code> specifies which results should be included in the plot, by giving some headings from the heading1 column of the headings data frame.</p>
+<p>(The order given in the <code>rows</code> argument decides the order in which the heading1 labels will be in the plot (top to bottom). The heading2 and heading3 labels will be in the order that they are in the headings data frame.)</p>
+<pre><code>#&gt;                              heading1 heading2 heading3      variable
+#&gt; 1  Lipoprotein particle concentration     VLDL    Large  nmr_l_vldl_p
+#&gt; 2  Lipoprotein particle concentration     VLDL   Medium  nmr_m_vldl_p
+#&gt; 3  Lipoprotein particle concentration     VLDL    Small  nmr_s_vldl_p
+#&gt; 4  Lipoprotein particle concentration      IDL     &lt;NA&gt;     nmr_idl_p
+#&gt; 5  Lipoprotein particle concentration      LDL    Large   nmr_l_ldl_p
+#&gt; 6  Lipoprotein particle concentration      LDL   Medium   nmr_m_ldl_p
+#&gt; 7  Lipoprotein particle concentration      LDL    Small   nmr_s_ldl_p
+#&gt; 8         Triglycerides concentration     VLDL    Large nmr_l_vldl_tg
+#&gt; 9         Triglycerides concentration     VLDL   Medium nmr_m_vldl_tg
+#&gt; 10        Triglycerides concentration     VLDL    Small nmr_s_vldl_tg
+#&gt; 11        Triglycerides concentration      IDL     &lt;NA&gt;    nmr_idl_tg
+#&gt; 12        Triglycerides concentration      LDL    Large  nmr_l_ldl_tg
+#&gt; 13        Triglycerides concentration      LDL   Medium  nmr_m_ldl_tg
+#&gt; 14        Triglycerides concentration      LDL    Small  nmr_s_ldl_tg
+#&gt; 15          Cholesterol concentration     VLDL    Large  nmr_l_vldl_c
+#&gt; 16          Cholesterol concentration     VLDL   Medium  nmr_m_vldl_c
+#&gt; 17          Cholesterol concentration     VLDL    Small  nmr_s_vldl_c
+#&gt; 18          Cholesterol concentration      IDL     &lt;NA&gt;     nmr_idl_c
+#&gt; 19          Cholesterol concentration      LDL    Large   nmr_l_ldl_c
+#&gt; 20          Cholesterol concentration      LDL   Medium   nmr_m_ldl_c
+#&gt; 21          Cholesterol concentration      LDL    Small   nmr_s_ldl_c</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
+                               rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Lipoprotein particle concentration"</span>,
+                                                    <span class="st">"Triglycerides concentration"</span>),
+                               cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
+                               exponentiate     = <span class="fl">TRUE</span>,
+                               colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                               col.key          = <span class="st">"variable"</span>,
+                               ci.delim         = <span class="st">" - "</span>,
+                               xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                               xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                               blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                               scalepoints      = <span class="fl">TRUE</span>,
+                               pointsize        = <span class="fl">3</span>,
+                               col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                               col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                               col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                               col.right.space  = <span class="fl">0.02</span>,
+                               col.heading.space = <span class="fl">1.5</span>,
+                               heading.space    = <span class="fl">2</span>,
+                               plot.space       = <span class="fl">8</span>)
+<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
+<p><img src="make_forest_plot_files/figure-html/make_forest_plot-example-2-1.png" width="672" style="display: block; margin: auto;"></p>
+</div>
+<div id="setting-colours-and-shapes-bold-text-and-diamonds" class="section level2">
+<h2 class="hasAnchor">
+<a href="#setting-colours-and-shapes-bold-text-and-diamonds" class="anchor"></a>Setting colours and shapes, bold text and diamonds</h2>
+<p>The shape and fill colour of points, colour of points and confidence interval lines, bold text, and which estimates/CIs should be plotted as diamonds can be set overall or on a per-point basis. This is done by setting arguments <code>shape</code>, <code>colour</code>, <code>fill</code>, <code>ciunder</code>, <code>col.bold</code>, and <code>col.diamond</code> to appropriate values, or to the name of a column containing values for each point.</p>
+<p>The argument/columns, what they control, and the type:</p>
+<table class="table">
+<thead><tr class="header">
+<th>argument</th>
+<th>controls</th>
+<th>type</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>shape</td>
+<td>plotting character for points</td>
+<td>integer</td>
+</tr>
+<tr class="even">
+<td>colour</td>
+<td>colour of points and lines</td>
+<td>character</td>
+</tr>
+<tr class="odd">
+<td>fill</td>
+<td>fill colour of points</td>
+<td>character</td>
+</tr>
+<tr class="even">
+<td>ciunder</td>
+<td>if the CI line should be plotted before the point</td>
+<td>logical</td>
+</tr>
+<tr class="odd">
+<td>col.bold</td>
+<td>if text is bold</td>
+<td>logical</td>
+</tr>
+<tr class="even">
+<td>col.diamond</td>
+<td>if a diamond should be plotted</td>
+<td>logical</td>
+</tr>
+</tbody>
+</table>
+<p>Note that <code>col.bold</code>, and <code>col.diamond</code> must be column names in the supplied data frames, while the others can be fixed values or column names.</p>
+<div id="using-values" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-values" class="anchor"></a>Using values</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
+                                rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
+                                cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>),
+                                exponentiate     = <span class="fl">TRUE</span>,
+                                colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>),
+                                col.key          = <span class="st">"variable"</span>,
+                                ci.delim         = <span class="st">" - "</span>,
+                                xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                                xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                                blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                                scalepoints      = <span class="fl">TRUE</span>,
+                                pointsize        = <span class="fl">3</span>,
+                                col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                                col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                                col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                                col.right.space  = <span class="fl">0.02</span>,
+                                heading.space    = <span class="fl">2</span>,
+                                plot.space       = <span class="fl">8</span>,
+                                shape            = <span class="fl">16</span>,
+                                colour           = <span class="st">"red"</span>,
+                                cicolour         = <span class="st">"black"</span>,
+                                ciunder          = <span class="fl">TRUE</span>)
+<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
+<p><img src="make_forest_plot_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;"></p>
+</div>
+<div id="using-column-names" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-column-names" class="anchor"></a>Using column names</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
+                                rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
+                                cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>),
+                                exponentiate     = <span class="fl">TRUE</span>,
+                                colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>),
+                                col.key          = <span class="st">"variable"</span>,
+                                ci.delim         = <span class="st">" - "</span>,
+                                xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                                xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                                blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                                scalepoints      = <span class="fl">TRUE</span>,
+                                pointsize        = <span class="fl">3</span>,
+                                col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                                col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                                col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                                col.right.space  = <span class="fl">0.02</span>,
+                                heading.space    = <span class="fl">2</span>,
+                                plot.space       = <span class="fl">8</span>,
+                                shape            = <span class="st">"shape"</span>,
+                                colour           = <span class="st">"colour"</span>,
+                                col.bold         = <span class="st">"bold"</span>,
+                                col.diamond      = <span class="st">"diamond"</span>,
+                                ciunder          = <span class="st">"ciunder"</span>)
+<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
+<p><img src="make_forest_plot_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;"></p>
+<p>If a parameter is not set, then default values are used for these aesthetics. If a parameter is set, then every data frame provided in <code>cols</code> must contain a column with that name.</p>
+</div>
+<div id="diamond-shortcut" class="section level3">
+<h3 class="hasAnchor">
+<a href="#diamond-shortcut" class="anchor"></a>Diamond shortcut</h3>
+<p>As an alternative to using <code>col.diamond</code>, provide a character vector in the <code>diamond</code> argument. In rows with these key values, estimates and CIs will be plotted using a diamond. (If a list is supplied, only the first element will be used.)</p>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="kw">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
+                                rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
+                                cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>),
+                                exponentiate     = <span class="fl">TRUE</span>,
+                                colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>),
+                                col.key          = <span class="st">"variable"</span>,
+                                ci.delim         = <span class="st">" - "</span>,
+                                xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                                xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                                blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                                scalepoints      = <span class="fl">TRUE</span>,
+                                pointsize        = <span class="fl">3</span>,
+                                col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                                col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                                col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                                col.right.space  = <span class="fl">0.02</span>,
+                                heading.space    = <span class="fl">2</span>,
+                                plot.space       = <span class="fl">8</span>,
+                                diamond          = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"nmr_l_ldl_tg"</span>, <span class="st">"nmr_m_ldl_tg"</span>))
+<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
+<p><img src="make_forest_plot_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
+</div>
+</div>
+<div id="adding-heterogeneity-and-trend-test-results-and-other-text" class="section level2">
+<h2 class="hasAnchor">
+<a href="#adding-heterogeneity-and-trend-test-results-and-other-text" class="anchor"></a>Adding heterogeneity and trend test results and other text</h2>
+<p>The <code>addtext</code> argument can be used to add results of heterogeneity or trend test, or some other text, in the text column of estimates and CIs.</p>
+<p>You will probably need to increase <code>plot.space</code> and widen the right margin as shown to stop overlapping text or overrunning the edge of the plot.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit">
+<span class="kw">resultsA_extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(variable   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"nmr_s_ldl_p"</span>, <span class="st">"nmr_s_vldl_p"</span>),
+                             het_dof    = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"2"</span>,           <span class="fl">NA</span>),
+                             het_stat   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"12"</span>,          <span class="fl">NA</span>),
+                             het_p      = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"0.22"</span>,        <span class="fl">NA</span>),
+                             trend_stat = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">NA</span>,            <span class="st">"7"</span>),
+                             trend_p    = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">NA</span>,            <span class="st">"0.31"</span>),
+                             stringsAsFactors = <span class="fl">FALSE</span>)
+<span class="kw">resultsB_extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(variable   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"nmr_s_ldl_p"</span>, <span class="st">"nmr_s_vldl_p"</span>),
+                             het_dof    = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"2"</span>,            <span class="fl">NA</span>),
+                             het_stat   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"14"</span>,           <span class="fl">NA</span>),
+                             het_p      = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"0.32"</span>,         <span class="fl">NA</span>),
+                             trend_stat = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">NA</span>,             <span class="st">"7"</span>),
+                             trend_p    = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">NA</span>,             <span class="st">"0.83"</span>),
+                             stringsAsFactors = <span class="fl">FALSE</span>)
 
+<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
+                               rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Lipoprotein particle concentration"</span>,
+                                                    <span class="st">"Triglycerides concentration"</span>),
+                               cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
+                               exponentiate     = <span class="fl">TRUE</span>,
+                               colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                               col.key          = <span class="st">"variable"</span>,
+                               ci.delim         = <span class="st">" - "</span>,
+                               xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                               xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                               blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                               scalepoints      = <span class="fl">TRUE</span>,
+                               pointsize        = <span class="fl">3</span>,
+                               col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                               col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                               col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                               col.right.space  = <span class="fl">0.02</span>,
+                               col.heading.space = <span class="fl">1.5</span>,
+                               heading.space    = <span class="fl">2</span>,
+                               plot.space       = <span class="fl">10</span>,
+                               addtext          = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA_extra</span>, <span class="kw">resultsB_extra</span>),
+                               printplot        = <span class="fl">FALSE</span>)
+<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+
+<span class="kw">forestplot</span><span class="op">$</span><span class="kw">plot</span> <span class="op">+</span> <span class="fu">theme</span>(plot.margin = <span class="fu">unit</span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">10</span>,<span class="fl">2</span>,<span class="fl">0</span>), <span class="st">"lines"</span>))
+</pre></div>
+<p><img src="make_forest_plot_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
+</div>
+<div id="different-limits-and-ticks-on-each-plot" class="section level2">
+<h2 class="hasAnchor">
+<a href="#different-limits-and-ticks-on-each-plot" class="anchor"></a>Different limits and ticks on each plot</h2>
+<p>The <code>make_forest_plot</code> function uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales (or limits or ticks) applied, so it’s not directly possible to have different limits and ticks on each forest plot.</p>
+<p>However, one approach to work around this is to use <code>make_forest_plot</code> for each plot you need, remove the labels from all but the first, then arrange them side-by-side. The <code>gridExtra</code> package can be used for this last step.</p>
+<p>Step 1: Use <code>make_forest_plot</code> for each plot.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="kw">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
                                 rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Lipoprotein particle concentration"</span>,
                                                      <span class="st">"Triglycerides concentration"</span>),
@@ -158,13 +442,12 @@
                                 col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
                                 col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
                                 col.right.space  = <span class="fl">0.02</span>,
+                                col.heading.space = <span class="fl">1.5</span>,
                                 heading.space    = <span class="fl">2</span>,
-                                plot.space       = <span class="fl">8</span>)
+                                plot.space       = <span class="fl">8</span>,
+                                printplot        = <span class="fl">FALSE</span>)
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
 <span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-</pre></div>
-<p><img src="make_forest_plot_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
 
 <span class="kw">forestplot2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
                                 rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Lipoprotein particle concentration"</span>,
@@ -183,24 +466,25 @@
                                 col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
                                 col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
                                 col.right.space  = <span class="fl">0.02</span>,
+                                col.heading.space = <span class="fl">1.5</span>,
                                 heading.space    = <span class="fl">2</span>,
-                                plot.space       = <span class="fl">8</span>)
+                                plot.space       = <span class="fl">8</span>,
+                                printplot        = <span class="fl">FALSE</span>)
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
 <span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
 </pre></div>
-<p><img src="make_forest_plot_files/figure-html/unnamed-chunk-2-2.png" width="700"></p>
 <p>Step 2: Remove the axis text for all but the first plot.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
+<div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="kw">p1</span> <span class="op">&lt;-</span> <span class="kw">forestplot1</span><span class="op">$</span><span class="kw">plot</span>
 
 <span class="kw">p2</span> <span class="op">&lt;-</span> <span class="kw">forestplot2</span><span class="op">$</span><span class="kw">plot</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(axis.text.y = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span>())
+  <span class="fu">theme</span>(axis.text.y = <span class="fu">element_blank</span>())
 </pre></div>
 <p>Step 3: Arrange the plots using <code>gridExtra</code> (there may be other packages that also work). Adjust <code>widths</code> until the plots are the desired widths in your final output file.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
+<div class="sourceCode" id="cb11"><pre class="downlit">
 <span class="kw">gridExtra</span>::<span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span>(<span class="kw">p1</span>, <span class="kw">p2</span>, ncol=<span class="fl">2</span>, widths = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>,<span class="fl">0.55</span>))
 </pre></div>
-<p><img src="make_forest_plot_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="make_forest_plot_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Note that if <code>scalepoints = TRUE</code>, then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots. However, if different axis scales are used then confidence intervals are not comparable either so this may be not be a problem.</p>
 </div>
   </div>

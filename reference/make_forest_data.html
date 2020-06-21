@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/make_forest_plot.html">Making forest plots</a>
+    </li>
+    <li>
+      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+    </li>
+    <li>
+      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
     </li>
   </ul>
 </li>
@@ -132,7 +138,7 @@
     <p><code>make_forest_data</code></p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/ckbplotr/man/make_forest_data.html'>make_forest_data</a></span>(
+    <pre class="usage"><span class='fu'>make_forest_data</span>(
   headings = <span class='kw'>NULL</span>,
   rows = <span class='kw'>NULL</span>,
   <span class='kw'>cols</span>,
@@ -145,11 +151,8 @@
   col.pval = <span class='kw'>NULL</span>,
   col.left = <span class='kw'>NULL</span>,
   col.right = <span class='kw'>NULL</span>,
+  col.keep = <span class='kw'>NULL</span>,
   ci.delim = <span class='st'>", "</span>,
-  whiteci = <span class='kw'>NULL</span>,
-  diamond = <span class='kw'>NULL</span>,
-  bold = <span class='kw'>NULL</span>,
-  boldheadings = <span class='kw'>NULL</span>,
   exponentiate = <span class='fl'>TRUE</span>,
   blankrows = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
   scalepoints = <span class='fl'>FALSE</span>,
@@ -225,30 +228,8 @@ If none provided, then they will be numbered 1, 2, 3 ...</p></td>
 confidence interval. (Default: ", ")</p></td>
     </tr>
     <tr>
-      <th>whiteci</th>
-      <td><p>A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)</p></td>
-    </tr>
-    <tr>
-      <th>diamond</th>
-      <td><p>A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)</p></td>
-    </tr>
-    <tr>
-      <th>bold</th>
-      <td><p>A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which text should be bold.
-If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)</p></td>
-    </tr>
-    <tr>
-      <th>boldheadings</th>
-      <td><p>A character vector. Identify headings (using key values)
-which should additionally be bold. (Default: NULL)</p></td>
-    </tr>
-    <tr>
       <th>exponentiate</th>
-      <td><p>Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis, and add a line at null effect. (Default: TRUE)</p></td>
+      <td><p>Exponentiate estimates (and CIs) before plotting. (Default: TRUE)</p></td>
     </tr>
     <tr>
       <th>blankrows</th>
@@ -264,13 +245,14 @@ error? (Default: FALSE)</p></td>
     <tr>
       <th>addtext</th>
       <td><p>A list of data frames. List must be the same length as cols.
-  Data frames should contain a col.key column, and one or more of:</p>
+  Data frames should contain a column with the name specified in col.key,
+  and one or more of:</p>
 <p>1. a column named 'text' containing character strings</p>
 <p>2. columns named 'het_dof', 'het_stat', and 'het_p' containing character strings</p>
 <p>3. columns names 'trend_stat' and 'trend_p' containing character strings</p>
-<p>The character strings (for 'text'), heterogeneity or trend test results will
-  be plotted to the right of each forest plot below the key specified in the
-  col.key column.</p></td>
+<p>The character strings, heterogeneity test, and trend test results will
+  be plotted in the column of estimates and CIs, below the row with the key
+  given in the col.key column.</p></td>
     </tr>
     </table>
 

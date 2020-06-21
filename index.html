@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -57,6 +57,12 @@
   <ul class="dropdown-menu" role="menu">
 <li>
       <a href="articles/make_forest_plot.html">Making forest plots</a>
+    </li>
+    <li>
+      <a href="articles/make_shape_plot.html">Making shape plots</a>
+    </li>
+    <li>
+      <a href="articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
     </li>
   </ul>
 </li>
@@ -93,7 +99,7 @@
 <div id="directly-from-github" class="section level3">
 <h3 class="hasAnchor">
 <a href="#directly-from-github" class="anchor"></a>Directly from github</h3>
-<p>The latest development version of <code>ckbplotr</code> can be installed directly from github using devtools.</p>
+<p>The latest version of <code>ckbplotr</code> can be installed directly from github using devtools.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">'devtools'</span>)
 <span class="kw">devtools</span>::<span class="fu">install_github</span>(<span class="st">'neilstats/ckbplotr'</span>)
@@ -118,228 +124,41 @@
 <p>The source package for the latest release version is available <a href="https://github.com/neilstats/ckbplotr/releases/latest">here</a>.</p>
 </div>
 </div>
-<div id="the-make_shape_plot-function" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-make_shape_plot-function" class="anchor"></a>The make_shape_plot function</h2>
-<p>The <code>make_shape_plot</code> function creates a plot of estimates and CIs against risk factor levels using the <code>ggplot2</code> package.</p>
-<p>The function returns a named list containing:</p>
-<ul>
-<li>plot: the plot</li>
-<li>code: ggplot2 code to generate the plot</li>
-</ul>
-<p>The function uses the <code>plot_like_ckb</code> function to modify the theme and control the look of the plot.</p>
-<p>In RStudio, the ggplot2 code used to generate the plot will be shown in the ‘Viewer’ pane. This code can be copied and further edited to adapt the plot.</p>
-<div id="examples" class="section level3">
-<h3 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h3>
-<p>Given a data frame of estimates and standard errors (to be plotted on the y axis), and risk factor levels (to be plotted on the x axis), a plot can be created.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/neilstats/ckbplotr">ckbplotr</a></span>)
-
-<span class="kw">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-  est = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span>, <span class="fl">1.75</span>, <span class="fl">1.1</span>, <span class="fl">1.35</span>, <span class="fl">1.75</span>, <span class="fl">2</span>),
-  se = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.08</span>, <span class="fl">0.02</span>, <span class="fl">0.07</span>, <span class="fl">0.15</span>, <span class="fl">0.05</span>, <span class="fl">0.02</span>, <span class="fl">0.07</span>, <span class="fl">0.1</span>),
-  rf = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">20</span>, <span class="fl">28</span>, <span class="fl">35</span>, <span class="fl">50</span>, <span class="fl">18.5</span>, <span class="fl">25</span>, <span class="fl">32</span>, <span class="fl">47</span>),
-  n = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">109</span>, <span class="fl">103</span>, <span class="fl">143</span>, <span class="fl">104</span>, <span class="fl">140</span>, <span class="fl">134</span>, <span class="fl">127</span>, <span class="fl">99</span>),
-  is_female = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>)
-)
-
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>[<span class="kw">results</span><span class="op">$</span><span class="kw">is_female</span> <span class="op">==</span> <span class="fl">1</span>,],
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>)
-</pre></div>
-<p><img src="reference/figures/README-make_shape_plot-example-1-1.png" width="100%"></p>
-<p>The <code>col.group</code> argument can be supplied to plot results for different groups (in shades of grey).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>,
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        col.group    = <span class="st">"is_female"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>)
-</pre></div>
-<p><img src="reference/figures/README-make_shape_plot-example-2-1.png" width="100%"></p>
-</div>
-</div>
 <div id="the-plot_like_ckb-function" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-plot_like_ckb-function" class="anchor"></a>The plot_like_ckb function</h2>
 <p>The <code>plot_like_ckb</code> function does three things to a ggplot2 plot:</p>
 <ol>
-<li>modifies the theme (i.e. the overall appearance)</li>
-<li>extends the plotting area, hides the default axis lines and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)</li>
+<li>applies a CKB theme (i.e. change the overall appearance)</li>
+<li>extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)</li>
 <li>applies a fixed aspect ratio</li>
 </ol>
-<div id="examples-1" class="section level3">
-<h3 class="hasAnchor">
-<a href="#examples-1" class="anchor"></a>Examples</h3>
-<p>Make a scatter plot with <code>ggplot</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/neilstats/ckbplotr">ckbplotr</a></span>)
-
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(data = <span class="kw">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">displ</span>, y = <span class="kw">hwy</span>)) <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(size = <span class="fl">1</span>)
-<span class="kw">plot</span>
-</pre></div>
-<p><img src="reference/figures/README-a-plot-1.png" width="100%"></p>
-<p>Then apply the <code>plot_like_ckb</code> function to the plot.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>))
-</pre></div>
-<p><img src="reference/figures/README-plot_like_ckb-example-1-1.png" width="100%"></p>
-<p>If you do not want a gap between the axes, set <code>gap = c(0, 0)</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>), gap = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>))
-</pre></div>
-<p><img src="reference/figures/README-plot_like_ckb-example-2-1.png" width="100%"></p>
-<p>If you wish to override some aspect of the theme applied by <code>plot_like_ckb</code>, then this can be done by adding a theme after the function.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>)) <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(axis.title = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span>(colour = <span class="st">"red"</span>, face = <span class="st">"plain"</span>))
-</pre></div>
-<p><img src="reference/figures/README-plot_like_ckb-example-3-1.png" width="100%"></p>
-<p>If any data points you are plotting fall outside the axes, then they will still be drawn and may show up in places such as the axes, the legend, the plot title, or the plot margins. There is also no warning if data points fall outside the whole plot area.</p>
-<p>So it is best to check that your <code>xlim</code> and <code>ylim</code> values are suitable for your data before using the function.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="co"># The xlim and ylim ranges are too narrow</span>
-<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">4</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">20</span>, <span class="fl">50</span>))
-</pre></div>
-<p><img src="reference/figures/README-plot_like_ckb-example-4-1.png" width="100%"></p>
-<p>A bar chart.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="kw">barplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="kw">class</span>)) <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar</a></span>()
-<span class="fu"><a href="reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">barplot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">7.5</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">70</span>), gap = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.025</span>, <span class="fl">0.005</span>), ratio = <span class="fl">0.5</span>) <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span>(axis.ticks.x = <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span>())
-</pre></div>
-<p><img src="reference/figures/README-bar-chart-example-1.png" width="100%"></p>
+<p><img src="reference/figures/README-a-plot-1.png" style="display: block; margin: auto;"></p>
 </div>
+<div id="the-make_shape_plot-function" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-make_shape_plot-function" class="anchor"></a>The make_shape_plot function</h2>
+<p>The <code>make_shape_plot</code> function creates a plot of estimates and CIs against risk factor levels using the <code>ggplot2</code> package.</p>
+<p><img src="reference/figures/README-make_shape_plot-example-1-1.png" style="display: block; margin: auto;"></p>
 </div>
 <div id="the-make_forest_plot-function" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-make_forest_plot-function" class="anchor"></a>The make_forest_plot function</h2>
-<p>The <code>make_forest_plot</code> function creates a forest plot using the <code>ggplot2</code> graphics package. It is available as part of the <code>ckbplotr</code> package.</p>
-<p>The function returns a named list containg:</p>
+<p>The <code>make_forest_plot</code> function creates a forest plot using the <code>ggplot2</code> graphics package. The function returns a named list containg:</p>
 <ul>
 <li>plot: the plot</li>
 <li>data: a data frame from which the plot is generated</li>
 <li>code: ggplot2 code to generate the plot</li>
 </ul>
 <p>In RStudio the ggplot2 code used to generate the plot will be shown in the ‘Viewer’ pane. If modifications are needed to the plot, then this code can be copied, edited, and run as needed.</p>
+<p><img src="reference/figures/README-example-forest-plot-1.png" style="display: block; margin: auto;"></p>
 <div id="expected-warning" class="section level3">
 <h3 class="hasAnchor">
 <a href="#expected-warning" class="anchor"></a>Expected warning</h3>
 <p>You may get the following warning when using this function.</p>
 <blockquote>
-<p>Vectorized input to <code><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text()</a></code> is not officially supported. Results may be unexpected or may change in future versions of ggplot2.</p>
+<p>Vectorized input to <code>element_text()</code> is not officially supported. Results may be unexpected or may change in future versions of ggplot2.</p>
 </blockquote>
-<p>This is related to how some headings used to label the rows of the forest plot are made bold. This should not be a problem if the forest plot produced appears as expected. (This hack is discussed <a href="https://github.com/tidyverse/ggplot2/issues/3492">here</a>.)</p>
-</div>
-<div id="the-headings-data-frame" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-headings-data-frame" class="anchor"></a>The headings data frame</h3>
-<p>The data frame specified in the <code>headings</code> argument allows the use of headings to label the rows of the forest plot.</p>
-<p>This must data frame contain columns ‘heading1’, ‘heading2’ and ‘heading3’, which can be set to NA if not needed for a particular row. For example, if you do not need a third level of heading for a particular row, then set <code>heading3=NA</code> for that row. If you only need one level of headings, then set <code>heading2=NA</code> and <code>heading3=NA</code> for every row.</p>
-<p>The data set must also contain a column with the same name as a column in each of the results data sets. This column is used to match headings to the correct results, and is specified in the argument <code>col.key</code>.</p>
-<p>The argument <code>rows</code> specifies which results should be included in the plot, by giving some headings from the heading1 column of the headings data frame.</p>
-<p>(The order given in the <code>rows</code> argument decides the order in which the heading1 labels will be in the plot (top to bottom). The heading2 and heading3 labels will be in the order that they are in the headings data frame.)</p>
-</div>
-<div id="examples-2" class="section level3">
-<h3 class="hasAnchor">
-<a href="#examples-2" class="anchor"></a>Examples</h3>
-<p>First of all, do your analyses and put the results into data frames (one data frame for each forest plot column). Here we generate some example results.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">57911624</span>)
-<span class="kw">exampleresults</span> <span class="op">&lt;-</span> <span class="fu">function</span>(){
-  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(variable = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'nmr_l_vldl_p'</span>, <span class="st">'nmr_m_vldl_p'</span>, <span class="st">'nmr_s_vldl_p'</span>,
-                          <span class="st">'nmr_idl_p'</span>,
-                          <span class="st">'nmr_l_ldl_p'</span>, <span class="st">'nmr_m_ldl_p'</span>, <span class="st">'nmr_s_ldl_p'</span>,
-                          <span class="st">'nmr_l_vldl_tg'</span>, <span class="st">'nmr_m_vldl_tg'</span>, <span class="st">'nmr_s_vldl_tg'</span>,
-                          <span class="st">'nmr_idl_tg'</span>,
-                          <span class="st">'nmr_l_ldl_tg'</span>, <span class="st">'nmr_m_ldl_tg'</span>, <span class="st">'nmr_s_ldl_tg'</span>,
-                          <span class="st">'nmr_l_vldl_c'</span>, <span class="st">'nmr_m_vldl_c'</span>, <span class="st">'nmr_s_vldl_c'</span>,
-                          <span class="st">'nmr_idl_c'</span>,
-                          <span class="st">'nmr_l_ldl_c'</span>, <span class="st">'nmr_m_ldl_c'</span>, <span class="st">'nmr_s_ldl_c'</span>),
-             estimate = <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">0.02</span>),
-             stderr   = <span class="fl">0.012</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="fl">21</span>, <span class="fl">0</span>, <span class="fl">0.015</span>)),
-             n        = <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)),
-             nb       = <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span>(<span class="fl">21</span>, <span class="fl">100</span>, <span class="fl">2000</span>)))
-}
-<span class="kw">resultsA</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
-<span class="kw">resultsB</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
-<span class="kw">resultsC</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
-<span class="kw">resultsD</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
-<span class="kw">resultsE</span> <span class="op">&lt;-</span> <span class="fu">exampleresults</span>()
-</pre></div>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/neilstats/ckbplotr">ckbplotr</a></span>)
-
-<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_forest_plot.html">make_forest_plot</a></span>(cols         = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
-                               exponentiate = <span class="fl">TRUE</span>,
-                               colnames     = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                               col.key      = <span class="st">"variable"</span>)
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-</pre></div>
-<p><img src="reference/figures/README-make_forest_plot-example-1-1.png" width="100%"></p>
-<p>To use headings, create a data frame of headings and specify arguments <code>headings</code> and <code>rows</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#&gt;                              heading1 heading2 heading3      variable</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; 1  Lipoprotein particle concentration     VLDL    Large  nmr_l_vldl_p</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt; 2  Lipoprotein particle concentration     VLDL   Medium  nmr_m_vldl_p</span></span>
-<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; 3  Lipoprotein particle concentration     VLDL    Small  nmr_s_vldl_p</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; 4  Lipoprotein particle concentration      IDL     &lt;NA&gt;     nmr_idl_p</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; 5  Lipoprotein particle concentration      LDL    Large   nmr_l_ldl_p</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a><span class="co">#&gt; 6  Lipoprotein particle concentration      LDL   Medium   nmr_m_ldl_p</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt; 7  Lipoprotein particle concentration      LDL    Small   nmr_s_ldl_p</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt; 8         Triglycerides concentration     VLDL    Large nmr_l_vldl_tg</span></span>
-<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt; 9         Triglycerides concentration     VLDL   Medium nmr_m_vldl_tg</span></span>
-<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt; 10        Triglycerides concentration     VLDL    Small nmr_s_vldl_tg</span></span>
-<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt; 11        Triglycerides concentration      IDL     &lt;NA&gt;    nmr_idl_tg</span></span>
-<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt; 12        Triglycerides concentration      LDL    Large  nmr_l_ldl_tg</span></span>
-<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt; 13        Triglycerides concentration      LDL   Medium  nmr_m_ldl_tg</span></span>
-<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt; 14        Triglycerides concentration      LDL    Small  nmr_s_ldl_tg</span></span>
-<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt; 15          Cholesterol concentration     VLDL    Large  nmr_l_vldl_c</span></span>
-<span id="cb14-17"><a href="#cb14-17"></a><span class="co">#&gt; 16          Cholesterol concentration     VLDL   Medium  nmr_m_vldl_c</span></span>
-<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt; 17          Cholesterol concentration     VLDL    Small  nmr_s_vldl_c</span></span>
-<span id="cb14-19"><a href="#cb14-19"></a><span class="co">#&gt; 18          Cholesterol concentration      IDL     &lt;NA&gt;     nmr_idl_c</span></span>
-<span id="cb14-20"><a href="#cb14-20"></a><span class="co">#&gt; 19          Cholesterol concentration      LDL    Large   nmr_l_ldl_c</span></span>
-<span id="cb14-21"><a href="#cb14-21"></a><span class="co">#&gt; 20          Cholesterol concentration      LDL   Medium   nmr_m_ldl_c</span></span>
-<span id="cb14-22"><a href="#cb14-22"></a><span class="co">#&gt; 21          Cholesterol concentration      LDL    Small   nmr_s_ldl_c</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">headings</span>,
-                               rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Lipoprotein particle concentration"</span>,
-                                                    <span class="st">"Triglycerides concentration"</span>),
-                               cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
-                               exponentiate     = <span class="fl">TRUE</span>,
-                               colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                               col.key          = <span class="st">"variable"</span>,
-                               ci.delim         = <span class="st">" - "</span>,
-                               xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
-                               xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
-                               blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
-                               scalepoints      = <span class="fl">TRUE</span>,
-                               pointsize        = <span class="fl">3</span>,
-                               col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
-                               col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
-                               col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
-                               col.right.space  = <span class="fl">0.02</span>,
-                               col.heading.space = <span class="fl">1.5</span>,
-                               heading.space    = <span class="fl">2</span>,
-                               plot.space       = <span class="fl">8</span>)
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-</pre></div>
-<p><img src="reference/figures/README-make_forest_plot-example-2-1.png" width="100%"></p>
 </div>
 </div>
 <div id="make_jasper_forest_plot-function" class="section level2">

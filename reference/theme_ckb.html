@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make a ggplot into CKB style — plot_like_ckb • ckbplotr</title>
+<title>CKB ggplot theme — theme_ckb • ckbplotr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Make a ggplot into CKB style — plot_like_ckb" />
-<meta property="og:description" content="Make a ggplot into CKB style" />
+<meta property="og:title" content="CKB ggplot theme — theme_ckb" />
+<meta property="og:description" content="Based on theme_bw" />
 
 
 
@@ -129,53 +129,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make a ggplot into CKB style</h1>
+    <h1>CKB ggplot theme</h1>
     <small class="dont-index">Source: <a href='https://github.com/neilstats/ckbplotr/blob/master/R/plot_like_ckb.R'><code>R/plot_like_ckb.R</code></a></small>
-    <div class="hidden name"><code>plot_like_ckb.Rd</code></div>
+    <div class="hidden name"><code>theme_ckb.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Make a ggplot into CKB style</p>
+    <p>Based on theme_bw</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_like_ckb</span>(
-  <span class='kw'>plot</span>,
-  xlims = <span class='kw'>NULL</span>,
-  ylims = <span class='kw'>NULL</span>,
-  gap = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.025</span>, <span class='fl'>0.025</span>),
-  ext = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.025</span>, <span class='fl'>0.025</span>),
-  ratio = <span class='fl'>1.5</span>,
-  base_size = <span class='fl'>11</span>,
-  base_line_size = <span class='kw'>base_size</span><span class='op'>/</span><span class='fl'>22</span>
-)</pre>
+    <pre class="usage"><span class='fu'>theme_ckb</span>(base_size = <span class='fl'>11</span>, base_line_size = <span class='kw'>base_size</span><span class='op'>/</span><span class='fl'>22</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>plot</th>
-      <td><p>A ggplot2 plot object.</p></td>
-    </tr>
-    <tr>
-      <th>xlims</th>
-      <td><p>A numeric vector of length two. The limits of the x-axis.</p></td>
-    </tr>
-    <tr>
-      <th>ylims</th>
-      <td><p>A numeric vector of length two. The limits of the y-axis.</p></td>
-    </tr>
-    <tr>
-      <th>gap</th>
-      <td><p>A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))</p></td>
-    </tr>
-    <tr>
-      <th>ext</th>
-      <td><p>A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))</p></td>
-    </tr>
-    <tr>
-      <th>ratio</th>
-      <td><p>The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)</p></td>
-    </tr>
     <tr>
       <th>base_size</th>
       <td><p>base font size, given in pts.</p></td>
@@ -186,9 +153,6 @@
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A ggplot2 plot.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -96,6 +96,12 @@
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/make_forest_plot.html">Making forest plots</a>
+    </li>
+    <li>
+      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+    </li>
+    <li>
+      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
     </li>
   </ul>
 </li>
@@ -132,11 +138,12 @@
     <p><code>make_forest_plot</code> creates a forest plot with ggplot</p>
     </div>
 
-    <pre class="usage"><span class='fu'><a href='https://rdrr.io/pkg/ckbplotr/man/make_forest_plot.html'>make_forest_plot</a></span>(
+    <pre class="usage"><span class='fu'>make_forest_plot</span>(
   headings = <span class='kw'>NULL</span>,
   rows = <span class='kw'>NULL</span>,
   <span class='kw'>cols</span>,
   exponentiate = <span class='fl'>TRUE</span>,
+  logscale = <span class='kw'>exponentiate</span>,
   colnames = <span class='kw'>NULL</span>,
   colheadings = <span class='kw'>colnames</span>,
   col.key = <span class='st'>"key"</span>,
@@ -148,8 +155,8 @@
   col.right = <span class='kw'>NULL</span>,
   col.left.heading = <span class='st'>""</span>,
   col.right.heading = <span class='st'>"HR (95% CI)"</span>,
-  col.left.space = <span class='fl'>0</span>,
-  col.right.space = <span class='fl'>0</span>,
+  col.left.space = <span class='fl'>0.02</span>,
+  col.right.space = <span class='fl'>0.02</span>,
   col.left.hjust = <span class='fl'>1</span>,
   col.right.hjust = <span class='fl'>0</span>,
   col.heading.space = <span class='fl'>0</span>,
@@ -161,16 +168,22 @@
   xlim = <span class='kw'>NULL</span>,
   xticks = <span class='kw'>NULL</span>,
   blankrows = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
-  whiteci = <span class='kw'>NULL</span>,
+  col.diamond = <span class='kw'>NULL</span>,
   diamond = <span class='kw'>NULL</span>,
-  bold = <span class='kw'>NULL</span>,
+  col.bold = <span class='kw'>NULL</span>,
   boldheadings = <span class='kw'>NULL</span>,
   scalepoints = <span class='fl'>FALSE</span>,
   pointsize = <span class='fl'>3</span>,
-  pointshape = <span class='fl'>15</span>,
+  shape = <span class='kw'>NULL</span>,
+  colour = <span class='kw'>NULL</span>,
+  cicolour = <span class='kw'>colour</span>,
+  fill = <span class='kw'>NULL</span>,
+  ciunder = <span class='kw'>NULL</span>,
   addtext = <span class='kw'>NULL</span>,
   heading.space = <span class='fl'>4</span>,
   plot.space = <span class='fl'>8</span>,
+  base_size = <span class='fl'>11</span>,
+  base_line_size = <span class='kw'>base_size</span><span class='op'>/</span><span class='fl'>22</span>,
   printplot = <span class='fl'>TRUE</span>,
   showcode = <span class='fl'>TRUE</span>
 )</pre>
@@ -198,8 +211,11 @@ with the same name (which can be specified by col.key).</p></td>
     </tr>
     <tr>
       <th>exponentiate</th>
-      <td><p>Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis, and add a line at null effect. (Default: TRUE)</p></td>
+      <td><p>Exponentiate estimates (and CIs) before plotting. (Default: TRUE)</p></td>
+    </tr>
+    <tr>
+      <th>logscale</th>
+      <td><p>Use log scale on the axis, and add a line at null effect. (Default: exponentiate)</p></td>
     </tr>
     <tr>
       <th>colnames</th>
@@ -314,25 +330,21 @@ after a heading1, at the end of a heading1 'section', after
 a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))</p></td>
     </tr>
     <tr>
-      <th>whiteci</th>
-      <td><p>A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)</p></td>
+      <th>col.diamond</th>
+      <td><p>Plot estimates and CIs as diamonds. Name of a column of logical values.</p></td>
     </tr>
     <tr>
       <th>diamond</th>
-      <td><p>A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)</p></td>
+      <td><p>Alternative to col.diamond. A character vectors identify the rows
+(using the key values) for which the estimate and CI should be plotted using a diamond.</p></td>
     </tr>
     <tr>
-      <th>bold</th>
-      <td><p>A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which text should be bold.
-If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)</p></td>
+      <th>col.bold</th>
+      <td><p>Plot text as bold. Name of a column of logical values.</p></td>
     </tr>
     <tr>
       <th>boldheadings</th>
-      <td><p>A character vector. Identify headings (using key values)
-which should additionally be bold. (Default: NULL)</p></td>
+      <td><p>A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)</p></td>
     </tr>
     <tr>
       <th>scalepoints</th>
@@ -345,20 +357,36 @@ error? (Default: FALSE)</p></td>
 estimates. (Default: 3)</p></td>
     </tr>
     <tr>
-      <th>pointshape</th>
-      <td><p>The shape used for plotting point estimates. Can be a vector.
-(Default: 15)</p></td>
+      <th>shape</th>
+      <td><p>Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)</p></td>
+    </tr>
+    <tr>
+      <th>colour</th>
+      <td><p>Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)</p></td>
+    </tr>
+    <tr>
+      <th>cicolour</th>
+      <td><p>Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)</p></td>
+    </tr>
+    <tr>
+      <th>fill</th>
+      <td><p>Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)</p></td>
+    </tr>
+    <tr>
+      <th>ciunder</th>
+      <td><p>Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)</p></td>
     </tr>
     <tr>
       <th>addtext</th>
       <td><p>A list of data frames. List must be the same length as cols.
-  Data frames should contain a col.key column, and one or more of:</p>
+  Data frames should contain a column with the name specified in col.key,
+  and one or more of:</p>
 <p>1. a column named 'text' containing character strings</p>
 <p>2. columns named 'het_dof', 'het_stat', and 'het_p' containing character strings</p>
 <p>3. columns names 'trend_stat' and 'trend_p' containing character strings</p>
-<p>The character strings (for 'text'), heterogeneity or trend test results will
-  be plotted to the right of each forest plot below the key specified in the
-  col.key column.</p></td>
+<p>The character strings, heterogeneity test, and trend test results will
+  be plotted in the column of estimates and CIs, below the row with the key
+  given in the col.key column.</p></td>
     </tr>
     <tr>
       <th>heading.space</th>
@@ -369,6 +397,14 @@ Unit is "lines". (Default: 4)</p></td>
       <th>plot.space</th>
       <td><p>Size of the gap between forest plots.
 Unit is "lines". (Default: 8)</p></td>
+    </tr>
+    <tr>
+      <th>base_size</th>
+      <td><p>base font size, given in pts.</p></td>
+    </tr>
+    <tr>
+      <th>base_line_size</th>
+      <td><p>base size for line elements</p></td>
     </tr>
     <tr>
       <th>printplot</th>
