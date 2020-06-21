@@ -31,8 +31,7 @@
 #' @param col.right A character vector of names of columns to be printed to the right of the plot.
 #' @param ci.delim Character string to separate lower and upper limits of
 #'   confidence interval. (Default: ", ")
-#' @param exponentiate Exponentiate estimates (and CIs) before plotting,
-#'   use log scale on the axis, and add a line at null effect. (Default: TRUE)
+#' @param exponentiate Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
 #' @param blankrows A numeric vector of length 4 specifying the number of blank rows
 #'   after a heading1, at the end of a heading1 'section', after
 #'   a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))
@@ -293,11 +292,9 @@ make_forest_data <- function(
   if (exponentiate == TRUE) {
     tf       <- exp
     inv_tf   <- log
-    scale    <- "log"
   } else {
     tf       <- identity
     inv_tf   <- identity
-    scale    <- "identity"
   }
 
   # Make 'column' a factor, so that facets will be in the correct order
@@ -400,6 +397,7 @@ make_forest_data <- function(
 #'
 #' @inheritParams make_forest_data
 #' @inheritParams theme_ckb
+#' @param logscale Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
 #' @param colheadings Titles to be placed above each forest plot. (Default: colnames)
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
@@ -457,6 +455,7 @@ make_forest_plot <- function(
   rows          = NULL,
   cols,
   exponentiate  = TRUE,
+  logscale      = exponentiate,
   colnames      = NULL,
   colheadings   = colnames,
   col.key       = "key",
@@ -507,7 +506,7 @@ make_forest_plot <- function(
   # take first element if diamond is a list
   if (is.list(diamond)){ diamond <- diamond[[1]] }
 
-  if (exponentiate == TRUE) {
+  if (logscale == TRUE) {
     tf       <- exp
     inv_tf   <- log
     scale    <- "log"
