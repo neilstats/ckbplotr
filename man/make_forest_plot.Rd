@@ -9,6 +9,7 @@ make_forest_plot(
   rows = NULL,
   cols,
   exponentiate = TRUE,
+  logscale = exponentiate,
   colnames = NULL,
   colheadings = colnames,
   col.key = "key",
@@ -66,8 +67,9 @@ estimates, and standard errors or confidence interval limits. If you
 specify a headings data frame, then they must also all contain a key column
 with the same name (which can be specified by col.key).}
 
-\item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis, and add a line at null effect. (Default: TRUE)}
+\item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
+
+\item{logscale}{Use log scale on the axis, and add a line at null effect. (Default: exponentiate)}
 
 \item{colnames}{A character vector. The names to be used for each forest plot.
 If none provided, then they will be numbered 1, 2, 3 ...}

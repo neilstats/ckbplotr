@@ -78,6 +78,8 @@ estimates. (Default: 3)}
 
 \item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 
+\item{lines}{Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)}
+
 \item{xlims}{A numeric vector of length two. The limits of the x-axis.}
 
 \item{ylims}{A numeric vector of length two. The limits of the y-axis.}

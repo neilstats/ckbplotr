@@ -41,8 +41,7 @@ estimates, and standard errors or confidence interval limits. If you
 specify a headings data frame, then they must also all contain a key column
 with the same name (which can be specified by col.key).}
 
-\item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis, and add a line at null effect. (Default: TRUE)}
+\item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
 \item{col.key}{Name of column that links the headings provided in headings
   and the results given in each data frame provided in cols.

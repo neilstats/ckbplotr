@@ -17,6 +17,7 @@
 #' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)
 #' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
+#' @param lines Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
 #'   use log scale on the axis. (Default: FALSE)
 #' @param logscale Use log scale for vertical axis. (Default: exponentiate)

@@ -67,8 +67,7 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}
 
-\item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis, and add a line at null effect. (Default: TRUE)}
+\item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
 \item{blankrows}{A numeric vector of length 4 specifying the number of blank rows
 after a heading1, at the end of a heading1 'section', after
