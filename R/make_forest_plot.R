@@ -517,6 +517,8 @@ make_forest_plot <- function(
     nullline <- NULL
   }
 
+  # make deault colnames
+  if (is.null(colnames)) { colnames <- as.character(1:length(cols)) }
 
   datatoplot <- make_forest_data(
     headings      = headings,
@@ -719,8 +721,12 @@ make_forest_plot <- function(
                 '             vjust = 4.4,',
                 '             fontface = "bold",',
                 sprintf(
-                '             data = dplyr::tibble(column = %s,',
+                '             data = dplyr::tibble(column = factor(%s,',
                 paste(deparse(colnames), collapse = '')),
+                sprintf(
+                '                                                  levels = %s,',
+                paste(deparse(colnames), collapse = '')),
+                '                                                  ordered = TRUE),',
                 sprintf(
                 '                                  xlab = %s)) +',
                 paste(deparse(xlab), collapse = '')),
@@ -733,8 +739,12 @@ make_forest_plot <- function(
                 '             size  = 3,',
                 '             fontface = "bold",',
                 sprintf(
-                '             data = dplyr::tibble(column = %s,',
+                '             data = dplyr::tibble(column = factor(%s,',
                 paste(deparse(colnames), collapse = '')),
+                sprintf(
+                '                                                  levels = %s,',
+                paste(deparse(colnames), collapse = '')),
+                '                                                  ordered = TRUE),',
                 sprintf(
                 '                                  title = %s)) +',
                 paste(deparse(colheadings), collapse = '')),
