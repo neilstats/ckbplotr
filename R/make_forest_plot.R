@@ -524,6 +524,9 @@ make_forest_plot <- function(
     if (x %in% names(cols[[1]])){ col.keep <- append(col.keep, x) }
   }
 
+  # make deault colnames
+  if (is.null(colnames)) { colnames <- as.character(1:length(cols)) }
+
   datatoplot <- make_forest_data(
     headings      = headings,
     rows          = rows,
@@ -756,7 +759,7 @@ make_forest_plot <- function(
                 '# Create the ggplot',
                 'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
                 '  # Put the different columns in side-by-side plots using facets',
-                '  facet_wrap(~column) +',
+                '  facet_wrap(~column, nrow = 1) +',
                 '',
                 '  # Add a line at null effect (only if exponentiate=TRUE)',
                 nullline,
@@ -873,11 +876,15 @@ make_forest_plot <- function(
                 '             vjust = 4.4,',
                 '             fontface = "bold",',
                 sprintf(
-                '             data = dplyr::tibble(column = factor(%s),',
-                paste(deparse(colnames))),
+                '             data = dplyr::tibble(column = factor(%s,',
+                paste(deparse(colnames), collapse = '')),
+                sprintf(
+                '                                                  levels = %s,',
+                paste(deparse(colnames), collapse = '')),
+                '                                                  ordered = TRUE),',
                 sprintf(
                 '                                  xlab = %s)) +',
-                paste(deparse(xlab))),
+                paste(deparse(xlab), collapse = '')),
                 '',
                 '  # Add column name above each column',
                 sprintf(
@@ -887,11 +894,15 @@ make_forest_plot <- function(
                 sprintf('             size  = %s,', base_size/(11/3)),
                 '             fontface = "bold",',
                 sprintf(
-                '             data = dplyr::tibble(column = factor(%s),',
-                paste(deparse(colnames))),
+                '             data = dplyr::tibble(column = factor(%s,',
+                paste(deparse(colnames), collapse = '')),
+                sprintf(
+                '                                                  levels = %s,',
+                paste(deparse(colnames), collapse = '')),
+                '                                                  ordered = TRUE),',
                 sprintf(
                 '                                  title = paste0(%s, "\\n\\n"))) +',
-                paste(deparse(colheadings))),
+                paste(deparse(colheadings), collapse = '')),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
                 sprintf('  scale_y_continuous(trans  = "%s",', scale),
