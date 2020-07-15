@@ -22,6 +22,7 @@ make_forest_data(
   exponentiate = TRUE,
   blankrows = c(1, 1, 0, 0),
   scalepoints = FALSE,
+  minse = NULL,
   addtext = NULL
 )
 }
@@ -75,6 +76,8 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
+
+\item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
   Data frames should contain a column with the name specified in col.key,

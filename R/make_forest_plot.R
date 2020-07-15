@@ -37,6 +37,7 @@
 #'   a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
+#' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
 #' @param addtext A list of data frames. List must be the same length as cols.
 #'   Data frames should contain a column with the name specified in col.key,
 #'   and one or more of:
@@ -76,6 +77,7 @@ make_forest_data <- function(
   exponentiate  = TRUE,
   blankrows     = c(1, 1, 0, 0),
   scalepoints   = FALSE,
+  minse         = NULL,
   addtext       = NULL
 ){
 
@@ -312,7 +314,11 @@ make_forest_data <- function(
                     lci_transformed = tf(lci),
                     uci_transformed = tf(uci)
       )
-    minse <- min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)
+    if (is.null(minse)){
+      minse <- min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)
+    } else {
+      if (minse > min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)) stop("minse is larger than the minimum standard error in the data")
+    }
     datatoplot$size <- 1.96*minse/(datatoplot$estimate - datatoplot$lci)
   } else {
     datatoplot <- datatoplot %>%
@@ -320,7 +326,11 @@ make_forest_data <- function(
                     lci_transformed = tf(estimate - 1.96*stderr),
                     uci_transformed = tf(estimate + 1.96*stderr)
       )
-    minse <- min(datatoplot$stderr, na.rm = TRUE)
+    if (is.null(minse)){
+      minse <- min(datatoplot$stderr, na.rm = TRUE)
+    } else {
+      if (minse > min(datatoplot$stderr, na.rm = TRUE)) stop("minse is larger than the minimum standard error in the data")
+    }
     datatoplot$size <- minse/datatoplot$stderr
   }
 
@@ -485,6 +495,7 @@ make_forest_plot <- function(
   col.bold      = NULL,
   boldheadings  = NULL,
   scalepoints   = FALSE,
+  minse         = NULL,
   pointsize     = 3,
   shape     = NULL,
   colour    = NULL,
@@ -544,6 +555,7 @@ make_forest_plot <- function(
     exponentiate  = exponentiate,
     blankrows     = blankrows,
     scalepoints   = scalepoints,
+    minse         = minse,
     addtext       = addtext
   )
 
@@ -799,8 +811,9 @@ make_forest_plot <- function(
                 '',
                 '  # Scale the size of points by their side length',
                 '  # and make the scale range from zero upwards',
-                '  scale_radius(limits = c(0, NA),',
-                sprintf('               range = c(0, %s)) +', pointsize),
+                '  scale_radius(limits = c(0, 1),',
+                sprintf(
+                '               range = c(0, %s)) +', pointsize),
                 '',
                 if (isFALSE(ciunder) || is.null(ciunder)){
                   c(

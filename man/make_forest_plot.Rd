@@ -39,6 +39,7 @@ make_forest_plot(
   col.bold = NULL,
   boldheadings = NULL,
   scalepoints = FALSE,
+  minse = NULL,
   pointsize = 3,
   shape = NULL,
   colour = NULL,
@@ -148,6 +149,8 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
+
+\item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 
 \item{pointsize}{The (largest) size of box to use for plotting point
 estimates. (Default: 3)}
