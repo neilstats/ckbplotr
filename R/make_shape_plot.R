@@ -23,6 +23,7 @@
 #' @param logscale Use log scale for vertical axis. (Default: exponentiate)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
+#' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
 #' @param xlab Label for x-axis. (Default: "Risk factor")
@@ -59,6 +60,7 @@ make_shape_plot <- function(data,
                             exponentiate  = FALSE,
                             logscale      = exponentiate,
                             scalepoints   = FALSE,
+                            minse         = NA,
                             pointsize     = 3,
                             col.group     = NULL,
                             shape         = NULL,
@@ -211,7 +213,7 @@ make_shape_plot <- function(data,
   if (scalepoints) {
     if (!is.null(col.lci)) {
       geom_point_string <- c(sprintf(
-                             '  geom_point(aes(size = 1/(%s - `%s`),', col.estimate, col.lci),
+                             '  geom_point(aes(size = 1.96/(%s - `%s`),', col.estimate, col.lci),
                              sprintf(
                                '                 shape = %s,', shape),
                              sprintf(
@@ -288,7 +290,8 @@ make_shape_plot <- function(data,
                 '',
                 '  # Set the scale for the size of boxes',
                 '  scale_radius(guide  = "none",',
-                '               limits = c(0, NA),',
+                sprintf(
+                '               limits = c(0, %s),', deparse(1/minse)),
                 sprintf('               range  = c(0, %s)) +', pointsize),
                 '',
                 if (isFALSE(ciunder) || is.null(ciunder)){

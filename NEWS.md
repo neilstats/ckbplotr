@@ -1,3 +1,7 @@
+# ckbplotr 0.3.0.9000
+
+* New parameter minse in make_shape_plot and make_forest_plot which sets the minimum standard error to use when scaling point size. This allows scaling to be made consistent between plots.
+
 # ckbplotr 0.3.0
 
 * New arguments for setting aesthetics overall (by value) or per-point (by specifying a column name).
