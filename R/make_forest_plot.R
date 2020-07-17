@@ -428,6 +428,7 @@ make_forest_data <- function(
 #' @param xlab Label to appear below the x-axis. (Default: "HR (95\% CI)")
 #' @param xlim A numeric vector. The limits of the x axis.
 #' @param xticks A numeric vector. The tick points of the x axis.
+#' @param nullval Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
 #' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
@@ -489,6 +490,7 @@ make_forest_plot <- function(
   xlab          = "HR (95% CI)",
   xlim          = NULL,
   xticks        = NULL,
+  nullval       = NULL,
   blankrows     = c(1, 1, 0, 0),
   col.diamond   = NULL,
   diamond       = NULL,
@@ -521,12 +523,11 @@ make_forest_plot <- function(
     tf       <- exp
     inv_tf   <- log
     scale    <- "log"
-    nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1, size = %s) +', base_line_size)
+    if (is.null(nullval)) {nullval <- 1}
   } else {
     tf       <- identity
     inv_tf   <- identity
     scale    <- "identity"
-    nullline <- NULL
   }
 
   col.keep <- c(col.diamond, col.bold)
@@ -558,6 +559,10 @@ make_forest_plot <- function(
     minse         = minse,
     addtext       = addtext
   )
+
+  # line at null
+  nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=%s, yend=%s, size = %s) +',
+                      nullval, nullval, base_line_size)
 
   # aesthetics: default value, match column name, or use argument itself
   if (is.null(shape)) {
@@ -772,7 +777,7 @@ make_forest_plot <- function(
                 '  # Put the different columns in side-by-side plots using facets',
                 '  facet_wrap(~column, nrow = 1) +',
                 '',
-                '  # Add a line at null effect (only if exponentiate=TRUE)',
+                '  # Add a line at null effect',
                 nullline,
                 '',
                 if (isTRUE(ciunder)){

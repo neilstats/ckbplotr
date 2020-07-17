@@ -33,6 +33,7 @@ make_forest_plot(
   xlab = "HR (95\% CI)",
   xlim = NULL,
   xticks = NULL,
+  nullval = NULL,
   blankrows = c(1, 1, 0, 0),
   col.diamond = NULL,
   diamond = NULL,
@@ -133,6 +134,8 @@ confidence interval. (Default: ", ")}
 \item{xlim}{A numeric vector. The limits of the x axis.}
 
 \item{xticks}{A numeric vector. The tick points of the x axis.}
+
+\item{nullval}{Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)}
 
 \item{blankrows}{A numeric vector of length 4 specifying the number of blank rows
 after a heading1, at the end of a heading1 'section', after
