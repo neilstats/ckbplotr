@@ -445,6 +445,7 @@ make_forest_data <- function(
 #' Unit is "lines". (Default: 4)
 #' @param plot.space Size of the gap between forest plots.
 #' Unit is "lines". (Default: 8)
+#' @param stroke Size of outline of shapes. (Default: base_size/22)
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #'
@@ -509,6 +510,7 @@ make_forest_plot <- function(
   plot.space    = 8,
   base_size     = 11,
   base_line_size = base_size/22,
+  stroke        = base_size/22,
   printplot     = TRUE,
   showcode      = TRUE
 ){
@@ -812,6 +814,9 @@ make_forest_plot <- function(
                 sprintf(
                 '  geom_point(aes(size = size, shape = %s, colour = %s, fill = %s),',
                 shape, colour, fill),
+                sprintf(
+                '             stroke = %s,',
+                stroke),
                 '             na.rm = TRUE) +',
                 '',
                 '  # Scale the size of points by their side length',

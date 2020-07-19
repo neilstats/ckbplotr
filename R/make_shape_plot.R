@@ -36,6 +36,7 @@
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
+#' @param stroke Size of outline of shapes. (Default: base_size/22)
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #'
@@ -76,6 +77,7 @@ make_shape_plot <- function(data,
                             ratio         = 1.5,
                             base_size     = 11,
                             base_line_size = base_size/22,
+                            stroke        = base_size/22,
                             xbreaks       = NULL,
                             ybreaks       = NULL,
                             xlab          = "Risk factor",
@@ -229,7 +231,9 @@ make_shape_plot <- function(data,
         sprintf(
           '                 colour = %s,', colour),
         sprintf(
-          '                 %s)) +', fill_string)
+          '                 %s),', fill_string),
+        sprintf(
+        '             stroke = %s) +', stroke)
       )
     }
   } else {
@@ -239,7 +243,9 @@ make_shape_plot <- function(data,
                            sprintf(
                            '                 colour = %s,', colour),
                            sprintf(
-                           '                 %s)) +', fill_string)
+                           '                 %s),', fill_string),
+                           sprintf(
+                           '             stroke = %s) +', stroke)
                            )
   }
 

@@ -52,6 +52,7 @@ make_forest_plot(
   plot.space = 8,
   base_size = 11,
   base_line_size = base_size/22,
+  stroke = base_size/22,
   printplot = TRUE,
   showcode = TRUE
 )
@@ -191,6 +192,8 @@ Unit is "lines". (Default: 8)}
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
+
+\item{stroke}{Size of outline of shapes. (Default: base_size/22)}
 
 \item{printplot}{Print the plot. (Default: TRUE)}
 

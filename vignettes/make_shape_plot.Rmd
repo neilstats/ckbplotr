@@ -188,3 +188,6 @@ plot <- make_shape_plot(results,
 ```
 
 Note that the size of boxes depends on `pointsize`, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.
+
+## Stroke
+The `stroke` argument sets the stroke aesthetic for plotted shapes. See https://ggplot2.tidyverse.org/articles/ggplot2-specs.html for more details. The stroke size adds to total size of a shape, so unless `stroke = 0` the scaling of size by inverse variance will be slightly inaccurate (but there are probably more important things to worry about).

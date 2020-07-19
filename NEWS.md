@@ -1,5 +1,6 @@
 # ckbplotr 0.3.0.9000
 
+* New parameter stroke in make_shape_plot and make_forest_plot.
 * New parameter nullval in make_forest_plot, which adds a vertical reference line at this value. (By default a line is still added at 1 if using log scale.)
 * New parameter minse in make_shape_plot and make_forest_plot which sets the minimum standard error to use when scaling point size. This allows scaling to be made consistent between plots.
 

@@ -31,6 +31,7 @@ make_shape_plot(
   ratio = 1.5,
   base_size = 11,
   base_line_size = base_size/22,
+  stroke = base_size/22,
   xbreaks = NULL,
   ybreaks = NULL,
   xlab = "Risk factor",
@@ -96,6 +97,8 @@ estimates. (Default: 3)}
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
+
+\item{stroke}{Size of outline of shapes. (Default: base_size/22)}
 
 \item{xbreaks}{Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)}
 

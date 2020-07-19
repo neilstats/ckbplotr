@@ -407,3 +407,6 @@ gridExtra::grid.arrange(p1, p2, ncol=2, widths = c(1,0.55))
 ```
 
 Note that if `scalepoints = TRUE`, then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots. However, if different axis scales are used then confidence intervals are not comparable either so this may be not be a problem.
+
+## Stroke
+The `stroke` argument sets the stroke aesthetic for plotted shapes. See https://ggplot2.tidyverse.org/articles/ggplot2-specs.html for more details. The stroke size adds to total size of a shape, so unless `stroke = 0` the scaling of size by inverse variance will be slightly inaccurate (but there are probably more important things to worry about).
