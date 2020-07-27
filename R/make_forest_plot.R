@@ -913,6 +913,7 @@ make_forest_plot <- function(
                 '   geom_text(aes(x = %s, y = %s, label = title),',
                 col.heading.space , xmid),
                 '             hjust = 0.5,',
+                '             nudge_x = 2,',
                 sprintf('             size  = %s,', base_size/(11/3)),
                 '             fontface = "bold",',
                 sprintf(
@@ -923,7 +924,7 @@ make_forest_plot <- function(
                 paste(deparse(colnames), collapse = '')),
                 '                                                  ordered = TRUE),',
                 sprintf(
-                '                                  title = paste0(%s, "\\n\\n"))) +',
+                '                                  title = %s)) +',
                 paste(deparse(colheadings), collapse = '')),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
