@@ -17,11 +17,8 @@ make_forest_data(
   col.pval = NULL,
   col.left = NULL,
   col.right = NULL,
+  col.keep = NULL,
   ci.delim = ", ",
-  whiteci = NULL,
-  diamond = NULL,
-  bold = NULL,
-  boldheadings = NULL,
   exponentiate = TRUE,
   blankrows = c(1, 1, 0, 0),
   scalepoints = FALSE,
@@ -70,21 +67,7 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}
 
-\item{whiteci}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the CI should be plotted in white. (Default: NULL)}
-
-\item{diamond}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which the estimate and CI should be plotted using a diamond. (Default: NULL)}
-
-\item{bold}{A list of character vectors. List must be the same length as cols.
-Identify the rows (using the key values) for which text should be bold.
-If a row has bold text in all cols, then heading will additionally be bold. (Default: NULL)}
-
-\item{boldheadings}{A character vector. Identify headings (using key values)
-which should additionally be bold. (Default: NULL)}
-
-\item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
-use log scale on the axis, and add a line at null effect. (Default: TRUE)}
+\item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
 \item{blankrows}{A numeric vector of length 4 specifying the number of blank rows
 after a heading1, at the end of a heading1 'section', after
@@ -94,7 +77,8 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 error? (Default: FALSE)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
-  Data frames should contain a col.key column, and one or more of:
+  Data frames should contain a column with the name specified in col.key,
+  and one or more of:
 
   1. a column named 'text' containing character strings
 
@@ -102,9 +86,9 @@ error? (Default: FALSE)}
 
   3. columns names 'trend_stat' and 'trend_p' containing character strings
 
-  The character strings (for 'text'), heterogeneity or trend test results will
-  be plotted to the right of each forest plot below the key specified in the
-  col.key column.}
+  The character strings, heterogeneity test, and trend test results will
+  be plotted in the column of estimates and CIs, below the row with the key
+  given in the col.key column.}
 }
 \value{
 A dataset from which the plot is generated.

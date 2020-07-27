@@ -1,6 +1,7 @@
 
 #' Make a shape plot with ggplot2
 #'
+#' @inheritParams plot_like_ckb
 #'
 #' @param data The data frame containing estimates to be plotted.
 #' @param col.x Name of column that provides the x-axis value (e.g. exposure, risk factor, dependent variable). (Default: "x")
@@ -11,15 +12,26 @@
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
 #' @param col.n Name of column that provides number to be plotted below CIs.
 #' @param col.group Name of column that groups the estimates. (Default: NULL)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
+#' @param lines Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
-#'   use log scale on the axis. (Default: TRUE)
+#'   use log scale on the axis. (Default: FALSE)
+#' @param logscale Use log scale for vertical axis. (Default: exponentiate)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
+#' @param pointsize The (largest) size of box to use for plotting point
+#'                  estimates. (Default: 3)
 #' @param xlab Label for x-axis. (Default: "Risk factor")
 #' @param ylab Label for y-axis. (Default: "Estimate (95\% CI)")
 #' @param title Plot title. (Default: "Figure")
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
+#' @param xbreaks Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)
+#' @param ybreaks Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
@@ -44,15 +56,24 @@ make_shape_plot <- function(data,
                             col.lci       = NULL,
                             col.uci       = NULL,
                             col.n         = NULL,
-                            col.group     = NULL,
                             exponentiate  = FALSE,
+                            logscale      = exponentiate,
                             scalepoints   = FALSE,
                             pointsize     = 3,
+                            col.group     = NULL,
+                            shape         = NULL,
+                            colour        = NULL,
+                            cicolour      = colour,
+                            fill          = NULL,
+                            ciunder       = NULL,
+                            lines         = FALSE,
                             xlims,
                             ylims,
                             gap           = c(0.025, 0.025),
                             ext           = c(0.025, 0.025),
                             ratio         = 1.5,
+                            base_size     = 11,
+                            base_line_size = base_size/22,
                             xbreaks       = NULL,
                             ybreaks       = NULL,
                             xlab          = "Risk factor",
@@ -64,6 +85,7 @@ make_shape_plot <- function(data,
   # Check arguments
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
+  if (!is.null(col.group) && !is.null(fill)) stop("col.group and fill both control fill, so do not specify both")
 
   # Add empty string title if it is null
   if (is.null(title)) title <- ""
@@ -80,6 +102,38 @@ make_shape_plot <- function(data,
   ext   <- deparse(ext)
   ratio <- deparse(ratio)
 
+  # aesthetics: default value, match column name, or use argument itself
+  if (is.null(shape)) {
+    shape <- 22
+  } else if (shape %in% names(data)){
+    shape <- paste0("`", shape, "`")
+  }
+
+  if (is.null(cicolour)) {
+    cicolour <- '\"black\"'
+  }
+  else if (cicolour %in% names(data)){
+    cicolour <- paste0("`", cicolour, "`")
+  } else {
+    cicolour <- paste0('\"', cicolour, '\"')
+  }
+
+  if (is.null(colour)) {
+    colour <- '\"black\"'
+  } else if (colour %in% names(data)){
+      colour <- paste0("`", colour, "`")
+  } else {
+      colour <- paste0('\"', colour, '\"')
+  }
+
+  if (is.null(fill)) {
+    fill <- '\"black\"'
+  } else if (fill %in% names(data)){
+    fill <- paste0("`", fill, "`")
+  } else {
+    fill <- paste0('\"', fill, '\"')
+  }
+
   # Create strings for axis breaks
   scale_x_string <- NULL
   if (!is.null(xbreaks)){
@@ -94,10 +148,13 @@ make_shape_plot <- function(data,
   }
 
   # Create strings for y-axis scale, estimates and CIs
-  if (exponentiate == TRUE) {
+  if (logscale == TRUE){
     scale    <- "log"
+  } else {
+    scale    <- "identity"
+  }
+  if (exponentiate == TRUE) {
     est_string <- paste0('exp(', col.estimate, ')')
-
     if (!is.null(col.lci)) {
       lci_string <- paste0('exp(`', col.lci,'`)')
       uci_string <- paste0('exp(`', col.uci,'`)')
@@ -105,9 +162,7 @@ make_shape_plot <- function(data,
       lci_string <- paste0('exp(', col.estimate,'-1.96*', col.stderr,')')
       uci_string <- paste0('exp(', col.estimate,'+1.96*', col.stderr,')')
     }
-
   } else {
-    scale    <- "identity"
     est_string <- col.estimate
     if (!is.null(col.lci)) {
       lci_string <- paste0("`", col.lci, "`")
@@ -120,26 +175,70 @@ make_shape_plot <- function(data,
 
   # Create string for setting fill colour by group
   if (!is.null(col.group)) {
-    group_string <- sprintf(', fill = as.factor(`%s`)', col.group)
+    group_string <- sprintf(', group = as.factor(`%s`)', col.group)
     scale_fill_string <- c('',
                            '  # Set the scale for fill colours',
                            '  scale_fill_grey(start = 0, end = 1, guide = FALSE) +')
-    fill_string <- ''
+    fill_string <- sprintf('fill = as.factor(`%s`)', col.group)
   } else {
     group_string <- ''
-    scale_fill_string <- NULL
-    fill_string <- ', fill = "black"'
+    scale_fill_string <- '  scale_fill_identity() +'
+    fill_string <- sprintf('fill = %s', fill)
+  }
+
+  # Create string for plotting lines
+  lines_string <- NULL
+  if(lines) {
+    lines_string <- c(
+      '  # Plot lines (linear fit through estimates, weighted by inverse variance)',
+      '  stat_smooth(method   = "glm",',
+      '              formula  = y ~ x,',
+      if (!is.null(col.lci)) {
+        sprintf(
+        '              aes(weight = 1/((%s - `%s`)^2)),', col.estimate, col.lci)
+      } else {
+        sprintf(
+        '              aes(weight = 1/(%s^2)),', col.stderr)
+      },
+      '              se       = FALSE,',
+      '              colour   = "black",',
+      '              linetype = "dashed",',
+      '              size     = 0.25) +',
+      '')
   }
 
   # Create string for plotting point estimates using geom_point
   if (scalepoints) {
     if (!is.null(col.lci)) {
-      geom_point_string <- paste0('geom_point(aes(size = 1/(', col.estimate,' - `', col.lci,'`)), shape = 22', fill_string,')')
+      geom_point_string <- c(sprintf(
+                             '  geom_point(aes(size = 1/(%s - `%s`),', col.estimate, col.lci),
+                             sprintf(
+                               '                 shape = %s,', shape),
+                             sprintf(
+                               '                 colour = %s,', colour),
+                             sprintf(
+                               '                 %s)) +', fill_string)
+      )
     } else {
-      geom_point_string <- paste0('geom_point(aes(size = 1/', col.stderr,'), shape = 22', fill_string,')')
+      geom_point_string <- c(sprintf(
+        '  geom_point(aes(size = 1/%s,', col.stderr),
+        sprintf(
+          '                 shape = %s,', shape),
+        sprintf(
+          '                 colour = %s,', colour),
+        sprintf(
+          '                 %s)) +', fill_string)
+      )
     }
   } else {
-    geom_point_string <- paste0('geom_point(aes(size = 1), shape = 22', fill_string,')')
+    geom_point_string <- c('  geom_point(aes(size = 1,',
+                           sprintf(
+                           '                 shape = %s,', shape),
+                           sprintf(
+                           '                 colour = %s,', colour),
+                           sprintf(
+                           '                 %s)) +', fill_string)
+                           )
   }
 
   # Create string for plotting col.n under CIs
@@ -149,7 +248,7 @@ make_shape_plot <- function(data,
                          sprintf('  geom_text(aes(y = %s,', lci_string),
                          sprintf('            label = %s),', col.n),
                          '            vjust = 1.8,',
-                         '            size  = 3) +')
+                         sprintf('            size  = %s) +', base_size/(11/3)))
   } else {
     n_events_string <- NULL
   }
@@ -159,24 +258,59 @@ make_shape_plot <- function(data,
                 sprintf('plot <- ggplot(data = %s,', deparse(substitute(data))),
                 sprintf('               aes(x = %s, y = %s%s)) +', col.x, est_string, group_string),
                 '',
-                '  # Plot the CIs',
-                sprintf('  geom_linerange(aes(ymin = %s,', lci_string),
-                sprintf('                     ymax = %s)) +', uci_string),
-                '',
+                lines_string,
+                if (isTRUE(ciunder)){
+                  c(
+                    '  # Plot the CIs',
+                    sprintf('  geom_linerange(aes(ymin = %s,', lci_string),
+                    sprintf('                     ymax = %s,', uci_string),
+                    sprintf('                     colour = %s), ', cicolour),
+                    sprintf('                     lwd = %s) +', base_line_size),
+                    '')
+                } else if (isTRUE(ciunder) || (is.character(ciunder) && any(data[[ciunder]], na.rm = TRUE))){
+                  c(
+                    '  # Plot the CIs - before plotting points',
+                    sprintf('  geom_linerange(data = ~ dplyr::filter(.x, `%s`),',ciunder),
+                    sprintf('                 aes(ymin = %s,', lci_string),
+                    sprintf('                     ymax = %s,', uci_string),
+                    sprintf('                     colour = %s), ', cicolour),
+                    sprintf('                     lwd = %s) +', base_line_size),
+                    '')},
                 '  # Plot the point estimates',
-                sprintf('  %s +', geom_point_string),
+                geom_point_string,
                 '',
                 '  # Plot point estimates text',
                 sprintf('  geom_text(aes(y = %s,', uci_string),
                 sprintf('            label = format(round(%s, 2), nsmall = 2)),', est_string),
                 '            vjust = -0.8,',
-                '            size  = 3) +',
+                sprintf('            size  = %s) +', base_size/(11/3)),
                 n_events_string,
                 '',
                 '  # Set the scale for the size of boxes',
                 '  scale_radius(guide  = "none",',
                 '               limits = c(0, NA),',
                 sprintf('               range  = c(0, %s)) +', pointsize),
+                '',
+                if (isFALSE(ciunder) || is.null(ciunder)){
+                  c(
+                    '  # Plot the CIs',
+                    sprintf('  geom_linerange(aes(ymin = %s,', lci_string),
+                    sprintf('                     ymax = %s,', uci_string),
+                    sprintf('                     colour = %s), ', cicolour),
+                    sprintf('                     lwd = %s) +', base_line_size),
+                    '')
+                } else if (is.character(ciunder) && !all(data[[ciunder]], na.rm = TRUE)){
+                  c(
+                    '  # Plot the CIs - after plotting points',
+                    sprintf('  geom_linerange(data = ~ dplyr::filter(.x, !`%s`),',ciunder),
+                    sprintf('                 aes(ymin = %s,', lci_string),
+                    sprintf('                     ymax = %s,', uci_string),
+                    sprintf('                     colour = %s), ', cicolour),
+                    sprintf('                     lwd = %s) +', base_line_size),
+                    '')},
+                '  # Use identity for aesthetic scales',
+                '  scale_shape_identity() +',
+                '  scale_colour_identity() +',
                 scale_fill_string,
                 '',
                 '  # Set the y-axis scale',
@@ -190,12 +324,14 @@ make_shape_plot <- function(data,
                 '',
                 '',
                 '# Plot like a CKB plot',
-                'plot_like_ckb(plot  = plot,',
-                sprintf('              xlims = %s,', xlims),
-                sprintf('              ylims = %s,', ylims),
-                sprintf('              gap   = %s,', gap),
-                sprintf('              ext   = %s,', ext),
-                sprintf('              ratio = %s)', ratio))
+                'plot_like_ckb(plot           = plot,',
+                sprintf('              xlims          = %s,', xlims),
+                sprintf('              ylims          = %s,', ylims),
+                sprintf('              gap            = %s,', gap),
+                sprintf('              ext            = %s,', ext),
+                sprintf('              ratio          = %s,', ratio),
+                sprintf('              base_size      = %s,', base_size),
+                sprintf('              base_line_size = %s)', base_line_size))
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
   if (showcode){

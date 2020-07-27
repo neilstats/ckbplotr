@@ -11,11 +11,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  fig.width = 8,
-  fig.height = 7,
-  dpi = 100,
-  out.width = "100%"
-)
+  fig.width = 4,
+  fig.height = 4,
+  fig.align = "center")
+library(ckbplotr)
 ```
 # ckbplotr
 
@@ -26,7 +25,7 @@ researchers.
 ## Installation
 
 ### Directly from github
-The latest development version of `ckbplotr` can be installed directly from 
+The latest version of `ckbplotr` can be installed directly from 
 github using devtools.
 ```{r install from github, eval = FALSE}
 install.packages('devtools')
@@ -54,27 +53,32 @@ In the "Install from..." box select "Package Archive File", and in the
 
 The source package for the latest release version is available [here](https://github.com/neilstats/ckbplotr/releases/latest).
 
+
+
+
+## The plot_like_ckb function
+
+The `plot_like_ckb` function does three things to a ggplot2 plot:
+
+1. applies a CKB theme (i.e. change the overall appearance)
+2. extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)
+3. applies a fixed aspect ratio
+
+```{r a-plot, echo = FALSE}
+plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
+plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
+```
+
+
+
+
+
 ## The make_shape_plot function
 
 The `make_shape_plot` function creates a plot of estimates and CIs against risk
 factor levels using the `ggplot2` package.
 
-The function returns a named list containing:
-
-* plot: the plot
-* code: ggplot2 code to generate the plot
-
-The function uses the `plot_like_ckb` function to modify the theme and control
-the look of the plot.
-
-In RStudio, the ggplot2 code used to generate the plot will be shown in the 'Viewer'
-pane. This code can be copied and further edited to adapt the plot.
-
-
-### Examples
-Given a data frame of estimates and standard errors (to be plotted on the y axis),
-and risk factor levels (to be plotted on the x axis), a plot can be created.
-```{r make_shape_plot-example-1}
+```{r make_shape_plot-example-1, echo = FALSE}
 library(ggplot2)
 library(ckbplotr)
 
@@ -97,87 +101,13 @@ plot <- make_shape_plot(results[results$is_female == 1,],
                         title        = NULL)
 ```
 
-The `col.group` argument can be supplied to plot results for different groups (in
-shades of grey).
-```{r make_shape_plot-example-2}
-plot <- make_shape_plot(results,
-                        col.x        = "rf",
-                        col.estimate = "est",
-                        col.stderr   = "se",
-                        col.n        = "n",
-                        col.group    = "is_female",
-                        xlims        = c(15,50),
-                        ylims        = c(0.5, 3),
-                        scalepoints  = TRUE,
-                        title        = NULL)
-```
 
-
-
-
-## The plot_like_ckb function
-
-The `plot_like_ckb` function does three things to a ggplot2 plot:
-
-1. modifies the theme (i.e. the overall appearance)
-2. extends the plotting area, hides the default axis lines and manually adds 
-axis lines (so that you can have a custom sized gap between the plotting area and the axes)
-3. applies a fixed aspect ratio
-
-### Examples
-
-Make a scatter plot with `ggplot`.
-```{r a-plot}
-library(ggplot2)
-library(ckbplotr)
-
-plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
-plot
-```
-
-Then apply the `plot_like_ckb` function to the plot.
-```{r plot_like_ckb-example-1}
-plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
-```
-
-If you do not want a gap between the axes, set `gap = c(0, 0)`.
-```{r plot_like_ckb-example-2}
-plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), gap = c(0, 0))
-```
-
-If you wish to override some aspect of the theme applied by `plot_like_ckb`, 
-then this can be done by adding a theme after the function.
-```{r plot_like_ckb-example-3}
-plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50)) +
-  theme(axis.title = element_text(colour = "red", face = "plain"))
-```
-
-If any data points you are plotting fall outside the axes, then they will still
-be drawn and may show up in places such as the axes, the legend, the plot title, 
-or the plot margins. There is also no warning if data points fall outside the whole plot area.
-
-So it is best to check that your `xlim` and `ylim` values are suitable for your 
-data before using the function.
-```{r plot_like_ckb-example-4}
-# The xlim and ylim ranges are too narrow
-plot_like_ckb(plot = plot, xlims = c(0, 4), ylims = c(20, 50))
-```
-
-
-A bar chart.
-```{r bar-chart-example}
-barplot <- ggplot(mpg, aes(class)) + geom_bar()
-plot_like_ckb(barplot, xlims = c(0.5, 7.5), ylims = c(0, 70), gap = c(0.025, 0.005), ratio = 0.5) +
-  theme(axis.ticks.x = element_blank())
-```
 
 
 
 ## The make_forest_plot function
 The `make_forest_plot` function creates a forest plot using the `ggplot2` graphics 
-package. It is available as part of the `ckbplotr` package.
-
-The function returns a named list containg:
+package. The function returns a named list containg:
 
 * plot: the plot
 * data: a data frame from which the plot is generated
@@ -187,45 +117,7 @@ In RStudio the ggplot2 code used to generate the plot will be shown in the
 'Viewer' pane. If modifications are needed to the plot, then this code can be
 copied, edited, and run as needed.
 
-
-### Expected warning
-You may get the following warning when using this function.
-
-> Vectorized input to `element_text()` is not officially supported.
-> Results may be unexpected or may change in future versions of ggplot2. 
-
-This is related to how some headings used to label the rows of the forest plot are
-made bold. This should not be a problem if the forest plot produced appears as expected.
-(This hack is discussed [here](https://github.com/tidyverse/ggplot2/issues/3492).)
-
-
-### The headings data frame
-The data frame specified in the `headings` argument allows the use of headings 
-to label the rows of the forest plot.
-
-This must data frame contain columns 'heading1', 'heading2' and 'heading3',
-which can be set to NA if not needed for a particular row. For example, if you 
-do not need a third level of heading for a particular row, then set `heading3=NA`
-for that row. If you only need one level of headings, then set `heading2=NA` and
-`heading3=NA` for every row.
-
-The data set must also contain a column with the same name as a column in each 
-of the results data sets. This column is used to match headings to the correct 
-results, and is specified in the argument `col.key`.
-
-The argument `rows` specifies which results should be included in the plot, by
-giving some headings from the heading1 column of the headings data frame.
-
-(The order given in the `rows` argument decides the order in which the heading1 
-labels will be in the plot (top to bottom). The heading2 and heading3 labels
-will be in the order that they are in the headings data frame.)
-
-
-### Examples
-
-First of all, do your analyses and put the results into data frames 
-(one data frame for each forest plot column). Here we generate some example results.
-```{r example forest plot results}
+```{r example-forest-plot, echo = FALSE, warning = FALSE, fig.width = 8, fig.height = 6}
 set.seed(57911624)
 exampleresults <- function(){
   data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
@@ -247,22 +139,7 @@ resultsB <- exampleresults()
 resultsC <- exampleresults()
 resultsD <- exampleresults()
 resultsE <- exampleresults()
-```
 
-```{r make_forest_plot-example-1}
-library(ckbplotr)
-
-forestplot <- make_forest_plot(cols         = list(resultsA, resultsB),
-                               exponentiate = TRUE,
-                               colnames     = c("Analysis A", "Analysis B"),
-                               col.key      = "variable")
-```
-
-To use headings, create a data frame of headings and specify arguments `headings` and
-`rows`.
-```{r forest plot headings, eval=TRUE, echo=FALSE}
-# Example headings for every row
-# This could be loaded from a csv containing headings that you use often
 headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
                                         "Triglycerides concentration",
                                         "Cholesterol concentration"), each = 7),
@@ -281,10 +158,7 @@ headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
                                     'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
                                     'nmr_idl_c',
                                     'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'))
-headings
-```
 
-```{r make_forest_plot-example-2}
 forestplot <- make_forest_plot(headings         = headings,
                                rows             = c("Lipoprotein particle concentration",
                                                     "Triglycerides concentration"),
@@ -307,6 +181,11 @@ forestplot <- make_forest_plot(headings         = headings,
                                plot.space       = 8)
 ```
 
+### Expected warning
+You may get the following warning when using this function.
+
+> Vectorized input to `element_text()` is not officially supported.
+> Results may be unexpected or may change in future versions of ggplot2.
 
 ## make_jasper_forest_plot function
 The `make_jasper_forest_plot` function requires the in-house Jasper package, 
