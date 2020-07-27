@@ -27,7 +27,8 @@ Suggests:
     knitr,
     rmarkdown,
     grid,
-    gridExtra
+    gridExtra,
+    ggtext
 VignetteBuilder: knitr
 URL: https://github.com/neilstats/ckbplotr
 BugReports: https://github.com/neilstats/ckbplotr/issues

@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 The `make_forest_plot` function creates a forest plot using the `ggplot2` graphics 
 package. It is available as part of the `ckbplotr` package.
 
-The function returns a named list containg:
+The function returns a named list containing:
 
 * plot: the plot
 * data: a data frame from which the plot is generated
