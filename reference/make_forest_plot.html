@@ -139,53 +139,53 @@
     </div>
 
     <pre class="usage"><span class='fu'>make_forest_plot</span>(
-  headings = <span class='kw'>NULL</span>,
-  rows = <span class='kw'>NULL</span>,
-  <span class='kw'>cols</span>,
-  exponentiate = <span class='fl'>TRUE</span>,
-  logscale = <span class='kw'>exponentiate</span>,
-  colnames = <span class='kw'>NULL</span>,
-  colheadings = <span class='kw'>colnames</span>,
-  col.key = <span class='st'>"key"</span>,
-  col.estimate = <span class='st'>"estimate"</span>,
-  col.stderr = <span class='st'>"stderr"</span>,
-  col.lci = <span class='kw'>NULL</span>,
-  col.uci = <span class='kw'>NULL</span>,
-  col.left = <span class='kw'>NULL</span>,
-  col.right = <span class='kw'>NULL</span>,
-  col.left.heading = <span class='st'>""</span>,
-  col.right.heading = <span class='st'>"HR (95% CI)"</span>,
-  col.left.space = <span class='fl'>0.02</span>,
-  col.right.space = <span class='fl'>0.02</span>,
-  col.left.hjust = <span class='fl'>1</span>,
-  col.right.hjust = <span class='fl'>0</span>,
-  col.heading.space = <span class='fl'>0</span>,
-  estcolumn = <span class='fl'>TRUE</span>,
-  col.pval = <span class='kw'>NULL</span>,
-  ci.delim = <span class='st'>", "</span>,
-  title = <span class='st'>""</span>,
-  xlab = <span class='st'>"HR (95% CI)"</span>,
-  xlim = <span class='kw'>NULL</span>,
-  xticks = <span class='kw'>NULL</span>,
-  blankrows = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
-  col.diamond = <span class='kw'>NULL</span>,
-  diamond = <span class='kw'>NULL</span>,
-  col.bold = <span class='kw'>NULL</span>,
-  boldheadings = <span class='kw'>NULL</span>,
-  scalepoints = <span class='fl'>FALSE</span>,
-  pointsize = <span class='fl'>3</span>,
-  shape = <span class='kw'>NULL</span>,
-  colour = <span class='kw'>NULL</span>,
-  cicolour = <span class='kw'>colour</span>,
-  fill = <span class='kw'>NULL</span>,
-  ciunder = <span class='kw'>NULL</span>,
-  addtext = <span class='kw'>NULL</span>,
-  heading.space = <span class='fl'>4</span>,
-  plot.space = <span class='fl'>8</span>,
-  base_size = <span class='fl'>11</span>,
-  base_line_size = <span class='kw'>base_size</span><span class='op'>/</span><span class='fl'>22</span>,
-  printplot = <span class='fl'>TRUE</span>,
-  showcode = <span class='fl'>TRUE</span>
+  <span class='kw'>headings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>cols</span>,
+  <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>logscale</span> <span class='kw'>=</span> <span class='no'>exponentiate</span>,
+  <span class='kw'>colnames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>colheadings</span> <span class='kw'>=</span> <span class='no'>colnames</span>,
+  <span class='kw'>col.key</span> <span class='kw'>=</span> <span class='st'>"key"</span>,
+  <span class='kw'>col.estimate</span> <span class='kw'>=</span> <span class='st'>"estimate"</span>,
+  <span class='kw'>col.stderr</span> <span class='kw'>=</span> <span class='st'>"stderr"</span>,
+  <span class='kw'>col.lci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col.uci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col.left</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col.right</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col.left.heading</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>col.right.heading</span> <span class='kw'>=</span> <span class='st'>"HR (95% CI)"</span>,
+  <span class='kw'>col.left.space</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,
+  <span class='kw'>col.right.space</span> <span class='kw'>=</span> <span class='fl'>0.02</span>,
+  <span class='kw'>col.left.hjust</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='kw'>col.right.hjust</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>col.heading.space</span> <span class='kw'>=</span> <span class='fl'>0</span>,
+  <span class='kw'>estcolumn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>col.pval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ci.delim</span> <span class='kw'>=</span> <span class='st'>", "</span>,
+  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>""</span>,
+  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"HR (95% CI)"</span>,
+  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>xticks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>blankrows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
+  <span class='kw'>col.diamond</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>diamond</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col.bold</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>boldheadings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>scalepoints</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>pointsize</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>colour</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>cicolour</span> <span class='kw'>=</span> <span class='no'>colour</span>,
+  <span class='kw'>fill</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ciunder</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>addtext</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>heading.space</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+  <span class='kw'>plot.space</span> <span class='kw'>=</span> <span class='fl'>8</span>,
+  <span class='kw'>base_size</span> <span class='kw'>=</span> <span class='fl'>11</span>,
+  <span class='kw'>base_line_size</span> <span class='kw'>=</span> <span class='no'>base_size</span>/<span class='fl'>22</span>,
+  <span class='kw'>printplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>showcode</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -418,7 +418,7 @@ Unit is "lines". (Default: 8)</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list:</p><dl>
+    <p>A list:</p><dl'>
   <dt>plot</dt><dd><p>the plot</p></dd>
   <dt>data</dt><dd><p>a data frame from which the plot is generated</p></dd>
   <dt>code</dt><dd><p>ggplot2 code to generate the plot</p></dd>
@@ -446,7 +446,7 @@ will be shown in the viewer.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

@@ -109,89 +109,79 @@
 <div id="prepare-example-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#prepare-example-data" class="anchor"></a>Prepare example data</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-  est       = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(   <span class="fl">1</span>, <span class="fl">1.25</span>,  <span class="fl">1.5</span>, <span class="fl">1.75</span>,  <span class="fl">1.7</span>, <span class="fl">1.85</span>, <span class="fl">2.25</span>, <span class="fl">2.6</span>),
-  se        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.08</span>, <span class="fl">0.03</span>, <span class="fl">0.07</span>, <span class="fl">0.15</span>, <span class="fl">0.08</span>, <span class="fl">0.08</span>, <span class="fl">0.07</span>, <span class="fl">0.1</span>),
-  rf        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(  <span class="fl">20</span>,   <span class="fl">28</span>,   <span class="fl">38</span>,   <span class="fl">50</span>, <span class="fl">18.5</span>,   <span class="fl">25</span>,   <span class="fl">37</span>,  <span class="fl">47</span>),
-  n         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="fl">109</span>,  <span class="fl">103</span>,  <span class="fl">143</span>,  <span class="fl">104</span>,  <span class="fl">140</span>,  <span class="fl">134</span>,  <span class="fl">127</span>,  <span class="fl">99</span>),
-  is_female = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(   <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">1</span>,    <span class="fl">1</span>,    <span class="fl">1</span>,   <span class="fl">1</span>)
-)
-</pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">results</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
+  <span class="kw">est</span>       <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(   <span class="fl">1</span>, <span class="fl">1.25</span>,  <span class="fl">1.5</span>, <span class="fl">1.75</span>,  <span class="fl">1.7</span>, <span class="fl">1.85</span>, <span class="fl">2.25</span>, <span class="fl">2.6</span>),
+  <span class="kw">se</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.08</span>, <span class="fl">0.03</span>, <span class="fl">0.07</span>, <span class="fl">0.15</span>, <span class="fl">0.08</span>, <span class="fl">0.08</span>, <span class="fl">0.07</span>, <span class="fl">0.1</span>),
+  <span class="kw">rf</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(  <span class="fl">20</span>,   <span class="fl">28</span>,   <span class="fl">38</span>,   <span class="fl">50</span>, <span class="fl">18.5</span>,   <span class="fl">25</span>,   <span class="fl">37</span>,  <span class="fl">47</span>),
+  <span class="kw">n</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>( <span class="fl">109</span>,  <span class="fl">103</span>,  <span class="fl">143</span>,  <span class="fl">104</span>,  <span class="fl">140</span>,  <span class="fl">134</span>,  <span class="fl">127</span>,  <span class="fl">99</span>),
+  <span class="kw">is_female</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(   <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">1</span>,    <span class="fl">1</span>,    <span class="fl">1</span>,   <span class="fl">1</span>)
+)</pre></body></html></div>
 </div>
 <div id="simple-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simple-example" class="anchor"></a>Simple example</h2>
 <p>Given a data frame of estimates and standard errors (to be plotted on the y axis), and risk factor levels (to be plotted on the x axis), a plot can be created.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>[<span class="kw">results</span><span class="op">$</span><span class="kw">is_female</span> <span class="op">==</span> <span class="fl">0</span>,],
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>, <span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>)
-</pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>[<span class="no">results</span>$<span class="no">is_female</span> <span class="kw">==</span> <span class="fl">0</span>,],
+                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
+                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
+                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
+                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
+                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>, <span class="fl">50</span>),
+                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
+                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>)</pre></body></html></div>
 <p><img src="make_shape_plot_files/figure-html/simple-example-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div id="log-scale" class="section level2">
 <h2 class="hasAnchor">
 <a href="#log-scale" class="anchor"></a>Log scale</h2>
 <p>Set the <code>logscale</code> argument to true to use a log scale on the vertical axis.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>[<span class="kw">results</span><span class="op">$</span><span class="kw">is_female</span> <span class="op">==</span> <span class="fl">0</span>,],
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>, <span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.7</span>, <span class="fl">3</span>),
-                        ybreaks      = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.7</span>, <span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">2</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>,
-                        logscale     = <span class="fl">TRUE</span>)
-</pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>[<span class="no">results</span>$<span class="no">is_female</span> <span class="kw">==</span> <span class="fl">0</span>,],
+                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
+                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
+                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
+                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
+                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>, <span class="fl">50</span>),
+                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.7</span>, <span class="fl">3</span>),
+                        <span class="kw">ybreaks</span>      <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.7</span>, <span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">2</span>, <span class="fl">3</span>),
+                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>,
+                        <span class="kw">logscale</span>     <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="make_shape_plot_files/figure-html/log-scale-1.png" width="384" style="display: block; margin: auto;"> If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set <code>exponentiate</code> to true. This will plot exp(estimates) and use a log scale for the axis (if <code>logscale</code> is not set).</p>
 </div>
 <div id="using-groups" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-groups" class="anchor"></a>Using groups</h2>
 <p>The <code>col.group</code> argument can be supplied to plot results for different groups (using shades of grey for the fill colour). (Set <code>ciunder</code> to <code>TRUE</code> so that the confidence interval lines are hidden behind behind the point estimate squares.)</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>,
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        col.group    = <span class="st">"is_female"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>,
-                        ciunder      = <span class="fl">TRUE</span>)
-</pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>,
+                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
+                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
+                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
+                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
+                        <span class="kw">col.group</span>    <span class="kw">=</span> <span class="st">"is_female"</span>,
+                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
+                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
+                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>,
+                        <span class="kw">ciunder</span>      <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="make_shape_plot_files/figure-html/groups-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div id="adding-lines" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-lines" class="anchor"></a>Adding lines</h2>
 <p>The <code>lines</code> argument will add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>,
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        col.group    = <span class="st">"is_female"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>,
-                        ciunder      = <span class="fl">TRUE</span>,
-                        lines        = <span class="fl">TRUE</span>)
-</pre></div>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>,
+                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
+                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
+                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
+                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
+                        <span class="kw">col.group</span>    <span class="kw">=</span> <span class="st">"is_female"</span>,
+                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
+                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
+                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>,
+                        <span class="kw">ciunder</span>      <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">lines</span>        <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="make_shape_plot_files/figure-html/lines-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div id="setting-aesthetics" class="section level2">
@@ -237,63 +227,57 @@
 <h3 class="hasAnchor">
 <a href="#using-values" class="anchor"></a>Using values</h3>
 <p>If the argument doesn’t match the anem of a column in the data, then the value will be used for all points.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>,
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>,
-                        ciunder      = <span class="fl">TRUE</span>,
-                        shape        = <span class="fl">23</span>,
-                        colour       = <span class="st">"black"</span>,
-                        fill         = <span class="st">"red"</span>,
-                        cicolour     = <span class="st">"blue"</span>)
-</pre></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>,
+                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
+                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
+                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
+                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
+                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
+                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
+                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>,
+                        <span class="kw">ciunder</span>      <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">shape</span>        <span class="kw">=</span> <span class="fl">23</span>,
+                        <span class="kw">colour</span>       <span class="kw">=</span> <span class="st">"black"</span>,
+                        <span class="kw">fill</span>         <span class="kw">=</span> <span class="st">"red"</span>,
+                        <span class="kw">cicolour</span>     <span class="kw">=</span> <span class="st">"blue"</span>)</pre></body></html></div>
 <p><img src="make_shape_plot_files/figure-html/aesthetics%20with%20values-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div id="using-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-columns" class="anchor"></a>Using columns</h3>
 <p>If the argument matches a column name, then the values in the column will be used.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw">results</span><span class="op">$</span><span class="kw">fillcol</span> <span class="op">&lt;-</span> <span class="st">"black"</span>
-<span class="kw">results</span>[<span class="kw">results</span><span class="op">$</span><span class="kw">is_female</span> <span class="op">==</span> <span class="fl">1</span>,]<span class="op">$</span><span class="kw">fillcol</span> <span class="op">&lt;-</span> <span class="st">"orange"</span>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">results</span>$<span class="no">fillcol</span> <span class="kw">&lt;-</span> <span class="st">"black"</span>
+<span class="no">results</span>[<span class="no">results</span>$<span class="no">is_female</span> <span class="kw">==</span> <span class="fl">1</span>,]$<span class="no">fillcol</span> <span class="kw">&lt;-</span> <span class="st">"orange"</span>
 
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>,
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>,
-                        ciunder      = <span class="fl">TRUE</span>,
-                        colour       = <span class="st">"fillcol"</span>,
-                        fill         = <span class="st">"fillcol"</span>)
-</pre></div>
+<span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>,
+                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
+                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
+                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
+                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
+                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
+                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
+                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>,
+                        <span class="kw">ciunder</span>      <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">colour</span>       <span class="kw">=</span> <span class="st">"fillcol"</span>,
+                        <span class="kw">fill</span>         <span class="kw">=</span> <span class="st">"fillcol"</span>)</pre></body></html></div>
 <p><img src="make_shape_plot_files/figure-html/aesthetics%20with%20columns-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>Specify a column for <code>cicolour</code> is useful for changing the colour of confidence interval lines that would otherwise be hidden.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="kw">results</span><span class="op">$</span><span class="kw">cicol</span> <span class="op">&lt;-</span> <span class="st">"black"</span>
-<span class="kw">results</span>[<span class="fl">2</span>,]<span class="op">$</span><span class="kw">cicol</span> <span class="op">&lt;-</span> <span class="st">"white"</span>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">results</span>$<span class="no">cicol</span> <span class="kw">&lt;-</span> <span class="st">"black"</span>
+<span class="no">results</span>[<span class="fl">2</span>,]$<span class="no">cicol</span> <span class="kw">&lt;-</span> <span class="st">"white"</span>
 
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="kw">results</span>,
-                        col.x        = <span class="st">"rf"</span>,
-                        col.estimate = <span class="st">"est"</span>,
-                        col.stderr   = <span class="st">"se"</span>,
-                        col.n        = <span class="st">"n"</span>,
-                        xlims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
-                        ylims        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
-                        scalepoints  = <span class="fl">TRUE</span>,
-                        title        = <span class="kw">NULL</span>,
-                        pointsize    = <span class="fl">7</span>,
-                        cicolour     = <span class="st">"cicol"</span>)
-</pre></div>
+<span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span>(<span class="no">results</span>,
+                        <span class="kw">col.x</span>        <span class="kw">=</span> <span class="st">"rf"</span>,
+                        <span class="kw">col.estimate</span> <span class="kw">=</span> <span class="st">"est"</span>,
+                        <span class="kw">col.stderr</span>   <span class="kw">=</span> <span class="st">"se"</span>,
+                        <span class="kw">col.n</span>        <span class="kw">=</span> <span class="st">"n"</span>,
+                        <span class="kw">xlims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">15</span>,<span class="fl">50</span>),
+                        <span class="kw">ylims</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">3</span>),
+                        <span class="kw">scalepoints</span>  <span class="kw">=</span> <span class="fl">TRUE</span>,
+                        <span class="kw">title</span>        <span class="kw">=</span> <span class="kw">NULL</span>,
+                        <span class="kw">pointsize</span>    <span class="kw">=</span> <span class="fl">7</span>,
+                        <span class="kw">cicolour</span>     <span class="kw">=</span> <span class="st">"cicol"</span>)</pre></body></html></div>
 <p><img src="make_shape_plot_files/figure-html/small%20ci-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>Note that the size of boxes depends on <code>pointsize</code>, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.</p>
 </div>
@@ -315,7 +299,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

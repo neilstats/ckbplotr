@@ -108,52 +108,38 @@
 <h2 class="hasAnchor">
 <a href="#simple-examples-with-a-scatter-plot" class="anchor"></a>Simple examples with a scatter plot</h2>
 <p>Make a scatter plot with <code>ggplot</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw">plot</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span>(data = <span class="kw">mpg</span>, <span class="fu">aes</span>(x = <span class="kw">displ</span>, y = <span class="kw">hwy</span>)) <span class="op">+</span> <span class="fu">geom_point</span>(size = <span class="fl">1</span>)
-<span class="kw">plot</span>
-</pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">plot</span> <span class="kw">&lt;-</span> <span class="fu">ggplot</span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">mpg</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">displ</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">hwy</span>)) + <span class="fu">geom_point</span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">1</span>)
+<span class="no">plot</span></pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/a-plot-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>Apply just a CKB theme and use axis lines.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ckb.html">theme_ckb</a></span>() <span class="op">+</span> <span class="fu">theme</span>(axis.line = <span class="fu">element_line</span>())
-</pre></div>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">plot</span> + <span class="fu"><a href="../reference/theme_ckb.html">theme_ckb</a></span>() + <span class="fu">theme</span>(<span class="kw">axis.line</span> <span class="kw">=</span> <span class="fu">element_line</span>())</pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/theme-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>Or apply the <code>plot_like_ckb</code> function to add separated axis lines and fix the aspect ratio.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>)
-</pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>)</pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-0-1.png" width="384" style="display: block; margin: auto;"></p>
 <div id="axis-limits" class="section level3">
 <h3 class="hasAnchor">
 <a href="#axis-limits" class="anchor"></a>Axis limits</h3>
 <p>Set axis limits.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>))
-</pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>))</pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-1-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>If you do not want a gap between the axes, set <code>gap = c(0, 0)</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>), gap = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>))
-</pre></div>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>), <span class="kw">gap</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">0</span>))</pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-2-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div id="aspect-ratio" class="section level3">
 <h3 class="hasAnchor">
 <a href="#aspect-ratio" class="anchor"></a>Aspect ratio</h3>
 <p>Change the aspect ratio of the plot.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>), ratio = <span class="fl">0.3</span>)
-</pre></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>), <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">0.3</span>)</pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/aspect%20ratio-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="modifying-the-appearance-of-the-plot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#modifying-the-appearance-of-the-plot" class="anchor"></a>Modifying the appearance of the plot</h3>
 <p>If you wish to override some aspect of the theme applied by <code>plot_like_ckb</code>, then this can be done by adding a theme after the function.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>)) <span class="op">+</span>
-  <span class="fu">theme</span>(axis.title = <span class="fu">element_text</span>(colour = <span class="st">"red"</span>, face = <span class="st">"plain"</span>))
-</pre></div>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">8</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10</span>, <span class="fl">50</span>)) +
+  <span class="fu">theme</span>(<span class="kw">axis.title</span> <span class="kw">=</span> <span class="fu">element_text</span>(<span class="kw">colour</span> <span class="kw">=</span> <span class="st">"red"</span>, <span class="kw">face</span> <span class="kw">=</span> <span class="st">"plain"</span>))</pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-3-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div id="warning-about-axis-limits" class="section level3">
@@ -161,21 +147,17 @@
 <a href="#warning-about-axis-limits" class="anchor"></a>Warning about axis limits</h3>
 <p>If any data points you are plotting fall outside the axes, then they will still be drawn and may show up in places such as the axes, the legend, the plot title, or the plot margins. There is also no warning if data points fall outside the whole plot area.</p>
 <p>So it is best to check that your <code>xlim</code> and <code>ylim</code> values are suitable for your data before using the function.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="co"># The xlim and ylim ranges are too narrow</span>
-<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(plot = <span class="kw">plot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">4</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">20</span>, <span class="fl">50</span>))
-</pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="co"># The xlim and ylim ranges are too narrow</span>
+<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">plot</span> <span class="kw">=</span> <span class="no">plot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">4</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">20</span>, <span class="fl">50</span>))</pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-4-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div id="bar-chart-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#bar-chart-example" class="anchor"></a>Bar chart example</h2>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="kw">barplot</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span>(<span class="kw">mpg</span>, <span class="fu">aes</span>(<span class="kw">class</span>)) <span class="op">+</span> <span class="fu">geom_bar</span>()
-<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="kw">barplot</span>, xlims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">7.5</span>), ylims = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">70</span>), gap = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.025</span>, <span class="fl">0.005</span>), ratio = <span class="fl">0.5</span>) <span class="op">+</span>
-  <span class="fu">theme</span>(axis.ticks.x = <span class="fu">element_blank</span>())
-</pre></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">barplot</span> <span class="kw">&lt;-</span> <span class="fu">ggplot</span>(<span class="no">mpg</span>, <span class="fu">aes</span>(<span class="no">class</span>)) + <span class="fu">geom_bar</span>()
+<span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span>(<span class="no">barplot</span>, <span class="kw">xlims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="fl">7.5</span>), <span class="kw">ylims</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">70</span>), <span class="kw">gap</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.025</span>, <span class="fl">0.005</span>), <span class="kw">ratio</span> <span class="kw">=</span> <span class="fl">0.5</span>) +
+  <span class="fu">theme</span>(<span class="kw">axis.ticks.x</span> <span class="kw">=</span> <span class="fu">element_blank</span>())</pre></body></html></div>
 <p><img src="plot_like_ckb_files/figure-html/bar-chart-example-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
   </div>
@@ -195,7 +177,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
