@@ -93,7 +93,7 @@ error? (Default: FALSE)}
   given in the col.key column.}
 }
 \value{
-A dataset from which the plot is generated.
+A dataset from which a forest plot can be generated.
 }
 \description{
 \code{make_forest_data}

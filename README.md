@@ -68,10 +68,10 @@ against risk factor levels using the `ggplot2` package.
 ## The make\_forest\_plot function
 
 The `make_forest_plot` function creates a forest plot using the
-`ggplot2` graphics package. The function returns a named list containg:
+`ggplot2` graphics package. The function returns a named list
+containing:
 
   - plot: the plot
-  - data: a data frame from which the plot is generated
   - code: ggplot2 code to generate the plot
 
 In RStudio the ggplot2 code used to generate the plot will be shown in

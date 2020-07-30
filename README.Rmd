@@ -79,9 +79,6 @@ The `make_shape_plot` function creates a plot of estimates and CIs against risk
 factor levels using the `ggplot2` package.
 
 ```{r make_shape_plot-example-1, echo = FALSE}
-library(ggplot2)
-library(ckbplotr)
-
 results <- data.frame(
   est = c(1, 1.25, 1.5, 1.75, 1.1, 1.35, 1.75, 2),
   se = c(0.08, 0.02, 0.07, 0.15, 0.05, 0.02, 0.07, 0.1),
@@ -90,7 +87,7 @@ results <- data.frame(
   is_female = c(0, 0, 0, 0, 1, 1, 1, 1)
 )
 
-plot <- make_shape_plot(results[results$is_female == 1,],
+plot <- make_shape_plot(results,
                         col.x        = "rf",
                         col.estimate = "est",
                         col.stderr   = "se",
@@ -107,10 +104,9 @@ plot <- make_shape_plot(results[results$is_female == 1,],
 
 ## The make_forest_plot function
 The `make_forest_plot` function creates a forest plot using the `ggplot2` graphics 
-package. The function returns a named list containg:
+package. The function returns a named list containing:
 
 * plot: the plot
-* data: a data frame from which the plot is generated
 * code: ggplot2 code to generate the plot
 
 In RStudio the ggplot2 code used to generate the plot will be shown in the 

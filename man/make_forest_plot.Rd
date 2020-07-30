@@ -203,7 +203,6 @@ Unit is "lines". (Default: 8)}
 A list:
 \describe{
   \item{plot}{the plot}
-  \item{data}{a data frame from which the plot is generated}
   \item{code}{ggplot2 code to generate the plot}
 }
 }

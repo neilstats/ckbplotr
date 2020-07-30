@@ -1,3 +1,3 @@
 .onAttach <- function(...) {
- packageStartupMessage("The method for setting aesthetics (shapes, colours etc.) has changed. Please see the help and vignettes for details.")
+ packageStartupMessage("Please check NEWS.md, help files and vignettes for latest changes to the package.")
 }

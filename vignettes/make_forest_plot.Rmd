@@ -96,8 +96,6 @@ resultsA[13, "fill"] <- "white"
 
 ## Simple forest plot
 ```{r make_forest_plot-example-1}
-library(ckbplotr)
-
 forestplot <- make_forest_plot(cols         = list(resultsA, resultsB),
                                exponentiate = TRUE,
                                colnames     = c("Analysis A", "Analysis B"),

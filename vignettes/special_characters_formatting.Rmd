@@ -107,8 +107,27 @@ forestplot <- make_forest_plot(headings         = varheadings,
 Now copy the code from the RStudio Viewer pane, and edit the section under the comment "# Get a character vector of the headings, so these can be used in the plot". (Also edit the third line so that `datatoplot` is `forestplot$data`.)
 ```{r}
 # ggplot2 code ------------------
-# Assign the data returned by the function to datatoplot
-datatoplot <- forestplot$data
+
+# Prepare data to be plotted using ckbplotr::make_forest_data()
+datatoplot <- ckbplotr::make_forest_data(
+                headings = varheadings,
+                rows = "Triglycerides concentration",
+                cols = list(resultsA, resultsB),
+                colnames = c("Analysis A", "Analysis B"),
+                col.key = "variable",
+                col.estimate = "estimate",
+                col.stderr = "stderr",
+                col.lci = NULL,
+                col.uci = NULL,
+                col.left = "n",
+                col.right = NULL,
+                col.keep = NULL,
+                ci.delim = " - ",
+                exponentiate = TRUE,
+                blankrows = c(1, 1, 0, 1),
+                scalepoints = TRUE,
+                minse = NULL,
+                addtext = NULL)
 
 # Get a character vector of the headings, so these can be used in the plot
 headings <- expression(bolditalic("Triglycerides concentration"),
@@ -129,29 +148,38 @@ headings <- expression(bolditalic("Triglycerides concentration"),
 
 # Get a character vector of the style for headings
 boldheadings <- datatoplot %>%
-  dplyr::group_by(row) %>%
-  dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %in% NULL)), "bold", "plain")) %>%
-  dplyr::arrange(row) %>%
-  dplyr::pull(bold)
+                  dplyr::group_by(row) %>%
+                  dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %in% NULL)), "bold", "plain")) %>%
+                  dplyr::arrange(row) %>%
+                  dplyr::pull(bold)
+
+# Identify any CIs that extend outside axis limits
+datatoplot <- datatoplot %>%
+                dplyr::mutate(cioverright  = (uci_transformed > 1.1),
+                              uci_transformed = pmin(uci_transformed, 1.1),
+                              cioverleft  = (lci_transformed < 0.9),
+                              lci_transformed = pmax(lci_transformed, 0.9))
 
 # Create the ggplot
 ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
+
   # Put the different columns in side-by-side plots using facets
   facet_wrap(~column, nrow = 1) +
-  
-  # Add a line at null effect (only if exponentiate=TRUE)
+
+  # Add a line at null effect
   annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1, size = 0.5) +
-  
+
   # Plot points at the transformed estimates
   ## Scale by inverse of the SE
   geom_point(aes(size = size, shape = 15, colour = "black", fill = "black"),
+             stroke = 0.5,
              na.rm = TRUE) +
-  
+
   # Scale the size of points by their side length
   # and make the scale range from zero upwards
-  scale_radius(limits = c(0, NA),
+  scale_radius(limits = c(0, 1),
                range = c(0, 3)) +
-  
+
   # Plot the CIs
   geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),
                  aes(ymin = lci_transformed,
@@ -159,22 +187,40 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
                      colour = "black"), 
                  size = 0.5,
                  na.rm = TRUE) +
-  
+
   # Add tiny segments with arrows when the CIs go outside axis limits
-  
+  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),
+               aes(x=-row,
+                   y=uci_transformed-0.000001,
+                   xend=-row,
+                   yend=uci_transformed),
+               colour = "black",
+               size = 0.5,
+               arrow = arrow(type = "closed", length = unit(4, "pt")),
+               na.rm = TRUE) +
+  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),
+               aes(x=-row,
+                   y=lci_transformed+0.000001,
+                   xend=-row,
+                   yend=lci_transformed),
+               colour = "black",
+               size = 0.5,
+               arrow = arrow(type = "closed", length = unit(4, "pt")),
+               na.rm = TRUE) +
+
   # Use identity for aesthetic scales
   scale_shape_identity() +
   scale_fill_identity() +
   scale_colour_identity() +
-  
+
   # Flip x and y coordinates
   coord_flip(clip = "off",
              ylim = c(0.9, 1.1)) +
-  
+
   # Add columns to right side of plots
   ## column textresult
   geom_text(aes(x = -row, y = 1.104423626284,
-                label = textresult),
+            label = textresult),
             hjust = 0,
             size = 3,
             na.rm = TRUE,
@@ -185,23 +231,23 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
            hjust = 0,
            size = 3,
            fontface = "bold") +
-  
+
   # Add columns to left side of plots
   ## column n
   geom_text(aes(x = -row, y = 0.896395166165542,
                 label = `n`,
-                fontface = "plain"),
-            hjust = 1,
-            size = 3,
+            fontface = "plain"),
+           hjust = 1,
+           size = 3,
             na.rm = TRUE) +
   annotate(geom = "text",
            x = 1.5, y = 0.896395166165542,
            label = "No. of
 events",
-hjust = 1,
-size = 3,
-fontface = "bold") +
-  
+           hjust = 1,
+           size = 3,
+           fontface = "bold") +
+
   # Add xlab below each axis
   geom_text(aes(x = -Inf, y = 0.99498743710662, label = xlab),
             hjust = 0.5,
@@ -212,7 +258,7 @@ fontface = "bold") +
                                                  levels = c("Analysis A", "Analysis B"),
                                                  ordered = TRUE),
                                  xlab = "HR (95% CI)")) +
-  
+
   # Add column name above each column
   geom_text(aes(x = 1.5, y = 0.99498743710662, label = title),
             hjust = 0.5,
@@ -223,12 +269,12 @@ fontface = "bold") +
                                                  levels = c("Analysis A", "Analysis B"),
                                                  ordered = TRUE),
                                  title = c("Analysis A", "Analysis B"))) +
-  
+
   # Set the scale for the y axis (the estimates and CIs)
   scale_y_continuous(trans  = "log",
                      breaks = c(0.9, 1, 1.1),
                      expand = c(0,0)) +
-  
+
   # Set the scale for the x axis (the rows)
   scale_x_continuous(breaks = -1:-max(datatoplot$row),
                      labels = headings,
@@ -236,7 +282,7 @@ fontface = "bold") +
                      expand = c(0,0)) +
   # Add the title
   labs(title = "") +
-  
+
   # Control the overall looks of the plots
   theme(text             = element_text(size = 11),
         line             = element_line(size = 0.5),

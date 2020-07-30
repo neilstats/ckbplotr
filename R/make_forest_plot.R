@@ -53,11 +53,12 @@
 #'   given in the col.key column.
 #'
 #'
-#' @return A dataset from which the plot is generated.
+#' @return A dataset from which a forest plot can be generated.
 #'
 #'
 #' @keywords internal
 #'
+#' @export
 
 make_forest_data <- function(
   headings     = NULL,
@@ -398,9 +399,8 @@ make_forest_data <- function(
 #'
 #' \code{make_forest_plot} creates a forest plot with ggplot
 #'
-#' The function returns the plot, a dataset which is used to create the plot,
-#' and the ggplot2 code that creates the plot. In RStudio, the ggplot2 code
-#' will be shown in the viewer.
+#' The function returns the plot and the ggplot2 code that creates the plot.
+#' In RStudio, the ggplot2 code will be shown in the viewer.
 #'
 #'
 #'
@@ -451,7 +451,6 @@ make_forest_data <- function(
 #' @return A list:
 #' \describe{
 #'   \item{plot}{the plot}
-#'   \item{data}{a data frame from which the plot is generated}
 #'   \item{code}{ggplot2 code to generate the plot}
 #'}
 #'
@@ -539,27 +538,6 @@ make_forest_plot <- function(
   # make deault colnames
   if (is.null(colnames)) { colnames <- as.character(1:length(cols)) }
 
-  datatoplot <- make_forest_data(
-    headings      = headings,
-    rows          = rows,
-    cols          = cols,
-    colnames      = colnames,
-    col.key  = col.key,
-    col.estimate  = col.estimate,
-    col.stderr    = col.stderr,
-    col.lci       = col.lci,
-    col.uci       = col.uci,
-    col.left      = col.left,
-    col.right     = col.right,
-    col.keep      = col.keep,
-    ci.delim      = ci.delim,
-    exponentiate  = exponentiate,
-    blankrows     = blankrows,
-    scalepoints   = scalepoints,
-    minse         = minse,
-    addtext       = addtext
-  )
-
   # line at null
   nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=%s, yend=%s, size = %s) +',
                       nullval, nullval, base_line_size)
@@ -571,11 +549,13 @@ make_forest_plot <- function(
     shape <- paste0("`", shape, "`")
   }
 
+  cicolouraes <- FALSE
   if (is.null(cicolour)) {
     cicolour <- '\"black\"'
   }
   else if (cicolour %in% names(cols[[1]])){
     cicolour <- paste0("`", cicolour, "`")
+    cicolouraes <- TRUE
   } else {
     cicolour <- paste0('\"', cicolour, '\"')
   }
@@ -599,24 +579,23 @@ make_forest_plot <- function(
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
 
   if (is.null(xlim)) {
-    xlim <- range(pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed)))
+    if (is.null(col.lci)) {
+      allvalues <- sapply(cols, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
+                                              tf(x[[col.estimate]] + 1.96 * x[[col.stderr]])))
+    } else {
+      allvalues <- sapply(cols, function(x) c(tf(x[[col.lci]]),
+                                              tf(x[[col.uci]])))
+    }
+    xlim <- range(pretty(allvalues))
     ## check for zero as axis limit when using exponential
     if (exponentiate & isTRUE(all.equal(0, xlim[[1]]))){
-      xlim[[1]] <- min(c(datatoplot$lci_transformed, datatoplot$uci_transformed), na.rm = TRUE)
+      xlim[[1]] <- min(allvalues, na.rm = TRUE)
     }
   }
 
   xfrom <- min(xlim)
   xto   <- max(xlim)
   xmid  <- tf((inv_tf(xfrom) + inv_tf(xto)) / 2)
-
-  ## check if any cis are outside limits of x-axis
-  datatoplot <- datatoplot %>%
-    dplyr::mutate(cioverright  = (uci_transformed > xto),
-                  uci_transformed = pmin(uci_transformed, xto),
-                  cioverleft  = (lci_transformed < xfrom),
-                  lci_transformed = pmax(lci_transformed, xfrom))
-
 
   if (is.null(xticks)) {
     xticks <- pretty(c(xfrom, xto))
@@ -629,11 +608,12 @@ make_forest_plot <- function(
     col.right.line <- ""
   } else {
 
+    col.right.all <- col.right
     if (estcolumn){
-      col.right <- c("textresult", col.right)
+      col.right.all <- c("textresult", col.right)
     }
 
-    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading, col.right.hjust, col.bold),
+    col.right.line <- unlist(purrr::pmap(list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold),
                                          ~ c(sprintf('  ## column %s', ..1),
                                              sprintf('  geom_text(aes(x = -row, y = %s,',
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
@@ -755,7 +735,44 @@ make_forest_plot <- function(
     )
   }
 
-  plotcode <- c('# Get a character vector of the headings, so these can be used in the plot',
+  argset <- function(x){
+    sprintf('                %s = %s,',
+            paste(deparse(substitute(x)), collapse = ''),
+            paste(deparse(x), collapse = ''))
+  }
+
+  plotcode <- c(
+                '# Prepare data to be plotted using ckbplotr::make_forest_data()',
+                'datatoplot <- ckbplotr::make_forest_data(',
+                sprintf(
+                '                headings = %s,',
+                paste(deparse(substitute(headings)), collapse = '')
+                ),
+                argset(rows),
+                sprintf(
+                '                cols = %s,',
+                paste(deparse(substitute(cols)), collapse = '')
+                ),
+                argset(colnames),
+                argset(col.key),
+                argset(col.estimate),
+                argset(col.stderr),
+                argset(col.lci),
+                argset(col.uci),
+                argset(col.left),
+                argset(col.right),
+                argset(col.keep),
+                argset(ci.delim),
+                argset(exponentiate),
+                argset(blankrows),
+                argset(scalepoints),
+                argset(minse),
+                sprintf(
+                '                addtext = %s)',
+                paste(deparse(substitute(addtext)), collapse = '')
+                ),
+                '',
+                '# Get a character vector of the headings, so these can be used in the plot',
                 'headings <- datatoplot %>%',
                 '              dplyr::group_by(row) %>%',
                 '              dplyr::summarise(Heading = dplyr::first(Heading)) %>%',
@@ -770,6 +787,18 @@ make_forest_plot <- function(
                 paste(deparse(boldheadings))),
                 '                  dplyr::arrange(row) %>%',
                 '                  dplyr::pull(bold)',
+                '',
+
+                '# Identify any CIs that extend outside axis limits',
+                'datatoplot <- datatoplot %>%',
+                sprintf(
+                '                dplyr::mutate(cioverright  = (uci_transformed > %s),', xto),
+                sprintf(
+                '                              uci_transformed = pmin(uci_transformed, %s),', xto),
+                sprintf(
+                '                              cioverleft  = (lci_transformed < %s),', xfrom),
+                sprintf(
+                '                              lci_transformed = pmax(lci_transformed, %s))', xfrom),
                 '',
                 diamondscode,
                 '# Create the ggplot',
@@ -793,7 +822,7 @@ make_forest_plot <- function(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
                     '')
-                } else if (is.character(ciunder) && any(datatoplot[[ciunder]], na.rm = TRUE)){
+                } else if (is.character(ciunder) && any(sapply(cols, function(x) x[[ciunder]]), na.rm = TRUE)){
                   c(
                     '  # Plot CIs - before plotting points',
                     sprintf(
@@ -836,7 +865,7 @@ make_forest_plot <- function(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
                     '')
-                } else if (is.character(ciunder) && !all(datatoplot[[ciunder]], na.rm = TRUE)){
+                } else if (is.character(ciunder) && !all(sapply(cols, function(x) x[[ciunder]]), na.rm = TRUE)){
                   c(
                     '  # Plot CIs - after plotting points',
                     sprintf(
@@ -852,26 +881,42 @@ make_forest_plot <- function(
                     '')
                 },
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
-                if(any(datatoplot$cioverright, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
-                '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed,',
+                '               aes(x=-row,',
+                '                   y=uci_transformed-0.000001,',
+                '                   xend=-row,',
+                if (cicolouraes) {c(
+                '                   yend=uci_transformed,',
                 sprintf(
-                '                   colour = %s),', cicolour),
+                '                   colour = %s),', cicolour))
+                } else {c(
+                '                   yend=uci_transformed),',
+                sprintf(
+                '               colour = %s,', cicolour))
+                },
                 sprintf(
                 '               size = %s,', base_line_size),
                 sprintf(
                 '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
-                '               na.rm = TRUE) +')},
-                if(any(datatoplot$cioverleft, na.rm = TRUE)){c(
+                '               na.rm = TRUE) +',
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
-                '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed,',
+                '               aes(x=-row,',
+                '                   y=lci_transformed+0.000001,',
+                '                   xend=-row,',
+                if (cicolouraes) {c(
+                '                   yend=lci_transformed,',
                 sprintf(
-                '                   colour = %s),', cicolour),
+                '                   colour = %s),', cicolour))
+                } else {c(
+                '                   yend=lci_transformed),',
+                sprintf(
+                '               colour = %s,', cicolour))
+                },
                 sprintf(
                 '               size = %s,', base_line_size),
                 sprintf(
                 '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
-                '               na.rm = TRUE) +')},
+                '               na.rm = TRUE) +',
                 '',
                 plotdiamondscode,
                 '  # Use identity for aesthetic scales',
@@ -975,8 +1020,6 @@ make_forest_plot <- function(
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
   if (showcode){
     writeLines(paste(c('# ggplot2 code ------------------',
-                       '# Assign the data returned by the function to datatoplot',
-                       'datatoplot <- plot$data',
                        '',
                        plotcode),
                      collapse = "\n"),
@@ -986,9 +1029,6 @@ make_forest_plot <- function(
   }
 
 
-  # Make copy of datatoplot before running plot code
-  datatoplot_clean <- datatoplot
-
   # Create plot and print
   plot <- eval(parse(text = plotcode))
   if (printplot){
@@ -996,7 +1036,5 @@ make_forest_plot <- function(
   }
 
   return(list(plot = plot,
-              data = datatoplot_clean,
               code = plotcode) )
-
 }
