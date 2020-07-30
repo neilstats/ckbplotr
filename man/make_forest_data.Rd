@@ -59,11 +59,11 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.uci}{Name of column that provides upper limit of confidence intervals.}
 
-\item{col.pval}{Currently does nothing.}
+\item{col.left}{Names of columns to be printed to the left of the plot.}
 
-\item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
+\item{col.right}{Names of columns to be printed to the right of the plot.}
 
-\item{col.right}{A character vector of names of columns to be printed to the right of the plot.}
+\item{col.keep}{Names of additional columns to be kept in returned data frame.}
 
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}

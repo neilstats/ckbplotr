@@ -26,9 +26,9 @@
 #' @param col.stderr Name of column that provides standard errors. (Default: "stderr")
 #' @param col.lci Name of column that provides lower limit of confidence intervals.
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
-#' @param col.pval Currently does nothing.
-#' @param col.left A character vector of names of columns to be printed to the left of the plot.
-#' @param col.right A character vector of names of columns to be printed to the right of the plot.
+#' @param col.left Names of columns to be printed to the left of the plot.
+#' @param col.right Names of columns to be printed to the right of the plot.
+#' @param col.keep Names of additional columns to be kept in returned data frame.
 #' @param ci.delim Character string to separate lower and upper limits of
 #'   confidence interval. (Default: ", ")
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
@@ -69,7 +69,6 @@ make_forest_data <- function(
   col.stderr    = "stderr",
   col.lci       = NULL,
   col.uci       = NULL,
-  col.pval      = NULL,
   col.left      = NULL,
   col.right     = NULL,
   col.keep      = NULL,
@@ -485,7 +484,7 @@ make_forest_plot <- function(
   col.right.hjust   = 0,
   col.heading.space = 0,
   estcolumn     = TRUE,
-  col.pval      = NULL,
+  col.keep      = NULL,
   ci.delim      = ", ",
   title         = "",
   xlab          = "HR (95% CI)",
@@ -532,7 +531,7 @@ make_forest_plot <- function(
     scale    <- "identity"
   }
 
-  col.keep <- c(col.diamond, col.bold)
+  col.keep <- c(col.keep, col.diamond, col.bold)
   for (x in c(shape, cicolour, colour, fill, ciunder)){
     if (x %in% names(cols[[1]])){ col.keep <- append(col.keep, x) }
   }
@@ -550,7 +549,6 @@ make_forest_plot <- function(
     col.stderr    = col.stderr,
     col.lci       = col.lci,
     col.uci       = col.uci,
-    col.pval      = col.pval,
     col.left      = col.left,
     col.right     = col.right,
     col.keep      = col.keep,

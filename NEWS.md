@@ -3,6 +3,7 @@
 * New argument stroke in make_shape_plot and make_forest_plot.
 * New argument nullval in make_forest_plot, which adds a vertical reference line at this value. (By default a line is still added at 1 if using log scale.)
 * New argument minse in make_shape_plot and make_forest_plot which sets the minimum standard error to use when scaling point size. This allows scaling to be made consistent between plots.
+* Argument col.keep available in make_forest_plot() to keep columns in the returned data frame.
 
 # ckbplotr 0.3.0
 

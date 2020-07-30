@@ -60,9 +60,9 @@ with the same name (which can be specified by col.key).}
 
 \item{col.uci}{Name of column that provides upper limit of confidence intervals.}
 
-\item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
+\item{col.left}{Names of columns to be printed to the left of the plot.}
 
-\item{col.right}{A character vector of names of columns to be printed to the right of the plot.}
+\item{col.right}{Names of columns to be printed to the right of the plot.}
 
 \item{col.pval}{Name of additional column to be printed to the right of the plot,
 and formatted as P value.}

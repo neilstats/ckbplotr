@@ -27,7 +27,7 @@ make_forest_plot(
   col.right.hjust = 0,
   col.heading.space = 0,
   estcolumn = TRUE,
-  col.pval = NULL,
+  col.keep = NULL,
   ci.delim = ", ",
   title = "",
   xlab = "HR (95\% CI)",
@@ -96,9 +96,9 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.uci}{Name of column that provides upper limit of confidence intervals.}
 
-\item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
+\item{col.left}{Names of columns to be printed to the left of the plot.}
 
-\item{col.right}{A character vector of names of columns to be printed to the right of the plot.}
+\item{col.right}{Names of columns to be printed to the right of the plot.}
 
 \item{col.left.heading}{A character vector of titles for col.left columns. (Default: "")}
 
@@ -123,7 +123,7 @@ col.right.heading. Increase to move them up. (Default: 0)}
 \item{estcolumn}{Include column of estimates and confidence intervals to the
 right of each plot. (Default: TRUE)}
 
-\item{col.pval}{Currently does nothing.}
+\item{col.keep}{Names of additional columns to be kept in returned data frame.}
 
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}

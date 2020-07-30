@@ -34,6 +34,7 @@ make_jasper_forest_plot <- function(
   col.left      = NULL,
   col.right     = NULL,
   col.pval      = NULL,
+  col.keep      = NULL,
   xlab          = "HR (95% CI)",
   ValueLabelsHeader = "HR (95% CI)",
   forest.xlim   = NULL,
@@ -47,6 +48,8 @@ make_jasper_forest_plot <- function(
          call. = FALSE)
   }
 
+  col.keep <- c(col.keep, col.pval)
+
   out <- make_forest_data(
     headings      = headings,
     rows          = rows,
@@ -56,7 +59,7 @@ make_jasper_forest_plot <- function(
     col.stderr    = col.stderr,
     col.lci       = col.lci,
     col.uci       = col.uci,
-    col.pval      = col.pval,
+    col.keep      = col.keep,
     col.left      = col.left,
     col.right     = col.right,
     exponentiate  = exponentiate,
@@ -70,8 +73,6 @@ make_jasper_forest_plot <- function(
     dplyr::filter(!row %in% c(max(row))) %>%
     dplyr::mutate(row = row - 1)
 
-  col.right <- c(col.pval, col.right)
-
   tres <- list()
   for (x in 1:length(cols)) {
     tres[[x]] <- cols[[x]]
@@ -83,14 +84,16 @@ make_jasper_forest_plot <- function(
                       Estimate = !!rlang::sym(col.estimate),
                       LCI      = !!rlang::sym(col.lci),
                       UCI      = !!rlang::sym(col.uci),
-                      !!!rlang::syms(col.right))
+                      !!!rlang::syms(col.right),
+                      !!!rlang::syms(col.keep))
     } else {
       tres[[x]] <- tres[[x]] %>%
         dplyr::select(key = !!rlang::sym(col.key),
                       !!!rlang::syms(col.left),
                       Estimate = !!rlang::sym(col.estimate),
                       StdErr   = !!rlang::sym(col.stderr),
-                      !!!rlang::syms(col.right))
+                      !!!rlang::syms(col.right),
+                      !!!rlang::syms(col.keep))
     }
 
     names(tres[[x]])[-1] <- paste0(names(tres[[x]])[-1], x)
