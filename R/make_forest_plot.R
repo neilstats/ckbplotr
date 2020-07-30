@@ -623,7 +623,7 @@ make_forest_plot <- function(
   if (is.null(xticks)) {
     xticks <- pretty(c(xfrom, xto))
   }
-  xticksline <- paste0("breaks = ",paste(deparse(xticks), collapse = ""),",")
+  xticksline <- paste0("                     breaks = ",paste(deparse(xticks), collapse = ""),",")
 
 
   # columns to right of plots
@@ -655,7 +655,7 @@ make_forest_plot <- function(
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                              sprintf('           label = "%s",', ..3),
                                              sprintf('           hjust = %s,', ..4),
-                                             sprintf('            size = %s,', base_size/(11/3)),
+                                             sprintf('           size = %s,', base_size/(11/3)),
                                              '           fontface = "bold") +')))
   }
 
@@ -682,7 +682,7 @@ make_forest_plot <- function(
                                             '            fontface = "plain"),'
                                             },
                                             sprintf('           hjust = %s,', ..4),
-                                            sprintf('            size = %s,', base_size/(11/3)),
+                                            sprintf('           size = %s,', base_size/(11/3)),
                                             '            na.rm = TRUE) +',
                                             '  annotate(geom = "text",',
                                             sprintf('           x = %s, y = %s,',
@@ -690,7 +690,7 @@ make_forest_plot <- function(
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                             sprintf('           label = "%s",', ..3),
                                             sprintf('           hjust = %s,', ..4),
-                                            sprintf('            size = %s,', base_size/(11/3)),
+                                            sprintf('           size = %s,', base_size/(11/3)),
                                             '           fontface = "bold") +')))
   }
 
@@ -776,6 +776,7 @@ make_forest_plot <- function(
                 diamondscode,
                 '# Create the ggplot',
                 'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
+                '',
                 '  # Put the different columns in side-by-side plots using facets',
                 '  facet_wrap(~column, nrow = 1) +',
                 '',
@@ -882,7 +883,8 @@ make_forest_plot <- function(
                 '',
                 '  # Flip x and y coordinates',
                 '  coord_flip(clip = "off",',
-                sprintf('              ylim = c(%s, %s)) +', xfrom, xto),
+                sprintf(
+                '             ylim = c(%s, %s)) +', xfrom, xto),
                 '',
                 '  # Add columns to right side of plots',
                 col.right.line,
@@ -892,39 +894,41 @@ make_forest_plot <- function(
                 '',
                 '  # Add xlab below each axis',
                 sprintf(
-                '   geom_text(aes(x = -Inf, y = %s, label = xlab),', xmid),
-                '             hjust = 0.5,',
-                sprintf('             size  = %s,', base_size/(11/3)),
-                '             vjust = 4.4,',
-                '             fontface = "bold",',
+                '  geom_text(aes(x = -Inf, y = %s, label = xlab),', xmid),
+                '            hjust = 0.5,',
                 sprintf(
-                '             data = dplyr::tibble(column = factor(%s,',
+                '            size  = %s,', base_size/(11/3)),
+                '            vjust = 4.4,',
+                '            fontface = "bold",',
+                sprintf(
+                '            data = dplyr::tibble(column = factor(%s,',
                 paste(deparse(colnames), collapse = '')),
                 sprintf(
-                '                                                  levels = %s,',
+                '                                                 levels = %s,',
                 paste(deparse(colnames), collapse = '')),
-                '                                                  ordered = TRUE),',
+                '                                                 ordered = TRUE),',
                 sprintf(
-                '                                  xlab = %s)) +',
+                '                                 xlab = %s)) +',
                 paste(deparse(xlab), collapse = '')),
                 '',
                 '  # Add column name above each column',
                 sprintf(
-                '   geom_text(aes(x = %s, y = %s, label = title),',
+                '  geom_text(aes(x = %s, y = %s, label = title),',
                 col.heading.space , xmid),
-                '             hjust = 0.5,',
-                '             nudge_x = 2,',
-                sprintf('             size  = %s,', base_size/(11/3)),
-                '             fontface = "bold",',
+                '            hjust = 0.5,',
+                '            nudge_x = 2,',
                 sprintf(
-                '             data = dplyr::tibble(column = factor(%s,',
+                '            size  = %s,', base_size/(11/3)),
+                '            fontface = "bold",',
+                sprintf(
+                '            data = dplyr::tibble(column = factor(%s,',
                 paste(deparse(colnames), collapse = '')),
                 sprintf(
-                '                                                  levels = %s,',
+                '                                                 levels = %s,',
                 paste(deparse(colnames), collapse = '')),
-                '                                                  ordered = TRUE),',
+                '                                                 ordered = TRUE),',
                 sprintf(
-                '                                  title = %s)) +',
+                '                                 title = %s)) +',
                 paste(deparse(colheadings), collapse = '')),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
