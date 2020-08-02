@@ -105,12 +105,12 @@ make_forest_data <- function(
                                     het_dof,
                                     "]^2,'=",
                                     het_stat,
-                                    " (p=",
+                                    " (p",
                                     het_p,
                                     ")', sep='')"),
           !is.na(trend_stat) ~ paste0("paste('Trend: ', chi[1]^2,'=",
                                       trend_stat,
-                                      " (p=",
+                                      " (p",
                                       trend_p,
                                       ")', sep='')")
         )) %>%
