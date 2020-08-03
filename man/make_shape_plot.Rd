@@ -15,6 +15,7 @@ make_shape_plot(
   exponentiate = FALSE,
   logscale = exponentiate,
   scalepoints = FALSE,
+  minse = NA,
   pointsize = 3,
   col.group = NULL,
   shape = NULL,
@@ -30,6 +31,7 @@ make_shape_plot(
   ratio = 1.5,
   base_size = 11,
   base_line_size = base_size/22,
+  stroke = base_size/22,
   xbreaks = NULL,
   ybreaks = NULL,
   xlab = "Risk factor",
@@ -63,6 +65,8 @@ use log scale on the axis. (Default: FALSE)}
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
 
+\item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
+
 \item{pointsize}{The (largest) size of box to use for plotting point
 estimates. (Default: 3)}
 
@@ -93,6 +97,8 @@ estimates. (Default: 3)}
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
+
+\item{stroke}{Size of outline of shapes. (Default: base_size/22)}
 
 \item{xbreaks}{Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)}
 

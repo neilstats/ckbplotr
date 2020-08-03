@@ -23,6 +23,7 @@
 #' @param logscale Use log scale for vertical axis. (Default: exponentiate)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
+#' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
 #' @param xlab Label for x-axis. (Default: "Risk factor")
@@ -35,6 +36,7 @@
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
+#' @param stroke Size of outline of shapes. (Default: base_size/22)
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #'
@@ -59,6 +61,7 @@ make_shape_plot <- function(data,
                             exponentiate  = FALSE,
                             logscale      = exponentiate,
                             scalepoints   = FALSE,
+                            minse         = NA,
                             pointsize     = 3,
                             col.group     = NULL,
                             shape         = NULL,
@@ -74,6 +77,7 @@ make_shape_plot <- function(data,
                             ratio         = 1.5,
                             base_size     = 11,
                             base_line_size = base_size/22,
+                            stroke        = base_size/22,
                             xbreaks       = NULL,
                             ybreaks       = NULL,
                             xlab          = "Risk factor",
@@ -211,7 +215,7 @@ make_shape_plot <- function(data,
   if (scalepoints) {
     if (!is.null(col.lci)) {
       geom_point_string <- c(sprintf(
-                             '  geom_point(aes(size = 1/(%s - `%s`),', col.estimate, col.lci),
+                             '  geom_point(aes(size = 1.96/(%s - `%s`),', col.estimate, col.lci),
                              sprintf(
                                '                 shape = %s,', shape),
                              sprintf(
@@ -227,7 +231,9 @@ make_shape_plot <- function(data,
         sprintf(
           '                 colour = %s,', colour),
         sprintf(
-          '                 %s)) +', fill_string)
+          '                 %s),', fill_string),
+        sprintf(
+        '             stroke = %s) +', stroke)
       )
     }
   } else {
@@ -237,7 +243,9 @@ make_shape_plot <- function(data,
                            sprintf(
                            '                 colour = %s,', colour),
                            sprintf(
-                           '                 %s)) +', fill_string)
+                           '                 %s),', fill_string),
+                           sprintf(
+                           '             stroke = %s) +', stroke)
                            )
   }
 
@@ -288,7 +296,8 @@ make_shape_plot <- function(data,
                 '',
                 '  # Set the scale for the size of boxes',
                 '  scale_radius(guide  = "none",',
-                '               limits = c(0, NA),',
+                sprintf(
+                '               limits = c(0, %s),', deparse(1/minse)),
                 sprintf('               range  = c(0, %s)) +', pointsize),
                 '',
                 if (isFALSE(ciunder) || is.null(ciunder)){

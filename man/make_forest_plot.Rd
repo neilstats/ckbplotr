@@ -27,18 +27,20 @@ make_forest_plot(
   col.right.hjust = 0,
   col.heading.space = 0,
   estcolumn = TRUE,
-  col.pval = NULL,
+  col.keep = NULL,
   ci.delim = ", ",
   title = "",
   xlab = "HR (95\% CI)",
   xlim = NULL,
   xticks = NULL,
+  nullval = NULL,
   blankrows = c(1, 1, 0, 0),
   col.diamond = NULL,
   diamond = NULL,
   col.bold = NULL,
   boldheadings = NULL,
   scalepoints = FALSE,
+  minse = NULL,
   pointsize = 3,
   shape = NULL,
   colour = NULL,
@@ -50,6 +52,7 @@ make_forest_plot(
   plot.space = 8,
   base_size = 11,
   base_line_size = base_size/22,
+  stroke = base_size/22,
   printplot = TRUE,
   showcode = TRUE
 )
@@ -93,9 +96,9 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.uci}{Name of column that provides upper limit of confidence intervals.}
 
-\item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
+\item{col.left}{Names of columns to be printed to the left of the plot.}
 
-\item{col.right}{A character vector of names of columns to be printed to the right of the plot.}
+\item{col.right}{Names of columns to be printed to the right of the plot.}
 
 \item{col.left.heading}{A character vector of titles for col.left columns. (Default: "")}
 
@@ -120,7 +123,7 @@ col.right.heading. Increase to move them up. (Default: 0)}
 \item{estcolumn}{Include column of estimates and confidence intervals to the
 right of each plot. (Default: TRUE)}
 
-\item{col.pval}{Currently does nothing.}
+\item{col.keep}{Names of additional columns to be kept in returned data frame.}
 
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}
@@ -132,6 +135,8 @@ confidence interval. (Default: ", ")}
 \item{xlim}{A numeric vector. The limits of the x axis.}
 
 \item{xticks}{A numeric vector. The tick points of the x axis.}
+
+\item{nullval}{Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)}
 
 \item{blankrows}{A numeric vector of length 4 specifying the number of blank rows
 after a heading1, at the end of a heading1 'section', after
@@ -148,6 +153,8 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
+
+\item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 
 \item{pointsize}{The (largest) size of box to use for plotting point
 estimates. (Default: 3)}
@@ -185,6 +192,8 @@ Unit is "lines". (Default: 8)}
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
+
+\item{stroke}{Size of outline of shapes. (Default: base_size/22)}
 
 \item{printplot}{Print the plot. (Default: TRUE)}
 

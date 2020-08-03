@@ -26,9 +26,9 @@
 #' @param col.stderr Name of column that provides standard errors. (Default: "stderr")
 #' @param col.lci Name of column that provides lower limit of confidence intervals.
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
-#' @param col.pval Currently does nothing.
-#' @param col.left A character vector of names of columns to be printed to the left of the plot.
-#' @param col.right A character vector of names of columns to be printed to the right of the plot.
+#' @param col.left Names of columns to be printed to the left of the plot.
+#' @param col.right Names of columns to be printed to the right of the plot.
+#' @param col.keep Names of additional columns to be kept in returned data frame.
 #' @param ci.delim Character string to separate lower and upper limits of
 #'   confidence interval. (Default: ", ")
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
@@ -37,6 +37,7 @@
 #'   a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
+#' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
 #' @param addtext A list of data frames. List must be the same length as cols.
 #'   Data frames should contain a column with the name specified in col.key,
 #'   and one or more of:
@@ -68,7 +69,6 @@ make_forest_data <- function(
   col.stderr    = "stderr",
   col.lci       = NULL,
   col.uci       = NULL,
-  col.pval      = NULL,
   col.left      = NULL,
   col.right     = NULL,
   col.keep      = NULL,
@@ -76,6 +76,7 @@ make_forest_data <- function(
   exponentiate  = TRUE,
   blankrows     = c(1, 1, 0, 0),
   scalepoints   = FALSE,
+  minse         = NULL,
   addtext       = NULL
 ){
 
@@ -104,12 +105,12 @@ make_forest_data <- function(
                                     het_dof,
                                     "]^2,'=",
                                     het_stat,
-                                    " (p=",
+                                    " (p",
                                     het_p,
                                     ")', sep='')"),
           !is.na(trend_stat) ~ paste0("paste('Trend: ', chi[1]^2,'=",
                                       trend_stat,
-                                      " (p=",
+                                      " (p",
                                       trend_p,
                                       ")', sep='')")
         )) %>%
@@ -312,7 +313,11 @@ make_forest_data <- function(
                     lci_transformed = tf(lci),
                     uci_transformed = tf(uci)
       )
-    minse <- min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)
+    if (is.null(minse)){
+      minse <- min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)
+    } else {
+      if (minse > min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)) stop("minse is larger than the minimum standard error in the data")
+    }
     datatoplot$size <- 1.96*minse/(datatoplot$estimate - datatoplot$lci)
   } else {
     datatoplot <- datatoplot %>%
@@ -320,7 +325,11 @@ make_forest_data <- function(
                     lci_transformed = tf(estimate - 1.96*stderr),
                     uci_transformed = tf(estimate + 1.96*stderr)
       )
-    minse <- min(datatoplot$stderr, na.rm = TRUE)
+    if (is.null(minse)){
+      minse <- min(datatoplot$stderr, na.rm = TRUE)
+    } else {
+      if (minse > min(datatoplot$stderr, na.rm = TRUE)) stop("minse is larger than the minimum standard error in the data")
+    }
     datatoplot$size <- minse/datatoplot$stderr
   }
 
@@ -418,6 +427,7 @@ make_forest_data <- function(
 #' @param xlab Label to appear below the x-axis. (Default: "HR (95\% CI)")
 #' @param xlim A numeric vector. The limits of the x axis.
 #' @param xticks A numeric vector. The tick points of the x axis.
+#' @param nullval Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
 #' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
@@ -434,6 +444,7 @@ make_forest_data <- function(
 #' Unit is "lines". (Default: 4)
 #' @param plot.space Size of the gap between forest plots.
 #' Unit is "lines". (Default: 8)
+#' @param stroke Size of outline of shapes. (Default: base_size/22)
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #'
@@ -473,18 +484,20 @@ make_forest_plot <- function(
   col.right.hjust   = 0,
   col.heading.space = 0,
   estcolumn     = TRUE,
-  col.pval      = NULL,
+  col.keep      = NULL,
   ci.delim      = ", ",
   title         = "",
   xlab          = "HR (95% CI)",
   xlim          = NULL,
   xticks        = NULL,
+  nullval       = NULL,
   blankrows     = c(1, 1, 0, 0),
   col.diamond   = NULL,
   diamond       = NULL,
   col.bold      = NULL,
   boldheadings  = NULL,
   scalepoints   = FALSE,
+  minse         = NULL,
   pointsize     = 3,
   shape     = NULL,
   colour    = NULL,
@@ -496,6 +509,7 @@ make_forest_plot <- function(
   plot.space    = 8,
   base_size     = 11,
   base_line_size = base_size/22,
+  stroke        = base_size/22,
   printplot     = TRUE,
   showcode      = TRUE
 ){
@@ -510,15 +524,14 @@ make_forest_plot <- function(
     tf       <- exp
     inv_tf   <- log
     scale    <- "log"
-    nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1, size = %s) +', base_line_size)
+    if (is.null(nullval)) {nullval <- 1}
   } else {
     tf       <- identity
     inv_tf   <- identity
     scale    <- "identity"
-    nullline <- NULL
   }
 
-  col.keep <- c(col.diamond, col.bold)
+  col.keep <- c(col.keep, col.diamond, col.bold)
   for (x in c(shape, cicolour, colour, fill, ciunder)){
     if (x %in% names(cols[[1]])){ col.keep <- append(col.keep, x) }
   }
@@ -536,7 +549,6 @@ make_forest_plot <- function(
     col.stderr    = col.stderr,
     col.lci       = col.lci,
     col.uci       = col.uci,
-    col.pval      = col.pval,
     col.left      = col.left,
     col.right     = col.right,
     col.keep      = col.keep,
@@ -544,8 +556,13 @@ make_forest_plot <- function(
     exponentiate  = exponentiate,
     blankrows     = blankrows,
     scalepoints   = scalepoints,
+    minse         = minse,
     addtext       = addtext
   )
+
+  # line at null
+  nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=%s, yend=%s, size = %s) +',
+                      nullval, nullval, base_line_size)
 
   # aesthetics: default value, match column name, or use argument itself
   if (is.null(shape)) {
@@ -604,7 +621,7 @@ make_forest_plot <- function(
   if (is.null(xticks)) {
     xticks <- pretty(c(xfrom, xto))
   }
-  xticksline <- paste0("breaks = ",paste(deparse(xticks), collapse = ""),",")
+  xticksline <- paste0("                     breaks = ",paste(deparse(xticks), collapse = ""),",")
 
 
   # columns to right of plots
@@ -636,7 +653,7 @@ make_forest_plot <- function(
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                              sprintf('           label = "%s",', ..3),
                                              sprintf('           hjust = %s,', ..4),
-                                             sprintf('            size = %s,', base_size/(11/3)),
+                                             sprintf('           size = %s,', base_size/(11/3)),
                                              '           fontface = "bold") +')))
   }
 
@@ -663,7 +680,7 @@ make_forest_plot <- function(
                                             '            fontface = "plain"),'
                                             },
                                             sprintf('           hjust = %s,', ..4),
-                                            sprintf('            size = %s,', base_size/(11/3)),
+                                            sprintf('           size = %s,', base_size/(11/3)),
                                             '            na.rm = TRUE) +',
                                             '  annotate(geom = "text",',
                                             sprintf('           x = %s, y = %s,',
@@ -671,7 +688,7 @@ make_forest_plot <- function(
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                             sprintf('           label = "%s",', ..3),
                                             sprintf('           hjust = %s,', ..4),
-                                            sprintf('            size = %s,', base_size/(11/3)),
+                                            sprintf('           size = %s,', base_size/(11/3)),
                                             '           fontface = "bold") +')))
   }
 
@@ -733,7 +750,7 @@ make_forest_plot <- function(
       sprintf(
       '                   colour = %s, fill = %s),', cicolour, fill),
       sprintf(
-      '               size = %s) +', base_line_size),
+      '               size = %s) +', stroke),
       ''
     )
   }
@@ -757,10 +774,11 @@ make_forest_plot <- function(
                 diamondscode,
                 '# Create the ggplot',
                 'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
+                '',
                 '  # Put the different columns in side-by-side plots using facets',
                 '  facet_wrap(~column, nrow = 1) +',
                 '',
-                '  # Add a line at null effect (only if exponentiate=TRUE)',
+                '  # Add a line at null effect',
                 nullline,
                 '',
                 if (isTRUE(ciunder)){
@@ -795,12 +813,16 @@ make_forest_plot <- function(
                 sprintf(
                 '  geom_point(aes(size = size, shape = %s, colour = %s, fill = %s),',
                 shape, colour, fill),
+                sprintf(
+                '             stroke = %s,',
+                stroke),
                 '             na.rm = TRUE) +',
                 '',
                 '  # Scale the size of points by their side length',
                 '  # and make the scale range from zero upwards',
-                '  scale_radius(limits = c(0, NA),',
-                sprintf('               range = c(0, %s)) +', pointsize),
+                '  scale_radius(limits = c(0, 1),',
+                sprintf(
+                '               range = c(0, %s)) +', pointsize),
                 '',
                 if (isFALSE(ciunder) || is.null(ciunder)){
                   c(
@@ -859,7 +881,8 @@ make_forest_plot <- function(
                 '',
                 '  # Flip x and y coordinates',
                 '  coord_flip(clip = "off",',
-                sprintf('              ylim = c(%s, %s)) +', xfrom, xto),
+                sprintf(
+                '             ylim = c(%s, %s)) +', xfrom, xto),
                 '',
                 '  # Add columns to right side of plots',
                 col.right.line,
@@ -869,38 +892,41 @@ make_forest_plot <- function(
                 '',
                 '  # Add xlab below each axis',
                 sprintf(
-                '   geom_text(aes(x = -Inf, y = %s, label = xlab),', xmid),
-                '             hjust = 0.5,',
-                sprintf('             size  = %s,', base_size/(11/3)),
-                '             vjust = 4.4,',
-                '             fontface = "bold",',
+                '  geom_text(aes(x = -Inf, y = %s, label = xlab),', xmid),
+                '            hjust = 0.5,',
                 sprintf(
-                '             data = dplyr::tibble(column = factor(%s,',
+                '            size  = %s,', base_size/(11/3)),
+                '            vjust = 4.4,',
+                '            fontface = "bold",',
+                sprintf(
+                '            data = dplyr::tibble(column = factor(%s,',
                 paste(deparse(colnames), collapse = '')),
                 sprintf(
-                '                                                  levels = %s,',
+                '                                                 levels = %s,',
                 paste(deparse(colnames), collapse = '')),
-                '                                                  ordered = TRUE),',
+                '                                                 ordered = TRUE),',
                 sprintf(
-                '                                  xlab = %s)) +',
+                '                                 xlab = %s)) +',
                 paste(deparse(xlab), collapse = '')),
                 '',
                 '  # Add column name above each column',
                 sprintf(
-                '   geom_text(aes(x = %s, y = %s, label = title),',
+                '  geom_text(aes(x = %s, y = %s, label = title),',
                 col.heading.space , xmid),
-                '             hjust = 0.5,',
-                sprintf('             size  = %s,', base_size/(11/3)),
-                '             fontface = "bold",',
+                '            hjust = 0.5,',
+                '            nudge_x = 2,',
                 sprintf(
-                '             data = dplyr::tibble(column = factor(%s,',
+                '            size  = %s,', base_size/(11/3)),
+                '            fontface = "bold",',
+                sprintf(
+                '            data = dplyr::tibble(column = factor(%s,',
                 paste(deparse(colnames), collapse = '')),
                 sprintf(
-                '                                                  levels = %s,',
+                '                                                 levels = %s,',
                 paste(deparse(colnames), collapse = '')),
-                '                                                  ordered = TRUE),',
+                '                                                 ordered = TRUE),',
                 sprintf(
-                '                                  title = paste0(%s, "\\n\\n"))) +',
+                '                                 title = %s)) +',
                 paste(deparse(colheadings), collapse = '')),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
@@ -919,7 +945,7 @@ make_forest_plot <- function(
                 '  # Control the overall looks of the plots',
                 sprintf('  theme(text             = element_text(size = %s),', base_size),
                 sprintf('        line             = element_line(size = %s),', base_line_size),
-                '        panel.background = element_rect(fill = "white", colour = NA),',
+                '        panel.background = element_blank(),',
                 '        panel.grid.major = element_blank(),',
                 '        panel.grid.minor = element_blank(),',
                 sprintf(
@@ -942,6 +968,7 @@ make_forest_plot <- function(
                 '        strip.placement  = "outside",',
                 '        strip.text       = element_blank(),',
                 '        legend.position  = "none",',
+                '        plot.background  = element_blank(),',
                 '        plot.margin      = unit(c(2,6,2,0), "lines"))')
 
 

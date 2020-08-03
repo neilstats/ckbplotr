@@ -14,7 +14,6 @@ make_forest_data(
   col.stderr = "stderr",
   col.lci = NULL,
   col.uci = NULL,
-  col.pval = NULL,
   col.left = NULL,
   col.right = NULL,
   col.keep = NULL,
@@ -22,6 +21,7 @@ make_forest_data(
   exponentiate = TRUE,
   blankrows = c(1, 1, 0, 0),
   scalepoints = FALSE,
+  minse = NULL,
   addtext = NULL
 )
 }
@@ -58,11 +58,11 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.uci}{Name of column that provides upper limit of confidence intervals.}
 
-\item{col.pval}{Currently does nothing.}
+\item{col.left}{Names of columns to be printed to the left of the plot.}
 
-\item{col.left}{A character vector of names of columns to be printed to the left of the plot.}
+\item{col.right}{Names of columns to be printed to the right of the plot.}
 
-\item{col.right}{A character vector of names of columns to be printed to the right of the plot.}
+\item{col.keep}{Names of additional columns to be kept in returned data frame.}
 
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}
@@ -75,6 +75,8 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
+
+\item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 
 \item{addtext}{A list of data frames. List must be the same length as cols.
   Data frames should contain a column with the name specified in col.key,
