@@ -750,7 +750,7 @@ make_forest_plot <- function(
       sprintf(
       '                   colour = %s, fill = %s),', cicolour, fill),
       sprintf(
-      '               size = %s) +', base_line_size),
+      '               size = %s) +', stroke),
       ''
     )
   }
@@ -945,7 +945,7 @@ make_forest_plot <- function(
                 '  # Control the overall looks of the plots',
                 sprintf('  theme(text             = element_text(size = %s),', base_size),
                 sprintf('        line             = element_line(size = %s),', base_line_size),
-                '        panel.background = element_rect(fill = "white", colour = NA),',
+                '        panel.background = element_blank(),',
                 '        panel.grid.major = element_blank(),',
                 '        panel.grid.minor = element_blank(),',
                 sprintf(
@@ -968,6 +968,7 @@ make_forest_plot <- function(
                 '        strip.placement  = "outside",',
                 '        strip.text       = element_blank(),',
                 '        legend.position  = "none",',
+                '        plot.background  = element_blank(),',
                 '        plot.margin      = unit(c(2,6,2,0), "lines"))')
 
 
