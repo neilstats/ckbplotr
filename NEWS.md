@@ -1,4 +1,4 @@
-# ckbplotr 0.3.0.9000
+# ckbplotr 0.3.1
 
 * New argument stroke in make_shape_plot and make_forest_plot.
 * New argument nullval in make_forest_plot, which adds a vertical reference line at this value. (By default a line is still added at 1 if using log scale.)

@@ -18,6 +18,7 @@ make_jasper_forest_plot(
   col.left = NULL,
   col.right = NULL,
   col.pval = NULL,
+  col.keep = NULL,
   xlab = "HR (95\% CI)",
   ValueLabelsHeader = "HR (95\% CI)",
   forest.xlim = NULL,
@@ -66,6 +67,8 @@ with the same name (which can be specified by col.key).}
 
 \item{col.pval}{Name of additional column to be printed to the right of the plot,
 and formatted as P value.}
+
+\item{col.keep}{Names of additional columns to be kept in returned data frame.}
 
 \item{xlab}{Label to appear below the x-axis. (Default: "HR (95\% CI)")}
 

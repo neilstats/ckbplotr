@@ -14,7 +14,6 @@ make_forest_data(
   col.stderr = "stderr",
   col.lci = NULL,
   col.uci = NULL,
-  col.pval = NULL,
   col.left = NULL,
   col.right = NULL,
   col.keep = NULL,
