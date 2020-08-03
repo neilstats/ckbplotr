@@ -106,7 +106,7 @@ forestplot <- make_forest_plot(cols         = list(resultsA, resultsB),
 To use headings, create a data frame of headings and specify arguments `headings` and
 `rows`.
 
-This must data frame contain columns 'heading1', 'heading2' and 'heading3',
+This data frame must contain columns 'heading1', 'heading2' and 'heading3',
 which can be set to NA if not needed for a particular row. For example, if you 
 do not need a third level of heading for a particular row, then set `heading3=NA`
 for that row. If you only need one level of headings, then set `heading2=NA` and
@@ -280,16 +280,16 @@ You will probably need to increase `plot.space` and widen the right margin as sh
 resultsA_extra <- data.frame(variable   = c("nmr_s_ldl_p", "nmr_s_vldl_p"),
                              het_dof    = c("2",           NA),
                              het_stat   = c("12",          NA),
-                             het_p      = c("0.22",        NA),
+                             het_p      = c("=0.22",       NA),
                              trend_stat = c(NA,            "7"),
-                             trend_p    = c(NA,            "0.31"),
+                             trend_p    = c(NA,            "=0.31"),
                              stringsAsFactors = FALSE)
 resultsB_extra <- data.frame(variable   = c("nmr_s_ldl_p", "nmr_s_vldl_p"),
                              het_dof    = c("2",            NA),
                              het_stat   = c("14",           NA),
-                             het_p      = c("0.32",         NA),
+                             het_p      = c("=0.32",        NA),
                              trend_stat = c(NA,             "7"),
-                             trend_p    = c(NA,             "0.83"),
+                             trend_p    = c(NA,             "=0.83"),
                              stringsAsFactors = FALSE)
 
 forestplot <- make_forest_plot(headings         = headings,

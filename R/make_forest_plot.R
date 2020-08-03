@@ -399,7 +399,7 @@ make_forest_data <- function(
 #'
 #' \code{make_forest_plot} creates a forest plot with ggplot
 #'
-#' The function returns the plot and the ggplot2 code that creates the plot.
+#' The function returns the plot, data and ggplot2 code to create the plot.
 #' In RStudio, the ggplot2 code will be shown in the viewer.
 #'
 #'
@@ -451,6 +451,7 @@ make_forest_data <- function(
 #' @return A list:
 #' \describe{
 #'   \item{plot}{the plot}
+#'   \item{data}{a data frame from which the plot is made}
 #'   \item{code}{ggplot2 code to generate the plot}
 #'}
 #'

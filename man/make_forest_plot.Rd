@@ -203,6 +203,7 @@ Unit is "lines". (Default: 8)}
 A list:
 \describe{
   \item{plot}{the plot}
+  \item{data}{a data frame from which the plot is made}
   \item{code}{ggplot2 code to generate the plot}
 }
 }
@@ -210,7 +211,6 @@ A list:
 \code{make_forest_plot} creates a forest plot with ggplot
 }
 \details{
-The function returns the plot, a dataset which is used to create the plot,
-and the ggplot2 code that creates the plot. In RStudio, the ggplot2 code
-will be shown in the viewer.
+The function returns the plot, data and ggplot2 code to create the plot.
+In RStudio, the ggplot2 code will be shown in the viewer.
 }

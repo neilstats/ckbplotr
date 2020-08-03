@@ -26,10 +26,10 @@ researchers.
 
 ### Directly from github
 The latest version of `ckbplotr` can be installed directly from 
-github using devtools.
+github using the `remotes` package.
 ```{r install from github, eval = FALSE}
-install.packages('devtools')
-devtools::install_github('neilstats/ckbplotr')
+install.packages('remotes')
+remotes::install_github('neilstats/ckbplotr')
 ```
 
 ### Or from source package
