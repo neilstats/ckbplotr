@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
+    </li>
+    <li>
+      <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
   </ul>
 </li>
@@ -148,7 +151,6 @@
   <span class='kw'>col.stderr</span> <span class='kw'>=</span> <span class='st'>"stderr"</span>,
   <span class='kw'>col.lci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>col.uci</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>col.pval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>col.left</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>col.right</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>col.keep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -156,6 +158,7 @@
   <span class='kw'>exponentiate</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>blankrows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
   <span class='kw'>scalepoints</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>minse</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>addtext</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
@@ -211,16 +214,16 @@ If none provided, then they will be numbered 1, 2, 3 ...</p></td>
       <td><p>Name of column that provides upper limit of confidence intervals.</p></td>
     </tr>
     <tr>
-      <th>col.pval</th>
-      <td><p>Currently does nothing.</p></td>
-    </tr>
-    <tr>
       <th>col.left</th>
-      <td><p>A character vector of names of columns to be printed to the left of the plot.</p></td>
+      <td><p>Names of columns to be printed to the left of the plot.</p></td>
     </tr>
     <tr>
       <th>col.right</th>
-      <td><p>A character vector of names of columns to be printed to the right of the plot.</p></td>
+      <td><p>Names of columns to be printed to the right of the plot.</p></td>
+    </tr>
+    <tr>
+      <th>col.keep</th>
+      <td><p>Names of additional columns to be kept in returned data frame.</p></td>
     </tr>
     <tr>
       <th>ci.delim</th>
@@ -241,6 +244,10 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))</p><
       <th>scalepoints</th>
       <td><p>Should the points be scaled by inverse of the standard
 error? (Default: FALSE)</p></td>
+    </tr>
+    <tr>
+      <th>minse</th>
+      <td><p>Minimum standard error to use when scaling point size. (Default will use minimum in the data.)</p></td>
     </tr>
     <tr>
       <th>addtext</th>

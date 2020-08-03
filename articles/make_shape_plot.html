@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -61,6 +61,9 @@
     </li>
     <li>
       <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
+    </li>
+    <li>
+      <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
   </ul>
 </li>
@@ -281,6 +284,11 @@
 <p><img src="make_shape_plot_files/figure-html/small%20ci-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>Note that the size of boxes depends on <code>pointsize</code>, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.</p>
 </div>
+</div>
+<div id="stroke" class="section level2">
+<h2 class="hasAnchor">
+<a href="#stroke" class="anchor"></a>Stroke</h2>
+<p>The <code>stroke</code> argument sets the stroke aesthetic for plotted shapes. See <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html" class="uri">https://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a> for more details. The stroke size adds to total size of a shape, so unless <code>stroke = 0</code> the scaling of size by inverse variance will be slightly inaccurate (but there are probably more important things to worry about).</p>
 </div>
   </div>
 

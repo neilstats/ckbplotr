@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
+    </li>
+    <li>
+      <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
   </ul>
 </li>
@@ -161,18 +164,20 @@
   <span class='kw'>col.right.hjust</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>col.heading.space</span> <span class='kw'>=</span> <span class='fl'>0</span>,
   <span class='kw'>estcolumn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>col.pval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>col.keep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ci.delim</span> <span class='kw'>=</span> <span class='st'>", "</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"HR (95% CI)"</span>,
   <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>xticks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>nullval</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>blankrows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
   <span class='kw'>col.diamond</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>diamond</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>col.bold</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>boldheadings</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>scalepoints</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>minse</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>pointsize</span> <span class='kw'>=</span> <span class='fl'>3</span>,
   <span class='kw'>shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>colour</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -184,6 +189,7 @@
   <span class='kw'>plot.space</span> <span class='kw'>=</span> <span class='fl'>8</span>,
   <span class='kw'>base_size</span> <span class='kw'>=</span> <span class='fl'>11</span>,
   <span class='kw'>base_line_size</span> <span class='kw'>=</span> <span class='no'>base_size</span>/<span class='fl'>22</span>,
+  <span class='kw'>stroke</span> <span class='kw'>=</span> <span class='no'>base_size</span>/<span class='fl'>22</span>,
   <span class='kw'>printplot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>showcode</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
@@ -253,11 +259,11 @@ If none provided, then they will be numbered 1, 2, 3 ...</p></td>
     </tr>
     <tr>
       <th>col.left</th>
-      <td><p>A character vector of names of columns to be printed to the left of the plot.</p></td>
+      <td><p>Names of columns to be printed to the left of the plot.</p></td>
     </tr>
     <tr>
       <th>col.right</th>
-      <td><p>A character vector of names of columns to be printed to the right of the plot.</p></td>
+      <td><p>Names of columns to be printed to the right of the plot.</p></td>
     </tr>
     <tr>
       <th>col.left.heading</th>
@@ -299,8 +305,8 @@ col.right.heading. Increase to move them up. (Default: 0)</p></td>
 right of each plot. (Default: TRUE)</p></td>
     </tr>
     <tr>
-      <th>col.pval</th>
-      <td><p>Currently does nothing.</p></td>
+      <th>col.keep</th>
+      <td><p>Names of additional columns to be kept in returned data frame.</p></td>
     </tr>
     <tr>
       <th>ci.delim</th>
@@ -322,6 +328,10 @@ confidence interval. (Default: ", ")</p></td>
     <tr>
       <th>xticks</th>
       <td><p>A numeric vector. The tick points of the x axis.</p></td>
+    </tr>
+    <tr>
+      <th>nullval</th>
+      <td><p>Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)</p></td>
     </tr>
     <tr>
       <th>blankrows</th>
@@ -350,6 +360,10 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))</p><
       <th>scalepoints</th>
       <td><p>Should the points be scaled by inverse of the standard
 error? (Default: FALSE)</p></td>
+    </tr>
+    <tr>
+      <th>minse</th>
+      <td><p>Minimum standard error to use when scaling point size. (Default will use minimum in the data.)</p></td>
     </tr>
     <tr>
       <th>pointsize</th>
@@ -405,6 +419,10 @@ Unit is "lines". (Default: 8)</p></td>
     <tr>
       <th>base_line_size</th>
       <td><p>base size for line elements</p></td>
+    </tr>
+    <tr>
+      <th>stroke</th>
+      <td><p>Size of outline of shapes. (Default: base_size/22)</p></td>
     </tr>
     <tr>
       <th>printplot</th>

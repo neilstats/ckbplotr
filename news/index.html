@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
     </li>
     <li>
       <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
+    </li>
+    <li>
+      <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
   </ul>
 </li>
@@ -132,6 +135,17 @@
       <small>Source: <a href='https://github.com/neilstats/ckbplotr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="ckbplotr-031" class="section level1">
+<h1 class="page-header" data-toc-text="0.3.1">
+<a href="#ckbplotr-031" class="anchor"></a>ckbplotr 0.3.1</h1>
+<ul>
+<li>New argument stroke in make_shape_plot and make_forest_plot.</li>
+<li>New argument nullval in make_forest_plot, which adds a vertical reference line at this value. (By default a line is still added at 1 if using log scale.)</li>
+<li>New argument minse in make_shape_plot and make_forest_plot which sets the minimum standard error to use when scaling point size. This allows scaling to be made consistent between plots.</li>
+<li>Argument col.keep available in make_forest_plot() to keep columns in the returned data frame.</li>
+<li>Using the addtext argument of make_forest_plot(), you now need to include an equals or less than sign with the p-value.</li>
+</ul>
+</div>
     <div id="ckbplotr-030" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.0">
 <a href="#ckbplotr-030" class="anchor"></a>ckbplotr 0.3.0</h1>
