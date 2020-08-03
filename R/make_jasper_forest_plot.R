@@ -22,11 +22,13 @@
 
 make_jasper_forest_plot <- function(
   filestem      = "_test",
+  panels,
+  col.key       = "key",
+  row.labels    = NULL,
   headings      = NULL,
   rows          = NULL,
-  cols,
+  cols          = panels,
   exponentiate  = TRUE,
-  col.key       = "key",
   col.estimate  = "estimate",
   col.stderr    = "stderr",
   col.lci       = NULL,
@@ -48,12 +50,22 @@ make_jasper_forest_plot <- function(
          call. = FALSE)
   }
 
+  # legacy arguments
+  if (!missing(cols)) {
+    panels <- cols
+    message("Note: cols argument is now called panels")
+  }
+  if (!missing(headings)) {
+    row.labels <- headings
+    message("Note: headings argument is now called row.labels")
+  }
+
   col.keep <- c(col.keep, col.pval)
 
   out <- make_forest_data(
-    headings      = headings,
+    row.labels    = row.labels,
     rows          = rows,
-    cols          = cols,
+    panels        = panels,
     col.key       = col.key,
     col.estimate  = col.estimate,
     col.stderr    = col.stderr,
@@ -65,7 +77,7 @@ make_jasper_forest_plot <- function(
     exponentiate  = exponentiate,
     blankrows     = blankrows) %>%
     dplyr::group_by(row) %>%
-    dplyr::summarise(Heading = dplyr::first(Heading),
+    dplyr::summarise(row.labels = dplyr::first(row.labels),
                      key = dplyr::first(key))
 
   # drop last row (which is blank)
@@ -74,8 +86,8 @@ make_jasper_forest_plot <- function(
     dplyr::mutate(row = row - 1)
 
   tres <- list()
-  for (x in 1:length(cols)) {
-    tres[[x]] <- cols[[x]]
+  for (x in 1:length(panels)) {
+    tres[[x]] <- panels[[x]]
 
     if (!is.null(col.lci)) {
       tres[[x]] <- tres[[x]] %>%

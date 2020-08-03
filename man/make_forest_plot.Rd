@@ -5,12 +5,16 @@
 \title{Make forest plot with ggplot2}
 \usage{
 make_forest_plot(
+  panels,
+  row.labels = NULL,
   headings = NULL,
   rows = NULL,
-  cols,
+  cols = panels,
   exponentiate = TRUE,
   logscale = exponentiate,
+  panel.names = NULL,
   colnames = NULL,
+  panel.headings = panel.names,
   colheadings = colnames,
   col.key = "key",
   col.estimate = "estimate",
@@ -38,6 +42,7 @@ make_forest_plot(
   col.diamond = NULL,
   diamond = NULL,
   col.bold = NULL,
+  bold.labels = NULL,
   boldheadings = NULL,
   scalepoints = FALSE,
   minse = NULL,
@@ -48,8 +53,10 @@ make_forest_plot(
   fill = NULL,
   ciunder = NULL,
   addtext = NULL,
-  heading.space = 4,
-  plot.space = 8,
+  label.space = 4,
+  heading.space = NULL,
+  panel.space = 8,
+  plot.space = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   stroke = base_size/22,
@@ -58,32 +65,31 @@ make_forest_plot(
 )
 }
 \arguments{
-\item{headings}{A data frame that contains the headings to be used for the
+\item{panels}{A list of data frames. These should include columns or point
+estimates, and standard errors or confidence interval limits. If you
+specify a row.labels data frame, then they must also all contain a key column
+with the same name (which can be specified by col.key).}
+
+\item{row.labels}{A data frame that contains the labels to be used for the
 rows of the plot. The data frame must contain columns 'heading1', 'heading2'
 and 'heading3'. Use NA if a lower level heading is not required.}
 
-\item{rows}{A character vector. The top level headings (heading1) of rows
+\item{rows}{A character vector. The top level labels (heading1) of rows
 to be included in the plot.}
-
-\item{cols}{A list of data frames. These should include columns or point
-estimates, and standard errors or confidence interval limits. If you
-specify a headings data frame, then they must also all contain a key column
-with the same name (which can be specified by col.key).}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
 \item{logscale}{Use log scale on the axis, and add a line at null effect. (Default: exponentiate)}
 
-\item{colnames}{A character vector. The names to be used for each forest plot.
+\item{panel.names}{A character vector. The names to be used for each forest plot panel.
 If none provided, then they will be numbered 1, 2, 3 ...}
 
-\item{colheadings}{Titles to be placed above each forest plot. (Default: colnames)}
+\item{panel.headings}{Titles to be placed above each forest plot. (Default: panel.names)}
 
-\item{col.key}{Name of column that links the headings provided in headings
-  and the results given in each data frame provided in cols.
+\item{col.key}{Name of column that links the results given in each data frame
+  provided in panels and the labels given in row.labels.
 
-  If headings data frame is not given, then this column will be used as headings
-  for each row of the plot.
+  If row.labels data frame is not given, then this column will be used as row labels.
 
   (Default: "key")}
 
@@ -149,7 +155,7 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
 \item{col.bold}{Plot text as bold. Name of a column of logical values.}
 
-\item{boldheadings}{A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)}
+\item{bold.labels}{A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
@@ -169,7 +175,7 @@ estimates. (Default: 3)}
 
 \item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 
-\item{addtext}{A list of data frames. List must be the same length as cols.
+\item{addtext}{A list of data frames. List must be the same length as panels.
   Data frames should contain a column with the name specified in col.key,
   and one or more of:
 
@@ -183,10 +189,10 @@ estimates. (Default: 3)}
   be plotted in the column of estimates and CIs, below the row with the key
   given in the col.key column.}
 
-\item{heading.space}{Size of the gap between headings and the first plot.
+\item{label.space}{Size of the gap between row labels and the first panel.
 Unit is "lines". (Default: 4)}
 
-\item{plot.space}{Size of the gap between forest plots.
+\item{panel.space}{Size of the gap between forest plot panels.
 Unit is "lines". (Default: 8)}
 
 \item{base_size}{base font size, given in pts.}
