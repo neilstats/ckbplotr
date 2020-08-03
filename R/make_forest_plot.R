@@ -1036,5 +1036,6 @@ make_forest_plot <- function(
   }
 
   return(list(plot = plot,
+              data = datatoplot,
               code = plotcode) )
 }
