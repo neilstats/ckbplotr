@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
   fig.height = 4,
   fig.align = "center")
 library(ckbplotr)
+library(grid)
+library(gridExtra)
 ```
 # ckbplotr
 
@@ -64,9 +66,10 @@ The `plot_like_ckb` function does three things to a ggplot2 plot:
 2. extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)
 3. applies a fixed aspect ratio
 
-```{r a-plot, echo = FALSE}
+```{r a-plot, echo = FALSE, fig.width=8}
 plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
-plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
+ckbplot <- plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
+grid.arrange(plot, ckbplot, ncol = 2)
 ```
 
 
@@ -155,26 +158,26 @@ headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
                                     'nmr_idl_c',
                                     'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'))
 
-forestplot <- make_forest_plot(headings         = headings,
-                               rows             = c("Lipoprotein particle concentration",
-                                                    "Triglycerides concentration"),
-                               cols             = list(resultsA, resultsB),
-                               exponentiate     = TRUE,
-                               colnames         = c("Analysis A", "Analysis B"),
-                               col.key          = "variable",
-                               ci.delim         = " - ",
-                               xlim             = c(0.9, 1.1),
-                               xticks           = c(0.9, 1, 1.1),
-                               blankrows        = c(1, 1, 0, 1),
-                               scalepoints      = TRUE,
-                               pointsize        = 3,
-                               col.left         = c("n"),
-                               col.left.space   = c(0.02),
-                               col.left.heading = c("No. of\nevents"),
-                               col.right.space  = 0.02,
+forestplot <- make_forest_plot(row.labels        = headings,
+                               rows              = c("Lipoprotein particle concentration",
+                                                     "Triglycerides concentration"),
+                               panels            = list(resultsA, resultsB),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               col.key           = "variable",
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3,
+                               col.left          = c("n"),
+                               col.left.space    = c(0.02),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.right.space   = 0.02,
                                col.heading.space = 1.5,
-                               heading.space    = 2,
-                               plot.space       = 8)
+                               label.space        = 2,
+                               panel.space       = 8)
 ```
 
 ### Expected warning

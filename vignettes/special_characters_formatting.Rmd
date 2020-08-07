@@ -405,7 +405,7 @@ forestplot$plot +
 ```
 
 You could also use `element_markdown` inside `theme` to make use of markdown just in row headings.
-```{r, eval = F}
+```{r}
 varheadings <- data.frame(heading1 = rep("Triglycerides concentration", each = 7),
                           heading2 = c("VLDL^a", "VLDL^a", "VLDL^a",
                                        "**IDL**",

@@ -12,11 +12,11 @@ Biobank](http://www.ckbiobank.org) researchers.
 ### Directly from github
 
 The latest version of `ckbplotr` can be installed directly from github
-using devtools.
+using the `remotes` package.
 
 ``` r
-install.packages('devtools')
-devtools::install_github('neilstats/ckbplotr')
+install.packages('remotes')
+remotes::install_github('neilstats/ckbplotr')
 ```
 
 ### Or from source package
