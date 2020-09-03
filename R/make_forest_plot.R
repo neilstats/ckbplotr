@@ -646,7 +646,7 @@ make_forest_plot <- function(
 
   xfrom <- min(xlim)
   xto   <- max(xlim)
-  xmid  <- tf((inv_tf(xfrom) + inv_tf(xto)) / 2)
+  xmid  <- round(tf((inv_tf(xfrom) + inv_tf(xto)) / 2), 6)
 
   if (is.null(xticks)) {
     xticks <- pretty(c(xfrom, xto))
@@ -667,7 +667,7 @@ make_forest_plot <- function(
     col.right.line <- unlist(purrr::pmap(list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold),
                                          ~ c(sprintf('  ## column %s', ..1),
                                              sprintf('  geom_text(aes(y = -row, x = %s,',
-                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                                     round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                                              if(is.character(..5)){
                                                sprintf('            label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
                                                        ..5, ..5, ..1, ..1)
@@ -681,7 +681,7 @@ make_forest_plot <- function(
                                              '  annotate(geom = "text",',
                                              sprintf('           y = %s, x = %s,',
                                                      col.heading.space,
-                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                                     round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                                              sprintf('           label = "%s",', ..3),
                                              sprintf('           hjust = %s,', ..4),
                                              sprintf('           size = %s,', base_size/(11/3)),
@@ -699,7 +699,7 @@ make_forest_plot <- function(
                                         ~ c(sprintf('  ## column %s', ..1),
                                             sprintf(
                                             '  geom_text(aes(y = -row, x = %s,',
-                                            tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                            round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                                             sprintf(
                                             '                label = `%s`,',
                                             ..1
@@ -716,7 +716,7 @@ make_forest_plot <- function(
                                             '  annotate(geom = "text",',
                                             sprintf('           y = %s, x = %s,',
                                                     col.heading.space,
-                                                    tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                                    round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                                             sprintf('           label = "%s",', ..3),
                                             sprintf('           hjust = %s,', ..4),
                                             sprintf('           size = %s,', base_size/(11/3)),
