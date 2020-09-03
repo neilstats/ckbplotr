@@ -857,9 +857,13 @@ make_forest_plot <- function(
                 sprintf(
                 '                              uci_transformed = pmin(uci_transformed, %s),', xto),
                 sprintf(
+                '                              lci_transformed = pmin(lci_transformed, %s),', xto),
+                sprintf(
                 '                              cioverleft  = (lci_transformed < %s),', xfrom),
                 sprintf(
-                '                              lci_transformed = pmax(lci_transformed, %s))', xfrom),
+                '                              lci_transformed = pmax(lci_transformed, %s),', xfrom),
+                sprintf(
+                '                              uci_transformed = pmax(uci_transformed, %s))', xfrom),
                 '',
                 diamondscode,
                 '# Create the ggplot',
@@ -901,7 +905,10 @@ make_forest_plot <- function(
                 '  # Plot points at the transformed estimates',
                 '  ## Scale by inverse of the SE',
                 sprintf(
-                '  geom_point(aes(size = size, shape = %s, colour = %s, fill = %s),',
+                '  geom_point(data = ~ dplyr::filter(.x, estimate_transformed > %s, estimate_transformed < %s),',
+                xfrom, xto),
+                sprintf(
+                '             aes(size = size, shape = %s, colour = %s, fill = %s),',
                 shape, colour, fill),
                 sprintf(
                 '             stroke = %s,',
