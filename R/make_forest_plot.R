@@ -457,6 +457,7 @@ make_forest_data <- function(
 #' @param panel.space Size of the gap between forest plot panels.
 #' Unit is "lines". (Default: 8)
 #' @param stroke Size of outline of shapes. (Default: base_size/22)
+#' @param margin Plot margin (top, right, left, bottom). Unit is "lines". (Default: c(2, 6, 2, 0))
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #'
@@ -529,6 +530,7 @@ make_forest_plot <- function(
   base_size     = 11,
   base_line_size = base_size/22,
   stroke        = base_size/22,
+  margin        = c(2, 6, 2, 0),
   printplot     = TRUE,
   showcode      = TRUE
 ){
@@ -1073,7 +1075,9 @@ make_forest_plot <- function(
                 '        strip.text       = element_blank(),',
                 '        legend.position  = "none",',
                 '        plot.background  = element_blank(),',
-                '        plot.margin      = unit(c(2,6,2,0), "lines"))')
+                sprintf(
+                '        plot.margin      = unit(%s, "lines"))',
+                paste(deparse(margin), collapse = '')))
 
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
