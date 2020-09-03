@@ -1,0 +1,23 @@
+---
+title: "ggplot2"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ggplot2}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The ggplot2 documentation can be found at <https://ggplot2.tidyverse.org>.
+
+More details about using the package can be found in:
+
+- [Data Visualisation chapter of 'R for Data Science' by Hadley Wickham & Garrett Grolemund](https://r4ds.had.co.nz/data-visualisation.html)
+- ['ggplot2: elegant graphics for data analysis' by Hadley Wickham](https://ggplot2-book.org/)
+- ['Fundamentals of Data Visualization' by Claus O. Wilke](https://clauswilke.com/dataviz/)

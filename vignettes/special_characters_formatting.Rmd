@@ -77,6 +77,142 @@ If you want more control over some text on a plot but to still use a `make_*` fu
 
 ## Examples
 
+
+### Special characters
+You can include some special characters just by putting their unicode in your text. But sometimes this does not work correctly, for example on Windows the code for a 'greater than or equal to' symbol "\\u2265" gets replaced by an equals sign. This can be fixed by using it in your own `geom_text` code (use either the 'copy and edit' or 'add layers' method).
+
+Use a unicode symbol in column headings:
+```{r}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = varheadings,
+                               rows              = c("Triglycerides concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("A", "B"),
+                               panel.headings    = c("", ""),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3,
+                               col.left          = c("n"),
+                               col.left.space    = c(0.02),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.right.space   = 0.02,
+                               col.heading.space = 1.5,
+                               label.space       = 2,
+                               panel.space       = 8,
+                               printplot         = FALSE)
+
+forestplot$plot +
+  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
+            hjust = 0.5,
+            nudge_y = 2,
+            size  = 3,
+            fontface = "bold",
+            data = dplyr::tibble(panel = factor(c("A", "B"),
+                                                levels = c("A", "B"),
+                                                ordered = TRUE),
+                                 title = c("A \u2265 10", " A < 10")))
+```
+
+### Formatting
+Various formatting (called "aesthetics") such as colour, bold, italics, and angle can be controlled in `geom_text`. Make use of the arguments of `geom_text` (https://ggplot2.tidyverse.org/reference/geom_text.html) as you need.
+
+Make column headings bold and italic:
+```{r}
+forestplot$plot +
+  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
+            hjust = 0.5,
+            nudge_y = 2,
+            size  = 3,
+            fontface = "bold.italic",
+            data = dplyr::tibble(panel = factor(c("A", "B"),
+                                                levels = c("A", "B"),
+                                                ordered = TRUE),
+                                 title = c("A \u2265 10", " A < 10")))
+```
+
+### Expressions
+The `geom_text` function has an argument `parse` which tells ggplot2 to parse text into expressions and display as described in [plotmath](https://rdrr.io/r/grDevices/plotmath.html). (Note that text in columns given by `col.right` in `make_forest_plot` already use `parse = TRUE`.)
+
+Evaluate column headings as expressions:
+```{r}
+forestplot$plot +
+  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
+            hjust = 0.5,
+            nudge_y = 2,
+            size  = 3,
+            parse = TRUE,
+            data = dplyr::tibble(panel = factor(c("A", "B"),
+                                                levels = c("A", "B"),
+                                                ordered = TRUE),
+                                 title = paste0("bold(", c("A>=10", "A^b"), ")")))
+```
+Note the expressions will remove the `fontface` and other formatting, but we can use `bold` inside the text instead (though it does not apply to symbols or numbers).
+
+
+### ggtext
+The [ggtext packge](https://wilkelab.org/ggtext/) adds support for some Markdown and HTML. You could install this package and use `geom_richtext()` in place of `geom_text()` to use some markdown (or HTML).
+
+Bold and italics using markdown:
+```{r}
+forestplot$plot +
+  ggtext::geom_richtext(aes(y = 1.5, x = 0.99498743710662, label = title),
+                        hjust = 0.5,
+                        size  = 3,
+                        nudge_y = 2,
+                        data = dplyr::tibble(panel = factor(c("A", "B"),
+                                                            levels = c("A", "B"),
+                                                            ordered = TRUE),
+                                             title = c("*A*", "**B<sup>2</sup>**")),
+                        fill = NA,
+                        label.color = NA)
+```
+
+You could also use `element_markdown` inside `theme` to make use of markdown just in row headings.
+```{r}
+varheadings <- data.frame(heading1 = rep("Triglycerides concentration", each = 7),
+                          heading2 = c("VLDL^a", "VLDL^a", "VLDL^a",
+                                       "**IDL**",
+                                       "*LDL*", "*LDL*", "*LDL*"),
+                          heading3 = c("Large", "Medium", "Small",
+                                       NA,
+                                       "*Large*", "*Medium*", "*Small*"),
+                          variable = c('nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
+                                       'nmr_idl_tg',
+                                       'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg'),
+                          stringsAsFactors = FALSE)
+
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = varheadings,
+                               rows              = c("Triglycerides concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("A", "B"),
+                               panel.headings    = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3,
+                               col.left          = c("n"),
+                               col.left.space    = c(0.02),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.right.space   = 0.02,
+                               col.heading.space = 1.5,
+                               label.space       = 2,
+                               panel.space       = 8,
+                               printplot         = FALSE,
+                               showcode          = FALSE)
+
+forestplot$plot + 
+  theme(axis.text.y = ggtext::element_markdown())
+```
+
+
 ### Change labels in make_forest_plot using expression
 If you want to use different formatting and characters for row labels in `make_forest_plot` you can use the 'copy and edit' method. Just replace the section of code that creates the rowlabels vector. For example you could replace it by a vector of expressions.
 
@@ -219,14 +355,14 @@ ggplot(datatoplot, aes(y=-row, x=estimate_transformed)) +
 
   # Add columns to right side of plots
   ## column textresult
-  geom_text(aes(y = -row, x = 1.104423626284,
+  geom_text(aes(y = -row, x = 1.104424,
             label = textresult),
             hjust = 0,
             size = 3,
             na.rm = TRUE,
             parse = TRUE) +
   annotate(geom = "text",
-           y = 1.5, x = 1.104423626284,
+           y = 1.5, x = 1.104424,
            label = "HR (95% CI)",
            hjust = 0,
            size = 3,
@@ -234,14 +370,14 @@ ggplot(datatoplot, aes(y=-row, x=estimate_transformed)) +
 
   # Add columns to left side of plots
   ## column n
-  geom_text(aes(y = -row, x = 0.896395166165542,
+  geom_text(aes(y = -row, x = 0.896395,
                 label = `n`,
             fontface = "plain"),
            hjust = 1,
            size = 3,
             na.rm = TRUE) +
   annotate(geom = "text",
-           y = 1.5, x = 0.896395166165542,
+           y = 1.5, x = 0.896395,
            label = "No. of
 events",
            hjust = 1,
@@ -249,7 +385,7 @@ events",
            fontface = "bold") +
 
   # Add xlab below each axis
-  geom_text(aes(y = -Inf, x = 0.99498743710662, label = xlab),
+  geom_text(aes(y = -Inf, x = 0.994987, label = xlab),
             hjust = 0.5,
             size  = 3,
             vjust = 4.4,
@@ -260,7 +396,7 @@ events",
                                  xlab = "HR (95% CI)")) +
 
   # Add panel name above each panel
-  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
+  geom_text(aes(y = 1.5, x = 0.994987, label = title),
             hjust = 0.5,
             nudge_y = 2,
             size  = 3,
@@ -308,142 +444,6 @@ events",
         strip.text       = element_blank(),
         legend.position  = "none",
         plot.background  = element_blank(),
-        plot.margin      = unit(c(2,6,2,0), "lines"))
+        plot.margin      = unit(c(2, 6, 2, 0), "lines"))
 ```
-
-### Special characters
-You can include some special characters just by putting their unicode in your text. But sometimes this does not work correctly, for example on Windows the code for a 'greater than or equal to' symbol "\\u2265" gets replaced by an equals sign. This can be fixed by using it in your own `geom_text` code (use either the 'copy and edit' or 'add layers' method).
-
-Use a unicode symbol in column headings:
-```{r}
-forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
-                               col.key           = "variable",
-                               row.labels        = varheadings,
-                               rows              = c("Triglycerides concentration"),
-                               exponentiate      = TRUE,
-                               panel.names       = c("A", "B"),
-                               panel.headings    = c("", ""),
-                               ci.delim          = " - ",
-                               xlim              = c(0.9, 1.1),
-                               xticks            = c(0.9, 1, 1.1),
-                               blankrows         = c(1, 1, 0, 1),
-                               scalepoints       = TRUE,
-                               pointsize         = 3,
-                               col.left          = c("n"),
-                               col.left.space    = c(0.02),
-                               col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
-                               col.heading.space = 1.5,
-                               label.space       = 2,
-                               panel.space       = 8,
-                               printplot         = FALSE)
-
-forestplot$plot +
-  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
-            hjust = 0.5,
-            nudge_y = 2,
-            size  = 3,
-            fontface = "bold",
-            data = dplyr::tibble(panel = factor(c("A", "B"),
-                                                levels = c("A", "B"),
-                                                ordered = TRUE),
-                                 title = c("A \u2265 10", " A < 10")))
-```
-
-### Formatting
-Various formatting (called "aesthetics") such as colour, bold, italics, and angle can be controlled in `geom_text`. Make use of the arguments of `geom_text` (https://ggplot2.tidyverse.org/reference/geom_text.html) as you need.
-
-Make column headings bold and italic:
-```{r}
-forestplot$plot +
-  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
-            hjust = 0.5,
-            nudge_y = 2,
-            size  = 3,
-            fontface = "bold.italic",
-            data = dplyr::tibble(panel = factor(c("A", "B"),
-                                                levels = c("A", "B"),
-                                                ordered = TRUE),
-                                 title = c("A \u2265 10", " A < 10")))
-```
-
-### Expressions
-The `geom_text` function has an argument `parse` which tells ggplot2 to parse text into expressions and display as described in [plotmath](https://rdrr.io/r/grDevices/plotmath.html). (Note that text in columns given by `col.right` in `make_forest_plot` already use `parse = TRUE`.)
-
-Evaluate column headings as expressions:
-```{r}
-forestplot$plot +
-  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
-            hjust = 0.5,
-            nudge_y = 2,
-            size  = 3,
-            parse = TRUE,
-            data = dplyr::tibble(panel = factor(c("A", "B"),
-                                                levels = c("A", "B"),
-                                                ordered = TRUE),
-                                 title = paste0("bold(", c("A>=10", "A^b"), ")")))
-```
-Note the expressions will remove the `fontface` and other formatting, but we can use `bold` inside the text instead (though it does not apply to symbols or numbers).
-
-
-### ggtext
-The [ggtext packge](https://wilkelab.org/ggtext/) adds support for some Markdown and HTML. You could install this package and use `geom_richtext()` in place of `geom_text()` to use some markdown (or HTML).
-
-Bold and italics using markdown:
-```{r}
-forestplot$plot +
-  ggtext::geom_richtext(aes(y = 1.5, x = 0.99498743710662, label = title),
-                        hjust = 0.5,
-                        size  = 3,
-                        nudge_y = 2,
-                        data = dplyr::tibble(panel = factor(c("A", "B"),
-                                                            levels = c("A", "B"),
-                                                            ordered = TRUE),
-                                             title = c("*A*", "**B<sup>2</sup>**")),
-                        fill = NA,
-                        label.color = NA)
-```
-
-You could also use `element_markdown` inside `theme` to make use of markdown just in row headings.
-```{r}
-varheadings <- data.frame(heading1 = rep("Triglycerides concentration", each = 7),
-                          heading2 = c("VLDL^a", "VLDL^a", "VLDL^a",
-                                       "**IDL**",
-                                       "*LDL*", "*LDL*", "*LDL*"),
-                          heading3 = c("Large", "Medium", "Small",
-                                       NA,
-                                       "*Large*", "*Medium*", "*Small*"),
-                          variable = c('nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
-                                       'nmr_idl_tg',
-                                       'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg'),
-                          stringsAsFactors = FALSE)
-
-forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
-                               col.key           = "variable",
-                               row.labels        = varheadings,
-                               rows              = c("Triglycerides concentration"),
-                               exponentiate      = TRUE,
-                               panel.names       = c("A", "B"),
-                               panel.headings    = c("Analysis A", "Analysis B"),
-                               ci.delim          = " - ",
-                               xlim              = c(0.9, 1.1),
-                               xticks            = c(0.9, 1, 1.1),
-                               blankrows         = c(1, 1, 0, 1),
-                               scalepoints       = TRUE,
-                               pointsize         = 3,
-                               col.left          = c("n"),
-                               col.left.space    = c(0.02),
-                               col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
-                               col.heading.space = 1.5,
-                               label.space       = 2,
-                               panel.space       = 8,
-                               printplot         = FALSE,
-                               showcode          = FALSE)
-
-forestplot$plot + 
-  theme(axis.text.y = ggtext::element_markdown())
-```
-
-
 
