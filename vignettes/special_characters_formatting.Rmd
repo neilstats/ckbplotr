@@ -161,13 +161,13 @@ datatoplot <- datatoplot %>%
                               lci_transformed = pmax(lci_transformed, 0.9))
 
 # Create the ggplot
-ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
+ggplot(datatoplot, aes(y=-row, x=estimate_transformed)) +
 
   # Put the different panels in side-by-side plots using facets
   facet_wrap(~panel, nrow = 1) +
 
   # Add a line at null effect
-  annotate(geom = "segment", x=-1, xend=-Inf, y=1, yend=1, size = 0.5) +
+  annotate(geom = "segment", y=-1, yend=-Inf, x=1, xend=1, size = 0.5) +
 
   # Plot points at the transformed estimates
   ## Scale by inverse of the SE
@@ -182,27 +182,27 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
 
   # Plot the CIs
   geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),
-                 aes(ymin = lci_transformed,
-                     ymax = uci_transformed,
+                 aes(xmin = lci_transformed,
+                     xmax = uci_transformed,
                      colour = "black"), 
                  size = 0.5,
                  na.rm = TRUE) +
 
   # Add tiny segments with arrows when the CIs go outside axis limits
   geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),
-               aes(x=-row,
-                   y=uci_transformed-0.000001,
-                   xend=-row,
-                   yend=uci_transformed),
+               aes(y=-row,
+                   x=uci_transformed-0.000001,
+                   yend=-row,
+                   xend=uci_transformed),
                colour = "black",
                size = 0.5,
                arrow = arrow(type = "closed", length = unit(4, "pt")),
                na.rm = TRUE) +
   geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),
-               aes(x=-row,
-                   y=lci_transformed+0.000001,
-                   xend=-row,
-                   yend=lci_transformed),
+               aes(y=-row,
+                   x=lci_transformed+0.000001,
+                   yend=-row,
+                   xend=lci_transformed),
                colour = "black",
                size = 0.5,
                arrow = arrow(type = "closed", length = unit(4, "pt")),
@@ -214,19 +214,19 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
   scale_colour_identity() +
 
   # Flip x and y coordinates
-  coord_flip(clip = "off",
-             ylim = c(0.9, 1.1)) +
+  coord_cartesian(clip = "off",
+             xlim = c(0.9, 1.1)) +
 
   # Add columns to right side of plots
   ## column textresult
-  geom_text(aes(x = -row, y = 1.104423626284,
+  geom_text(aes(y = -row, x = 1.104423626284,
             label = textresult),
             hjust = 0,
             size = 3,
             na.rm = TRUE,
             parse = TRUE) +
   annotate(geom = "text",
-           x = 1.5, y = 1.104423626284,
+           y = 1.5, x = 1.104423626284,
            label = "HR (95% CI)",
            hjust = 0,
            size = 3,
@@ -234,14 +234,14 @@ ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +
 
   # Add columns to left side of plots
   ## column n
-  geom_text(aes(x = -row, y = 0.896395166165542,
+  geom_text(aes(y = -row, x = 0.896395166165542,
                 label = `n`,
             fontface = "plain"),
            hjust = 1,
            size = 3,
             na.rm = TRUE) +
   annotate(geom = "text",
-           x = 1.5, y = 0.896395166165542,
+           y = 1.5, x = 0.896395166165542,
            label = "No. of
 events",
            hjust = 1,
@@ -249,7 +249,7 @@ events",
            fontface = "bold") +
 
   # Add xlab below each axis
-  geom_text(aes(x = -Inf, y = 0.99498743710662, label = xlab),
+  geom_text(aes(y = -Inf, x = 0.99498743710662, label = xlab),
             hjust = 0.5,
             size  = 3,
             vjust = 4.4,
@@ -260,9 +260,9 @@ events",
                                  xlab = "HR (95% CI)")) +
 
   # Add panel name above each panel
-  geom_text(aes(x = 1.5, y = 0.99498743710662, label = title),
+  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
             hjust = 0.5,
-            nudge_x = 2,
+            nudge_y = 2,
             size  = 3,
             fontface = "bold",
             data = dplyr::tibble(panel = factor(c("Analysis A", "Analysis B"),
@@ -271,12 +271,12 @@ events",
                                  title = c("Analysis A", "Analysis B"))) +
 
   # Set the scale for the y axis (the estimates and CIs)
-  scale_y_continuous(trans  = "log",
+  scale_x_continuous(trans  = "log",
                      breaks = c(0.9, 1, 1.1),
                      expand = c(0,0)) +
 
   # Set the scale for the x axis (the rows)
-  scale_x_continuous(breaks = -1:-max(datatoplot$row),
+  scale_y_continuous(breaks = -1:-max(datatoplot$row),
                      labels = rowlabels,
                      name   = "",
                      expand = c(0,0)) +
@@ -339,9 +339,9 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                printplot         = FALSE)
 
 forestplot$plot +
-  geom_text(aes(x = 1.5, y = 0.99498743710662, label = title),
+  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
             hjust = 0.5,
-            nudge_x = 2,
+            nudge_y = 2,
             size  = 3,
             fontface = "bold",
             data = dplyr::tibble(panel = factor(c("A", "B"),
@@ -356,9 +356,9 @@ Various formatting (called "aesthetics") such as colour, bold, italics, and angl
 Make column headings bold and italic:
 ```{r}
 forestplot$plot +
-  geom_text(aes(x = 1.5, y = 0.99498743710662, label = title),
+  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
             hjust = 0.5,
-            nudge_x = 2,
+            nudge_y = 2,
             size  = 3,
             fontface = "bold.italic",
             data = dplyr::tibble(panel = factor(c("A", "B"),
@@ -373,9 +373,9 @@ The `geom_text` function has an argument `parse` which tells ggplot2 to parse te
 Evaluate column headings as expressions:
 ```{r}
 forestplot$plot +
-  geom_text(aes(x = 1.5, y = 0.99498743710662, label = title),
+  geom_text(aes(y = 1.5, x = 0.99498743710662, label = title),
             hjust = 0.5,
-            nudge_x = 2,
+            nudge_y = 2,
             size  = 3,
             parse = TRUE,
             data = dplyr::tibble(panel = factor(c("A", "B"),
@@ -392,10 +392,10 @@ The [ggtext packge](https://wilkelab.org/ggtext/) adds support for some Markdown
 Bold and italics using markdown:
 ```{r}
 forestplot$plot +
-  ggtext::geom_richtext(aes(x = 1.5, y = 0.99498743710662, label = title),
+  ggtext::geom_richtext(aes(y = 1.5, x = 0.99498743710662, label = title),
                         hjust = 0.5,
                         size  = 3,
-                        nudge_x = 2,
+                        nudge_y = 2,
                         data = dplyr::tibble(panel = factor(c("A", "B"),
                                                             levels = c("A", "B"),
                                                             ordered = TRUE),

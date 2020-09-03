@@ -590,7 +590,7 @@ make_forest_plot <- function(
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
   # line at null
-  nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=%s, yend=%s, size = %s) +',
+  nullline <- sprintf('  annotate(geom = "segment", y=-1, yend=-Inf, x=%s, xend=%s, size = %s) +',
                       nullval, nullval, base_line_size)
 
   # aesthetics: default value, match column name, or use argument itself
@@ -666,7 +666,7 @@ make_forest_plot <- function(
 
     col.right.line <- unlist(purrr::pmap(list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold),
                                          ~ c(sprintf('  ## column %s', ..1),
-                                             sprintf('  geom_text(aes(x = -row, y = %s,',
+                                             sprintf('  geom_text(aes(y = -row, x = %s,',
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                              if(is.character(..5)){
                                                sprintf('            label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
@@ -679,7 +679,7 @@ make_forest_plot <- function(
                                              '            na.rm = TRUE,',
                                              '            parse = TRUE) +',
                                              '  annotate(geom = "text",',
-                                             sprintf('           x = %s, y = %s,',
+                                             sprintf('           y = %s, x = %s,',
                                                      col.heading.space,
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                              sprintf('           label = "%s",', ..3),
@@ -698,7 +698,7 @@ make_forest_plot <- function(
     col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust, col.bold),
                                         ~ c(sprintf('  ## column %s', ..1),
                                             sprintf(
-                                            '  geom_text(aes(x = -row, y = %s,',
+                                            '  geom_text(aes(y = -row, x = %s,',
                                             tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                             sprintf(
                                             '                label = `%s`,',
@@ -714,7 +714,7 @@ make_forest_plot <- function(
                                             sprintf('           size = %s,', base_size/(11/3)),
                                             '            na.rm = TRUE) +',
                                             '  annotate(geom = "text",',
-                                            sprintf('           x = %s, y = %s,',
+                                            sprintf('           y = %s, x = %s,',
                                                     col.heading.space,
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
                                             sprintf('           label = "%s",', ..3),
@@ -732,13 +732,13 @@ make_forest_plot <- function(
         'diamonds <- datatoplot %>%',
         sprintf(
         '  dplyr::filter(key %%in%% %s) %%>%%', deparse(diamond)),
-        '  dplyr::mutate(y1 = lci_transformed,',
-        '                y2 = estimate_transformed,',
-        '                y3 = uci_transformed,',
-        '                y4 = estimate_transformed) %>%',
-        '  tidyr::gather(part, y, y1:y4) %>%',
+        '  dplyr::mutate(x1 = lci_transformed,',
+        '                x2 = estimate_transformed,',
+        '                x3 = uci_transformed,',
+        '                x4 = estimate_transformed) %>%',
+        '  tidyr::gather(part, x, x1:x4) %>%',
         '  dplyr::arrange(panel, row, part) %>%',
-        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))',
+        '  dplyr::mutate(y = - row + c(0, -0.25, 0, 0.25))',
         '',
         '# Remove plotting of points if a diamond is to be used',
         'datatoplot <- datatoplot %>% ',
@@ -756,13 +756,13 @@ make_forest_plot <- function(
         'diamonds <- datatoplot %>%',
         sprintf(
           '  dplyr::filter(`%s` == TRUE) %%>%%', col.diamond),
-        '  dplyr::mutate(y1 = lci_transformed,',
-        '                y2 = estimate_transformed,',
-        '                y3 = uci_transformed,',
-        '                y4 = estimate_transformed) %>%',
-        '  tidyr::gather(part, y, y1:y4) %>%',
+        '  dplyr::mutate(x1 = lci_transformed,',
+        '                x2 = estimate_transformed,',
+        '                x3 = uci_transformed,',
+        '                x4 = estimate_transformed) %>%',
+        '  tidyr::gather(part, x, x1:x4) %>%',
         '  dplyr::arrange(panel, row, part) %>%',
-        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))',
+        '  dplyr::mutate(y = - row + c(0, -0.25, 0, 0.25))',
         '',
         '# Remove plotting of points if a diamond is to be used',
         sprintf('if (any(datatoplot[["%s"]])) {', col.diamond),
@@ -861,7 +861,7 @@ make_forest_plot <- function(
                 '',
                 diamondscode,
                 '# Create the ggplot',
-                'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
+                'ggplot(datatoplot, aes(y=-row, x=estimate_transformed)) +',
                 '',
                 '  # Put the different panels in side-by-side plots using facets',
                 '  facet_wrap(~panel, nrow = 1) +',
@@ -873,8 +873,8 @@ make_forest_plot <- function(
                   c(
                     '  # Plot the CIs',
                     '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-                    '                 aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
+                    '                 aes(xmin = lci_transformed,',
+                    '                     xmax = uci_transformed,',
                     sprintf(
                     '                     colour = %s), ', cicolour),
                     sprintf(
@@ -887,8 +887,8 @@ make_forest_plot <- function(
                     sprintf(
                       '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s),',
                       ciunder),
-                    '                 aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
+                    '                 aes(xmin = lci_transformed,',
+                    '                     xmax = uci_transformed,',
                     sprintf(
                     '                     colour = %s),', cicolour),
                     sprintf(
@@ -916,8 +916,8 @@ make_forest_plot <- function(
                   c(
                     '  # Plot the CIs',
                     '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-                    '                 aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
+                    '                 aes(xmin = lci_transformed,',
+                    '                     xmax = uci_transformed,',
                     sprintf(
                     '                     colour = %s), ', cicolour),
                     sprintf(
@@ -930,8 +930,8 @@ make_forest_plot <- function(
                     sprintf(
                     '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s),',
                     ciunder),
-                    '                 aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
+                    '                 aes(xmin = lci_transformed,',
+                    '                     xmax = uci_transformed,',
                     sprintf(
                     '                     colour = %s),', cicolour),
                     sprintf(
@@ -941,15 +941,15 @@ make_forest_plot <- function(
                 },
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
-                '               aes(x=-row,',
-                '                   y=uci_transformed-0.000001,',
-                '                   xend=-row,',
+                '               aes(y=-row,',
+                '                   x=uci_transformed-0.000001,',
+                '                   yend=-row,',
                 if (cicolouraes) {c(
-                '                   yend=uci_transformed,',
+                '                   xend=uci_transformed,',
                 sprintf(
                 '                   colour = %s),', cicolour))
                 } else {c(
-                '                   yend=uci_transformed),',
+                '                   xend=uci_transformed),',
                 sprintf(
                 '               colour = %s,', cicolour))
                 },
@@ -959,15 +959,15 @@ make_forest_plot <- function(
                 '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
                 '               na.rm = TRUE) +',
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
-                '               aes(x=-row,',
-                '                   y=lci_transformed+0.000001,',
-                '                   xend=-row,',
+                '               aes(y=-row,',
+                '                   x=lci_transformed+0.000001,',
+                '                   yend=-row,',
                 if (cicolouraes) {c(
-                '                   yend=lci_transformed,',
+                '                   xend=lci_transformed,',
                 sprintf(
                 '                   colour = %s),', cicolour))
                 } else {c(
-                '                   yend=lci_transformed),',
+                '                   xend=lci_transformed),',
                 sprintf(
                 '               colour = %s,', cicolour))
                 },
@@ -984,9 +984,9 @@ make_forest_plot <- function(
                 '  scale_colour_identity() +',
                 '',
                 '  # Flip x and y coordinates',
-                '  coord_flip(clip = "off",',
+                '  coord_cartesian(clip = "off",',
                 sprintf(
-                '             ylim = c(%s, %s)) +', xfrom, xto),
+                '             xlim = c(%s, %s)) +', xfrom, xto),
                 '',
                 '  # Add columns to right side of plots',
                 col.right.line,
@@ -996,7 +996,7 @@ make_forest_plot <- function(
                 '',
                 '  # Add xlab below each axis',
                 sprintf(
-                '  geom_text(aes(x = -Inf, y = %s, label = xlab),', xmid),
+                '  geom_text(aes(y = -Inf, x = %s, label = xlab),', xmid),
                 '            hjust = 0.5,',
                 sprintf(
                 '            size  = %s,', base_size/(11/3)),
@@ -1015,10 +1015,10 @@ make_forest_plot <- function(
                 '',
                 '  # Add panel name above each panel',
                 sprintf(
-                '  geom_text(aes(x = %s, y = %s, label = title),',
+                '  geom_text(aes(y = %s, x = %s, label = title),',
                 col.heading.space , xmid),
                 '            hjust = 0.5,',
-                '            nudge_x = 2,',
+                '            nudge_y = 2,',
                 sprintf(
                 '            size  = %s,', base_size/(11/3)),
                 '            fontface = "bold",',
@@ -1034,12 +1034,12 @@ make_forest_plot <- function(
                 paste(deparse(panel.headings), collapse = '')),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
-                sprintf('  scale_y_continuous(trans  = "%s",', scale),
+                sprintf('  scale_x_continuous(trans  = "%s",', scale),
                 xticksline,
                 '                     expand = c(0,0)) +',
                 '',
                 '  # Set the scale for the x axis (the rows)',
-                '  scale_x_continuous(breaks = -1:-max(datatoplot$row),',
+                '  scale_y_continuous(breaks = -1:-max(datatoplot$row),',
                 '                     labels = rowlabels,',
                 '                     name   = "",',
                 '                     expand = c(0,0)) +',
