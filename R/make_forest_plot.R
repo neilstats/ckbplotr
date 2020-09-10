@@ -572,6 +572,10 @@ make_forest_plot <- function(
   # take first element if diamond is a list
   if (is.list(diamond)){ diamond <- diamond[[1]] }
 
+  # transpose column headings if a list
+  if (purrr::is_list(col.right.heading)){ col.right.heading <- purrr::transpose(col.right.heading)}
+  if (purrr::is_list(col.left.heading)){ col.left.heading <- purrr::transpose(col.left.heading)}
+
   if (logscale == TRUE) {
     tf       <- exp
     inv_tf   <- log
@@ -671,23 +675,37 @@ make_forest_plot <- function(
                                              sprintf('  geom_text(aes(y = -row, x = %s,',
                                                      round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                                              if(is.character(..5)){
-                                               sprintf('            label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
+                                               sprintf('                label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
                                                        ..5, ..5, ..1, ..1)
                                                } else {
-                                                sprintf('            label = %s),', ..1)
+                                                sprintf('                label = %s),', ..1)
                                                        },
-                                             sprintf('            hjust = %s,', ..4),
-                                             sprintf('            size = %s,', base_size/(11/3)),
+                                             sprintf(
+                                             '            hjust = %s,', ..4),
+                                             sprintf(
+                                             '            size = %s,', base_size/(11/3)),
                                              '            na.rm = TRUE,',
                                              '            parse = TRUE) +',
-                                             '  annotate(geom = "text",',
-                                             sprintf('           y = %s, x = %s,',
-                                                     col.heading.space,
-                                                     round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
-                                             sprintf('           label = "%s",', ..3),
-                                             sprintf('           hjust = %s,', ..4),
-                                             sprintf('           size = %s,', base_size/(11/3)),
-                                             '           fontface = "bold") +')))
+                                             sprintf(
+                                             '  geom_text(aes(y = %s, x = %s,',
+                                             col.heading.space,
+                                             round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                                             '                label = title),',
+                                             sprintf(
+                                             '            hjust = %s,', ..4),
+                                             sprintf(
+                                             '            size = %s,', base_size/(11/3)),
+                                             '            fontface = "bold",',
+                                             sprintf(
+                                             '            data = dplyr::tibble(panel = factor(%s,',
+                                             paste(deparse(panel.names), collapse = '')),
+                                             sprintf(
+                                             '                                                levels = %s,',
+                                             paste(deparse(panel.names), collapse = '')),
+                                             '                                                ordered = TRUE),',
+                                             sprintf(
+                                             '                                 title = %s)) +',
+                                             paste(deparse(unlist(..3)), collapse = '')))))
   }
 
 
@@ -712,17 +730,31 @@ make_forest_plot <- function(
                                             ..5, ..5)} else {
                                             '            fontface = "plain"),'
                                             },
-                                            sprintf('           hjust = %s,', ..4),
-                                            sprintf('           size = %s,', base_size/(11/3)),
+                                            sprintf(
+                                            '            hjust = %s,', ..4),
+                                            sprintf(
+                                            '            size = %s,', base_size/(11/3)),
                                             '            na.rm = TRUE) +',
-                                            '  annotate(geom = "text",',
-                                            sprintf('           y = %s, x = %s,',
-                                                    col.heading.space,
-                                                    round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
-                                            sprintf('           label = "%s",', ..3),
-                                            sprintf('           hjust = %s,', ..4),
-                                            sprintf('           size = %s,', base_size/(11/3)),
-                                            '           fontface = "bold") +')))
+                                            sprintf(
+                                            '  geom_text(aes(y = %s, x = %s,',
+                                            col.heading.space,
+                                            round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                                            '                label = title),',
+                                            sprintf(
+                                            '            hjust = %s,', ..4),
+                                            sprintf(
+                                            '            size = %s,', base_size/(11/3)),
+                                            '            fontface = "bold",',
+                                            sprintf(
+                                            '            data = dplyr::tibble(panel = factor(%s,',
+                                            paste(deparse(panel.names), collapse = '')),
+                                            sprintf(
+                                            '                                                levels = %s,',
+                                            paste(deparse(panel.names), collapse = '')),
+                                            '                                                ordered = TRUE),',
+                                            sprintf(
+                                            '                                 title = %s)) +',
+                                            paste(deparse(unlist(..3)), collapse = '')))))
   }
 
   diamondscode <- NULL
