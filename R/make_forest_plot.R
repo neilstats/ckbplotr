@@ -520,6 +520,10 @@ make_forest_plot <- function(
   # take first element if diamond is a list
   if (is.list(diamond)){ diamond <- diamond[[1]] }
 
+  # transpose column headings if a list
+  if (purrr::is_list(col.right.heading)){ col.right.heading <- purrr::transpose(col.right.heading)}
+  if (purrr::is_list(col.left.heading)){ col.left.heading <- purrr::transpose(col.left.heading)}
+
   if (logscale == TRUE) {
     tf       <- exp
     inv_tf   <- log
@@ -647,14 +651,23 @@ make_forest_plot <- function(
                                              sprintf('            size = %s,', base_size/(11/3)),
                                              '            na.rm = TRUE,',
                                              '            parse = TRUE) +',
-                                             '  annotate(geom = "text",',
-                                             sprintf('           x = %s, y = %s,',
+                                             sprintf('  geom_text(aes(x = %s, y = %s,',
                                                      col.heading.space,
                                                      tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
-                                             sprintf('           label = "%s",', ..3),
-                                             sprintf('           hjust = %s,', ..4),
-                                             sprintf('           size = %s,', base_size/(11/3)),
-                                             '           fontface = "bold") +')))
+                                             '            label = title),',
+                                             sprintf('            hjust = %s,', ..4),
+                                             sprintf('            size = %s,', base_size/(11/3)),
+                                             '            fontface = "bold",',
+                                             sprintf(
+                                             '            data = dplyr::tibble(column = factor(%s,',
+                                             paste(deparse(colnames), collapse = '')),
+                                             sprintf(
+                                             '                                                levels = %s,',
+                                             paste(deparse(colnames), collapse = '')),
+                                             '                                                ordered = TRUE),',
+                                             sprintf(
+                                             '                                 title = %s)) +',
+                                             paste(deparse(unlist(..3)), collapse = '')))))
   }
 
 
@@ -682,14 +695,23 @@ make_forest_plot <- function(
                                             sprintf('           hjust = %s,', ..4),
                                             sprintf('           size = %s,', base_size/(11/3)),
                                             '            na.rm = TRUE) +',
-                                            '  annotate(geom = "text",',
-                                            sprintf('           x = %s, y = %s,',
+                                            sprintf('  geom_text(aes(x = %s, y = %s,',
                                                     col.heading.space,
                                                     tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
-                                            sprintf('           label = "%s",', ..3),
+                                            '           label = title),',
                                             sprintf('           hjust = %s,', ..4),
                                             sprintf('           size = %s,', base_size/(11/3)),
-                                            '           fontface = "bold") +')))
+                                            '           fontface = "bold",',
+                                            sprintf(
+                                            '           data = dplyr::tibble(column = factor(%s,',
+                                            paste(deparse(colnames), collapse = '')),
+                                            sprintf(
+                                            '                                                levels = %s,',
+                                            paste(deparse(colnames), collapse = '')),
+                                            '                                                ordered = TRUE),',
+                                            sprintf(
+                                            '                                title = %s)) +',
+                                            paste(deparse(unlist(..3)), collapse = '')))))
   }
 
   diamondscode <- NULL

@@ -1,3 +1,7 @@
+# ckbplotr 0.3.2
+
+* Arguments col.right.headings and col.left.headings in make_forest_plot will now accept lists, so that different headings can be used between plots.
+
 # ckbplotr 0.3.1
 
 * New argument stroke in make_shape_plot and make_forest_plot.
