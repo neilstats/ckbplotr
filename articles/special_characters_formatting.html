@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -120,35 +120,38 @@
 <a href="#change-headings-in-make_forest_plot-using-expression" class="anchor"></a>Change headings in make_forest_plot using expression</h3>
 <p>If you want to use different formatting and characters for row headings in <code>make_forest_plot</code> you can you the ‘copy and edit’ method. Just replace the section of code that creates the headings vector. For example you could replace it by a vector of expressions.</p>
 <p>First start by using <code>make_forest_plot</code>.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">forestplot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(<span class="kw">headings</span>         <span class="kw">=</span> <span class="no">varheadings</span>,
-                               <span class="kw">rows</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
-                               <span class="kw">cols</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">resultsA</span>, <span class="no">resultsB</span>),
-                               <span class="kw">exponentiate</span>     <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">colnames</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                               <span class="kw">col.key</span>          <span class="kw">=</span> <span class="st">"variable"</span>,
-                               <span class="kw">ci.delim</span>         <span class="kw">=</span> <span class="st">" - "</span>,
-                               <span class="kw">xlim</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
-                               <span class="kw">xticks</span>           <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
-                               <span class="kw">blankrows</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
-                               <span class="kw">scalepoints</span>      <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">pointsize</span>        <span class="kw">=</span> <span class="fl">3</span>,
-                               <span class="kw">col.left</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
-                               <span class="kw">col.left.space</span>   <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
-                               <span class="kw">col.left.heading</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
-                               <span class="kw">col.right.space</span>  <span class="kw">=</span> <span class="fl">0.02</span>,
-                               <span class="kw">col.heading.space</span> <span class="kw">=</span> <span class="fl">1.5</span>,
-                               <span class="kw">heading.space</span>    <span class="kw">=</span> <span class="fl">2</span>,
-                               <span class="kw">plot.space</span>       <span class="kw">=</span> <span class="fl">8</span>,
-                               <span class="kw">printplot</span>        <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb1"><pre class="downlit">
+<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">varheadings</span>,
+                               rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
+                               cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
+                               exponentiate     = <span class="fl">TRUE</span>,
+                               colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                               col.key          = <span class="st">"variable"</span>,
+                               ci.delim         = <span class="st">" - "</span>,
+                               xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                               xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                               blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                               scalepoints      = <span class="fl">TRUE</span>,
+                               pointsize        = <span class="fl">3</span>,
+                               col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                               col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                               col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                               col.right.space  = <span class="fl">0.02</span>,
+                               col.heading.space = <span class="fl">1.5</span>,
+                               heading.space    = <span class="fl">2</span>,
+                               plot.space       = <span class="fl">8</span>,
+                               printplot        = <span class="fl">FALSE</span>)
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></body></html></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
 <p>Now copy the code from the RStudio Viewer pane, and edit the section under the comment “# Get a character vector of the headings, so these can be used in the plot”. (Also edit the third line so that <code>datatoplot</code> is <code>forestplot$data</code>.)</p>
-<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># ggplot2 code ------------------</span>
+<div class="sourceCode" id="cb2"><pre class="downlit">
+<span class="co"># ggplot2 code ------------------</span>
 <span class="co"># Assign the data returned by the function to datatoplot</span>
-<span class="no">datatoplot</span> <span class="kw">&lt;-</span> <span class="no">forestplot</span>$<span class="no">data</span>
+<span class="kw">datatoplot</span> <span class="op">&lt;-</span> <span class="kw">forestplot</span><span class="op">$</span><span class="kw">data</span>
 
 <span class="co"># Get a character vector of the headings, so these can be used in the plot</span>
-<span class="no">headings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(<span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">bolditalic</a></span>(<span class="st">"Triglycerides concentration"</span>),
+<span class="kw">headings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(<span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">bolditalic</a></span>(<span class="st">"Triglycerides concentration"</span>),
                        <span class="st">""</span>,
                        <span class="st">"VLDL"</span>,
                        <span class="st">"Large"</span>,
@@ -165,143 +168,144 @@
                        <span class="st">""</span>)
 
 <span class="co"># Get a character vector of the style for headings</span>
-<span class="no">boldheadings</span> <span class="kw">&lt;-</span> <span class="no">datatoplot</span> <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">row</span>) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(<span class="kw">bold</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">estimate_transformed</span>) <span class="kw">|</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="no">key</span> <span class="kw">%in%</span> <span class="kw">NULL</span>)), <span class="st">"bold"</span>, <span class="st">"plain"</span>)) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="no">row</span>) <span class="kw">%&gt;%</span>
-  <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span>(<span class="no">bold</span>)
+<span class="kw">boldheadings</span> <span class="op">&lt;-</span> <span class="kw">datatoplot</span> <span class="op">%&gt;%</span>
+  <span class="kw">dplyr</span>::<span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="kw">row</span>) <span class="op">%&gt;%</span>
+  <span class="kw">dplyr</span>::<span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span>(bold = <span class="kw">dplyr</span>::<span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="kw">estimate_transformed</span>) <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="kw">key</span> <span class="op">%in%</span> <span class="kw">NULL</span>)), <span class="st">"bold"</span>, <span class="st">"plain"</span>)) <span class="op">%&gt;%</span>
+  <span class="kw">dplyr</span>::<span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(<span class="kw">row</span>) <span class="op">%&gt;%</span>
+  <span class="kw">dplyr</span>::<span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span>(<span class="kw">bold</span>)
 <span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
 
 <span class="co"># Create the ggplot</span>
-<span class="fu">ggplot</span>(<span class="no">datatoplot</span>, <span class="fu">aes</span>(<span class="kw">x</span><span class="kw">=</span>-<span class="no">row</span>, <span class="kw">y</span><span class="kw">=</span><span class="no">estimate_transformed</span>)) +
+<span class="fu">ggplot</span>(<span class="kw">datatoplot</span>, <span class="fu">aes</span>(x=<span class="op">-</span><span class="kw">row</span>, y=<span class="kw">estimate_transformed</span>)) <span class="op">+</span>
   <span class="co"># Put the different columns in side-by-side plots using facets</span>
-  <span class="fu">facet_wrap</span>(~<span class="no">column</span>, <span class="kw">nrow</span> <span class="kw">=</span> <span class="fl">1</span>) +
-
+  <span class="fu">facet_wrap</span>(<span class="op">~</span><span class="kw">column</span>, nrow = <span class="fl">1</span>) <span class="op">+</span>
+  
   <span class="co"># Add a line at null effect (only if exponentiate=TRUE)</span>
-  <span class="fu">annotate</span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"segment"</span>, <span class="kw">x</span><span class="kw">=</span>-<span class="fl">1</span>, <span class="kw">xend</span><span class="kw">=</span>-<span class="fl">Inf</span>, <span class="kw">y</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">yend</span><span class="kw">=</span><span class="fl">1</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">0.5</span>) +
-
+  <span class="fu">annotate</span>(geom = <span class="st">"segment"</span>, x=<span class="op">-</span><span class="fl">1</span>, xend=<span class="op">-</span><span class="fl">Inf</span>, y=<span class="fl">1</span>, yend=<span class="fl">1</span>, size = <span class="fl">0.5</span>) <span class="op">+</span>
+  
   <span class="co"># Plot points at the transformed estimates</span>
   <span class="co">## Scale by inverse of the SE</span>
-  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="kw">size</span> <span class="kw">=</span> <span class="no">size</span>, <span class="kw">shape</span> <span class="kw">=</span> <span class="fl">15</span>, <span class="kw">colour</span> <span class="kw">=</span> <span class="st">"black"</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="st">"black"</span>),
-             <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>) +
-
+  <span class="fu">geom_point</span>(<span class="fu">aes</span>(size = <span class="kw">size</span>, shape = <span class="fl">15</span>, colour = <span class="st">"black"</span>, fill = <span class="st">"black"</span>),
+             na.rm = <span class="fl">TRUE</span>) <span class="op">+</span>
+  
   <span class="co"># Scale the size of points by their side length</span>
   <span class="co"># and make the scale range from zero upwards</span>
-  <span class="fu">scale_radius</span>(<span class="kw">limits</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">NA</span>),
-               <span class="kw">range</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">3</span>)) +
-
+  <span class="fu">scale_radius</span>(limits = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">NA</span>),
+               range = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">3</span>)) <span class="op">+</span>
+  
   <span class="co"># Plot the CIs</span>
-  <span class="fu">geom_linerange</span>(<span class="kw">data</span> <span class="kw">=</span> ~ <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="no">.x</span>, !<span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="no">estimate_transformed</span>)),
-                 <span class="fu">aes</span>(<span class="kw">ymin</span> <span class="kw">=</span> <span class="no">lci_transformed</span>,
-                     <span class="kw">ymax</span> <span class="kw">=</span> <span class="no">uci_transformed</span>,
-                     <span class="kw">colour</span> <span class="kw">=</span> <span class="st">"black"</span>),
-                 <span class="kw">size</span> <span class="kw">=</span> <span class="fl">0.5</span>,
-                 <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>) +
-
+  <span class="fu">geom_linerange</span>(data = <span class="op">~</span> <span class="kw">dplyr</span>::<span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">.x</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(<span class="kw">estimate_transformed</span>)),
+                 <span class="fu">aes</span>(ymin = <span class="kw">lci_transformed</span>,
+                     ymax = <span class="kw">uci_transformed</span>,
+                     colour = <span class="st">"black"</span>), 
+                 size = <span class="fl">0.5</span>,
+                 na.rm = <span class="fl">TRUE</span>) <span class="op">+</span>
+  
   <span class="co"># Add tiny segments with arrows when the CIs go outside axis limits</span>
-
+  
   <span class="co"># Use identity for aesthetic scales</span>
-  <span class="fu">scale_shape_identity</span>() +
-  <span class="fu">scale_fill_identity</span>() +
-  <span class="fu">scale_colour_identity</span>() +
-
+  <span class="fu">scale_shape_identity</span>() <span class="op">+</span>
+  <span class="fu">scale_fill_identity</span>() <span class="op">+</span>
+  <span class="fu">scale_colour_identity</span>() <span class="op">+</span>
+  
   <span class="co"># Flip x and y coordinates</span>
-  <span class="fu">coord_flip</span>(<span class="kw">clip</span> <span class="kw">=</span> <span class="st">"off"</span>,
-             <span class="kw">ylim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>)) +
-
+  <span class="fu">coord_flip</span>(clip = <span class="st">"off"</span>,
+             ylim = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>)) <span class="op">+</span>
+  
   <span class="co"># Add columns to right side of plots</span>
   <span class="co">## column textresult</span>
-  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> -<span class="no">row</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">1.104423626284</span>,
-                <span class="kw">label</span> <span class="kw">=</span> <span class="no">textresult</span>),
-            <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0</span>,
-            <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-            <span class="kw">parse</span> <span class="kw">=</span> <span class="fl">TRUE</span>) +
-  <span class="fu">annotate</span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>,
-           <span class="kw">x</span> <span class="kw">=</span> <span class="fl">1.5</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">1.104423626284</span>,
-           <span class="kw">label</span> <span class="kw">=</span> <span class="st">"HR (95% CI)"</span>,
-           <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0</span>,
-           <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>,
-           <span class="kw">fontface</span> <span class="kw">=</span> <span class="st">"bold"</span>) +
-
+  <span class="fu">geom_text</span>(<span class="fu">aes</span>(x = <span class="op">-</span><span class="kw">row</span>, y = <span class="fl">1.104423626284</span>,
+                label = <span class="kw">textresult</span>),
+            hjust = <span class="fl">0</span>,
+            size = <span class="fl">3</span>,
+            na.rm = <span class="fl">TRUE</span>,
+            parse = <span class="fl">TRUE</span>) <span class="op">+</span>
+  <span class="fu">annotate</span>(geom = <span class="st">"text"</span>,
+           x = <span class="fl">1.5</span>, y = <span class="fl">1.104423626284</span>,
+           label = <span class="st">"HR (95% CI)"</span>,
+           hjust = <span class="fl">0</span>,
+           size = <span class="fl">3</span>,
+           fontface = <span class="st">"bold"</span>) <span class="op">+</span>
+  
   <span class="co"># Add columns to left side of plots</span>
   <span class="co">## column n</span>
-  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> -<span class="no">row</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0.896395166165542</span>,
-                <span class="kw">label</span> <span class="kw">=</span> <span class="no">`n`</span>,
-                <span class="kw">fontface</span> <span class="kw">=</span> <span class="st">"plain"</span>),
-            <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">1</span>,
-            <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">na.rm</span> <span class="kw">=</span> <span class="fl">TRUE</span>) +
-  <span class="fu">annotate</span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>,
-           <span class="kw">x</span> <span class="kw">=</span> <span class="fl">1.5</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0.896395166165542</span>,
-           <span class="kw">label</span> <span class="kw">=</span> <span class="st">"No. of
+  <span class="fu">geom_text</span>(<span class="fu">aes</span>(x = <span class="op">-</span><span class="kw">row</span>, y = <span class="fl">0.896395166165542</span>,
+                label = <span class="kw">`n`</span>,
+                fontface = <span class="st">"plain"</span>),
+            hjust = <span class="fl">1</span>,
+            size = <span class="fl">3</span>,
+            na.rm = <span class="fl">TRUE</span>) <span class="op">+</span>
+  <span class="fu">annotate</span>(geom = <span class="st">"text"</span>,
+           x = <span class="fl">1.5</span>, y = <span class="fl">0.896395166165542</span>,
+           label = <span class="st">"No. of
 events"</span>,
-<span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">1</span>,
-<span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>,
-<span class="kw">fontface</span> <span class="kw">=</span> <span class="st">"bold"</span>) +
-
+hjust = <span class="fl">1</span>,
+size = <span class="fl">3</span>,
+fontface = <span class="st">"bold"</span>) <span class="op">+</span>
+  
   <span class="co"># Add xlab below each axis</span>
-  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> -<span class="fl">Inf</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0.99498743710662</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">xlab</span>),
-            <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0.5</span>,
-            <span class="kw">size</span>  <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">vjust</span> <span class="kw">=</span> <span class="fl">4.4</span>,
-            <span class="kw">fontface</span> <span class="kw">=</span> <span class="st">"bold"</span>,
-            <span class="kw">data</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(<span class="kw">column</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                                                 <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                                                 <span class="kw">ordered</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                                 <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"HR (95% CI)"</span>)) +
-
+  <span class="fu">geom_text</span>(<span class="fu">aes</span>(x = <span class="op">-</span><span class="fl">Inf</span>, y = <span class="fl">0.99498743710662</span>, label = <span class="kw">xlab</span>),
+            hjust = <span class="fl">0.5</span>,
+            size  = <span class="fl">3</span>,
+            vjust = <span class="fl">4.4</span>,
+            fontface = <span class="st">"bold"</span>,
+            data = <span class="kw">dplyr</span>::<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(column = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                                                 levels = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                                                 ordered = <span class="fl">TRUE</span>),
+                                 xlab = <span class="st">"HR (95% CI)"</span>)) <span class="op">+</span>
+  
   <span class="co"># Add column name above each column</span>
-  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fl">1.5</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0.99498743710662</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">title</span>),
-            <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0.5</span>,
-            <span class="kw">nudge_x</span> <span class="kw">=</span> <span class="fl">2</span>,
-            <span class="kw">size</span>  <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">fontface</span> <span class="kw">=</span> <span class="st">"bold"</span>,
-            <span class="kw">data</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(<span class="kw">column</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                                                 <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                                                 <span class="kw">ordered</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                                 <span class="kw">title</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>))) +
-
+  <span class="fu">geom_text</span>(<span class="fu">aes</span>(x = <span class="fl">1.5</span>, y = <span class="fl">0.99498743710662</span>, label = <span class="kw">title</span>),
+            hjust = <span class="fl">0.5</span>,
+            nudge_x = <span class="fl">2</span>,
+            size  = <span class="fl">3</span>,
+            fontface = <span class="st">"bold"</span>,
+            data = <span class="kw">dplyr</span>::<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(column = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                                                 levels = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                                                 ordered = <span class="fl">TRUE</span>),
+                                 title = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>))) <span class="op">+</span>
+  
   <span class="co"># Set the scale for the y axis (the estimates and CIs)</span>
-  <span class="fu">scale_y_continuous</span>(<span class="kw">trans</span>  <span class="kw">=</span> <span class="st">"log"</span>,
-                     <span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
-                     <span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)) +
-
+  <span class="fu">scale_y_continuous</span>(trans  = <span class="st">"log"</span>,
+                     breaks = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                     expand = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)) <span class="op">+</span>
+  
   <span class="co"># Set the scale for the x axis (the rows)</span>
-  <span class="fu">scale_x_continuous</span>(<span class="kw">breaks</span> <span class="kw">=</span> -<span class="fl">1</span>:-<span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="no">datatoplot</span>$<span class="no">row</span>),
-                     <span class="kw">labels</span> <span class="kw">=</span> <span class="no">headings</span>,
-                     <span class="kw">name</span>   <span class="kw">=</span> <span class="st">""</span>,
-                     <span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)) +
+  <span class="fu">scale_x_continuous</span>(breaks = <span class="op">-</span><span class="fl">1</span><span class="op">:</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(<span class="kw">datatoplot</span><span class="op">$</span><span class="kw">row</span>),
+                     labels = <span class="kw">headings</span>,
+                     name   = <span class="st">""</span>,
+                     expand = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">0</span>)) <span class="op">+</span>
   <span class="co"># Add the title</span>
-  <span class="fu">labs</span>(<span class="kw">title</span> <span class="kw">=</span> <span class="st">""</span>) +
-
+  <span class="fu">labs</span>(title = <span class="st">""</span>) <span class="op">+</span>
+  
   <span class="co"># Control the overall looks of the plots</span>
-  <span class="fu">theme</span>(<span class="kw">text</span>             <span class="kw">=</span> <span class="fu">element_text</span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">11</span>),
-        <span class="kw">line</span>             <span class="kw">=</span> <span class="fu">element_line</span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">0.5</span>),
-        <span class="kw">panel.background</span> <span class="kw">=</span> <span class="fu">element_rect</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="st">"white"</span>, <span class="kw">colour</span> <span class="kw">=</span> <span class="fl">NA</span>),
-        <span class="kw">panel.grid.major</span> <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">panel.grid.minor</span> <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">axis.line.x</span>      <span class="kw">=</span> <span class="fu">element_line</span>(<span class="kw">size</span> <span class="kw">=</span> <span class="fl">0.5</span>, <span class="kw">lineend</span> <span class="kw">=</span> <span class="st">"round"</span>),
-        <span class="kw">axis.title.x</span>     <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">axis.ticks.x</span>     <span class="kw">=</span> <span class="fu">element_line</span>(<span class="kw">colour</span> <span class="kw">=</span> <span class="st">"black"</span>),
-        <span class="kw">axis.text.x</span>      <span class="kw">=</span> <span class="fu">element_text</span>(<span class="kw">colour</span> <span class="kw">=</span> <span class="st">"black"</span>,
-                                        <span class="kw">margin</span> <span class="kw">=</span> <span class="fu">margin</span>(<span class="kw">t</span> <span class="kw">=</span> <span class="fl">4.4</span>),
-                                        <span class="kw">vjust</span>  <span class="kw">=</span> <span class="fl">1</span>),
-        <span class="kw">axis.ticks.y</span>     <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">axis.line.y</span>      <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">axis.text.y</span>      <span class="kw">=</span> <span class="fu">element_text</span>(<span class="kw">hjust</span>  <span class="kw">=</span> <span class="fl">0</span>,
-                                        <span class="kw">colour</span> <span class="kw">=</span> <span class="st">"black"</span>,
-                                        <span class="kw">face</span>   <span class="kw">=</span> <span class="no">boldheadings</span>,
-                                        <span class="kw">margin</span> <span class="kw">=</span> <span class="fu">margin</span>(<span class="kw">r</span> <span class="kw">=</span> <span class="fl">2</span>, <span class="kw">unit</span> <span class="kw">=</span> <span class="st">"lines"</span>)),
-        <span class="kw">panel.border</span>     <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">panel.spacing</span>    <span class="kw">=</span> <span class="fu">unit</span>(<span class="fl">8</span>, <span class="st">"lines"</span>),
-        <span class="kw">strip.background</span> <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">strip.placement</span>  <span class="kw">=</span> <span class="st">"outside"</span>,
-        <span class="kw">strip.text</span>       <span class="kw">=</span> <span class="fu">element_blank</span>(),
-        <span class="kw">legend.position</span>  <span class="kw">=</span> <span class="st">"none"</span>,
-        <span class="kw">plot.margin</span>      <span class="kw">=</span> <span class="fu">unit</span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">6</span>,<span class="fl">2</span>,<span class="fl">0</span>), <span class="st">"lines"</span>))
+  <span class="fu">theme</span>(text             = <span class="fu">element_text</span>(size = <span class="fl">11</span>),
+        line             = <span class="fu">element_line</span>(size = <span class="fl">0.5</span>),
+        panel.background = <span class="fu">element_rect</span>(fill = <span class="st">"white"</span>, colour = <span class="fl">NA</span>),
+        panel.grid.major = <span class="fu">element_blank</span>(),
+        panel.grid.minor = <span class="fu">element_blank</span>(),
+        axis.line.x      = <span class="fu">element_line</span>(size = <span class="fl">0.5</span>, lineend = <span class="st">"round"</span>),
+        axis.title.x     = <span class="fu">element_blank</span>(),
+        axis.ticks.x     = <span class="fu">element_line</span>(colour = <span class="st">"black"</span>),
+        axis.text.x      = <span class="fu">element_text</span>(colour = <span class="st">"black"</span>,
+                                        margin = <span class="fu">margin</span>(t = <span class="fl">4.4</span>),
+                                        vjust  = <span class="fl">1</span>),
+        axis.ticks.y     = <span class="fu">element_blank</span>(),
+        axis.line.y      = <span class="fu">element_blank</span>(),
+        axis.text.y      = <span class="fu">element_text</span>(hjust  = <span class="fl">0</span>,
+                                        colour = <span class="st">"black"</span>,
+                                        face   = <span class="kw">boldheadings</span>,
+                                        margin = <span class="fu">margin</span>(r = <span class="fl">2</span>, unit = <span class="st">"lines"</span>)),
+        panel.border     = <span class="fu">element_blank</span>(),
+        panel.spacing    = <span class="fu">unit</span>(<span class="fl">8</span>, <span class="st">"lines"</span>),
+        strip.background = <span class="fu">element_blank</span>(),
+        strip.placement  = <span class="st">"outside"</span>,
+        strip.text       = <span class="fu">element_blank</span>(),
+        legend.position  = <span class="st">"none"</span>,
+        plot.margin      = <span class="fu">unit</span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">2</span>,<span class="fl">6</span>,<span class="fl">2</span>,<span class="fl">0</span>), <span class="st">"lines"</span>))
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></body></html></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
+</pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
 <div id="special-characters" class="section level3">
@@ -309,40 +313,42 @@ events"</span>,
 <a href="#special-characters" class="anchor"></a>Special characters</h3>
 <p>You can include some special characters just by putting their unicode in your text. But sometimes this does not work correctly, for example on Windows the code for a ‘greater than or equal to’ symbol “\u2265” gets replaced by an equals sign. This can be fixed by using it in your own <code>geom_text</code> code (use either the ‘copy and edit’ or ‘add layers’ method).</p>
 <p>Use a unicode symbol in column headings:</p>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">forestplot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(<span class="kw">headings</span>         <span class="kw">=</span> <span class="no">varheadings</span>,
-                               <span class="kw">rows</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
-                               <span class="kw">cols</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">resultsA</span>, <span class="no">resultsB</span>),
-                               <span class="kw">exponentiate</span>     <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">colnames</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                               <span class="kw">colheadings</span>      <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">""</span>, <span class="st">""</span>),
-                               <span class="kw">col.key</span>          <span class="kw">=</span> <span class="st">"variable"</span>,
-                               <span class="kw">ci.delim</span>         <span class="kw">=</span> <span class="st">" - "</span>,
-                               <span class="kw">xlim</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
-                               <span class="kw">xticks</span>           <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
-                               <span class="kw">blankrows</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
-                               <span class="kw">scalepoints</span>      <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">pointsize</span>        <span class="kw">=</span> <span class="fl">3</span>,
-                               <span class="kw">col.left</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
-                               <span class="kw">col.left.space</span>   <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
-                               <span class="kw">col.left.heading</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
-                               <span class="kw">col.right.space</span>  <span class="kw">=</span> <span class="fl">0.02</span>,
-                               <span class="kw">col.heading.space</span> <span class="kw">=</span> <span class="fl">1.5</span>,
-                               <span class="kw">heading.space</span>    <span class="kw">=</span> <span class="fl">2</span>,
-                               <span class="kw">plot.space</span>       <span class="kw">=</span> <span class="fl">8</span>,
-                               <span class="kw">printplot</span>        <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">varheadings</span>,
+                               rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
+                               cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
+                               exponentiate     = <span class="fl">TRUE</span>,
+                               colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                               colheadings      = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">""</span>, <span class="st">""</span>),
+                               col.key          = <span class="st">"variable"</span>,
+                               ci.delim         = <span class="st">" - "</span>,
+                               xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                               xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                               blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                               scalepoints      = <span class="fl">TRUE</span>,
+                               pointsize        = <span class="fl">3</span>,
+                               col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                               col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                               col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                               col.right.space  = <span class="fl">0.02</span>,
+                               col.heading.space = <span class="fl">1.5</span>,
+                               heading.space    = <span class="fl">2</span>,
+                               plot.space       = <span class="fl">8</span>,
+                               printplot        = <span class="fl">FALSE</span>)
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
 <span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
 
-<span class="no">forestplot</span>$<span class="no">plot</span> +
-  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fl">1.5</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0.99498743710662</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">title</span>),
-            <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0.5</span>,
-            <span class="kw">nudge_x</span> <span class="kw">=</span> <span class="fl">2</span>,
-            <span class="kw">size</span>  <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">fontface</span> <span class="kw">=</span> <span class="st">"bold"</span>,
-            <span class="kw">data</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(<span class="kw">column</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                                                 <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                                                 <span class="kw">ordered</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                                 <span class="kw">title</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span>)))</pre></body></html></div>
+<span class="kw">forestplot</span><span class="op">$</span><span class="kw">plot</span> <span class="op">+</span>
+  <span class="fu">geom_text</span>(<span class="fu">aes</span>(x = <span class="fl">1.5</span>, y = <span class="fl">0.99498743710662</span>, label = <span class="kw">title</span>),
+            hjust = <span class="fl">0.5</span>,
+            nudge_x = <span class="fl">2</span>,
+            size  = <span class="fl">3</span>,
+            fontface = <span class="st">"bold"</span>,
+            data = <span class="kw">dplyr</span>::<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(column = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                                                 levels = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                                                 ordered = <span class="fl">TRUE</span>),
+                                 title = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span>)))
+</pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
 </div>
 <div id="formatting" class="section level3">
@@ -350,16 +356,18 @@ events"</span>,
 <a href="#formatting" class="anchor"></a>Formatting</h3>
 <p>Various formatting (called “aesthetics”) such as colour, bold, italics, and angle can be controlled in <code>geom_text</code>. Make use of the arguments of <code>geom_text</code> (<a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="uri">https://ggplot2.tidyverse.org/reference/geom_text.html</a>) as you need.</p>
 <p>Make column headings bold and italic:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">forestplot</span>$<span class="no">plot</span> +
-  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fl">1.5</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0.99498743710662</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">title</span>),
-            <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0.5</span>,
-            <span class="kw">nudge_x</span> <span class="kw">=</span> <span class="fl">2</span>,
-            <span class="kw">size</span>  <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">fontface</span> <span class="kw">=</span> <span class="st">"bold.italic"</span>,
-            <span class="kw">data</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(<span class="kw">column</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                                                 <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                                                 <span class="kw">ordered</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                                 <span class="kw">title</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span>)))</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="kw">forestplot</span><span class="op">$</span><span class="kw">plot</span> <span class="op">+</span>
+  <span class="fu">geom_text</span>(<span class="fu">aes</span>(x = <span class="fl">1.5</span>, y = <span class="fl">0.99498743710662</span>, label = <span class="kw">title</span>),
+            hjust = <span class="fl">0.5</span>,
+            nudge_x = <span class="fl">2</span>,
+            size  = <span class="fl">3</span>,
+            fontface = <span class="st">"bold.italic"</span>,
+            data = <span class="kw">dplyr</span>::<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(column = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                                                 levels = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                                                 ordered = <span class="fl">TRUE</span>),
+                                 title = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span>)))
+</pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 </div>
 <div id="expressions" class="section level3">
@@ -367,16 +375,18 @@ events"</span>,
 <a href="#expressions" class="anchor"></a>Expressions</h3>
 <p>The <code>geom_text</code> function has an argument <code>parse</code> which tells ggplot2 to parse text into expressions and display as described in <a href="https://rdrr.io/r/grDevices/plotmath.html">plotmath</a>. (Note that text in columns given by <code>col.right</code> in <code>make_forest_plot</code> already use <code>parse = TRUE</code>.)</p>
 <p>Evaluate column headings as expressions:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">forestplot</span>$<span class="no">plot</span> +
-  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fl">1.5</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0.99498743710662</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">title</span>),
-            <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0.5</span>,
-            <span class="kw">nudge_x</span> <span class="kw">=</span> <span class="fl">2</span>,
-            <span class="kw">size</span>  <span class="kw">=</span> <span class="fl">3</span>,
-            <span class="kw">parse</span> <span class="kw">=</span> <span class="fl">TRUE</span>,
-            <span class="kw">data</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(<span class="kw">column</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                                                 <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                                                 <span class="kw">ordered</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                                 <span class="kw">title</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"bold("</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A&gt;=10"</span>, <span class="st">"A^b"</span>), <span class="st">")"</span>)))</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">forestplot</span><span class="op">$</span><span class="kw">plot</span> <span class="op">+</span>
+  <span class="fu">geom_text</span>(<span class="fu">aes</span>(x = <span class="fl">1.5</span>, y = <span class="fl">0.99498743710662</span>, label = <span class="kw">title</span>),
+            hjust = <span class="fl">0.5</span>,
+            nudge_x = <span class="fl">2</span>,
+            size  = <span class="fl">3</span>,
+            parse = <span class="fl">TRUE</span>,
+            data = <span class="kw">dplyr</span>::<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(column = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                                                 levels = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                                                 ordered = <span class="fl">TRUE</span>),
+                                 title = <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"bold("</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A&gt;=10"</span>, <span class="st">"A^b"</span>), <span class="st">")"</span>)))
+</pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-5-1.png" width="700"> Note the expressions will remove the <code>fontface</code> and other formatting, but we can use <code>bold</code> inside the text instead (though it does not apply to symbols or numbers).</p>
 </div>
 <div id="ggtext" class="section level3">
@@ -384,56 +394,60 @@ events"</span>,
 <a href="#ggtext" class="anchor"></a>ggtext</h3>
 <p>The <a href="https://wilkelab.org/ggtext/">ggtext packge</a> adds support for some Markdown and HTML. You could install this package and use <code>geom_richtext()</code> in place of <code>geom_text()</code> to use some markdown (or HTML).</p>
 <p>Bold and italics using markdown:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">forestplot</span>$<span class="no">plot</span> +
-  <span class="kw pkg">ggtext</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggtext/man/geom_richtext.html">geom_richtext</a></span>(<span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="fl">1.5</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="fl">0.99498743710662</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">title</span>),
-                        <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0.5</span>,
-                        <span class="kw">size</span>  <span class="kw">=</span> <span class="fl">3</span>,
-                        <span class="kw">nudge_x</span> <span class="kw">=</span> <span class="fl">2</span>,
-                        <span class="kw">data</span> <span class="kw">=</span> <span class="kw pkg">dplyr</span><span class="kw ns">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">tibble</a></span>(<span class="kw">column</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                                                             <span class="kw">levels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                                                             <span class="kw">ordered</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
-                                             <span class="kw">title</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"*A*"</span>, <span class="st">"**B&lt;sup&gt;2&lt;/sup&gt;**"</span>)),
-                        <span class="kw">fill</span> <span class="kw">=</span> <span class="fl">NA</span>,
-                        <span class="kw">label.color</span> <span class="kw">=</span> <span class="fl">NA</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">forestplot</span><span class="op">$</span><span class="kw">plot</span> <span class="op">+</span>
+  <span class="kw">ggtext</span>::<span class="fu"><a href="https://rdrr.io/pkg/ggtext/man/geom_richtext.html">geom_richtext</a></span>(<span class="fu">aes</span>(x = <span class="fl">1.5</span>, y = <span class="fl">0.99498743710662</span>, label = <span class="kw">title</span>),
+                        hjust = <span class="fl">0.5</span>,
+                        size  = <span class="fl">3</span>,
+                        nudge_x = <span class="fl">2</span>,
+                        data = <span class="kw">dplyr</span>::<span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span>(column = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                                                             levels = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                                                             ordered = <span class="fl">TRUE</span>),
+                                             title = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"*A*"</span>, <span class="st">"**B&lt;sup&gt;2&lt;/sup&gt;**"</span>)),
+                        fill = <span class="fl">NA</span>,
+                        label.color = <span class="fl">NA</span>)
+</pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>You could also use <code>element_markdown</code> inside <code>theme</code> to make use of markdown just in row headings.</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">varheadings</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">heading1</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="st">"Triglycerides concentration"</span>, <span class="kw">each</span> <span class="kw">=</span> <span class="fl">7</span>),
-                          <span class="kw">heading2</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"VLDL^a"</span>, <span class="st">"VLDL^a"</span>, <span class="st">"VLDL^a"</span>,
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="kw">varheadings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(heading1 = <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="st">"Triglycerides concentration"</span>, each = <span class="fl">7</span>),
+                          heading2 = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"VLDL^a"</span>, <span class="st">"VLDL^a"</span>, <span class="st">"VLDL^a"</span>,
                                        <span class="st">"**IDL**"</span>,
                                        <span class="st">"*LDL*"</span>, <span class="st">"*LDL*"</span>, <span class="st">"*LDL*"</span>),
-                          <span class="kw">heading3</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Large"</span>, <span class="st">"Medium"</span>, <span class="st">"Small"</span>,
+                          heading3 = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Large"</span>, <span class="st">"Medium"</span>, <span class="st">"Small"</span>,
                                        <span class="fl">NA</span>,
                                        <span class="st">"*Large*"</span>, <span class="st">"*Medium*"</span>, <span class="st">"*Small*"</span>),
-                          <span class="kw">variable</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'nmr_l_vldl_tg'</span>, <span class="st">'nmr_m_vldl_tg'</span>, <span class="st">'nmr_s_vldl_tg'</span>,
+                          variable = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">'nmr_l_vldl_tg'</span>, <span class="st">'nmr_m_vldl_tg'</span>, <span class="st">'nmr_s_vldl_tg'</span>,
                                        <span class="st">'nmr_idl_tg'</span>,
                                        <span class="st">'nmr_l_ldl_tg'</span>, <span class="st">'nmr_m_ldl_tg'</span>, <span class="st">'nmr_s_ldl_tg'</span>),
-                          <span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+                          stringsAsFactors = <span class="fl">FALSE</span>)
 
-<span class="no">forestplot</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(<span class="kw">headings</span>         <span class="kw">=</span> <span class="no">varheadings</span>,
-                               <span class="kw">rows</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
-                               <span class="kw">cols</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">resultsA</span>, <span class="no">resultsB</span>),
-                               <span class="kw">exponentiate</span>     <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">colnames</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
-                               <span class="kw">colheadings</span>      <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
-                               <span class="kw">col.key</span>          <span class="kw">=</span> <span class="st">"variable"</span>,
-                               <span class="kw">ci.delim</span>         <span class="kw">=</span> <span class="st">" - "</span>,
-                               <span class="kw">xlim</span>             <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
-                               <span class="kw">xticks</span>           <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
-                               <span class="kw">blankrows</span>        <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
-                               <span class="kw">scalepoints</span>      <span class="kw">=</span> <span class="fl">TRUE</span>,
-                               <span class="kw">pointsize</span>        <span class="kw">=</span> <span class="fl">3</span>,
-                               <span class="kw">col.left</span>         <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
-                               <span class="kw">col.left.space</span>   <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
-                               <span class="kw">col.left.heading</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
-                               <span class="kw">col.right.space</span>  <span class="kw">=</span> <span class="fl">0.02</span>,
-                               <span class="kw">col.heading.space</span> <span class="kw">=</span> <span class="fl">1.5</span>,
-                               <span class="kw">heading.space</span>    <span class="kw">=</span> <span class="fl">2</span>,
-                               <span class="kw">plot.space</span>       <span class="kw">=</span> <span class="fl">8</span>,
-                               <span class="kw">printplot</span>        <span class="kw">=</span> <span class="fl">FALSE</span>,
-                               <span class="kw">showcode</span>         <span class="kw">=</span> <span class="fl">FALSE</span>)
+<span class="kw">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span>(headings         = <span class="kw">varheadings</span>,
+                               rows             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Triglycerides concentration"</span>),
+                               cols             = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">resultsA</span>, <span class="kw">resultsB</span>),
+                               exponentiate     = <span class="fl">TRUE</span>,
+                               colnames         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A"</span>, <span class="st">"B"</span>),
+                               colheadings      = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span>),
+                               col.key          = <span class="st">"variable"</span>,
+                               ci.delim         = <span class="st">" - "</span>,
+                               xlim             = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1.1</span>),
+                               xticks           = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span>),
+                               blankrows        = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>),
+                               scalepoints      = <span class="fl">TRUE</span>,
+                               pointsize        = <span class="fl">3</span>,
+                               col.left         = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"n"</span>),
+                               col.left.space   = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.02</span>),
+                               col.left.heading = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"No. of\nevents"</span>),
+                               col.right.space  = <span class="fl">0.02</span>,
+                               col.heading.space = <span class="fl">1.5</span>,
+                               heading.space    = <span class="fl">2</span>,
+                               plot.space       = <span class="fl">8</span>,
+                               printplot        = <span class="fl">FALSE</span>,
+                               showcode         = <span class="fl">FALSE</span>)
 
-<span class="no">forestplot</span>$<span class="no">plot</span> +
-  <span class="fu">theme</span>(<span class="kw">axis.text.y</span> <span class="kw">=</span> <span class="kw pkg">ggtext</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggtext/man/element_markdown.html">element_markdown</a></span>())</pre></body></html></div>
+<span class="kw">forestplot</span><span class="op">$</span><span class="kw">plot</span> <span class="op">+</span> 
+  <span class="fu">theme</span>(axis.text.y = <span class="kw">ggtext</span>::<span class="fu"><a href="https://rdrr.io/pkg/ggtext/man/element_markdown.html">element_markdown</a></span>())
+</pre></div>
 </div>
 </div>
   </div>
@@ -453,7 +467,7 @@ events"</span>,
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
 </div>
 
       </footer>
