@@ -3,24 +3,23 @@
 #'
 #' \code{make_forest_data}
 #'
-#' @param headings A data frame that contains the headings to be used for the
-#'   rows of the plot. The data frame must contain columns 'heading1', 'heading2'
-#'   and 'heading3'. Use NA if a lower level heading is not required.
-#' @param rows A character vector. The top level headings (heading1) of rows
-#'   to be included in the plot.
-#' @param cols A list of data frames. These should include columns or point
+#' @param panels A list of data frames. These should include columns or point
 #'   estimates, and standard errors or confidence interval limits. If you
-#'   specify a headings data frame, then they must also all contain a key column
+#'   specify a row.labels data frame, then they must also all contain a key column
 #'   with the same name (which can be specified by col.key).
-#' @param colnames A character vector. The names to be used for each forest plot.
-#'   If none provided, then they will be numbered 1, 2, 3 ...
-#' @param col.key Name of column that links the headings provided in headings
-#'   and the results given in each data frame provided in cols.
+#' @param col.key Name of column that links the results given in each data frame
+#'   provided in panels and the labels given in row.labels.
 #'
-#'   If headings data frame is not given, then this column will be used as headings
-#'   for each row of the plot.
+#'   If row.labels data frame is not given, then this column will be used as row labels.
 #'
 #'   (Default: "key")
+#' @param row.labels A data frame that contains the labels to be used for the
+#'   rows of the plot. The data frame must contain columns 'heading1', 'heading2'
+#'   and 'heading3'. Use NA if a lower level heading is not required.
+#' @param rows A character vector. The top level labels (heading1) of rows
+#'   to be included in the plot.
+#' @param panel.names A character vector. The names to be used for each forest plot panel.
+#'   If none provided, then they will be numbered 1, 2, 3 ...
 #' @param col.estimate Name of column that provides point estimates.
 #'   (Default: "estimate")
 #' @param col.stderr Name of column that provides standard errors. (Default: "stderr")
@@ -38,7 +37,7 @@
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
-#' @param addtext A list of data frames. List must be the same length as cols.
+#' @param addtext A list of data frames. List must be the same length as panels.
 #'   Data frames should contain a column with the name specified in col.key,
 #'   and one or more of:
 #'
@@ -53,18 +52,22 @@
 #'   given in the col.key column.
 #'
 #'
-#' @return A dataset from which the plot is generated.
+#' @return A dataset from which a forest plot can be generated.
 #'
 #'
 #' @keywords internal
 #'
+#' @export
 
 make_forest_data <- function(
-  headings     = NULL,
-  rows         = NULL,
-  cols,
-  colnames      = NULL,
+  panels,
+  cols          = panels,
   col.key       = "key",
+  row.labels    = NULL,
+  headings      = NULL,
+  rows          = NULL,
+  panel.names   = NULL,
+  colnames      = NULL,
   col.estimate  = "estimate",
   col.stderr    = "stderr",
   col.lci       = NULL,
@@ -80,12 +83,27 @@ make_forest_data <- function(
   addtext       = NULL
 ){
 
+  # legacy arguments
+  if (!missing(cols)) {
+    panels <- cols
+    message("Note: cols argument is now called panels")
+  }
+  if (!missing(headings)) {
+    row.labels <- headings
+    message("Note: headings argument is now called row.labels")
+  }
+  if (!missing(colnames)) {
+    panel.names <- colnames
+    message("Note: colnames argument is now called panel.names")
+  }
+
+  # check arguments
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
-  if (is.null(colnames)) { colnames <- as.character(1:length(cols)) }
-  if (!is.character(colnames)) stop("colnames must be a character vector")
-  if (!all(!duplicated(colnames))) stop("colnames must be unique")
-  if (length(cols) != length(colnames)) stop("cols and colnames must be the same length")
+  if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
+  if (!is.character(panel.names)) stop("panel.names must be a character vector")
+  if (!all(!duplicated(panel.names))) stop("panel.names must be unique")
+  if (length(panels) != length(panel.names)) stop("panels and panel.names must be the same length")
   if (!(length(blankrows == 4) & is.numeric(blankrows))) stop("blankrows must be a length 4 vector")
 
   # Make vector of keys after which extra rows are added for addtext
@@ -123,20 +141,20 @@ make_forest_data <- function(
   }
   extrarowkeys <- unique(extrarowkeys)
 
-  if (is.null(headings)) {
-    out <- cols[[1]] %>%
-      dplyr::mutate(Heading = !!rlang::sym(col.key),
+  if (is.null(row.labels)) {
+    out <- panels[[1]] %>%
+      dplyr::mutate(row.label = !!rlang::sym(col.key),
                     key = !!rlang::sym(col.key),
                     extrarowkey = "") %>%
-      dplyr::select(Heading, key, extrarowkey) %>%
-      dplyr::add_row(Heading = "") %>%
+      dplyr::select(row.label, key, extrarowkey) %>%
+      dplyr::add_row(row.label = "") %>%
       dplyr::mutate(row = 1:dplyr::n())
 
     # Add extra rows for addtext
     if (!is.null(addtext)) {
       for (k in 1:length(extrarowkeys)) {
         out <- out %>%
-          dplyr::add_row(Heading = "", extrarowkey = paste0(extrarowkeys[[k]]),
+          dplyr::add_row(row.label = "", extrarowkey = paste0(extrarowkeys[[k]]),
                          .after = which(out$key == extrarowkeys[[k]]))
       }
     }
@@ -146,100 +164,98 @@ make_forest_data <- function(
 
   } else {
 
-    if (is.null(rows)) stop("argument rows must be given if headings is used")
-    if (!col.key %in% names(headings)) stop(paste0(col.key, " must be a column in ",  deparse(substitute(headings))))
+    if (is.null(rows)) stop("argument rows must be given if row.labels is used")
+    if (!col.key %in% names(row.labels)) stop(paste0(col.key, " must be a column in ",  deparse(substitute(row.labels))))
 
-    for (col in cols) {
-      if (!col.key %in% names(col)) stop(paste0(col.key, " must be a column in every data frame given in cols"))
+    for (panel in panels) {
+      if (!col.key %in% names(panel)) stop(paste0(col.key, " must be a column in every data frame given in panels"))
     }
 
     for (head1 in rows) {
-      if (!(head1 %in% headings$heading1)) {
-        stop(paste(head1,"is not in heading1 column of", deparse(substitute(headings))))
+      if (!(head1 %in% row.labels$heading1)) {
+        stop(paste(head1,"is not in heading1 column of", deparse(substitute(row.labels))))
       }
     }
 
-    headings <- headings %>%
+    row.labels <- row.labels %>%
       dplyr::mutate(heading1 = heading1,
                     heading2 = heading2,
                     heading3 = heading3,
                     key = !!rlang::sym(col.key))
 
-    out <- tibble::tibble(Heading = "", key = "", extrarowkey = "", removelater = TRUE)
+    out <- tibble::tibble(row.label = "", key = "", extrarowkey = "", removelater = TRUE)
 
     for (head1 in rows) {
-      #    print(paste0("now working on: ", head1))
-      l2headings <- headings %>%
+      l2headings <- row.labels %>%
         dplyr::filter(heading1 == head1) %>%
         dplyr::select(heading2, key) %>%
         dplyr::distinct(heading2, .keep_all = TRUE)
 
       if (is.na(l2headings[[1, "heading2"]])) {
-        if (head1 != "") {out <- tibble::add_row(out, Heading = head1, key = headings %>% dplyr::filter(heading1 == head1) %>% dplyr::pull(key))}
+        if (head1 != "") {out <- tibble::add_row(out,
+                                                 row.label = head1,
+                                                 key = row.labels %>%
+                                                   dplyr::filter(heading1 == head1) %>%
+                                                   dplyr::pull(key))}
 
         # Add extra row for addtext
-        if (headings[[which(headings$heading1 == head1),"key"]] %in% extrarowkeys) {
+        if (row.labels[[which(row.labels$heading1 == head1),"key"]] %in% extrarowkeys) {
           out <- tibble::add_row(out,
-                                 Heading = "",
-                                 extrarowkey = headings[[which(headings$heading1 == head1), "key"]])
+                                 row.label = "",
+                                 extrarowkey = row.labels[[which(row.labels$heading1 == head1), "key"]])
         }
       }
       else{
 
-
-
-        if (head1 != "") {out <- tibble::add_row(out, Heading = head1)}
-
-        if (blankrows[[1]] > 0) {for (i in 1:blankrows[[1]]) { out <- tibble::add_row(out, Heading = "") }}
-
-
+        if (head1 != "") {out <- tibble::add_row(out, row.label = head1)}
+        if (blankrows[[1]] > 0) {for (i in 1:blankrows[[1]]) { out <- tibble::add_row(out, row.label = "") }}
 
         for (head2 in 1:nrow(l2headings)) {
-          #      print(paste0("now working on: ", l2headings[[head2, "heading2"]]))
 
-          l3headings <- headings %>%
+          l3headings <- row.labels %>%
             dplyr::filter(heading1 == head1 & heading2 == l2headings[[head2, "heading2"]]) %>%
             dplyr::select(heading3, key)
 
-          #     print(l3headings)
-
           if (is.na(l3headings[[1, "heading3"]])) {
-            if (head2 != "") {out <- tibble::add_row(out, Heading = l2headings[[head2, "heading2"]], key = l2headings[[head2, "key"]])}
+            if (head2 != "") {out <- tibble::add_row(out,
+                                                     row.label = l2headings[[head2, "heading2"]],
+                                                     key = l2headings[[head2, "key"]])}
 
             # Add extra row for addtext
             if (l2headings[[head2, "key"]] %in% extrarowkeys) {
               out <- tibble::add_row(out,
-                                     Heading = "",
+                                     row.label = "",
                                      extrarowkey = l2headings[[head2, "key"]])
             }
           }
           else{
-            if (head2 != "") {out <- tibble::add_row(out, Heading = l2headings[[head2, "heading2"]])}
-            if (blankrows[[3]] > 0) {for (i in 1:blankrows[[3]]) { out <- tibble::add_row(out, Heading = "") }}
+            if (head2 != "") {out <- tibble::add_row(out,
+                                                     row.label = l2headings[[head2, "heading2"]])}
+            if (blankrows[[3]] > 0) {for (i in 1:blankrows[[3]]) { out <- tibble::add_row(out, row.label = "") }}
             for (head3 in 1:nrow(l3headings)) {
               out <- tibble::add_row(out,
-                                     Heading = l3headings[[head3, "heading3"]],
+                                     row.label = l3headings[[head3, "heading3"]],
                                      key = l3headings[[head3, "key"]])
 
               # Add extra row for addtext
               if (l3headings[[head3, "key"]] %in% extrarowkeys) {
                 out <- tibble::add_row(out,
-                                       Heading = "",
+                                       row.label = "",
                                        extrarowkey = l3headings[[head3, "key"]])
               }
             }
           }
-          if (blankrows[[4]] > 0) {for (i in 1:blankrows[[4]]) { out <- tibble::add_row(out, Heading = "") }}
+          if (blankrows[[4]] > 0) {for (i in 1:blankrows[[4]]) { out <- tibble::add_row(out, row.label = "") }}
         }
       }
-      if (blankrows[[2]] > 0) {for (i in 1:blankrows[[2]]) { out <- tibble::add_row(out, Heading = "") }}
+      if (blankrows[[2]] > 0) {for (i in 1:blankrows[[2]]) { out <- tibble::add_row(out, row.label = "") }}
     }
 
 
     # add a blank heading at bottom if needed
-    if (utils::tail(out$Heading, 1) != "") {
+    if (utils::tail(out$row.label, 1) != "") {
       out <- out %>%
-        tibble::add_row(Heading = "")
+        tibble::add_row(row.label = "")
     }
 
     out <- out %>%
@@ -252,10 +268,10 @@ make_forest_data <- function(
   # make datatoplot
   datatoplot <- tibble::tibble()
 
-  for (i in 1:length(cols)) {
+  for (i in 1:length(panels)) {
 
     if (!is.null(col.lci)) {
-      cols[[i]] <- cols[[i]] %>%
+      panels[[i]] <- panels[[i]] %>%
         dplyr::select(key = !!rlang::sym(col.key),
                       !!!rlang::syms(col.left),
                       estimate = !!rlang::sym(col.estimate),
@@ -264,7 +280,7 @@ make_forest_data <- function(
                       !!!rlang::syms(col.right),
                       !!!rlang::syms(col.keep))
     } else {
-      cols[[i]] <- cols[[i]] %>%
+      panels[[i]] <- panels[[i]] %>%
         dplyr::select(key = !!rlang::sym(col.key),
                       !!!rlang::syms(col.left),
                       estimate = !!rlang::sym(col.estimate),
@@ -274,8 +290,8 @@ make_forest_data <- function(
 
     }
 
-    out1 <- merge(out, cols[[i]], by = "key", all.x = TRUE) %>%
-      dplyr::mutate(column = colnames[[i]])
+    out1 <- merge(out, panels[[i]], by = "key", all.x = TRUE) %>%
+      dplyr::mutate(panel = panel.names[[i]])
 
     if (!is.null(addtext)){
       out1 <- merge(out1, addtext[[i]], by.x = "extrarowkey", by.y = "key", all.x = TRUE)
@@ -283,11 +299,8 @@ make_forest_data <- function(
       out1 <- dplyr::mutate(out1, extratext = as.character(NA))
     }
 
-
-
     datatoplot <- dplyr::bind_rows(datatoplot, out1)
   }
-
 
 
   if (exponentiate == TRUE) {
@@ -298,12 +311,12 @@ make_forest_data <- function(
     inv_tf   <- identity
   }
 
-  # Make 'column' a factor, so that facets will be in the correct order
+  # Make 'panel' a factor, so that facet panels will be in the correct order
   datatoplot <- datatoplot %>%
-    dplyr::mutate(column = factor(column,
-                                  levels = colnames,
-                                  labels = colnames,
-                                  ordered = TRUE))
+    dplyr::mutate(panel = factor(panel,
+                                 levels = panel.names,
+                                 labels = panel.names,
+                                 ordered = TRUE))
 
 
   # Adding CIs and text to show estimate and CI
@@ -344,7 +357,7 @@ make_forest_data <- function(
       !is.na(extratext) ~ extratext,
       TRUE              ~ "''")) %>%
     dplyr::select(-extrarowkey, -extratext) %>%
-    dplyr::arrange(column, row)
+    dplyr::arrange(panel, row)
 
 
   if (!scalepoints) {
@@ -398,16 +411,15 @@ make_forest_data <- function(
 #'
 #' \code{make_forest_plot} creates a forest plot with ggplot
 #'
-#' The function returns the plot, a dataset which is used to create the plot,
-#' and the ggplot2 code that creates the plot. In RStudio, the ggplot2 code
-#' will be shown in the viewer.
+#' The function returns the plot, data and ggplot2 code to create the plot.
+#' In RStudio, the ggplot2 code will be shown in the viewer.
 #'
 #'
 #'
 #' @inheritParams make_forest_data
 #' @inheritParams theme_ckb
 #' @param logscale Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
-#' @param colheadings Titles to be placed above each forest plot. (Default: colnames)
+#' @param panel.headings Titles to be placed above each forest plot. (Default: panel.names)
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
 #' @param col.left.space A numeric vector. Sizes of the gaps between the plot
@@ -439,19 +451,20 @@ make_forest_data <- function(
 #' @param diamond Alternative to col.diamond. A character vectors identify the rows
 #'                (using the key values) for which the estimate and CI should be plotted using a diamond.
 #' @param col.bold Plot text as bold. Name of a column of logical values.
-#' @param boldheadings A character vector identifying headings (using key values) which should additionally be bold. (Default: NULL)
-#' @param heading.space Size of the gap between headings and the first plot.
+#' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
+#' @param label.space Size of the gap between row labels and the first panel.
 #' Unit is "lines". (Default: 4)
-#' @param plot.space Size of the gap between forest plots.
+#' @param panel.space Size of the gap between forest plot panels.
 #' Unit is "lines". (Default: 8)
 #' @param stroke Size of outline of shapes. (Default: base_size/22)
+#' @param margin Plot margin (top, right, left, bottom). Unit is "lines". (Default: c(2, 6, 2, 0))
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #'
 #' @return A list:
 #' \describe{
 #'   \item{plot}{the plot}
-#'   \item{data}{a data frame from which the plot is generated}
+#'   \item{data}{a data frame from which the plot is made}
 #'   \item{code}{ggplot2 code to generate the plot}
 #'}
 #'
@@ -462,12 +475,16 @@ make_forest_data <- function(
 
 
 make_forest_plot <- function(
+  panels,
+  row.labels    = NULL,
   headings      = NULL,
   rows          = NULL,
-  cols,
+  cols          = panels,
   exponentiate  = TRUE,
   logscale      = exponentiate,
+  panel.names   = NULL,
   colnames      = NULL,
+  panel.headings = panel.names,
   colheadings   = colnames,
   col.key       = "key",
   col.estimate  = "estimate",
@@ -495,6 +512,7 @@ make_forest_plot <- function(
   col.diamond   = NULL,
   diamond       = NULL,
   col.bold      = NULL,
+  bold.labels   = NULL,
   boldheadings  = NULL,
   scalepoints   = FALSE,
   minse         = NULL,
@@ -505,14 +523,48 @@ make_forest_plot <- function(
   fill      = NULL,
   ciunder   = NULL,
   addtext       = NULL,
-  heading.space = 4,
-  plot.space    = 8,
+  label.space   = 4,
+  heading.space = NULL,
+  panel.space   = 8,
+  plot.space    = NULL,
   base_size     = 11,
   base_line_size = base_size/22,
   stroke        = base_size/22,
+  margin        = c(2, 6, 2, 0),
   printplot     = TRUE,
   showcode      = TRUE
 ){
+
+  # legacy arguments
+  if (!missing(cols)) {
+    panels <- cols
+    message("Note: cols argument is now called panels")
+  }
+  if (!missing(headings)) {
+    row.labels <- headings
+    message("Note: headings argument is now called row.labels")
+  }
+  if (!missing(colnames)) {
+    panel.names <- colnames
+    message("Note: colnames argument is now called panel.names")
+  }
+  if (!missing(colheadings)) {
+    panel.headings <- colheadings
+    message("Note: colheadings argument is now called panel.headings")
+  }
+  if (!missing(boldheadings)) {
+    bold.labels <- boldheadings
+    message("Note: boldheadings argument is now called bold.labels")
+  }
+  if (!missing(heading.space)) {
+    label.space <- heading.space
+    message("Note: heading.space argument is now called label.space")
+  }
+  if (!missing(plot.space)) {
+    panel.space <- plot.space
+    message("Note: plot.space argument is now called panel.space")
+  }
+
 
   # check arguments
   if (!missing(col.diamond) &&  !missing(diamond)) stop("Use either col.diamond or diamond, not both.")
@@ -537,56 +589,37 @@ make_forest_plot <- function(
 
   col.keep <- c(col.keep, col.diamond, col.bold)
   for (x in c(shape, cicolour, colour, fill, ciunder)){
-    if (x %in% names(cols[[1]])){ col.keep <- append(col.keep, x) }
+    if (x %in% names(panels[[1]])){ col.keep <- append(col.keep, x) }
   }
 
-  # make deault colnames
-  if (is.null(colnames)) { colnames <- as.character(1:length(cols)) }
-
-  datatoplot <- make_forest_data(
-    headings      = headings,
-    rows          = rows,
-    cols          = cols,
-    colnames      = colnames,
-    col.key  = col.key,
-    col.estimate  = col.estimate,
-    col.stderr    = col.stderr,
-    col.lci       = col.lci,
-    col.uci       = col.uci,
-    col.left      = col.left,
-    col.right     = col.right,
-    col.keep      = col.keep,
-    ci.delim      = ci.delim,
-    exponentiate  = exponentiate,
-    blankrows     = blankrows,
-    scalepoints   = scalepoints,
-    minse         = minse,
-    addtext       = addtext
-  )
+  # make deault panel.names
+  if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
   # line at null
-  nullline <- sprintf('  annotate(geom = "segment", x=-1, xend=-Inf, y=%s, yend=%s, size = %s) +',
+  nullline <- sprintf('  annotate(geom = "segment", y=-1, yend=-Inf, x=%s, xend=%s, size = %s) +',
                       nullval, nullval, base_line_size)
 
   # aesthetics: default value, match column name, or use argument itself
   if (is.null(shape)) {
     shape <- 15
-  } else if (shape %in% names(cols[[1]])){
+  } else if (shape %in% names(panels[[1]])){
     shape <- paste0("`", shape, "`")
   }
 
+  cicolouraes <- FALSE
   if (is.null(cicolour)) {
     cicolour <- '\"black\"'
   }
-  else if (cicolour %in% names(cols[[1]])){
+  else if (cicolour %in% names(panels[[1]])){
     cicolour <- paste0("`", cicolour, "`")
+    cicolouraes <- TRUE
   } else {
     cicolour <- paste0('\"', cicolour, '\"')
   }
 
   if (is.null(colour)) {
     colour <- '\"black\"'
-  } else if (colour %in% names(cols[[1]])){
+  } else if (colour %in% names(panels[[1]])){
     colour <- paste0("`", colour, "`")
   } else {
     colour <- paste0('\"', colour, '\"')
@@ -594,7 +627,7 @@ make_forest_plot <- function(
 
   if (is.null(fill)) {
     fill <- '\"black\"'
-  } else if (fill %in% names(cols[[1]])){
+  } else if (fill %in% names(panels[[1]])){
     fill <- paste0("`", fill, "`")
   } else {
     fill <- paste0('\"', fill, '\"')
@@ -603,24 +636,23 @@ make_forest_plot <- function(
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
 
   if (is.null(xlim)) {
-    xlim <- range(pretty(c(datatoplot$lci_transformed, datatoplot$uci_transformed)))
+    if (is.null(col.lci)) {
+      allvalues <- sapply(panels, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
+                                              tf(x[[col.estimate]] + 1.96 * x[[col.stderr]])))
+    } else {
+      allvalues <- sapply(panels, function(x) c(tf(x[[col.lci]]),
+                                              tf(x[[col.uci]])))
+    }
+    xlim <- range(pretty(allvalues))
     ## check for zero as axis limit when using exponential
     if (exponentiate & isTRUE(all.equal(0, xlim[[1]]))){
-      xlim[[1]] <- min(c(datatoplot$lci_transformed, datatoplot$uci_transformed), na.rm = TRUE)
+      xlim[[1]] <- min(allvalues, na.rm = TRUE)
     }
   }
 
   xfrom <- min(xlim)
   xto   <- max(xlim)
-  xmid  <- tf((inv_tf(xfrom) + inv_tf(xto)) / 2)
-
-  ## check if any cis are outside limits of x-axis
-  datatoplot <- datatoplot %>%
-    dplyr::mutate(cioverright  = (uci_transformed > xto),
-                  uci_transformed = pmin(uci_transformed, xto),
-                  cioverleft  = (lci_transformed < xfrom),
-                  lci_transformed = pmax(lci_transformed, xfrom))
-
+  xmid  <- round(tf((inv_tf(xfrom) + inv_tf(xto)) / 2), 6)
 
   if (is.null(xticks)) {
     xticks <- pretty(c(xfrom, xto))
@@ -633,37 +665,43 @@ make_forest_plot <- function(
     col.right.line <- ""
   } else {
 
+    col.right.all <- col.right
     if (estcolumn){
-      col.right <- c("textresult", col.right)
+      col.right.all <- c("textresult", col.right)
     }
 
-    col.right.line <- unlist(purrr::pmap(list(col.right, col.right.space, col.right.heading, col.right.hjust, col.bold),
+    col.right.line <- unlist(purrr::pmap(list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold),
                                          ~ c(sprintf('  ## column %s', ..1),
-                                             sprintf('  geom_text(aes(x = -row, y = %s,',
-                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                             sprintf('  geom_text(aes(y = -row, x = %s,',
+                                                     round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                                              if(is.character(..5)){
-                                               sprintf('            label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
+                                               sprintf('                label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
                                                        ..5, ..5, ..1, ..1)
                                                } else {
-                                                sprintf('            label = %s),', ..1)
+                                                sprintf('                label = %s),', ..1)
                                                        },
-                                             sprintf('            hjust = %s,', ..4),
-                                             sprintf('            size = %s,', base_size/(11/3)),
+                                             sprintf(
+                                             '            hjust = %s,', ..4),
+                                             sprintf(
+                                             '            size = %s,', base_size/(11/3)),
                                              '            na.rm = TRUE,',
                                              '            parse = TRUE) +',
-                                             sprintf('  geom_text(aes(x = %s, y = %s,',
-                                                     col.heading.space,
-                                                     tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
-                                             '            label = title),',
-                                             sprintf('            hjust = %s,', ..4),
-                                             sprintf('            size = %s,', base_size/(11/3)),
+                                             sprintf(
+                                             '  geom_text(aes(y = %s, x = %s,',
+                                             col.heading.space,
+                                             round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                                             '                label = title),',
+                                             sprintf(
+                                             '            hjust = %s,', ..4),
+                                             sprintf(
+                                             '            size = %s,', base_size/(11/3)),
                                              '            fontface = "bold",',
                                              sprintf(
-                                             '            data = dplyr::tibble(column = factor(%s,',
-                                             paste(deparse(colnames), collapse = '')),
+                                             '            data = dplyr::tibble(panel = factor(%s,',
+                                             paste(deparse(panel.names), collapse = '')),
                                              sprintf(
                                              '                                                levels = %s,',
-                                             paste(deparse(colnames), collapse = '')),
+                                             paste(deparse(panel.names), collapse = '')),
                                              '                                                ordered = TRUE),',
                                              sprintf(
                                              '                                 title = %s)) +',
@@ -680,8 +718,8 @@ make_forest_plot <- function(
     col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust, col.bold),
                                         ~ c(sprintf('  ## column %s', ..1),
                                             sprintf(
-                                            '  geom_text(aes(x = -row, y = %s,',
-                                            tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
+                                            '  geom_text(aes(y = -row, x = %s,',
+                                            round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                                             sprintf(
                                             '                label = `%s`,',
                                             ..1
@@ -692,25 +730,30 @@ make_forest_plot <- function(
                                             ..5, ..5)} else {
                                             '            fontface = "plain"),'
                                             },
-                                            sprintf('           hjust = %s,', ..4),
-                                            sprintf('           size = %s,', base_size/(11/3)),
-                                            '            na.rm = TRUE) +',
-                                            sprintf('  geom_text(aes(x = %s, y = %s,',
-                                                    col.heading.space,
-                                                    tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2)),
-                                            '           label = title),',
-                                            sprintf('           hjust = %s,', ..4),
-                                            sprintf('           size = %s,', base_size/(11/3)),
-                                            '           fontface = "bold",',
                                             sprintf(
-                                            '           data = dplyr::tibble(column = factor(%s,',
-                                            paste(deparse(colnames), collapse = '')),
+                                            '            hjust = %s,', ..4),
+                                            sprintf(
+                                            '            size = %s,', base_size/(11/3)),
+                                            '            na.rm = TRUE) +',
+                                            sprintf(
+                                            '  geom_text(aes(y = %s, x = %s,',
+                                            col.heading.space,
+                                            round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                                            '                label = title),',
+                                            sprintf(
+                                            '            hjust = %s,', ..4),
+                                            sprintf(
+                                            '            size = %s,', base_size/(11/3)),
+                                            '            fontface = "bold",',
+                                            sprintf(
+                                            '            data = dplyr::tibble(panel = factor(%s,',
+                                            paste(deparse(panel.names), collapse = '')),
                                             sprintf(
                                             '                                                levels = %s,',
-                                            paste(deparse(colnames), collapse = '')),
+                                            paste(deparse(panel.names), collapse = '')),
                                             '                                                ordered = TRUE),',
                                             sprintf(
-                                            '                                title = %s)) +',
+                                            '                                 title = %s)) +',
                                             paste(deparse(unlist(..3)), collapse = '')))))
   }
 
@@ -723,13 +766,13 @@ make_forest_plot <- function(
         'diamonds <- datatoplot %>%',
         sprintf(
         '  dplyr::filter(key %%in%% %s) %%>%%', deparse(diamond)),
-        '  dplyr::mutate(y1 = lci_transformed,',
-        '                y2 = estimate_transformed,',
-        '                y3 = uci_transformed,',
-        '                y4 = estimate_transformed) %>%',
-        '  tidyr::gather(part, y, y1:y4) %>%',
-        '  dplyr::arrange(column, row, part) %>%',
-        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))',
+        '  dplyr::mutate(x1 = lci_transformed,',
+        '                x2 = estimate_transformed,',
+        '                x3 = uci_transformed,',
+        '                x4 = estimate_transformed) %>%',
+        '  tidyr::gather(part, x, x1:x4) %>%',
+        '  dplyr::arrange(panel, row, part) %>%',
+        '  dplyr::mutate(y = - row + c(0, -0.25, 0, 0.25))',
         '',
         '# Remove plotting of points if a diamond is to be used',
         'datatoplot <- datatoplot %>% ',
@@ -747,13 +790,13 @@ make_forest_plot <- function(
         'diamonds <- datatoplot %>%',
         sprintf(
           '  dplyr::filter(`%s` == TRUE) %%>%%', col.diamond),
-        '  dplyr::mutate(y1 = lci_transformed,',
-        '                y2 = estimate_transformed,',
-        '                y3 = uci_transformed,',
-        '                y4 = estimate_transformed) %>%',
-        '  tidyr::gather(part, y, y1:y4) %>%',
-        '  dplyr::arrange(column, row, part) %>%',
-        '  dplyr::mutate(x = - row + c(0, -0.25, 0, 0.25))',
+        '  dplyr::mutate(x1 = lci_transformed,',
+        '                x2 = estimate_transformed,',
+        '                x3 = uci_transformed,',
+        '                x4 = estimate_transformed) %>%',
+        '  tidyr::gather(part, x, x1:x4) %>%',
+        '  dplyr::arrange(panel, row, part) %>%',
+        '  dplyr::mutate(y = - row + c(0, -0.25, 0, 0.25))',
         '',
         '# Remove plotting of points if a diamond is to be used',
         sprintf('if (any(datatoplot[["%s"]])) {', col.diamond),
@@ -777,28 +820,89 @@ make_forest_plot <- function(
     )
   }
 
-  plotcode <- c('# Get a character vector of the headings, so these can be used in the plot',
-                'headings <- datatoplot %>%',
-                '              dplyr::group_by(row) %>%',
-                '              dplyr::summarise(Heading = dplyr::first(Heading)) %>%',
-                '              dplyr::arrange(row) %>%',
-                '              dplyr::pull(Heading)',
+  argset <- function(x){
+    sprintf('                %s = %s,',
+            paste(deparse(substitute(x)), collapse = ''),
+            paste(deparse(x), collapse = ''))
+  }
+
+  plotcode <- c(
+                '# Prepare data to be plotted using ckbplotr::make_forest_data()',
+                'datatoplot <- ckbplotr::make_forest_data(',
+                sprintf(
+                '                row.labels = %s,',
+                if (!missing(headings)) {
+                  paste(deparse(substitute(headings)), collapse = '')
+                } else {
+                  paste(deparse(substitute(row.labels)), collapse = '')
+                }
+                ),
+                argset(rows),
+                sprintf(
+                '                panels = %s,',
+                if (!missing(cols)) {
+                  paste(deparse(substitute(cols)), collapse = '')
+                } else {
+                  paste(deparse(substitute(panels)), collapse = '')
+                }
+                ),
+                argset(panel.names),
+                argset(col.key),
+                argset(col.estimate),
+                argset(col.stderr),
+                argset(col.lci),
+                argset(col.uci),
+                argset(col.left),
+                argset(col.right),
+                argset(col.keep),
+                argset(ci.delim),
+                argset(exponentiate),
+                argset(blankrows),
+                argset(scalepoints),
+                argset(minse),
+                sprintf(
+                '                addtext = %s)',
+                paste(deparse(substitute(addtext)), collapse = '')
+                ),
                 '',
-                '# Get a character vector of the style for headings',
-                'boldheadings <- datatoplot %>%',
+                '# Get a character vector of the row labels, so these can be used in the plot',
+                'rowlabels <- datatoplot %>%',
+                '              dplyr::group_by(row) %>%',
+                '              dplyr::summarise(row.label = dplyr::first(row.label)) %>%',
+                '              dplyr::arrange(row) %>%',
+                '              dplyr::pull(row.label)',
+                '',
+                '# Get a character vector of the style for row labels',
+                'boldlabels <- datatoplot %>%',
                 '                  dplyr::group_by(row) %>%',
                 sprintf(
                 '                  dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %%in%% %s)), "bold", "plain")) %%>%%',
-                paste(deparse(boldheadings))),
+                paste(deparse(bold.labels))),
                 '                  dplyr::arrange(row) %>%',
                 '                  dplyr::pull(bold)',
                 '',
+
+                '# Identify any CIs that extend outside axis limits',
+                'datatoplot <- datatoplot %>%',
+                sprintf(
+                '                dplyr::mutate(cioverright  = (uci_transformed > %s),', xto),
+                sprintf(
+                '                              uci_transformed = pmin(uci_transformed, %s),', xto),
+                sprintf(
+                '                              lci_transformed = pmin(lci_transformed, %s),', xto),
+                sprintf(
+                '                              cioverleft  = (lci_transformed < %s),', xfrom),
+                sprintf(
+                '                              lci_transformed = pmax(lci_transformed, %s),', xfrom),
+                sprintf(
+                '                              uci_transformed = pmax(uci_transformed, %s))', xfrom),
+                '',
                 diamondscode,
                 '# Create the ggplot',
-                'ggplot(datatoplot, aes(x=-row, y=estimate_transformed)) +',
+                'ggplot(datatoplot, aes(y=-row, x=estimate_transformed)) +',
                 '',
-                '  # Put the different columns in side-by-side plots using facets',
-                '  facet_wrap(~column, nrow = 1) +',
+                '  # Put the different panels in side-by-side plots using facets',
+                '  facet_wrap(~panel, nrow = 1) +',
                 '',
                 '  # Add a line at null effect',
                 nullline,
@@ -807,22 +911,22 @@ make_forest_plot <- function(
                   c(
                     '  # Plot the CIs',
                     '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-                    '                 aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
+                    '                 aes(xmin = lci_transformed,',
+                    '                     xmax = uci_transformed,',
                     sprintf(
                     '                     colour = %s), ', cicolour),
                     sprintf(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
                     '')
-                } else if (is.character(ciunder) && any(datatoplot[[ciunder]], na.rm = TRUE)){
+                } else if (is.character(ciunder) && any(sapply(panels, function(x) x[[ciunder]]), na.rm = TRUE)){
                   c(
                     '  # Plot CIs - before plotting points',
                     sprintf(
                       '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s),',
                       ciunder),
-                    '                 aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
+                    '                 aes(xmin = lci_transformed,',
+                    '                     xmax = uci_transformed,',
                     sprintf(
                     '                     colour = %s),', cicolour),
                     sprintf(
@@ -833,7 +937,10 @@ make_forest_plot <- function(
                 '  # Plot points at the transformed estimates',
                 '  ## Scale by inverse of the SE',
                 sprintf(
-                '  geom_point(aes(size = size, shape = %s, colour = %s, fill = %s),',
+                '  geom_point(data = ~ dplyr::filter(.x, estimate_transformed > %s, estimate_transformed < %s),',
+                xfrom, xto),
+                sprintf(
+                '             aes(size = size, shape = %s, colour = %s, fill = %s),',
                 shape, colour, fill),
                 sprintf(
                 '             stroke = %s,',
@@ -850,22 +957,22 @@ make_forest_plot <- function(
                   c(
                     '  # Plot the CIs',
                     '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-                    '                 aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
+                    '                 aes(xmin = lci_transformed,',
+                    '                     xmax = uci_transformed,',
                     sprintf(
                     '                     colour = %s), ', cicolour),
                     sprintf(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
                     '')
-                } else if (is.character(ciunder) && !all(datatoplot[[ciunder]], na.rm = TRUE)){
+                } else if (is.character(ciunder) && !all(sapply(panels, function(x) x[[ciunder]]), na.rm = TRUE)){
                   c(
                     '  # Plot CIs - after plotting points',
                     sprintf(
                     '  geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s),',
                     ciunder),
-                    '                 aes(ymin = lci_transformed,',
-                    '                     ymax = uci_transformed,',
+                    '                 aes(xmin = lci_transformed,',
+                    '                     xmax = uci_transformed,',
                     sprintf(
                     '                     colour = %s),', cicolour),
                     sprintf(
@@ -874,26 +981,42 @@ make_forest_plot <- function(
                     '')
                 },
                 '  # Add tiny segments with arrows when the CIs go outside axis limits',
-                if(any(datatoplot$cioverright, na.rm = TRUE)){c(
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
-                '               aes(x=-row, y=uci_transformed-0.000001, xend=-row, yend=uci_transformed,',
+                '               aes(y=-row,',
+                '                   x=uci_transformed-0.000001,',
+                '                   yend=-row,',
+                if (cicolouraes) {c(
+                '                   xend=uci_transformed,',
                 sprintf(
-                '                   colour = %s),', cicolour),
+                '                   colour = %s),', cicolour))
+                } else {c(
+                '                   xend=uci_transformed),',
+                sprintf(
+                '               colour = %s,', cicolour))
+                },
                 sprintf(
                 '               size = %s,', base_line_size),
                 sprintf(
                 '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
-                '               na.rm = TRUE) +')},
-                if(any(datatoplot$cioverleft, na.rm = TRUE)){c(
+                '               na.rm = TRUE) +',
                 '  geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
-                '               aes(x=-row, y=lci_transformed+0.000001, xend=-row, yend=lci_transformed,',
+                '               aes(y=-row,',
+                '                   x=lci_transformed+0.000001,',
+                '                   yend=-row,',
+                if (cicolouraes) {c(
+                '                   xend=lci_transformed,',
                 sprintf(
-                '                   colour = %s),', cicolour),
+                '                   colour = %s),', cicolour))
+                } else {c(
+                '                   xend=lci_transformed),',
+                sprintf(
+                '               colour = %s,', cicolour))
+                },
                 sprintf(
                 '               size = %s,', base_line_size),
                 sprintf(
                 '               arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
-                '               na.rm = TRUE) +')},
+                '               na.rm = TRUE) +',
                 '',
                 plotdiamondscode,
                 '  # Use identity for aesthetic scales',
@@ -902,9 +1025,9 @@ make_forest_plot <- function(
                 '  scale_colour_identity() +',
                 '',
                 '  # Flip x and y coordinates',
-                '  coord_flip(clip = "off",',
+                '  coord_cartesian(clip = "off",',
                 sprintf(
-                '             ylim = c(%s, %s)) +', xfrom, xto),
+                '             xlim = c(%s, %s)) +', xfrom, xto),
                 '',
                 '  # Add columns to right side of plots',
                 col.right.line,
@@ -914,57 +1037,57 @@ make_forest_plot <- function(
                 '',
                 '  # Add xlab below each axis',
                 sprintf(
-                '  geom_text(aes(x = -Inf, y = %s, label = xlab),', xmid),
+                '  geom_text(aes(y = -Inf, x = %s, label = xlab),', xmid),
                 '            hjust = 0.5,',
                 sprintf(
                 '            size  = %s,', base_size/(11/3)),
                 '            vjust = 4.4,',
                 '            fontface = "bold",',
                 sprintf(
-                '            data = dplyr::tibble(column = factor(%s,',
-                paste(deparse(colnames), collapse = '')),
+                '            data = dplyr::tibble(panel = factor(%s,',
+                paste(deparse(panel.names), collapse = '')),
                 sprintf(
                 '                                                 levels = %s,',
-                paste(deparse(colnames), collapse = '')),
+                paste(deparse(panel.names), collapse = '')),
                 '                                                 ordered = TRUE),',
                 sprintf(
                 '                                 xlab = %s)) +',
                 paste(deparse(xlab), collapse = '')),
                 '',
-                '  # Add column name above each column',
+                '  # Add panel name above each panel',
                 sprintf(
-                '  geom_text(aes(x = %s, y = %s, label = title),',
+                '  geom_text(aes(y = %s, x = %s, label = title),',
                 col.heading.space , xmid),
                 '            hjust = 0.5,',
-                '            nudge_x = 2,',
+                '            nudge_y = 2,',
                 sprintf(
                 '            size  = %s,', base_size/(11/3)),
                 '            fontface = "bold",',
                 sprintf(
-                '            data = dplyr::tibble(column = factor(%s,',
-                paste(deparse(colnames), collapse = '')),
+                '            data = dplyr::tibble(panel = factor(%s,',
+                paste(deparse(panel.names), collapse = '')),
                 sprintf(
                 '                                                 levels = %s,',
-                paste(deparse(colnames), collapse = '')),
+                paste(deparse(panel.names), collapse = '')),
                 '                                                 ordered = TRUE),',
                 sprintf(
                 '                                 title = %s)) +',
-                paste(deparse(colheadings), collapse = '')),
+                paste(deparse(panel.headings), collapse = '')),
                 '',
                 '  # Set the scale for the y axis (the estimates and CIs)',
-                sprintf('  scale_y_continuous(trans  = "%s",', scale),
+                sprintf('  scale_x_continuous(trans  = "%s",', scale),
                 xticksline,
                 '                     expand = c(0,0)) +',
                 '',
                 '  # Set the scale for the x axis (the rows)',
-                '  scale_x_continuous(breaks = -1:-max(datatoplot$row),',
-                '                     labels = headings,',
+                '  scale_y_continuous(breaks = -1:-max(datatoplot$row),',
+                '                     labels = rowlabels,',
                 '                     name   = "",',
                 '                     expand = c(0,0)) +',
                 '  # Add the title',
                 sprintf('  labs(title = "%s") +', title),
                 '',
-                '  # Control the overall looks of the plots',
+                '  # Control the overall look of the plots',
                 sprintf('  theme(text             = element_text(size = %s),', base_size),
                 sprintf('        line             = element_line(size = %s),', base_line_size),
                 '        panel.background = element_blank(),',
@@ -982,23 +1105,23 @@ make_forest_plot <- function(
                 '        axis.line.y      = element_blank(),',
                 '        axis.text.y      = element_text(hjust  = 0,',
                 '                                        colour = "black",',
-                '                                        face   = boldheadings,',
-                sprintf('                                        margin = margin(r = %s, unit = "lines")),', heading.space),
+                '                                        face   = boldlabels,',
+                sprintf('                                        margin = margin(r = %s, unit = "lines")),', label.space),
                 '        panel.border     = element_blank(),',
-                sprintf('        panel.spacing    = unit(%s, "lines"),', plot.space),
+                sprintf('        panel.spacing    = unit(%s, "lines"),', panel.space),
                 '        strip.background = element_blank(),',
                 '        strip.placement  = "outside",',
                 '        strip.text       = element_blank(),',
                 '        legend.position  = "none",',
                 '        plot.background  = element_blank(),',
-                '        plot.margin      = unit(c(2,6,2,0), "lines"))')
+                sprintf(
+                '        plot.margin      = unit(%s, "lines"))',
+                paste(deparse(margin), collapse = '')))
 
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
   if (showcode){
     writeLines(paste(c('# ggplot2 code ------------------',
-                       '# Assign the data returned by the function to datatoplot',
-                       'datatoplot <- plot$data',
                        '',
                        plotcode),
                      collapse = "\n"),
@@ -1008,9 +1131,6 @@ make_forest_plot <- function(
   }
 
 
-  # Make copy of datatoplot before running plot code
-  datatoplot_clean <- datatoplot
-
   # Create plot and print
   plot <- eval(parse(text = plotcode))
   if (printplot){
@@ -1018,7 +1138,6 @@ make_forest_plot <- function(
   }
 
   return(list(plot = plot,
-              data = datatoplot_clean,
+              data = datatoplot,
               code = plotcode) )
-
 }
