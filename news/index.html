@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -93,6 +93,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ggplot2.html">ggplot2</a>
+    </li>
     <li>
       <a href="../articles/make_forest_plot.html">Making forest plots</a>
     </li>
@@ -135,6 +138,17 @@
       <small>Source: <a href='https://github.com/neilstats/ckbplotr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="ckbplotr-040" class="section level1">
+<h1 class="page-header" data-toc-text="0.4.0">
+<a href="#ckbplotr-040" class="anchor"></a>ckbplotr 0.4.0</h1>
+<ul>
+<li>Name of arguments in make_forest_plot(), make_forest_data(), and make_jasper_forest_plot() have changed. The old names should still work for now and a message is displayed to tell you the new names. Hopefully the new names are more meaningful.</li>
+<li>The code returned by make_forest_plot() will now run entirely on its own with editing. (i.e. It includes code to prepare data for plotting, so you do not need to run make_forest_plot() for it to work.)</li>
+<li>Use of coord_flip() has been removed from make_forest_plot(), and x and y have been switched where needed.</li>
+<li>The x positions for axis labels, text columns, and panel headings in make_forest_plot() are rounded to six decimal places.</li>
+<li>Point estimates and CIs outside the axis limits will not be plotted with make_forest_plot().</li>
+</ul>
+</div>
     <div id="ckbplotr-032" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.2">
 <a href="#ckbplotr-032" class="anchor"></a>ckbplotr 0.3.2</h1>
@@ -190,7 +204,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

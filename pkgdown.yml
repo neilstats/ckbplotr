@@ -1,6 +1,11 @@
 pandoc: 2.7.3
-pkgdown: 1.6.0
+pkgdown: 1.6.1
 pkgdown_sha: ~
-articles: []
-last_built: 2020-09-10T14:45Z
+articles:
+  ggplot2: ggplot2.html
+  make_forest_plot: make_forest_plot.html
+  make_shape_plot: make_shape_plot.html
+  plot_like_ckb: plot_like_ckb.html
+  special_characters_formatting: special_characters_formatting.html
+last_built: 2020-09-28T13:53Z
 

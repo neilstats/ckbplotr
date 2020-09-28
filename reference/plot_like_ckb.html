@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -94,6 +94,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ggplot2.html">ggplot2</a>
+    </li>
     <li>
       <a href="../articles/make_forest_plot.html">Making forest plots</a>
     </li>
@@ -141,16 +144,16 @@
     <p>Make a ggplot into CKB style</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_like_ckb</span>(
-  <span class='kw'>plot</span>,
-  xlims = <span class='kw'>NULL</span>,
-  ylims = <span class='kw'>NULL</span>,
-  gap = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.025</span>, <span class='fl'>0.025</span>),
-  ext = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.025</span>, <span class='fl'>0.025</span>),
-  ratio = <span class='fl'>1.5</span>,
-  base_size = <span class='fl'>11</span>,
-  base_line_size = <span class='kw'>base_size</span><span class='op'>/</span><span class='fl'>22</span>
-)</pre>
+    <pre class="usage"><span class='fu'>plot_like_ckb</span><span class='op'>(</span>
+  <span class='va'>plot</span>,
+  xlims <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ylims <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gap <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.025</span><span class='op'>)</span>,
+  ext <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.025</span><span class='op'>)</span>,
+  ratio <span class='op'>=</span> <span class='fl'>1.5</span>,
+  base_size <span class='op'>=</span> <span class='fl'>11</span>,
+  base_line_size <span class='op'>=</span> <span class='va'>base_size</span><span class='op'>/</span><span class='fl'>22</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,7 +211,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

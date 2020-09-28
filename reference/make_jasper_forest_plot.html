@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -94,6 +94,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/ggplot2.html">ggplot2</a>
+    </li>
     <li>
       <a href="../articles/make_forest_plot.html">Making forest plots</a>
     </li>
@@ -141,28 +144,30 @@
     <p><code>make_jasper_forest_plot</code> creates a forest plot with Jasper</p>
     </div>
 
-    <pre class="usage"><span class='fu'>make_jasper_forest_plot</span>(
-  filestem = <span class='st'>"_test"</span>,
-  headings = <span class='kw'>NULL</span>,
-  rows = <span class='kw'>NULL</span>,
-  <span class='kw'>cols</span>,
-  exponentiate = <span class='fl'>TRUE</span>,
-  col.key = <span class='st'>"key"</span>,
-  col.estimate = <span class='st'>"estimate"</span>,
-  col.stderr = <span class='st'>"stderr"</span>,
-  col.lci = <span class='kw'>NULL</span>,
-  col.uci = <span class='kw'>NULL</span>,
-  col.left = <span class='kw'>NULL</span>,
-  col.right = <span class='kw'>NULL</span>,
-  col.pval = <span class='kw'>NULL</span>,
-  col.keep = <span class='kw'>NULL</span>,
-  xlab = <span class='st'>"HR (95% CI)"</span>,
-  ValueLabelsHeader = <span class='st'>"HR (95% CI)"</span>,
-  forest.xlim = <span class='kw'>NULL</span>,
-  forest.xticks = <span class='kw'>NULL</span>,
-  blankrows = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span>),
-  <span class='kw'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>make_jasper_forest_plot</span><span class='op'>(</span>
+  filestem <span class='op'>=</span> <span class='st'>"_test"</span>,
+  <span class='va'>panels</span>,
+  col.key <span class='op'>=</span> <span class='st'>"key"</span>,
+  row.labels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  headings <span class='op'>=</span> <span class='cn'>NULL</span>,
+  rows <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cols <span class='op'>=</span> <span class='va'>panels</span>,
+  exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  col.estimate <span class='op'>=</span> <span class='st'>"estimate"</span>,
+  col.stderr <span class='op'>=</span> <span class='st'>"stderr"</span>,
+  col.lci <span class='op'>=</span> <span class='cn'>NULL</span>,
+  col.uci <span class='op'>=</span> <span class='cn'>NULL</span>,
+  col.left <span class='op'>=</span> <span class='cn'>NULL</span>,
+  col.right <span class='op'>=</span> <span class='cn'>NULL</span>,
+  col.pval <span class='op'>=</span> <span class='cn'>NULL</span>,
+  col.keep <span class='op'>=</span> <span class='cn'>NULL</span>,
+  xlab <span class='op'>=</span> <span class='st'>"HR (95% CI)"</span>,
+  ValueLabelsHeader <span class='op'>=</span> <span class='st'>"HR (95% CI)"</span>,
+  forest.xlim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  forest.xticks <span class='op'>=</span> <span class='cn'>NULL</span>,
+  blankrows <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,34 +177,33 @@
       <td><p>String to use for file names. (Default: "_test")</p></td>
     </tr>
     <tr>
-      <th>headings</th>
-      <td><p>A data frame that contains the headings to be used for the
+      <th>panels</th>
+      <td><p>A list of data frames. These should include columns or point
+estimates, and standard errors or confidence interval limits. If you
+specify a row.labels data frame, then they must also all contain a key column
+with the same name (which can be specified by col.key).</p></td>
+    </tr>
+    <tr>
+      <th>col.key</th>
+      <td><p>Name of column that links the results given in each data frame
+  provided in panels and the labels given in row.labels.</p>
+<p>If row.labels data frame is not given, then this column will be used as row labels.</p>
+<p>(Default: "key")</p></td>
+    </tr>
+    <tr>
+      <th>row.labels</th>
+      <td><p>A data frame that contains the labels to be used for the
 rows of the plot. The data frame must contain columns 'heading1', 'heading2'
 and 'heading3'. Use NA if a lower level heading is not required.</p></td>
     </tr>
     <tr>
       <th>rows</th>
-      <td><p>A character vector. The top level headings (heading1) of rows
+      <td><p>A character vector. The top level labels (heading1) of rows
 to be included in the plot.</p></td>
-    </tr>
-    <tr>
-      <th>cols</th>
-      <td><p>A list of data frames. These should include columns or point
-estimates, and standard errors or confidence interval limits. If you
-specify a headings data frame, then they must also all contain a key column
-with the same name (which can be specified by col.key).</p></td>
     </tr>
     <tr>
       <th>exponentiate</th>
       <td><p>Exponentiate estimates (and CIs) before plotting. (Default: TRUE)</p></td>
-    </tr>
-    <tr>
-      <th>col.key</th>
-      <td><p>Name of column that links the headings provided in headings
-  and the results given in each data frame provided in cols.</p>
-<p>If headings data frame is not given, then this column will be used as headings
-  for each row of the plot.</p>
-<p>(Default: "key")</p></td>
     </tr>
     <tr>
       <th>col.estimate</th>
@@ -285,7 +289,7 @@ to create a forest plot.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
