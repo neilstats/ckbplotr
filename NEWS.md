@@ -1,3 +1,5 @@
+# ckbplotr 0.4.0
+
 * Name of arguments in make_forest_plot(), make_forest_data(), and make_jasper_forest_plot() have changed. The old names should still work for now and a message is displayed to tell you the new names. Hopefully the new names are more meaningful.
 * The code returned by make_forest_plot() will now run entirely on its own with editing. (i.e. It includes code to prepare data for plotting, so you do not need to run make_forest_plot() for it to work.)
 * Use of coord_flip() has been removed from make_forest_plot(), and x and y have been switched where needed.
