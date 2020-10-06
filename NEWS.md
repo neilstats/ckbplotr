@@ -1,3 +1,7 @@
+# ckbplotr 0.4.1
+
+* Fixed make_jasper_forest_plot.
+
 # ckbplotr 0.4.0
 
 * Name of arguments in make_forest_plot(), make_forest_data(), and make_jasper_forest_plot() have changed. The old names should still work for now and a message is displayed to tell you the new names. Hopefully the new names are more meaningful.

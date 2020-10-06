@@ -77,7 +77,7 @@ make_jasper_forest_plot <- function(
     exponentiate  = exponentiate,
     blankrows     = blankrows) %>%
     dplyr::group_by(row) %>%
-    dplyr::summarise(row.labels = dplyr::first(row.labels),
+    dplyr::summarise(Heading = dplyr::first(row.label),
                      key = dplyr::first(key))
 
   # drop last row (which is blank)
