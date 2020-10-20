@@ -109,6 +109,8 @@
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'remotes'</span><span class="op">)</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">'neilstats/ckbplotr'</span><span class="op">)</span></pre></div>
+<p>If you get an error that reads “Error: Failed to install ‘unknown package’ from GitHub: HTTP error 404. No commit found for the ref master” then make sure to update to the latest version of the <code>remotes</code> package, or try <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github('neilstats/ckbplotr@main')</a></code>.</p>
+<p>If you get an error that reads “Error: (converted from warning) package ‘ggplot2’ was built under R version …” you can avoid this by first running <code>Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true"</code>. (This is a <a href="https://github.com/r-lib/remotes/issues/403">known issue</a> with the <code>remotes</code> package.)</p>
 </div>
 <div id="or-from-source-package" class="section level3">
 <h3 class="hasAnchor">
