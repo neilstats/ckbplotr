@@ -27,9 +27,9 @@ master” then make sure to update to the latest version of the
 
 If you get an error that reads “Error: (converted from warning) package
 ‘ggplot2’ was built under R version …” you can avoid this by first
-running `Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true"`. (This
-is a [known issue](https://github.com/r-lib/remotes/issues/403) with the
-`remotes` package.)
+running `Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")`.
+(This is a [known issue](https://github.com/r-lib/remotes/issues/403)
+with the `remotes` package.)
 
 ### Or from source package
 
