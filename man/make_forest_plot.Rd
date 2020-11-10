@@ -57,9 +57,10 @@ make_forest_plot(
   heading.space = NULL,
   panel.space = 8,
   plot.space = NULL,
+  panel.width = NULL,
   base_size = 11,
   base_line_size = base_size/22,
-  stroke = base_size/22,
+  stroke = 0,
   margin = c(2, 6, 2, 0),
   printplot = TRUE,
   showcode = TRUE
@@ -200,7 +201,7 @@ Unit is "lines". (Default: 8)}
 
 \item{base_line_size}{base size for line elements}
 
-\item{stroke}{Size of outline of shapes. (Default: base_size/22)}
+\item{stroke}{Size of outline of shapes. (Default: 0)}
 
 \item{margin}{Plot margin (top, right, left, bottom). Unit is "lines". (Default: c(2, 6, 2, 0))}
 
