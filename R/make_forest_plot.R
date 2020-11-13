@@ -830,7 +830,7 @@ make_forest_plot <- function(
       '  dplyr::mutate(cicolour =  dplyr::if_else((%s(uci_transformed) - %s(lci_transformed)) <= ',
       scale, scale),
       sprintf(
-      '                           size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.75),',
+      '                           size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
       (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, shape),
       sprintf(
         '                                    %s,', cicolour[length(cicolour)]),
@@ -853,7 +853,7 @@ make_forest_plot <- function(
       '  dplyr::mutate(ciunder =  dplyr::if_else((%s(uci_transformed) - %s(lci_transformed)) <= ',
       scale, scale),
       sprintf(
-      '                           size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.75),',
+      '                           size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
       (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, shape),
       sprintf(
         '                                    %s,', ciunder[length(ciunder)]),
