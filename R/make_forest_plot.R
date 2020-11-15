@@ -533,7 +533,8 @@ make_forest_plot <- function(
   stroke        = 0,
   margin        = c(2, 6, 2, 0),
   printplot     = TRUE,
-  showcode      = TRUE
+  showcode      = TRUE,
+  envir = NULL
 ){
 
   # legacy arguments
@@ -1180,15 +1181,14 @@ make_forest_plot <- function(
     viewer(file.path(tempdir(), "plotcode.txt"))
   }
 
-
   # Create plot and print
-  plot <- eval(parse(text = plotcode))
+  plot <- eval(parse(text = plotcode), envir = envir)
   if (printplot){
     print(plot)
   }
 
   return(list(plot = plot,
-              data = datatoplot,
+              data = plot$data,
               code = plotcode) )
 }
 
