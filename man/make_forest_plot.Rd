@@ -62,8 +62,10 @@ make_forest_plot(
   base_line_size = base_size/22,
   stroke = 0,
   margin = c(2, 6, 2, 0),
+  units = "lines",
   printplot = TRUE,
-  showcode = TRUE
+  showcode = TRUE,
+  envir = NULL
 )
 }
 \arguments{
@@ -191,11 +193,11 @@ estimates. (Default: 3)}
   be plotted in the column of estimates and CIs, below the row with the key
   given in the col.key column.}
 
-\item{label.space}{Size of the gap between row labels and the first panel.
-Unit is "lines". (Default: 4)}
+\item{label.space}{Size of the gap between row labels and the first panel. (Default: 4)}
 
-\item{panel.space}{Size of the gap between forest plot panels.
-Unit is "lines". (Default: 8)}
+\item{panel.space}{Size of the gap between forest plot panels. (Default: 8)}
+
+\item{panel.width}{Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".}
 
 \item{base_size}{base font size, given in pts.}
 
@@ -203,11 +205,15 @@ Unit is "lines". (Default: 8)}
 
 \item{stroke}{Size of outline of shapes. (Default: 0)}
 
-\item{margin}{Plot margin (top, right, left, bottom). Unit is "lines". (Default: c(2, 6, 2, 0))}
+\item{margin}{Plot margin (top, right, bottom, left). (Default: c(2, 6, 2, 0))}
+
+\item{units}{Units to use for label.space, panel.space and margin (Default: "Lines")}
 
 \item{printplot}{Print the plot. (Default: TRUE)}
 
 \item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
+
+\item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
 }
 \value{
 A list:
