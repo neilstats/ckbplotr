@@ -198,10 +198,12 @@ grid::grid.draw(plot)
 # Changing colour and plotting of lines
 
 ```{r forest-plot-4}
+resultsA <- dplyr::select(resultsA, -ciunder)
 resultsA$cicol1 <- "black"
 resultsA$cicol2 <- "white"
 resultsA$shape <- 15
 
+resultsB <- dplyr::select(resultsB, -ciunder)
 resultsB$cicol1 <- "black"
 resultsB$cicol2 <- "black"
 resultsB$shape <- 22

@@ -972,7 +972,7 @@ make_forest_plot <- function(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
                     '')
-                } else if (is.character(ciunder) && any(sapply(panels, function(x) x[[ciunder]]), na.rm = TRUE)){
+                } else if (is.character(ciunder)){
                   c(
                     '  # Plot CIs - before plotting points',
                     sprintf(
@@ -1018,7 +1018,7 @@ make_forest_plot <- function(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
                     '')
-                } else if (is.character(ciunder) && !all(sapply(panels, function(x) x[[ciunder]]), na.rm = TRUE)){
+                } else if (is.character(ciunder)){
                   c(
                     '  # Plot CIs - after plotting points',
                     sprintf(
