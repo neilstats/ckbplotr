@@ -187,6 +187,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                # set panel width + CI under or over
                                panel.width       = 25,
                                shape             = 22,
+                               stroke            = 0.5,
                                fill              = "white",
                                ciunder           = c(TRUE, FALSE),
                                printplot         = FALSE)
@@ -231,6 +232,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                # set panel width + CI colours
                                panel.width       = 25,
                                shape             = "shape",
+                               stroke            = 0.5,
                                cicolour          = c("cicol1", "cicol2"),
                                ciunder           = c(TRUE, FALSE),
                                fill              = "white",
