@@ -1,3 +1,9 @@
+# ckbplotr 0.5.0
+
+* In make_forest_plot(), confidence intervals narrower than plotted points can be a different colour (and plotted before/after the points) by using the panel.width argument.
+* A new function fix_panel_width() can then be used to fix the width of panels in a forest plot.
+* A new argument envir in make_forest_plot() allows the user to specify the environment for evaluating the plotcode. (Helpful if using make_forest_plot() inside another function.)
+
 # ckbplotr 0.4.1
 
 * Fixed make_jasper_forest_plot.
