@@ -315,7 +315,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                addtext           = list(resultsA_extra, resultsB_extra),
                                printplot         = FALSE)
 
-forestplot$plot + theme(plot.margin = unit(c(2,10,2,0), "lines"))
+forestplot$plot + theme(plot.margin = unit(c(2,10,2,1), "lines"))
 ```
 
 
@@ -399,9 +399,9 @@ p2 <- forestplot2$plot +
   theme(axis.text.y = element_blank())
 ```
 
-Step 3: Arrange the plots using `gridExtra` (there may be other packages that also work). Adjust `widths` until the plots are the desired widths in your final output file.
+Step 3: Arrange the plots using `gridExtra` (there may be other packages that also work). Adjust `widths` until the plots are the desired widths in your final output file. 
 ```{r}
-gridExtra::grid.arrange(p1, p2, ncol=2, widths = c(1,0.55))
+gridExtra::grid.arrange(p1, p2, nrow = 1, widths = c(1, 0.52))
 ```
 
 Note that if `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots. However, if different axis scales are used then confidence intervals are not comparable either so this may be not be a problem.

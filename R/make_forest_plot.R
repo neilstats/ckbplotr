@@ -452,14 +452,15 @@ make_forest_data <- function(
 #'                (using the key values) for which the estimate and CI should be plotted using a diamond.
 #' @param col.bold Plot text as bold. Name of a column of logical values.
 #' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
-#' @param label.space Size of the gap between row labels and the first panel.
-#' Unit is "lines". (Default: 4)
-#' @param panel.space Size of the gap between forest plot panels.
-#' Unit is "lines". (Default: 8)
-#' @param stroke Size of outline of shapes. (Default: base_size/22)
-#' @param margin Plot margin (top, right, left, bottom). Unit is "lines". (Default: c(2, 6, 2, 0))
+#' @param label.space Size of the gap between row labels and the first panel. (Default: 4)
+#' @param panel.space Size of the gap between forest plot panels. (Default: 8)
+#' @param panel.width Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".
+#' @param stroke Size of outline of shapes. (Default: 0)
+#' @param margin Plot margin (top, right, bottom, left). (Default: c(2, 6, 2, 1))
+#' @param units Units to use for label.space, panel.space and margin (Default: "Lines")
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
+#' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
 #'
 #' @return A list:
 #' \describe{
@@ -527,12 +528,15 @@ make_forest_plot <- function(
   heading.space = NULL,
   panel.space   = 8,
   plot.space    = NULL,
+  panel.width   = NULL,
   base_size     = 11,
   base_line_size = base_size/22,
-  stroke        = base_size/22,
-  margin        = c(2, 6, 2, 0),
+  stroke        = 0,
+  margin        = c(2, 6, 2, 1),
+  units         = "lines",
   printplot     = TRUE,
-  showcode      = TRUE
+  showcode      = TRUE,
+  envir         = NULL
 ){
 
   # legacy arguments
@@ -610,7 +614,7 @@ make_forest_plot <- function(
   if (is.null(cicolour)) {
     cicolour <- '\"black\"'
   }
-  else if (cicolour %in% names(panels[[1]])){
+  else if (all(cicolour %in% names(panels[[1]]))){
     cicolour <- paste0("`", cicolour, "`")
     cicolouraes <- TRUE
   } else {
@@ -813,11 +817,55 @@ make_forest_plot <- function(
       '  geom_polygon(data = diamonds,',
       '               aes(x = x, y = y, group = row,',
       sprintf(
-      '                   colour = %s, fill = %s),', cicolour, fill),
+      '                   colour = %s, fill = %s),', cicolour[1], fill),
       sprintf(
       '               size = %s) +', stroke),
       ''
     )
+  }
+
+  # CI colour code
+  if (is.numeric(panel.width) && length(cicolour) > 1) {
+    cicolourcode <- c(
+      '# Create column for CI colour',
+      'datatoplot <- datatoplot %>%',
+      sprintf(
+      '  dplyr::mutate(cicolour =  dplyr::if_else((%s(uci_transformed) - %s(lci_transformed)) <= ',
+      scale, scale),
+      sprintf(
+      '                           size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
+      (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, shape),
+      sprintf(
+        '                                    %s,', cicolour[length(cicolour)]),
+      sprintf(
+        '                                    %s))', cicolour[1])
+    )
+    cicolour <- "cicolour"
+    cicolouraes <- TRUE
+  } else {
+    cicolourcode <- ''
+  }
+
+
+  # CI under code
+  if (is.numeric(panel.width) && length(ciunder) > 1) {
+    ciundercode <- c(
+      '# Create column for CI under',
+      'datatoplot <- datatoplot %>%',
+      sprintf(
+      '  dplyr::mutate(ciunder =  dplyr::if_else((%s(uci_transformed) - %s(lci_transformed)) <= ',
+      scale, scale),
+      sprintf(
+      '                           size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
+      (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, shape),
+      sprintf(
+        '                                    %s,', ciunder[length(ciunder)]),
+      sprintf(
+        '                                    %s))', ciunder[1])
+    )
+    ciunder <- "ciunder"
+  } else {
+    ciundercode <- ""
   }
 
   argset <- function(x){
@@ -898,6 +946,11 @@ make_forest_plot <- function(
                 '                              uci_transformed = pmax(uci_transformed, %s))', xfrom),
                 '',
                 diamondscode,
+                '',
+                cicolourcode,
+                '',
+                ciundercode,
+                '',
                 '# Create the ggplot',
                 'ggplot(datatoplot, aes(y=-row, x=estimate_transformed)) +',
                 '',
@@ -914,12 +967,12 @@ make_forest_plot <- function(
                     '                 aes(xmin = lci_transformed,',
                     '                     xmax = uci_transformed,',
                     sprintf(
-                    '                     colour = %s), ', cicolour),
+                    '                     colour = %s),', cicolour[1]),
                     sprintf(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
                     '')
-                } else if (is.character(ciunder) && any(sapply(panels, function(x) x[[ciunder]]), na.rm = TRUE)){
+                } else if (is.character(ciunder)){
                   c(
                     '  # Plot CIs - before plotting points',
                     sprintf(
@@ -928,7 +981,7 @@ make_forest_plot <- function(
                     '                 aes(xmin = lci_transformed,',
                     '                     xmax = uci_transformed,',
                     sprintf(
-                    '                     colour = %s),', cicolour),
+                    '                     colour = %s),', cicolour[1]),
                     sprintf(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
@@ -960,12 +1013,12 @@ make_forest_plot <- function(
                     '                 aes(xmin = lci_transformed,',
                     '                     xmax = uci_transformed,',
                     sprintf(
-                    '                     colour = %s), ', cicolour),
+                    '                     colour = %s),', cicolour[1]),
                     sprintf(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
                     '')
-                } else if (is.character(ciunder) && !all(sapply(panels, function(x) x[[ciunder]]), na.rm = TRUE)){
+                } else if (is.character(ciunder)){
                   c(
                     '  # Plot CIs - after plotting points',
                     sprintf(
@@ -974,7 +1027,7 @@ make_forest_plot <- function(
                     '                 aes(xmin = lci_transformed,',
                     '                     xmax = uci_transformed,',
                     sprintf(
-                    '                     colour = %s),', cicolour),
+                    '                     colour = %s),', cicolour[1]),
                     sprintf(
                     '                 size = %s,', base_line_size),
                     '                 na.rm = TRUE) +',
@@ -988,11 +1041,11 @@ make_forest_plot <- function(
                 if (cicolouraes) {c(
                 '                   xend=uci_transformed,',
                 sprintf(
-                '                   colour = %s),', cicolour))
+                '                   colour = %s),', cicolour[1]))
                 } else {c(
                 '                   xend=uci_transformed),',
                 sprintf(
-                '               colour = %s,', cicolour))
+                '               colour = %s,', cicolour[1]))
                 },
                 sprintf(
                 '               size = %s,', base_line_size),
@@ -1006,11 +1059,11 @@ make_forest_plot <- function(
                 if (cicolouraes) {c(
                 '                   xend=lci_transformed,',
                 sprintf(
-                '                   colour = %s),', cicolour))
+                '                   colour = %s),', cicolour[1]))
                 } else {c(
                 '                   xend=lci_transformed),',
                 sprintf(
-                '               colour = %s,', cicolour))
+                '               colour = %s,', cicolour[1]))
                 },
                 sprintf(
                 '               size = %s,', base_line_size),
@@ -1082,10 +1135,12 @@ make_forest_plot <- function(
                 '  # Set the scale for the x axis (the rows)',
                 '  scale_y_continuous(breaks = -1:-max(datatoplot$row),',
                 '                     labels = rowlabels,',
-                '                     name   = "",',
                 '                     expand = c(0,0)) +',
+                if (title != ""){c(
+                '',
                 '  # Add the title',
-                sprintf('  labs(title = "%s") +', title),
+                sprintf('  labs(title = "%s") +', title))
+                },
                 '',
                 '  # Control the overall look of the plots',
                 sprintf('  theme(text             = element_text(size = %s),', base_size),
@@ -1093,9 +1148,14 @@ make_forest_plot <- function(
                 '        panel.background = element_blank(),',
                 '        panel.grid.major = element_blank(),',
                 '        panel.grid.minor = element_blank(),',
+                if (title == ""){
+                '        plot.title       = element_blank(),'
+                } else {
+                '        plot.title.position = "plot",'
+                },
                 sprintf(
                 '        axis.line.x      = element_line(size = %s, lineend = "round"),', base_line_size),
-                '        axis.title.x     = element_blank(),',
+                '        axis.title       = element_blank(),',
                 '        axis.ticks.x     = element_line(colour = "black"),',
                 '        axis.text.x      = element_text(colour = "black",',
                 sprintf(
@@ -1106,17 +1166,17 @@ make_forest_plot <- function(
                 '        axis.text.y      = element_text(hjust  = 0,',
                 '                                        colour = "black",',
                 '                                        face   = boldlabels,',
-                sprintf('                                        margin = margin(r = %s, unit = "lines")),', label.space),
+                sprintf('                                        margin = margin(r = %s, unit = "%s")),', label.space, units),
                 '        panel.border     = element_blank(),',
-                sprintf('        panel.spacing    = unit(%s, "lines"),', panel.space),
+                sprintf('        panel.spacing    = unit(%s, "%s"),', panel.space, units),
                 '        strip.background = element_blank(),',
                 '        strip.placement  = "outside",',
                 '        strip.text       = element_blank(),',
                 '        legend.position  = "none",',
                 '        plot.background  = element_blank(),',
                 sprintf(
-                '        plot.margin      = unit(%s, "lines"))',
-                paste(deparse(margin), collapse = '')))
+                '        plot.margin      = unit(%s, "%s"))',
+                paste(deparse(margin), collapse = ''), units))
 
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
@@ -1130,14 +1190,42 @@ make_forest_plot <- function(
     viewer(file.path(tempdir(), "plotcode.txt"))
   }
 
-
   # Create plot and print
-  plot <- eval(parse(text = plotcode))
+  plot <- eval(parse(text = plotcode), envir = envir)
   if (printplot){
     print(plot)
   }
 
   return(list(plot = plot,
-              data = datatoplot,
+              data = plot$data,
               code = plotcode) )
+}
+
+
+
+
+
+
+
+
+
+
+#' Fix panel width of a forest plot
+#'
+#' \code{fix_panel_width} fixes the panel width of a forest plot
+#'
+#' @param plot A plot (created by make_forest_plot()).
+#' @param width Width of panels.
+#' @param units Units (Default: mm).
+#'
+#' @return A gtable object
+#'
+#' @import ggplot2
+#' @export
+
+
+fix_panel_width <- function(plot, width, units = "mm"){
+  gtable <- ggplot2::ggplotGrob(plot)
+  gtable$widths[gtable$layout$l[grepl("panel", gtable$layout$name)]] <- unit(x = width, units = units)
+  gtable
 }
