@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -63,6 +63,9 @@
       <a href="../articles/make_shape_plot.html">Making shape plots</a>
     </li>
     <li>
+      <a href="../articles/narrow_cis.html">Changing narrow forest plot confidence interval lines</a>
+    </li>
+    <li>
       <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
     </li>
     <li>
@@ -91,7 +94,8 @@
 
       
 
-      </header><script src="make_forest_plot_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="make_forest_plot_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="make_forest_plot_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="make_forest_plot_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Making forest plots</h1>
@@ -125,8 +129,8 @@
 <h2 class="hasAnchor">
 <a href="#prepare-data" class="anchor"></a>Prepare data</h2>
 <p>First of all, do your analyses and put the results into data frames (one data frame for each forest plot panel). Here we generate some example results.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">57911624</span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">57911624</span><span class="op">)</span>
 <span class="va">exampleresults</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span>
   <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'nmr_l_vldl_p'</span>, <span class="st">'nmr_m_vldl_p'</span>, <span class="st">'nmr_s_vldl_p'</span>,
                           <span class="st">'nmr_idl_p'</span>,
@@ -161,18 +165,18 @@
 <span class="va">resultsA</span><span class="op">[</span><span class="fl">12</span>, <span class="st">"diamond"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
 <span class="va">resultsA</span><span class="op">[</span><span class="fl">13</span>, <span class="st">"ciunder"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
 <span class="va">resultsA</span><span class="op">[</span><span class="fl">13</span>, <span class="st">"shape"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">22</span>
-<span class="va">resultsA</span><span class="op">[</span><span class="fl">13</span>, <span class="st">"fill"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"white"</span></pre></div>
+<span class="va">resultsA</span><span class="op">[</span><span class="fl">13</span>, <span class="st">"fill"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"white"</span></code></pre></div>
 </div>
 <div id="simple-forest-plot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#simple-forest-plot" class="anchor"></a>Simple forest plot</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
                                col.key        <span class="op">=</span> <span class="st">"variable"</span>,
                                panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
                                exponentiate   <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
 <p><img src="make_forest_plot_files/figure-html/make_forest_plot-example-1-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="forest-plot-with-row-labels" class="section level2">
@@ -205,8 +209,8 @@
 #&gt; 19          Cholesterol concentration      LDL    Large   nmr_l_ldl_c
 #&gt; 20          Cholesterol concentration      LDL   Medium   nmr_m_ldl_c
 #&gt; 21          Cholesterol concentration      LDL    Small   nmr_s_ldl_c</code></pre>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
                                col.key           <span class="op">=</span> <span class="st">"variable"</span>,
                                row.labels        <span class="op">=</span> <span class="va">mylabels</span>,
                                rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Lipoprotein particle concentration"</span>,
@@ -227,7 +231,7 @@
                                label.space       <span class="op">=</span> <span class="fl">2</span>,
                                panel.space       <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
 <p><img src="make_forest_plot_files/figure-html/make_forest_plot-example-2-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="setting-colours-and-shapes-bold-text-and-diamonds" class="section level2">
@@ -278,8 +282,8 @@
 <div id="using-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-values" class="anchor"></a>Using values</h3>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
                                 col.key          <span class="op">=</span> <span class="st">"variable"</span>,
                                 row.labels       <span class="op">=</span> <span class="va">mylabels</span>,
                                 rows             <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
@@ -302,14 +306,14 @@
                                 cicolour         <span class="op">=</span> <span class="st">"black"</span>,
                                 ciunder          <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
 <p><img src="make_forest_plot_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div id="using-column-names" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-column-names" class="anchor"></a>Using column names</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
                                 col.key          <span class="op">=</span> <span class="st">"variable"</span>,
                                 row.labels       <span class="op">=</span> <span class="va">mylabels</span>,
                                 rows             <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
@@ -333,7 +337,7 @@
                                 col.diamond      <span class="op">=</span> <span class="st">"diamond"</span>,
                                 ciunder          <span class="op">=</span> <span class="st">"ciunder"</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
 <p><img src="make_forest_plot_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>If a parameter is not set, then default values are used for these aesthetics. If a parameter is set, then every data frame provided in <code>cols</code> must contain a column with that name.</p>
 </div>
@@ -341,8 +345,8 @@
 <h3 class="hasAnchor">
 <a href="#diamond-shortcut" class="anchor"></a>Diamond shortcut</h3>
 <p>As an alternative to using <code>col.diamond</code>, provide a character vector in the <code>diamond</code> argument. In rows with these key values, estimates and CIs will be plotted using a diamond. (If a list is supplied, only the first element will be used.)</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
                                 col.key          <span class="op">=</span> <span class="st">"variable"</span>,
                                 row.labels       <span class="op">=</span> <span class="va">mylabels</span>,
                                 rows             <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
@@ -362,7 +366,7 @@
                                 panel.space      <span class="op">=</span> <span class="fl">8</span>,
                                 diamond          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nmr_l_ldl_tg"</span>, <span class="st">"nmr_m_ldl_tg"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
 <p><img src="make_forest_plot_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -371,8 +375,8 @@
 <a href="#adding-heterogeneity-and-trend-test-results-and-other-text" class="anchor"></a>Adding heterogeneity and trend test results and other text</h2>
 <p>The <code>addtext</code> argument can be used to add results of heterogeneity or trend test, or some other text, in the text column of estimates and CIs.</p>
 <p>You will probably need to increase <code>panel.space</code> and widen the right margin as shown to stop overlapping text or overrunning the edge of the plot.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">resultsA_extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>variable   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nmr_s_ldl_p"</span>, <span class="st">"nmr_s_vldl_p"</span><span class="op">)</span>,
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">resultsA_extra</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>variable   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"nmr_s_ldl_p"</span>, <span class="st">"nmr_s_vldl_p"</span><span class="op">)</span>,
                              het_dof    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"2"</span>,           <span class="cn">NA</span><span class="op">)</span>,
                              het_stat   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"12"</span>,          <span class="cn">NA</span><span class="op">)</span>,
                              het_p      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"=0.22"</span>,       <span class="cn">NA</span><span class="op">)</span>,
@@ -412,7 +416,7 @@
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
 <span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
 
-<span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> <span class="fu">theme</span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span>,<span class="fl">2</span>,<span class="fl">0</span><span class="op">)</span>, <span class="st">"lines"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> <span class="fu">theme</span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">10</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>, <span class="st">"lines"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="make_forest_plot_files/figure-html/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div id="different-limits-and-ticks-on-each-plot" class="section level2">
@@ -421,8 +425,8 @@
 <p>The <code>make_forest_plot</code> function uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales (or limits or ticks) applied, so it’s not directly possible to have different limits and ticks on each forest plot.</p>
 <p>However, one approach to work around this is to use <code>make_forest_plot</code> for each plot you need, remove the labels from all but the first, then arrange them side-by-side. The <code>gridExtra</code> package can be used for this last step.</p>
 <p>Step 1: Use <code>make_forest_plot</code> for each plot.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
                                 col.key           <span class="op">=</span> <span class="st">"variable"</span>,
                                 row.labels        <span class="op">=</span> <span class="va">mylabels</span>,
                                 rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Lipoprotein particle concentration"</span>,
@@ -468,16 +472,16 @@
                                 panel.space       <span class="op">=</span> <span class="fl">8</span>,
                                 printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
 <p>Step 2: Remove the axis text for all but the first plot.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">forestplot1</span><span class="op">$</span><span class="va">plot</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">forestplot1</span><span class="op">$</span><span class="va">plot</span>
 
 <span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">forestplot2</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> 
-  <span class="fu">theme</span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></pre></div>
+  <span class="fu">theme</span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Step 3: Arrange the plots using <code>gridExtra</code> (there may be other packages that also work). Adjust <code>widths</code> until the plots are the desired widths in your final output file.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, ncol<span class="op">=</span><span class="fl">2</span>, widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0.55</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, nrow <span class="op">=</span> <span class="fl">1</span>, widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.52</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="make_forest_plot_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>Note that if <code>scalepoints = TRUE</code> (and <code>minse</code> is not specified the same for each plot) then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots. However, if different axis scales are used then confidence intervals are not comparable either so this may be not be a problem.</p>
 </div>

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -63,6 +63,9 @@
       <a href="../articles/make_shape_plot.html">Making shape plots</a>
     </li>
     <li>
+      <a href="../articles/narrow_cis.html">Changing narrow forest plot confidence interval lines</a>
+    </li>
+    <li>
       <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
     </li>
     <li>
@@ -91,7 +94,8 @@
 
       
 
-      </header><script src="special_characters_formatting_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><script src="special_characters_formatting_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="special_characters_formatting_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="special_characters_formatting_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using special characters and formatting</h1>
@@ -123,8 +127,8 @@
 <a href="#special-characters" class="anchor"></a>Special characters</h3>
 <p>You can include some special characters just by putting their unicode in your text. But sometimes this does not work correctly, for example on Windows the code for a ‘greater than or equal to’ symbol “\u2265” gets replaced by an equals sign. This can be fixed by using it in your own <code>geom_text</code> code (use either the ‘copy and edit’ or ‘add layers’ method).</p>
 <p>Use a unicode symbol in column headings:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
                                col.key           <span class="op">=</span> <span class="st">"variable"</span>,
                                row.labels        <span class="op">=</span> <span class="va">varheadings</span>,
                                rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
@@ -157,7 +161,7 @@
             data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
                                                 levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
                                                 ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
 </div>
 <div id="formatting" class="section level3">
@@ -165,8 +169,8 @@
 <a href="#formatting" class="anchor"></a>Formatting</h3>
 <p>Various formatting (called “aesthetics”) such as colour, bold, italics, and angle can be controlled in <code>geom_text</code>. Make use of the arguments of <code>geom_text</code> (<a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="uri">https://ggplot2.tidyverse.org/reference/geom_text.html</a>) as you need.</p>
 <p>Make column headings bold and italic:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
   <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.99498743710662</span>, label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,
             hjust <span class="op">=</span> <span class="fl">0.5</span>,
             nudge_y <span class="op">=</span> <span class="fl">2</span>,
@@ -175,7 +179,7 @@
             data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
                                                 levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
                                                 ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 </div>
 <div id="expressions" class="section level3">
@@ -183,8 +187,8 @@
 <a href="#expressions" class="anchor"></a>Expressions</h3>
 <p>The <code>geom_text</code> function has an argument <code>parse</code> which tells ggplot2 to parse text into expressions and display as described in <a href="https://rdrr.io/r/grDevices/plotmath.html">plotmath</a>. (Note that text in columns given by <code>col.right</code> in <code>make_forest_plot</code> already use <code>parse = TRUE</code>.)</p>
 <p>Evaluate column headings as expressions:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
   <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.99498743710662</span>, label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,
             hjust <span class="op">=</span> <span class="fl">0.5</span>,
             nudge_y <span class="op">=</span> <span class="fl">2</span>,
@@ -193,7 +197,7 @@
             data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
                                                 levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
                                                 ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"bold("</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A&gt;=10"</span>, <span class="st">"A^b"</span><span class="op">)</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></pre></div>
+                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"bold("</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A&gt;=10"</span>, <span class="st">"A^b"</span><span class="op">)</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-3-1.png" width="700"> Note the expressions will remove the <code>fontface</code> and other formatting, but we can use <code>bold</code> inside the text instead (though it does not apply to symbols or numbers).</p>
 </div>
 <div id="ggtext" class="section level3">
@@ -201,8 +205,8 @@
 <a href="#ggtext" class="anchor"></a>ggtext</h3>
 <p>The <a href="https://wilkelab.org/ggtext/">ggtext packge</a> adds support for some Markdown and HTML. You could install this package and use <code>geom_richtext()</code> in place of <code>geom_text()</code> to use some markdown (or HTML).</p>
 <p>Bold and italics using markdown:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
   <span class="fu">ggtext</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/ggtext/reference/geom_richtext.html">geom_richtext</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.99498743710662</span>, label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,
                         hjust <span class="op">=</span> <span class="fl">0.5</span>,
                         size  <span class="op">=</span> <span class="fl">3</span>,
@@ -212,11 +216,11 @@
                                                             ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
                                              title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"*A*"</span>, <span class="st">"**B&lt;sup&gt;2&lt;/sup&gt;**"</span><span class="op">)</span><span class="op">)</span>,
                         fill <span class="op">=</span> <span class="cn">NA</span>,
-                        label.color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></pre></div>
+                        label.color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
 <p>You could also use <code>element_markdown</code> inside <code>theme</code> to make use of markdown just in row headings.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="va">varheadings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>heading1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>, each <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">varheadings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>heading1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>, each <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,
                           heading2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"VLDL^a"</span>, <span class="st">"VLDL^a"</span>, <span class="st">"VLDL^a"</span>,
                                        <span class="st">"**IDL**"</span>,
                                        <span class="st">"*LDL*"</span>, <span class="st">"*LDL*"</span>, <span class="st">"*LDL*"</span><span class="op">)</span>,
@@ -254,7 +258,7 @@
 <span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
 
 <span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> 
-  <span class="fu">theme</span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu">ggtext</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></pre></div>
+  <span class="fu">theme</span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu">ggtext</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div id="change-labels-in-make_forest_plot-using-expression" class="section level3">
@@ -262,8 +266,8 @@
 <a href="#change-labels-in-make_forest_plot-using-expression" class="anchor"></a>Change labels in make_forest_plot using expression</h3>
 <p>If you want to use different formatting and characters for row labels in <code>make_forest_plot</code> you can use the ‘copy and edit’ method. Just replace the section of code that creates the rowlabels vector. For example you could replace it by a vector of expressions.</p>
 <p>First start by using <code>make_forest_plot</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
                                col.key           <span class="op">=</span> <span class="st">"variable"</span>,
                                row.labels        <span class="op">=</span> <span class="va">varheadings</span>,
                                rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
@@ -284,10 +288,10 @@
                                panel.space       <span class="op">=</span> <span class="fl">8</span>,
                                printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
 <p>Now copy the code from the RStudio Viewer pane, and edit the section under the comment “# Get a character vector of the row labels, so these can be used in the plot”.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co"># ggplot2 code ------------------</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># ggplot2 code ------------------</span>
 
 <span class="co"># Prepare data to be plotted using ckbplotr::make_forest_data()</span>
 <span class="va">datatoplot</span> <span class="op">&lt;-</span> <span class="fu">ckbplotr</span><span class="fu">::</span><span class="fu"><a href="../reference/make_forest_data.html">make_forest_data</a></span><span class="op">(</span>
@@ -492,7 +496,7 @@ events"</span>,
         plot.background  <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
         plot.margin      <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">6</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"lines"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></pre></div>
+<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
 <p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 </div>

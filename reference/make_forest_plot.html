@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/make_shape_plot.html">Making shape plots</a>
+    </li>
+    <li>
+      <a href="../articles/narrow_cis.html">Changing narrow forest plot confidence interval lines</a>
     </li>
     <li>
       <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
@@ -197,12 +200,15 @@
   heading.space <span class='op'>=</span> <span class='cn'>NULL</span>,
   panel.space <span class='op'>=</span> <span class='fl'>8</span>,
   plot.space <span class='op'>=</span> <span class='cn'>NULL</span>,
+  panel.width <span class='op'>=</span> <span class='cn'>NULL</span>,
   base_size <span class='op'>=</span> <span class='fl'>11</span>,
   base_line_size <span class='op'>=</span> <span class='va'>base_size</span><span class='op'>/</span><span class='fl'>22</span>,
-  stroke <span class='op'>=</span> <span class='va'>base_size</span><span class='op'>/</span><span class='fl'>22</span>,
-  margin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>6</span>, <span class='fl'>2</span>, <span class='fl'>0</span><span class='op'>)</span>,
+  stroke <span class='op'>=</span> <span class='fl'>0</span>,
+  margin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2</span>, <span class='fl'>6</span>, <span class='fl'>2</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  units <span class='op'>=</span> <span class='st'>"lines"</span>,
   printplot <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  showcode <span class='op'>=</span> <span class='cn'>TRUE</span>
+  showcode <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  envir <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -414,13 +420,15 @@ estimates. (Default: 3)</p></td>
     </tr>
     <tr>
       <th>label.space</th>
-      <td><p>Size of the gap between row labels and the first panel.
-Unit is "lines". (Default: 4)</p></td>
+      <td><p>Size of the gap between row labels and the first panel. (Default: 4)</p></td>
     </tr>
     <tr>
       <th>panel.space</th>
-      <td><p>Size of the gap between forest plot panels.
-Unit is "lines". (Default: 8)</p></td>
+      <td><p>Size of the gap between forest plot panels. (Default: 8)</p></td>
+    </tr>
+    <tr>
+      <th>panel.width</th>
+      <td><p>Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".</p></td>
     </tr>
     <tr>
       <th>base_size</th>
@@ -432,11 +440,15 @@ Unit is "lines". (Default: 8)</p></td>
     </tr>
     <tr>
       <th>stroke</th>
-      <td><p>Size of outline of shapes. (Default: base_size/22)</p></td>
+      <td><p>Size of outline of shapes. (Default: 0)</p></td>
     </tr>
     <tr>
       <th>margin</th>
-      <td><p>Plot margin (top, right, left, bottom). Unit is "lines". (Default: c(2, 6, 2, 0))</p></td>
+      <td><p>Plot margin (top, right, bottom, left). (Default: c(2, 6, 2, 1))</p></td>
+    </tr>
+    <tr>
+      <th>units</th>
+      <td><p>Units to use for label.space, panel.space and margin (Default: "Lines")</p></td>
     </tr>
     <tr>
       <th>printplot</th>
@@ -445,6 +457,10 @@ Unit is "lines". (Default: 8)</p></td>
     <tr>
       <th>showcode</th>
       <td><p>Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)</p></td>
+    </tr>
+    <tr>
+      <th>envir</th>
+      <td><p>Environment in which to evaluate the plot code. May be useful when calling this function inside another function.</p></td>
     </tr>
     </table>
 

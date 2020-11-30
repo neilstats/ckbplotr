@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Make a ggplot into CKB style — plot_like_ckb • ckbplotr</title>
+<title>Fix panel width of a forest plot — fix_panel_width • ckbplotr</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Make a ggplot into CKB style — plot_like_ckb" />
-<meta property="og:description" content="Make a ggplot into CKB style" />
+<meta property="og:title" content="Fix panel width of a forest plot — fix_panel_width" />
+<meta property="og:description" content="fix_panel_width fixes the panel width of a forest plot" />
 
 
 
@@ -138,66 +138,37 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Make a ggplot into CKB style</h1>
-    <small class="dont-index">Source: <a href='https://github.com/neilstats/ckbplotr/blob/master/R/plot_like_ckb.R'><code>R/plot_like_ckb.R</code></a></small>
-    <div class="hidden name"><code>plot_like_ckb.Rd</code></div>
+    <h1>Fix panel width of a forest plot</h1>
+    <small class="dont-index">Source: <a href='https://github.com/neilstats/ckbplotr/blob/master/R/make_forest_plot.R'><code>R/make_forest_plot.R</code></a></small>
+    <div class="hidden name"><code>fix_panel_width.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Make a ggplot into CKB style</p>
+    <p><code>fix_panel_width</code> fixes the panel width of a forest plot</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_like_ckb</span><span class='op'>(</span>
-  <span class='va'>plot</span>,
-  xlims <span class='op'>=</span> <span class='cn'>NULL</span>,
-  ylims <span class='op'>=</span> <span class='cn'>NULL</span>,
-  gap <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.025</span><span class='op'>)</span>,
-  ext <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.025</span>, <span class='fl'>0.025</span><span class='op'>)</span>,
-  ratio <span class='op'>=</span> <span class='fl'>1.5</span>,
-  base_size <span class='op'>=</span> <span class='fl'>11</span>,
-  base_line_size <span class='op'>=</span> <span class='va'>base_size</span><span class='op'>/</span><span class='fl'>22</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>fix_panel_width</span><span class='op'>(</span><span class='va'>plot</span>, <span class='va'>width</span>, units <span class='op'>=</span> <span class='st'>"mm"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>plot</th>
-      <td><p>A ggplot2 plot object.</p></td>
+      <td><p>A plot (created by make_forest_plot()).</p></td>
     </tr>
     <tr>
-      <th>xlims</th>
-      <td><p>A numeric vector of length two. The limits of the x-axis.</p></td>
+      <th>width</th>
+      <td><p>Width of panels.</p></td>
     </tr>
     <tr>
-      <th>ylims</th>
-      <td><p>A numeric vector of length two. The limits of the y-axis.</p></td>
-    </tr>
-    <tr>
-      <th>gap</th>
-      <td><p>A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))</p></td>
-    </tr>
-    <tr>
-      <th>ext</th>
-      <td><p>A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))</p></td>
-    </tr>
-    <tr>
-      <th>ratio</th>
-      <td><p>The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)</p></td>
-    </tr>
-    <tr>
-      <th>base_size</th>
-      <td><p>base font size, given in pts.</p></td>
-    </tr>
-    <tr>
-      <th>base_line_size</th>
-      <td><p>base size for line elements</p></td>
+      <th>units</th>
+      <td><p>Units (Default: mm).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A ggplot2 plot.</p>
+    <p>A gtable object</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

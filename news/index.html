@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
     </li>
     <li>
       <a href="../articles/make_shape_plot.html">Making shape plots</a>
+    </li>
+    <li>
+      <a href="../articles/narrow_cis.html">Changing narrow forest plot confidence interval lines</a>
     </li>
     <li>
       <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
@@ -138,6 +141,15 @@
       <small>Source: <a href='https://github.com/neilstats/ckbplotr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="ckbplotr-050" class="section level1">
+<h1 class="page-header" data-toc-text="0.5.0">
+<a href="#ckbplotr-050" class="anchor"></a>ckbplotr 0.5.0</h1>
+<ul>
+<li>In make_forest_plot(), confidence intervals narrower than plotted points can be a different colour (and plotted before/after the points) by using the panel.width argument.</li>
+<li>A new function fix_panel_width() can then be used to fix the width of panels in a forest plot.</li>
+<li>A new argument envir in make_forest_plot() allows the user to specify the environment for evaluating the plotcode. (Helpful if using make_forest_plot() inside another function.)</li>
+</ul>
+</div>
     <div id="ckbplotr-041" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.1">
 <a href="#ckbplotr-041" class="anchor"></a>ckbplotr 0.4.1</h1>
