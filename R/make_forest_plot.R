@@ -925,7 +925,7 @@ make_forest_plot <- function(
                 '                  dplyr::group_by(row) %>%',
                 sprintf(
                 '                  dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %%in%% %s)), "bold", "plain")) %%>%%',
-                paste(deparse(bold.labels)), collapse = ''),
+                paste(deparse(bold.labels), collapse = '')),
                 '                  dplyr::arrange(row) %>%',
                 '                  dplyr::pull(bold)',
                 '',
