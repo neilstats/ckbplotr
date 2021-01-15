@@ -57,6 +57,8 @@
 #'
 #' @keywords internal
 #'
+#' @importFrom rlang .data
+#'
 #' @export
 
 make_forest_data <- function(
@@ -133,8 +135,8 @@ make_forest_data <- function(
                                       ")', sep='')")
         )) %>%
         dplyr::select(key = !!rlang::sym(col.key),
-                      extratext) %>%
-        dplyr::mutate(key = as.character(key))
+                      .data$extratext) %>%
+        dplyr::mutate(key = as.character(.data$key))
 
       extrarowkeys <- c(extrarowkeys, addtext[[i]][["key"]])
     }
@@ -146,7 +148,7 @@ make_forest_data <- function(
       dplyr::mutate(row.label = !!rlang::sym(col.key),
                     key = !!rlang::sym(col.key),
                     extrarowkey = "") %>%
-      dplyr::select(row.label, key, extrarowkey) %>%
+      dplyr::select(.data$row.label, .data$key, .data$extrarowkey) %>%
       dplyr::add_row(row.label = "") %>%
       dplyr::mutate(row = 1:dplyr::n())
 
@@ -178,25 +180,25 @@ make_forest_data <- function(
     }
 
     row.labels <- row.labels %>%
-      dplyr::mutate(heading1 = heading1,
-                    heading2 = heading2,
-                    heading3 = heading3,
+      dplyr::mutate(heading1 = .data$heading1,
+                    heading2 = .data$heading2,
+                    heading3 = .data$heading3,
                     key = !!rlang::sym(col.key))
 
     out <- tibble::tibble(row.label = "", key = "", extrarowkey = "", removelater = TRUE)
 
     for (head1 in rows) {
       l2headings <- row.labels %>%
-        dplyr::filter(heading1 == head1) %>%
-        dplyr::select(heading2, key) %>%
-        dplyr::distinct(heading2, .keep_all = TRUE)
+        dplyr::filter(.data$heading1 == head1) %>%
+        dplyr::select(.data$heading2, .data$key) %>%
+        dplyr::distinct(.data$heading2, .keep_all = TRUE)
 
       if (is.na(l2headings[[1, "heading2"]])) {
         if (head1 != "") {out <- tibble::add_row(out,
                                                  row.label = head1,
                                                  key = row.labels %>%
-                                                   dplyr::filter(heading1 == head1) %>%
-                                                   dplyr::pull(key))}
+                                                   dplyr::filter(.data$heading1 == head1) %>%
+                                                   dplyr::pull(.data$key))}
 
         # Add extra row for addtext
         if (row.labels[[which(row.labels$heading1 == head1),"key"]] %in% extrarowkeys) {
@@ -213,8 +215,8 @@ make_forest_data <- function(
         for (head2 in 1:nrow(l2headings)) {
 
           l3headings <- row.labels %>%
-            dplyr::filter(heading1 == head1 & heading2 == l2headings[[head2, "heading2"]]) %>%
-            dplyr::select(heading3, key)
+            dplyr::filter(.data$heading1 == head1 & .data$heading2 == l2headings[[head2, "heading2"]]) %>%
+            dplyr::select(.data$heading3, .data$key)
 
           if (is.na(l3headings[[1, "heading3"]])) {
             if (head2 != "") {out <- tibble::add_row(out,
@@ -259,8 +261,8 @@ make_forest_data <- function(
     }
 
     out <- out %>%
-      dplyr::filter(is.na(removelater) | !removelater) %>%
-      dplyr::select(-removelater) %>%
+      dplyr::filter(is.na(.data$removelater) | !.data$removelater) %>%
+      dplyr::select(-.data$removelater) %>%
       dplyr::mutate(row = 1:dplyr::n())
   }
 
@@ -322,9 +324,9 @@ make_forest_data <- function(
   # Adding CIs and text to show estimate and CI
   if (!is.null(col.lci)) {
     datatoplot <- datatoplot %>%
-      dplyr::mutate(estimate_transformed = tf(estimate),
-                    lci_transformed = tf(lci),
-                    uci_transformed = tf(uci)
+      dplyr::mutate(estimate_transformed = tf(.data$estimate),
+                    lci_transformed = tf(.data$lci),
+                    uci_transformed = tf(.data$uci)
       )
     if (is.null(minse)){
       minse <- min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)
@@ -334,9 +336,9 @@ make_forest_data <- function(
     datatoplot$size <- 1.96*minse/(datatoplot$estimate - datatoplot$lci)
   } else {
     datatoplot <- datatoplot %>%
-      dplyr::mutate(estimate_transformed = tf(estimate),
-                    lci_transformed = tf(estimate - 1.96*stderr),
-                    uci_transformed = tf(estimate + 1.96*stderr)
+      dplyr::mutate(estimate_transformed = tf(.data$estimate),
+                    lci_transformed = tf(.data$estimate - 1.96*.data$stderr),
+                    uci_transformed = tf(.data$estimate + 1.96*.data$stderr)
       )
     if (is.null(minse)){
       minse <- min(datatoplot$stderr, na.rm = TRUE)
@@ -354,9 +356,9 @@ make_forest_data <- function(
                                 ci.delim,
                                 format(round(uci_transformed, 2), nsmall = 2),
                                 ")'"),
-      !is.na(extratext) ~ extratext,
+      !is.na(.data$extratext) ~ .data$extratext,
       TRUE              ~ "''")) %>%
-    dplyr::select(-extrarowkey, -extratext) %>%
+    dplyr::select(-.data$extrarowkey, -.data$extratext) %>%
     dplyr::arrange(panel, row)
 
 
