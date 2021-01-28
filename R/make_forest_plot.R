@@ -462,6 +462,9 @@ make_forest_data <- function(
 #' @param units Units to use for label.space, panel.space and margin (Default: "Lines")
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
+#' @param addcode A character vector of code to add to the generated code.
+#'                The first element should be a regular expression.
+#'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
 #' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
 #'
 #' @return A list:
@@ -538,6 +541,7 @@ make_forest_plot <- function(
   units         = "lines",
   printplot     = TRUE,
   showcode      = TRUE,
+  addcode       = NULL,
   envir         = NULL
 ){
 
@@ -1180,10 +1184,15 @@ make_forest_plot <- function(
                 '        plot.margin      = unit(%s, "%s"))',
                 paste(deparse(margin), collapse = ''), units))
 
+  # add additional code
+  if (!is.null(addcode)){
+    plotcode <- append(plotcode, addcode[2:length(addcode)], grep(addcode[1], trimws(plotcode))[1]-1)
+  }
+
 
   # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
   if (showcode){
-    writeLines(paste(c('# ggplot2 code ------------------',
+    writeLines(paste(c('# Generated plot code ------------------',
                        '',
                        plotcode),
                      collapse = "\n"),

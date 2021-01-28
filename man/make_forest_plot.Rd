@@ -65,6 +65,7 @@ make_forest_plot(
   units = "lines",
   printplot = TRUE,
   showcode = TRUE,
+  addcode = NULL,
   envir = NULL
 )
 }
@@ -212,6 +213,10 @@ estimates. (Default: 3)}
 \item{printplot}{Print the plot. (Default: TRUE)}
 
 \item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
+
+\item{addcode}{A character vector of code to add to the generated code.
+The first element should be a regular expression.
+The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)}
 
 \item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
 }
