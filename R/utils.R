@@ -19,11 +19,12 @@ indent <- function(n, ...){
 #'
 
 fixsp <- function(x){
-  if (grepl("[[:blank:]]", x)){
-    paste0("`", x, "`")
-  } else {
-      x
+  for (i in 1:length(x)){
+    if (grepl("[[:blank:]]", x[[i]])){
+      x[[i]] <- paste0("`", x[[i]], "`")
     }
+  }
+  x
 }
 
 
@@ -43,7 +44,7 @@ fixq <- function(x){
 #' @keywords internal
 #' @noRd
 #'
-make_layer <- function(name = "", f, aes = NULL, arg = NULL){
+make_layer <- function(name = NULL, f, aes = NULL, arg = NULL, plus = TRUE, br = TRUE){
   if (!is.null(aes)){
     aes <- indent(4, paste0(aes, ","))
     aes[[1]] <- paste0("aes(", trimws(aes[[1]]))
@@ -54,8 +55,8 @@ make_layer <- function(name = "", f, aes = NULL, arg = NULL){
   }
   args <- indent(nchar(f)+1, c(aes, arg))
   args[[1]] <- paste0(f, "(", trimws(args[[1]]))
-  args[[length(args)]] <- paste0(sub(",$", "", args[[length(args)]]), ") +")
-  c(name, args, '')
+  args[[length(args)]] <- paste0(sub(",$", "", args[[length(args)]]), ")", if(plus){" +"})
+  c(name, args, if(br){''})
 }
 
 

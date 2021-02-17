@@ -614,39 +614,46 @@ make_forest_plot <- function(
 
 
   # aesthetics: default value, match column name, or use argument itself
+  shape.aes <- NULL
   if (is.null(shape)) {
     shape <- 15
   } else if (shape %in% names(panels[[1]])){
-    shape <- paste0("`", shape, "`")
+    shape.aes <- fixsp(shape)
+    shape <- NULL
   }
 
-  cicolouraes <- FALSE
+  cicolour.aes <- NULL
   if (is.null(cicolour)) {
-    cicolour <- '\"black\"'
-  } else if (all(cicolour %in% names(panels[[1]]))){
-    cicolour <- paste0("`", cicolour, "`")
-    cicolouraes <- TRUE
+    cicolour <- fixq("black")
+  }
+  else if (all(cicolour %in% names(panels[[1]]))){
+    cicolour.aes <- fixsp(cicolour)
+    cicolour <- NULL
   } else {
-    cicolour <- paste0('\"', cicolour, '\"')
+    cicolour <- fixq(cicolour)
   }
 
+  colour.aes <- NULL
   if (is.null(colour)) {
-    colour <- '\"black\"'
-  } else if (colour %in% names(panels[[1]])){
-    colour <- paste0("`", colour, "`")
+    colour <- fixq("black")
+  } else if (all(colour %in% names(panels[[1]]))){
+    colour.aes <- fixsp(colour)
+    colour <- NULL
   } else {
-    colour <- paste0('\"', colour, '\"')
+    colour <- fixq(colour)
   }
 
+  fill.aes <- NULL
   if (is.null(fill)) {
-    fill <- '\"black\"'
+    fill <- fixq("black")
   } else if (fill %in% names(panels[[1]])){
-    fill <- paste0("`", fill, "`")
+    fill.aes <- fixsp(fill)
+    fill <- NULL
   } else {
-    fill <- paste0('\"', fill, '\"')
+    fill <- fixq(fill)
   }
 
-  if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- paste0("`", col.bold, "`")}
+  if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- fixsp(col.bold)}
 
 
   # codetext - list of character vectors for writing plot code
@@ -678,20 +685,20 @@ make_forest_plot <- function(
   }
 
   codetext$axes <- c(
-    indent(2,
-           '# Set the scale for the y axis (the estimates and CIs)',
-           sprintf('scale_x_continuous(trans  = "%s",', scale),
-           indent(19,
-                  paste0("breaks = ",paste(deparse(xticks), collapse = ""),","),
-                  'expand = c(0,0)) +')),
-    '',
-    indent(2,
-           '# Set the scale for the x axis (the rows)',
-           'scale_y_continuous(breaks = -1:-max(datatoplot$row),',
-           indent(19,
-                  'labels = rowlabels,',
-                  'expand = c(0,0)) +')),
-    ''
+    make_layer(
+      '# Set the scale for the y axis (the estimates and CIs)',
+      f = "scale_x_continuous",
+      arg = c(sprintf('trans  = "%s"', scale),
+              paste0("breaks = ",paste(deparse(xticks), collapse = "")),
+              'expand = c(0,0)')
+    ),
+    make_layer(
+      '# Set the scale for the x axis (the rows)',
+      f = "scale_y_continuous",
+      arg = c('breaks = -1:-max(datatoplot$row)',
+              'labels = rowlabels',
+              'expand = c(0,0)')
+    )
   )
 
   # Write code for preparing data using make_forest_data
@@ -815,7 +822,7 @@ make_forest_plot <- function(
         '# Create data frame for diamonds to be plotted',
         'diamonds <- datatoplot %>%',
         indent(2,
-               sprintf('dplyr::filter(`%s` == TRUE) %%>%%', col.diamond),
+               sprintf('dplyr::filter(%s == TRUE) %%>%%', fixsp(col.diamond)),
                'dplyr::mutate(x1 = lci_transformed,',
                indent(14,
                       'x2 = estimate_transformed,',
@@ -836,21 +843,23 @@ make_forest_plot <- function(
       )
     }
 
-    codetext$plotdiamondscode <- c(
-      '  # Add diamonds',
-      '  geom_polygon(data = diamonds,',
-      '               aes(x = x, y = y, group = row,',
-      sprintf(
-        '                   colour = %s, fill = %s),', cicolour[1], fill),
-      sprintf(
-        '               size = %s) +', stroke),
-      ''
+    codetext$plotdiamondscode <- make_layer(
+      '# Add diamonds',
+      f = 'geom_polygon',
+      aes = c('x = x, y = y, group = row',
+              sprintf('colour = %s', cicolour.aes[1]),
+              sprintf('fill = %s', fill.aes)),
+      arg = c('data = diamonds',
+              sprintf('colour = %s', cicolour[1]),
+              sprintf('fill = %s', fill),
+              sprintf('size = %s', stroke))
     )
   }
 
 
-  # CI colour code
-  if (is.numeric(panel.width) && length(cicolour) > 1) {
+  # CI colour code - if using panel.width
+  if (is.numeric(panel.width)) {
+    cicolours <- c(cicolour, cicolour.aes)
     codetext$cicolourcode <- c(
       '# Create column for CI colour',
       'datatoplot <- datatoplot %>%',
@@ -859,17 +868,17 @@ make_forest_plot <- function(
                      scale, scale),
              indent(24,
                     sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
-                            (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, shape),
-                    sprintf('%s,', cicolour[length(cicolour)]),
-                    sprintf('%s))', cicolour[1]))),
+                            (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, c(shape, shape.aes)),
+                    sprintf('%s,', cicolours[length(cicolours)]),
+                    sprintf('%s))', cicolours[1]))),
       ''
     )
-    cicolour <- "cicolour"
-    cicolouraes <- TRUE
+    cicolour.aes <- "cicolour"
+    cicolour <- NULL
   }
 
 
-  # CI under code
+  # CI under code - if using panel.width
   if (is.numeric(panel.width) && length(ciunder) > 1) {
     codetext$ciundercode <- c(
       '# Create column for CI under',
@@ -879,7 +888,7 @@ make_forest_plot <- function(
                      scale, scale),
              indent(25,
                     sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
-                            (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, shape),
+                            (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, c(shape, shape.aes)),
                     sprintf('%s,', ciunder[length(ciunder)]),
                     sprintf('%s))', ciunder[1]))),
       ''
@@ -897,349 +906,318 @@ make_forest_plot <- function(
 
 
   # Write the code to put panels in facets
-  codetext$facet <- c(
-    indent(2,
-           '# Put the different panels in side-by-side plots using facets',
-           'facet_wrap(~panel, nrow = 1) +'),
-    ''
+  codetext$facet <- make_layer(
+    '# Put the different panels in side-by-side plots using facets',
+    f = 'facet_wrap',
+    arg = c('~panel, nrow = 1')
   )
 
 
   # Write code for line at null
-  codetext$nullline <- c(indent(2,
-                                '# Add a line at null effect',
-                                sprintf('annotate(geom = "segment", y=-1, yend=-Inf, x=%s, xend=%s, size = %s) +',
-                                        nullval, nullval, base_line_size)),
-                         '')
-
+  codetext$nullline <- make_layer(
+    '# Add a line at null effect',
+    f = "annotate",
+    arg = c('geom = "segment"',
+            'y = -1, yend = -Inf',
+            sprintf('x = %s, xend = %s', nullval, nullval),
+            sprintf('size = %s', base_line_size))
+  )
 
   # Write code for plotting CIs
-  if (isTRUE(ciunder)){
-    codetext$plot.cis.before <- c(
-      indent(2,
-             '# Plot the CIs',
-             'geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-             indent(15,
-                    'aes(xmin = lci_transformed,',
-                    indent(4,
-                           'xmax = uci_transformed,',
-                           sprintf('colour = %s),', cicolour[1])),
-                    sprintf('size = %s,', base_line_size),
-                    'na.rm = TRUE) +')),
-      '')
-  } else if (isFALSE(ciunder) || is.null(ciunder)){
-    codetext$plot.cis.after <- c(
-      indent(2,
-             '# Plot the CIs',
-             'geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed)),',
-             indent(15,
-                    'aes(xmin = lci_transformed,',
-                    indent(4,
-                           'xmax = uci_transformed,',
-                           sprintf('colour = %s),', cicolour[1])),
-                    sprintf('size = %s,', base_line_size),
-                    'na.rm = TRUE) +')),
-      '')
+  codetext$plot.cis.before <- make_layer(
+    '# Plot the CIs',
+    f = 'geom_linerange',
+    aes = c('xmin = lci_transformed',
+            'xmax = uci_transformed',
+            sprintf('colour = %s', cicolour.aes[1])),
+    arg = c('data = ~ dplyr::filter(.x, !is.na(estimate_transformed))',
+            sprintf('colour = %s', cicolour[1]),
+            sprintf('size = %s', base_line_size),
+            'na.rm = TRUE')
+  )
+
+  if (isFALSE(ciunder) || is.null(ciunder)){
+    codetext$plot.cis.after <- codetext$plot.cis.before
+    codetext$plot.cis.before <- NULL
   } else if (is.character(ciunder)){
-    codetext$plot.cis.before <- c(
-      indent(2,
-             '# Plot CIs - before plotting points',
-             sprintf('geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s),',
-                     ciunder),
-             indent(15,
-                    'aes(xmin = lci_transformed,',
-                    indent(4,
-                           'xmax = uci_transformed,',
-                           sprintf('colour = %s),', cicolour[1])),
-                    sprintf('size = %s,', base_line_size),
-                    'na.rm = TRUE) +')),
-      '')
-    codetext$plot.cis.after <- c(
-      indent(2,
-             '# Plot CIs - after plotting points',
-             sprintf('geom_linerange(data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s),',
-                     ciunder),
-             indent(15,
-                    'aes(xmin = lci_transformed,',
-                    indent(4,
-                           'xmax = uci_transformed,',
-                           sprintf('colour = %s),', cicolour[1])),
-                    sprintf('size = %s,', base_line_size),
-                    'na.rm = TRUE) +')),
-      '')
+    codetext$plot.cis.before <- make_layer(
+      '# Plot the CIs - before plotting points',
+      f = 'geom_linerange',
+      aes = c('xmin = lci_transformed',
+              'xmax = uci_transformed',
+              sprintf('colour = %s', cicolour.aes[1])),
+      arg = c(sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s)', ciunder),
+              sprintf('colour = %s', cicolour[1]),
+              sprintf('size = %s', base_line_size),
+              'na.rm = TRUE')
+    )
+    codetext$plot.cis.after <- make_layer(
+      '# Plot the CIs - after plotting points',
+      f = 'geom_linerange',
+      aes = c('xmin = lci_transformed',
+              'xmax = uci_transformed',
+              sprintf('colour = %s', cicolour.aes[1])),
+      arg = c(sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s)', ciunder),
+              sprintf('colour = %s', cicolour[1]),
+              sprintf('size = %s', base_line_size),
+              'na.rm = TRUE')
+    )
   }
 
 
   # Write code to plot points
   codetext$plot.points <- c(
-    indent(2,
-           '# Plot points at the transformed estimates',
-           '## Scale by inverse of the SE',
-           sprintf(
-             'geom_point(data = ~ dplyr::filter(.x, estimate_transformed > %s, estimate_transformed < %s),',
-             xfrom, xto),
-           indent(11,
-                  sprintf('aes(size = size, shape = %s, colour = %s, fill = %s),',
-                          shape, colour, fill),
-                  sprintf('stroke = %s,',
-                          stroke),
-                  'na.rm = TRUE) +')),
-    '',
-    indent(2,
-           '# Scale the size of points by their side length',
-           '# and make the scale range from zero upwards',
-           'scale_radius(limits = c(0, 1),',
-           indent(14,
-                  sprintf('range = c(0, %s)) +', pointsize))),
-    ''
+    make_layer(
+      c('# Plot points at the transformed estimates',
+        '## Scale by inverse of the SE'),
+      f = 'geom_point',
+      aes = c('size = size',
+              sprintf('shape = %s', shape.aes),
+              sprintf('colour = %s', colour.aes),
+              sprintf('fill = %s', fill.aes)),
+      arg = c(sprintf('data = ~ dplyr::filter(.x, estimate_transformed > %s, estimate_transformed < %s)',
+                      xfrom, xto),
+              sprintf('shape = %s', shape),
+              sprintf('colour = %s', colour),
+              sprintf('fill = %s', fill),
+              sprintf('stroke = %s', stroke),
+              'na.rm = TRUE')
+    ),
+    make_layer(
+      c('# Scale the size of points by their side length',
+        '# and make the scale range from zero upwards'),
+      f = 'scale_radius',
+      arg = c('limits = c(0, 1)',
+              sprintf('range = c(0, %s)', pointsize))
+    )
   )
 
 
   # Write code to add arrows to CIs
   codetext$arrows <- c(
-    indent(2,
-           '# Add tiny segments with arrows when the CIs go outside axis limits',
-           'geom_segment(data = ~ dplyr::filter(.x, cioverright == TRUE),',
-           indent(13,
-                  'aes(y=-row,',
-                  indent(4,
-                         'x=uci_transformed-0.000001,',
-                         'yend=-row,',
-                         if (cicolouraes) {c(
-                           'xend=uci_transformed,',
-                           sprintf('colour = %s),', cicolour[1]))
-                         } else {c(
-                           'xend=uci_transformed),',
-                           sprintf('colour = %s,', cicolour[1]))
-                         }),
-                  sprintf('size = %s,', base_line_size),
-                  sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
-                  'na.rm = TRUE) +'),
-           'geom_segment(data = ~ dplyr::filter(.x, cioverleft == TRUE),',
-           indent(13,
-                  'aes(y=-row,',
-                  indent(4,
-                         'x=lci_transformed+0.000001,',
-                         'yend=-row,',
-                         if (cicolouraes) {c(
-                           'xend=lci_transformed,',
-                           sprintf('colour = %s),', cicolour[1]))
-                         } else {c(
-                           'xend=lci_transformed),',
-                           sprintf('colour = %s,', cicolour[1]))
-                         }),
-                  sprintf('size = %s,', base_line_size),
-                  sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt")),', 8 * base_line_size),
-                  'na.rm = TRUE) +')),
-    ''
+    make_layer(
+      '# Add tiny segments with arrows when the CIs go outside axis limits',
+      f = 'geom_segment',
+      aes = c('y = -row',
+              'yend = -row',
+              'x = uci_transformed-0.000001',
+              'xend = uci_transformed',
+              sprintf('colour = %s', cicolour.aes[1])),
+      arg = c('data = ~ dplyr::filter(.x, cioverright == TRUE)',
+              sprintf('colour = %s', cicolour[1]),
+              sprintf('size = %s', base_line_size),
+              sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
+              'na.rm = TRUE'),
+      br = FALSE
+    ),
+    make_layer(
+      f = 'geom_segment',
+      aes = c('y = -row',
+              'yend = -row',
+              'x = lci_transformed+0.000001',
+              'xend = lci_transformed',
+              sprintf('colour = %s', cicolour.aes[1])),
+      arg = c('data = ~ dplyr::filter(.x, cioverleft == TRUE)',
+              sprintf('colour = %s', cicolour[1]),
+              sprintf('size = %s', base_line_size),
+              sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
+              'na.rm = TRUE')
+    )
   )
+
 
 
   # Write code for scales and coordinates
   codetext$scales.coords <- c(
-    indent(2,
-           '# Use identity for aesthetic scales',
-           'scale_shape_identity() +',
-           'scale_fill_identity() +',
-           'scale_colour_identity() +'),
+    '# Use identity for aesthetic scales',
+    'scale_shape_identity() +',
+    'scale_fill_identity() +',
+    'scale_colour_identity() +',
     '',
-    indent(2,
-           '# Flip x and y coordinates',
-           'coord_cartesian(clip = "off",',
-           indent(11,
-                  sprintf('xlim = c(%s, %s)) +', xfrom, xto))),
-    ''
+    make_layer(
+      '# Flip x and y coordinates',
+      f = 'coord_cartesian',
+      arg = c('clip = "off"',
+              sprintf('xlim = c(%s, %s)', xfrom, xto))
+    )
   )
 
 
   # Write code for columns to right of plots
-  if (is.null(col.right) & !estcolumn) {
-    codetext$col.right.line <- ""
-  } else {
+  if (!is.null(col.right) | estcolumn) {
     col.right.all <- col.right
     if (estcolumn){
       col.right.all <- c("textresult", col.right)
     }
 
-    codetext$col.right.line <- unlist(purrr::pmap(list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold),
-                                                  ~ c(sprintf('## column %s', ..1),
-                                                      sprintf('geom_text(aes(y = -row, x = %s,',
-                                                              round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
-                                                      indent(10,
-                                                             indent(4,
-                                                                    if(is.character(..5)){
-                                                                      sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)),',
-                                                                              ..5, ..5, ..1, ..1)
-                                                                    } else {
-                                                                      sprintf('label = %s),', ..1)
-                                                                    }),
-                                                             sprintf('hjust = %s,', ..4),
-                                                             sprintf('size  = %s,', base_size/(11/3)),
-                                                             'na.rm = TRUE,',
-                                                             'parse = TRUE) +'),
-                                                      sprintf('geom_text(aes(y = %s, x = %s,',
-                                                              col.heading.space,
-                                                              round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
-                                                      indent(10,
-                                                             indent(4,
-                                                                    'label = title),'),
-                                                             sprintf('hjust    = %s,', ..4),
-                                                             sprintf('size     = %s,', base_size/(11/3)),
-                                                             'fontface = "bold",',
-                                                             sprintf('data = dplyr::tibble(panel = factor(%s,',
-                                                                     paste(deparse(panel.names), collapse = '')),
-                                                             indent(36,
-                                                                    sprintf('levels = %s,',
-                                                                            paste(deparse(panel.names), collapse = '')),
-                                                                    'ordered = TRUE),'),
-                                                             indent(21,
-                                                                    sprintf('title = %s)) +',
-                                                                            paste(deparse(unlist(..3)), collapse = '')))))))
-    codetext$col.right.line <- indent(2,
-                                      '# Add columns to right side of plots',
-                                      codetext$col.right.line,
-                                      '')
+    codetext$col.right.line <- unlist(purrr::pmap(
+      list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold),
+      ~ c(
+        make_layer(
+          sprintf('## column %s', ..1),
+          f = 'geom_text',
+          aes = c(sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                  if(is.character(..5)){
+                    sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)',
+                            ..5, ..5, ..1, ..1)
+                  } else {
+                    sprintf('label = %s', ..1)
+                  }),
+          arg = c(sprintf('hjust = %s', ..4),
+                  sprintf('size  = %s', base_size/(11/3)),
+                  'na.rm = TRUE',
+                  'parse = TRUE'),
+          br = FALSE
+        ),
+        make_layer(
+          f = 'geom_text',
+          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                  'label = title'),
+          arg = c(sprintf('hjust    = %s', ..4),
+                  sprintf('size     = %s', base_size/(11/3)),
+                  'fontface = "bold"',
+                  sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
+                  indent(36,
+                         sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
+                  indent(36,
+                         'ordered = TRUE)'),
+                  indent(21,
+                         sprintf('title = %s)',paste(deparse(unlist(..3)), collapse = ''))))
+        )
+      )
+    )
+    )
+    codetext$col.right.line <- c('# Add columns to right side of plots',
+                                 codetext$col.right.line)
   }
 
 
   # Write code for columns to left of plots
-  if (is.null(col.left)) {
-    codetext$col.left.line <- ""
-  } else {
-    codetext$col.left.line <- unlist(purrr::pmap(list(col.left, col.left.space, col.left.heading, col.left.hjust, col.bold),
-                                                 ~ c(sprintf('## column %s', ..1),
-                                                     sprintf('geom_text(aes(y = -row, x = %s,',
-                                                             round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
-                                                     indent(10,
-                                                            indent(4,
-                                                                   sprintf('label = `%s`,', ..1),
-                                                                   if(is.character(..5)){
-                                                                     sprintf('fontface = dplyr::if_else(!is.na(%s) & %s, "bold", "plain")),',
-                                                                             ..5, ..5)} else {
-                                                                               'fontface = "plain"),'
-                                                                             }),
-                                                            sprintf('hjust = %s,', ..4),
-                                                            sprintf('size  = %s,', base_size/(11/3)),
-                                                            'na.rm = TRUE) +'),
-                                                     sprintf('geom_text(aes(y = %s, x = %s,',
-                                                             col.heading.space,
-                                                             round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
-                                                     indent(10,
-                                                            indent(4,
-                                                                   'label = title),'),
-                                                            sprintf('hjust    = %s,', ..4),
-                                                            sprintf('size     = %s,', base_size/(11/3)),
-                                                            'fontface = "bold",',
-                                                            sprintf('data = dplyr::tibble(panel = factor(%s,',
-                                                                    paste(deparse(panel.names), collapse = '')),
-                                                            indent(36,
-                                                                   sprintf('levels = %s,',
-                                                                           paste(deparse(panel.names), collapse = '')),
-                                                                   'ordered = TRUE),'),
-                                                            indent(21,
-                                                                   sprintf('title = %s)) +',
-                                                                           paste(deparse(unlist(..3)), collapse = '')))))))
-    codetext$col.left.line <- indent(2,
-                                     '# Add columns to right side of plots',
-                                     codetext$col.left.line,
-                                     '')
+  if (!is.null(col.left)) {
+    codetext$col.left.line <- unlist(purrr::pmap(
+      list(col.left, col.left.space, col.left.heading, col.left.hjust, col.bold),
+      ~ c(
+        make_layer(
+          sprintf('## column %s', ..1),
+          f = 'geom_text',
+          aes = c(sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                  sprintf('label = %s,', fixsp(..1)),
+                  if(is.character(..5)){
+                    sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..5, ..5)
+                  } else {
+                    'fontface = "plain"'
+                  }),
+          arg = c(sprintf('hjust = %s', ..4),
+                  sprintf('size  = %s', base_size/(11/3)),
+                  'na.rm = TRUE'),
+          br = FALSE
+        ),
+        make_layer(
+          f = 'geom_text',
+          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                  'label = title'),
+          arg = c(sprintf('hjust    = %s', ..4),
+                  sprintf('size     = %s', base_size/(11/3)),
+                  'fontface = "bold"',
+                  sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
+                  indent(36,
+                         sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
+                  indent(36,
+                         'ordered = TRUE)'),
+                  indent(21,
+                         sprintf('title = %s)',paste(deparse(unlist(..3)), collapse = ''))))
+        )
+      )
+    )
+    )
+    codetext$col.left.line <- c('# Add columns to left side of plots',
+                                codetext$col.left.line)
   }
+
 
 
   # Write code for x-axis labels and panel headings
   codetext$xlab.panel.headings <- c(
-    indent(2,
-           '# Add xlab below each axis',
-           sprintf('geom_text(aes(y = -Inf, x = %s, label = xlab),', xmid),
-           indent(10,
-                  'hjust = 0.5,',
-                  sprintf('size  = %s,', base_size/(11/3)),
-                  'vjust = 4.4,',
-                  'fontface = "bold",',
-                  sprintf('data = dplyr::tibble(panel = factor(%s,',
-                          paste(deparse(panel.names), collapse = '')),
-                  indent(36,
-                         sprintf('levels = %s,',
-                                 paste(deparse(panel.names), collapse = '')),
-                         'ordered = TRUE),'),
-                  indent(21,
-                         sprintf('xlab = %s)) +',
-                                 paste(deparse(xlab), collapse = ''))))),
-    '',
-    indent(2,
-           '# Add panel name above each panel',
-           sprintf('geom_text(aes(y = %s, x = %s, label = title),',
-                   col.heading.space , xmid),
-           indent(10,
-                  'hjust = 0.5,',
-                  'nudge_y = 2,',
-                  sprintf('size  = %s,', base_size/(11/3)),
-                  'fontface = "bold",',
-                  sprintf('data = dplyr::tibble(panel = factor(%s,',
-                          paste(deparse(panel.names), collapse = '')),
-                  indent(36,
-                         sprintf('levels = %s,',
-                                 paste(deparse(panel.names), collapse = '')),
-                         'ordered = TRUE),'),
-                  indent(21,
-                         sprintf('title = %s)) +',
-                                 paste(deparse(panel.headings), collapse = ''))))),
-    ''
+    make_layer(
+      '# Add xlab below each axis',
+      f = 'geom_text',
+      aes = c(sprintf('y = -Inf, x = %s, label = xlab', xmid)),
+      arg = c('hjust = 0.5',
+              sprintf('size  = %s', base_size/(11/3)),
+              'vjust = 4.4',
+              'fontface = "bold"',
+              sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
+              indent(36, sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
+              indent(36, 'ordered = TRUE)'),
+              indent(21, sprintf('xlab = %s)', paste(deparse(xlab), collapse = ''))))
+    ),
+    make_layer(
+      '# Add panel name above each panel',
+      f = 'geom_text',
+      aes = c(sprintf('y = %s, x = %s, label = title', col.heading.space, xmid)),
+      arg = c('hjust = 0.5',
+              'nudge_y = 2',
+              sprintf('size  = %s', base_size/(11/3)),
+              'fontface = "bold"',
+              sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
+              indent(36, sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
+              indent(36, 'ordered = TRUE)'),
+              indent(21, sprintf('title = %s)', paste(deparse(panel.headings), collapse = ''))))
+    )
   )
+
 
 
   # Write code for the plot title
   if (title != ""){
-    codetext$title <- c(
-      indent(2,
-             '# Add the title',
-             sprintf('labs(title = "%s") +', title)),
-      '')
+    codetext$title <- make_layer(
+      '# Add the title',
+      f = 'labs',
+      arg = sprintf('title = "%s"', title)
+    )
   }
 
 
   # Write code for the theme
-  codetext$theme <- c(
-    indent(2,
-           '# Control the overall look of the plots',
-           sprintf('theme(text             = element_text(size = %s),', base_size),
-           indent(6,
-                  sprintf('line             = element_line(size = %s),', base_line_size),
-                  'panel.background = element_blank(),',
-                  'panel.grid.major = element_blank(),',
-                  'panel.grid.minor = element_blank(),',
-                  if (title == ""){
-                    'plot.title       = element_blank(),'
-                  } else {
-                    'plot.title.position = "plot",'
-                  },
-                  sprintf('axis.line.x      = element_line(size = %s, lineend = "round"),',
-                          base_line_size),
-                  'axis.title       = element_blank(),',
-                  'axis.ticks.x     = element_line(colour = "black"),',
-                  'axis.text.x      = element_text(colour = "black",',
-                  indent(32,
-                         sprintf('margin = margin(t = %s),',
-                                 base_size/(11/4.4)),
-                         'vjust  = 1),'),
-                  'axis.ticks.y     = element_blank(),',
-                  'axis.line.y      = element_blank(),',
-                  'axis.text.y      = element_text(hjust  = 0,',
-                  indent(32,
-                         'colour = "black",',
-                         'face   = boldlabels,',
-                         sprintf('margin = margin(r = %s, unit = "%s")),',
-                                 label.space, units)),
-                  'panel.border     = element_blank(),',
-                  sprintf('panel.spacing    = unit(%s, "%s"),',
-                          panel.space, units),
-                  'strip.background = element_blank(),',
-                  'strip.placement  = "outside",',
-                  'strip.text       = element_blank(),',
-                  'legend.position  = "none",',
-                  'plot.background  = element_blank(),',
-                  sprintf('plot.margin      = unit(%s, "%s"))',
-                          paste(deparse(margin), collapse = ''), units)))
+  codetext$theme <- make_layer(
+    '# Control the overall look of the plots',
+    f = 'theme',
+    arg = c(sprintf('text             = element_text(size = %s)', base_size),
+            sprintf('line             = element_line(size = %s)', base_line_size),
+            'panel.background = element_blank()',
+            'panel.grid.major = element_blank()',
+            'panel.grid.minor = element_blank()',
+            if (title == ""){
+              'plot.title       = element_blank()'
+            } else {
+              'plot.title.position = "plot"'
+            },
+            sprintf('axis.line.x      = element_line(size = %s, lineend = "round")',
+                    base_line_size),
+            'axis.title       = element_blank()',
+            'axis.ticks.x     = element_line(colour = "black")',
+            'axis.text.x      = element_text(colour = "black"',
+            indent(32,
+                   sprintf('margin = margin(t = %s)',base_size/(11/4.4)),
+                   'vjust  = 1),'),
+            'axis.ticks.y     = element_blank()',
+            'axis.line.y      = element_blank()',
+            'axis.text.y      = element_text(hjust  = 0',
+            indent(32,
+                   'colour = "black"',
+                   'face   = boldlabels',
+                   sprintf('margin = margin(r = %s, unit = "%s"))',
+                           label.space, units)),
+            'panel.border     = element_blank()',
+            sprintf('panel.spacing    = unit(%s, "%s")',
+                    panel.space, units),
+            'strip.background = element_blank()',
+            'strip.placement  = "outside"',
+            'strip.text       = element_blank()',
+            'legend.position  = "none"',
+            'plot.background  = element_blank()',
+            sprintf('plot.margin      = unit(%s, "%s")', paste(deparse(margin), collapse = ''), units)),
+    plus = FALSE
   )
 
 
@@ -1253,20 +1231,21 @@ make_forest_plot <- function(
     codetext$cicolourcode,
     codetext$ciundercode,
     codetext$start.ggplot,
-    codetext$facet,
-    codetext$nullline,
-    codetext$plot.cis.before,
-    codetext$plot.points,
-    codetext$plot.cis.after,
-    codetext$arrows,
-    codetext$plotdiamondscode,
-    codetext$scales.coords,
-    codetext$col.right.line,
-    codetext$col.left.line,
-    codetext$xlab.panel.headings,
-    codetext$axes,
-    codetext$title,
-    codetext$theme
+    indent(2,
+           codetext$facet,
+           codetext$nullline,
+           codetext$plot.cis.before,
+           codetext$plot.points,
+           codetext$plot.cis.after,
+           codetext$arrows,
+           codetext$plotdiamondscode,
+           codetext$scales.coords,
+           codetext$col.right.line,
+           codetext$col.left.line,
+           codetext$xlab.panel.headings,
+           codetext$axes,
+           codetext$title,
+           codetext$theme)
   )
 
 
@@ -1276,16 +1255,9 @@ make_forest_plot <- function(
   }
 
 
-  # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
-  if (showcode){
-    writeLines(paste(c('# Generated plot code ------------------',
-                       '',
-                       plotcode),
-                     collapse = "\n"),
-               file.path(tempdir(), "plotcode.txt"))
-    viewer <- getOption("viewer", default = function(url){})
-    viewer(file.path(tempdir(), "plotcode.txt"))
-  }
+  # Show code in RStudio viewer.
+  if (showcode){ displaycode(plotcode) }
+
 
   # Create plot and print
   plot <- eval(parse(text = plotcode), envir = envir)

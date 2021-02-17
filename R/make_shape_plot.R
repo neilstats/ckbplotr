@@ -362,12 +362,9 @@ make_shape_plot <- function(data,
             sprintf('ext            = %s', ext),
             sprintf('ratio          = %s', ratio),
             sprintf('base_size      = %s', base_size),
-            sprintf('base_line_size = %s', base_line_size))
+            sprintf('base_line_size = %s', base_line_size)),
+    plus = FALSE
   )
-
-  codetext$plot.like.ckb <- sub("\\s\\+$",
-                                "",
-                                codetext$plot.like.ckb)
 
 
   # Create the plot code
