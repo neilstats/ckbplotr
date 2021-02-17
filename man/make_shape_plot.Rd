@@ -14,6 +14,7 @@ make_shape_plot(
   col.n = NULL,
   exponentiate = FALSE,
   logscale = exponentiate,
+  position = NULL,
   scalepoints = FALSE,
   minse = NA,
   pointsize = 3,
@@ -61,6 +62,9 @@ make_shape_plot(
 use log scale on the axis. (Default: FALSE)}
 
 \item{logscale}{Use log scale for vertical axis. (Default: exponentiate)}
+
+\item{position}{Character string. Add position argument to the plotted points, CIs, and text.
+Useful to avoid overlapping points, CIs, and text. (Default: NULL)}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}

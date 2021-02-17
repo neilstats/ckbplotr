@@ -21,6 +21,8 @@
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
 #'   use log scale on the axis. (Default: FALSE)
 #' @param logscale Use log scale for vertical axis. (Default: exponentiate)
+#' @param position Character string. Add position argument to the plotted points, CIs, and text.
+#' Useful to avoid overlapping points, CIs, and text. (Default: NULL)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
@@ -60,6 +62,7 @@ make_shape_plot <- function(data,
                             col.n         = NULL,
                             exponentiate  = FALSE,
                             logscale      = exponentiate,
+                            position      = NULL,
                             scalepoints   = FALSE,
                             minse         = NA,
                             pointsize     = 3,
@@ -275,7 +278,8 @@ make_shape_plot <- function(data,
     arg = c(sprintf('shape = %s', shape),
             sprintf('colour = %s', colour),
             sprintf('%s', fill_string),
-            sprintf('stroke = %s', stroke))
+            sprintf('stroke = %s', stroke),
+            sprintf('position = %s', position))
   )
 
 
@@ -286,7 +290,8 @@ make_shape_plot <- function(data,
     aes = c(sprintf('y = %s', uci_string),
             sprintf('label = format(round(%s, 2), nsmall = 2)', est_string)),
     arg = c('vjust = -0.8',
-            sprintf('size  = %s', base_size/(11/3)))
+            sprintf('size  = %s', base_size/(11/3)),
+            sprintf('position = %s', position))
   )
 
 
@@ -298,7 +303,8 @@ make_shape_plot <- function(data,
       aes = c(sprintf('y = %s', lci_string),
               sprintf('label = %s', col.n)),
       arg = c('vjust = 1.8',
-              sprintf('size  = %s', base_size/(11/3)))
+              sprintf('size  = %s', base_size/(11/3)),
+              sprintf('position = %s', position))
     )
   }
 
@@ -311,7 +317,8 @@ make_shape_plot <- function(data,
             sprintf('ymax = %s', uci_string),
             sprintf('colour = %s', cicolour.aes)),
     arg = c(sprintf('colour = %s', cicolour),
-            sprintf('lwd = %s', base_line_size))
+            sprintf('lwd = %s', base_line_size),
+            sprintf('position = %s', position))
   )
 
   if (isFALSE(ciunder) || is.null(ciunder)){
@@ -326,7 +333,8 @@ make_shape_plot <- function(data,
               sprintf('colour = %s', cicolour.aes)),
       arg = c(sprintf('colour = %s', cicolour),
               sprintf('lwd = %s', base_line_size),
-              sprintf('data = ~ dplyr::filter(.x, %s),', fixsp(ciunder)))
+              sprintf('data = ~ dplyr::filter(.x, %s),', fixsp(ciunder)),
+              sprintf('position = %s', position))
     )
     codetext$cis.after <- make_layer(
       '# Plot the CIs - after plotting points',
@@ -336,7 +344,8 @@ make_shape_plot <- function(data,
               sprintf('colour = %s', cicolour.aes)),
       arg = c(sprintf('colour = %s', cicolour),
               sprintf('lwd = %s', base_line_size),
-              sprintf('data = ~ dplyr::filter(.x, !%s),', fixsp(ciunder)))
+              sprintf('data = ~ dplyr::filter(.x, !%s),', fixsp(ciunder)),
+              sprintf('position = %s', position))
     )
   }
 
