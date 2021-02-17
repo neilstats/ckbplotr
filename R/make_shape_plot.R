@@ -91,13 +91,10 @@ make_shape_plot <- function(data,
   if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if (!is.null(col.group) && !is.null(fill)) stop("col.group and fill both control fill, so do not specify both")
 
-  # Add empty string title if it is null
-  if (is.null(title)) title <- ""
-
-  # Put column names in ``
-  col.x        <- paste0("`", col.x, "`")
-  col.estimate <- paste0("`", col.estimate, "`")
-  col.stderr   <- paste0("`", col.stderr, "`")
+  # Put column names in `` if required
+  col.x        <- fixsp(col.x)
+  col.estimate <- fixsp(col.estimate)
+  col.stderr   <- fixsp(col.stderr)
 
   # Turn plot_like_ckb argument expression into strings
   xlims <- deparse(xlims)
@@ -107,51 +104,47 @@ make_shape_plot <- function(data,
   ratio <- deparse(ratio)
 
   # aesthetics: default value, match column name, or use argument itself
+  shape.aes <- NULL
   if (is.null(shape)) {
     shape <- 22
   } else if (shape %in% names(data)){
-    shape <- paste0("`", shape, "`")
+    shape.aes <- fixsp(shape)
+    shape <- NULL
   }
 
+  cicolour.aes <- NULL
   if (is.null(cicolour)) {
-    cicolour <- '\"black\"'
+    cicolour <- fixq("black")
   }
   else if (cicolour %in% names(data)){
-    cicolour <- paste0("`", cicolour, "`")
+    cicolour.aes <- fixsp(cicolour)
+    cicolour <- NULL
   } else {
-    cicolour <- paste0('\"', cicolour, '\"')
+    cicolour <- fixq(cicolour)
   }
 
+  colour.aes <- NULL
   if (is.null(colour)) {
-    colour <- '\"black\"'
+    colour <- fixq("black")
   } else if (colour %in% names(data)){
-      colour <- paste0("`", colour, "`")
+    colour.aes <- fixsp(colour)
+    colour <- NULL
   } else {
-      colour <- paste0('\"', colour, '\"')
+    colour <- fixq(colour)
   }
 
+  fill.aes <- NULL
   if (is.null(fill)) {
-    fill <- '\"black\"'
+    fill <- fixq("black")
   } else if (fill %in% names(data)){
-    fill <- paste0("`", fill, "`")
+    fill.aes <- fixsp(fill)
+    fill <- NULL
   } else {
-    fill <- paste0('\"', fill, '\"')
+    fill <- fixq(fill)
   }
 
-  # Create strings for axis breaks
-  scale_x_string <- NULL
-  if (!is.null(xbreaks)){
-    scale_x_string <- c('',
-                        '  # Set the x-axis scale',
-                        sprintf('scale_x_continuous(breaks = %s) +', deparse(xbreaks)))
-  }
 
-  y_breaks_string <- ''
-  if (!is.null(ybreaks)){
-    y_breaks_string <- sprintf(', breaks = %s', deparse(ybreaks))
-  }
-
-  # Create strings for y-axis scale, estimates and CIs
+  # Check for log scale and exponentiate estimates
   if (logscale == TRUE){
     scale    <- "log"
   } else {
@@ -160,8 +153,8 @@ make_shape_plot <- function(data,
   if (exponentiate == TRUE) {
     est_string <- paste0('exp(', col.estimate, ')')
     if (!is.null(col.lci)) {
-      lci_string <- paste0('exp(`', col.lci,'`)')
-      uci_string <- paste0('exp(`', col.uci,'`)')
+      lci_string <- paste0('exp(', fixsp(col.lci), ')')
+      uci_string <- paste0('exp(', fixsp(col.uci), ')')
     } else {
       lci_string <- paste0('exp(', col.estimate,'-1.96*', col.stderr,')')
       uci_string <- paste0('exp(', col.estimate,'+1.96*', col.stderr,')')
@@ -169,187 +162,234 @@ make_shape_plot <- function(data,
   } else {
     est_string <- col.estimate
     if (!is.null(col.lci)) {
-      lci_string <- paste0("`", col.lci, "`")
-      uci_string <- paste0("`", col.uci, "`")
+      lci_string <- fixsp(col.lci)
+      uci_string <- fixsp(col.uci)
     } else {
       lci_string <- paste0(col.estimate,'-1.96*', col.stderr)
       uci_string <- paste0(col.estimate,'+1.96*', col.stderr)
     }
   }
 
-  # Create string for setting fill colour by group
+  # Check for using groups
+  fill_string <- NULL
+  fill_string.aes <- NULL
   if (!is.null(col.group)) {
-    group_string <- sprintf(', group = as.factor(`%s`)', col.group)
+    group_string <- sprintf(', group = as.factor(%s)', fixsp(col.group))
     scale_fill_string <- c('',
-                           '  # Set the scale for fill colours',
-                           '  scale_fill_grey(start = 0, end = 1, guide = FALSE) +')
-    fill_string <- sprintf('fill = as.factor(`%s`)', col.group)
+                           '# Set the scale for fill colours',
+                           'scale_fill_grey(start = 0, end = 1, guide = FALSE) +')
+    fill_string.aes <- sprintf('fill = as.factor(%s)', fixsp(col.group))
   } else {
     group_string <- ''
-    scale_fill_string <- '  scale_fill_identity() +'
+    scale_fill_string <- 'scale_fill_identity() +'
     fill_string <- sprintf('fill = %s', fill)
+    fill_string.aes <-  sprintf('fill = %s', fill.aes)
   }
 
-  # Create string for plotting lines
-  lines_string <- NULL
+
+  # codetext - list of character vectors for writing plot code
+  codetext <- list()
+
+
+  # Write code to initiate the ggplot
+  codetext$start.ggplot <- c(
+    '# Create the ggplot',
+    sprintf('plot <- ggplot(data = %s,', deparse(substitute(data))),
+    indent(15,
+           sprintf('aes(x = %s, y = %s%s)) +', col.x, est_string, group_string)),
+    ''
+  )
+
+
+  # Write code for axes
+  y_breaks_string <- ''
+  if (!is.null(ybreaks)){
+    y_breaks_string <- sprintf(', breaks = %s', deparse(ybreaks))
+  }
+
+  codetext$axes <- c(
+    if (!is.null(xbreaks)){
+      c('# Set the x-axis scale',
+        sprintf('scale_x_continuous(breaks = %s) +', deparse(xbreaks)),
+        '')
+    },
+    '# Set the y-axis scale',
+    sprintf('scale_y_continuous(trans = "%s"%s) +', scale, y_breaks_string),
+    '')
+
+
+  # Write code for aesthetics scales
+  codetext$scales <- c(
+    make_layer(
+    '# Set the scale for the size of boxes',
+      f = "scale_radius",
+      arg = c('guide  = "none"',
+              sprintf('limits = c(0, %s)', deparse(1/minse)),
+              sprintf('range  = c(0, %s)', pointsize))
+    ),
+    '# Use identity for aesthetic scales',
+    'scale_shape_identity() +',
+    'scale_colour_identity() +',
+    scale_fill_string,
+    ''
+  )
+
+
+  # Write code for plotting lines
   if(lines) {
-    lines_string <- c(
-      '  # Plot lines (linear fit through estimates, weighted by inverse variance)',
-      '  stat_smooth(method   = "glm",',
-      '              formula  = y ~ x,',
-      if (!is.null(col.lci)) {
-        sprintf(
-        '              aes(weight = 1/((%s - `%s`)^2)),', col.estimate, col.lci)
+    codetext$lines <- make_layer(
+      '# Plot lines (linear fit through estimates, weighted by inverse variance)',
+      f = "stat_smooth",
+      aes = c(if (!is.null(col.lci)) {
+        sprintf('weight = 1/((%s - %s)^2)', col.estimate, fixsp(col.lci))
       } else {
-        sprintf(
-        '              aes(weight = 1/(%s^2)),', col.stderr)
+        sprintf('weight = 1/(%s^2)', col.stderr)
+      }),
+      arg = c('method   = "glm"',
+              'formula  = y ~ x',
+              'se       = FALSE',
+              'colour   = "black"',
+              'linetype = "dashed"',
+              'size     = 0.25')
+    )
+  }
+
+
+  # Write code for plotting point estimates using geom_point
+  codetext$estimates.points <- make_layer(
+    '# Plot the point estimates',
+    f = "geom_point",
+    aes = c(
+      if (scalepoints) {
+        if (!is.null(col.lci)) {
+          sprintf('size = 1.96/(%s - %s)', col.estimate, fixsp(col.lci))
+        } else {
+          sprintf('size = 1/%s', col.stderr)
+        }
+      } else {
+        'size = 1'
       },
-      '              se       = FALSE,',
-      '              colour   = "black",',
-      '              linetype = "dashed",',
-      '              size     = 0.25) +',
-      '')
-  }
+      sprintf('shape = %s', shape.aes),
+      sprintf('%s', fill_string.aes),
+      sprintf('colour = %s', colour.aes)),
+    arg = c(sprintf('shape = %s', shape),
+            sprintf('colour = %s', colour),
+            sprintf('%s', fill_string),
+            sprintf('stroke = %s', stroke))
+  )
 
-  # Create string for plotting point estimates using geom_point
-  if (scalepoints) {
-    if (!is.null(col.lci)) {
-      geom_point_string <- c(sprintf(
-                             '  geom_point(aes(size = 1.96/(%s - `%s`),', col.estimate, col.lci),
-                             sprintf(
-                               '                 shape = %s,', shape),
-                             sprintf(
-                               '                 colour = %s,', colour),
-                             sprintf(
-                               '                 %s)) +', fill_string)
-      )
-    } else {
-      geom_point_string <- c(sprintf(
-        '  geom_point(aes(size = 1/%s,', col.stderr),
-        sprintf(
-          '                 shape = %s,', shape),
-        sprintf(
-          '                 colour = %s,', colour),
-        sprintf(
-          '                 %s),', fill_string),
-        sprintf(
-        '             stroke = %s) +', stroke)
-      )
-    }
-  } else {
-    geom_point_string <- c('  geom_point(aes(size = 1,',
-                           sprintf(
-                           '                 shape = %s,', shape),
-                           sprintf(
-                           '                 colour = %s,', colour),
-                           sprintf(
-                           '                 %s),', fill_string),
-                           sprintf(
-                           '             stroke = %s) +', stroke)
-                           )
-  }
 
-  # Create string for plotting col.n under CIs
+  # Write code for plotting estimates text
+  codetext$estimates.text <- make_layer(
+    '# Plot point estimates text',
+    f = "geom_text",
+    aes = c(sprintf('y = %s', uci_string),
+            sprintf('label = format(round(%s, 2), nsmall = 2)', est_string)),
+    arg = c('vjust = -0.8',
+            sprintf('size  = %s', base_size/(11/3)))
+  )
+
+
+  # Write code for plotting col.n under CIs
   if (!is.null(col.n)){
-    n_events_string <- c('',
-                         '  # Plot n events text',
-                         sprintf('  geom_text(aes(y = %s,', lci_string),
-                         sprintf('            label = %s),', col.n),
-                         '            vjust = 1.8,',
-                         sprintf('            size  = %s) +', base_size/(11/3)))
-  } else {
-    n_events_string <- NULL
+    codetext$n.events.text <- make_layer(
+      '# Plot n events text',
+      f = "geom_text",
+      aes = c(sprintf('y = %s', lci_string),
+              sprintf('label = %s', col.n)),
+      arg = c('vjust = 1.8',
+              sprintf('size  = %s', base_size/(11/3)))
+    )
   }
 
-  # Put together plot code with strings created above
-  plotcode <- c('# Create the ggplot',
-                sprintf('plot <- ggplot(data = %s,', deparse(substitute(data))),
-                sprintf('               aes(x = %s, y = %s%s)) +', col.x, est_string, group_string),
-                '',
-                lines_string,
-                if (isTRUE(ciunder)){
-                  c(
-                    '  # Plot the CIs',
-                    sprintf('  geom_linerange(aes(ymin = %s,', lci_string),
-                    sprintf('                     ymax = %s,', uci_string),
-                    sprintf('                     colour = %s), ', cicolour),
-                    sprintf('                     lwd = %s) +', base_line_size),
-                    '')
-                } else if (isTRUE(ciunder) || (is.character(ciunder) && any(data[[ciunder]], na.rm = TRUE))){
-                  c(
-                    '  # Plot the CIs - before plotting points',
-                    sprintf('  geom_linerange(data = ~ dplyr::filter(.x, `%s`),',ciunder),
-                    sprintf('                 aes(ymin = %s,', lci_string),
-                    sprintf('                     ymax = %s,', uci_string),
-                    sprintf('                     colour = %s), ', cicolour),
-                    sprintf('                     lwd = %s) +', base_line_size),
-                    '')},
-                '  # Plot the point estimates',
-                geom_point_string,
-                '',
-                '  # Plot point estimates text',
-                sprintf('  geom_text(aes(y = %s,', uci_string),
-                sprintf('            label = format(round(%s, 2), nsmall = 2)),', est_string),
-                '            vjust = -0.8,',
-                sprintf('            size  = %s) +', base_size/(11/3)),
-                n_events_string,
-                '',
-                '  # Set the scale for the size of boxes',
-                '  scale_radius(guide  = "none",',
-                sprintf(
-                '               limits = c(0, %s),', deparse(1/minse)),
-                sprintf('               range  = c(0, %s)) +', pointsize),
-                '',
-                if (isFALSE(ciunder) || is.null(ciunder)){
-                  c(
-                    '  # Plot the CIs',
-                    sprintf('  geom_linerange(aes(ymin = %s,', lci_string),
-                    sprintf('                     ymax = %s,', uci_string),
-                    sprintf('                     colour = %s), ', cicolour),
-                    sprintf('                     lwd = %s) +', base_line_size),
-                    '')
-                } else if (is.character(ciunder) && !all(data[[ciunder]], na.rm = TRUE)){
-                  c(
-                    '  # Plot the CIs - after plotting points',
-                    sprintf('  geom_linerange(data = ~ dplyr::filter(.x, !`%s`),',ciunder),
-                    sprintf('                 aes(ymin = %s,', lci_string),
-                    sprintf('                     ymax = %s,', uci_string),
-                    sprintf('                     colour = %s), ', cicolour),
-                    sprintf('                     lwd = %s) +', base_line_size),
-                    '')},
-                '  # Use identity for aesthetic scales',
-                '  scale_shape_identity() +',
-                '  scale_colour_identity() +',
-                scale_fill_string,
-                '',
-                '  # Set the y-axis scale',
-                sprintf('  scale_y_continuous(trans = "%s"%s) +', scale, y_breaks_string),
-                scale_x_string,
-                '',
-                '  # Add titles',
-                sprintf('  xlab("%s") +', xlab),
-                sprintf('  ylab("%s") +', ylab),
-                sprintf('  ggtitle("%s")', title),
-                '',
-                '',
-                '# Plot like a CKB plot',
-                'plot_like_ckb(plot           = plot,',
-                sprintf('              xlims          = %s,', xlims),
-                sprintf('              ylims          = %s,', ylims),
-                sprintf('              gap            = %s,', gap),
-                sprintf('              ext            = %s,', ext),
-                sprintf('              ratio          = %s,', ratio),
-                sprintf('              base_size      = %s,', base_size),
-                sprintf('              base_line_size = %s)', base_line_size))
 
-  # Write the ggplot2 code to a file in temp directory, and show in RStudio viewer.
-  if (showcode){
-    writeLines(paste(plotcode,
-                     collapse = "\n"),
-               file.path(tempdir(), "plotcode.txt"))
-    viewer <- getOption("viewer", default = function(url){})
-    viewer(file.path(tempdir(), "plotcode.txt"))
+  # Write code for plotting CIs
+  codetext$cis.before <- make_layer(
+    '# Plot the CIs',
+    f = "geom_linerange",
+    aes = c(sprintf('ymin = %s', lci_string),
+            sprintf('ymax = %s', uci_string),
+            sprintf('colour = %s', cicolour.aes)),
+    arg = c(sprintf('colour = %s', cicolour),
+            sprintf('lwd = %s', base_line_size))
+  )
+
+  if (isFALSE(ciunder) || is.null(ciunder)){
+    codetext$cis.after <- codetext$cis.before
+    codetext$cis.before <- NULL
+  } else if (is.character(ciunder)){
+    codetext$cis.before <- make_layer(
+      '# Plot the CIs - before plotting points',
+      f = "geom_linerange",
+      aes = c(sprintf('ymin = %s', lci_string),
+              sprintf('ymax = %s', uci_string),
+              sprintf('colour = %s', cicolour.aes)),
+      arg = c(sprintf('colour = %s', cicolour),
+              sprintf('lwd = %s', base_line_size),
+              sprintf('data = ~ dplyr::filter(.x, %s),', fixsp(ciunder)))
+    )
+    codetext$cis.after <- make_layer(
+      '# Plot the CIs - after plotting points',
+      f = "geom_linerange",
+      aes = c(sprintf('ymin = %s', lci_string),
+              sprintf('ymax = %s', uci_string),
+              sprintf('colour = %s', cicolour.aes)),
+      arg = c(sprintf('colour = %s', cicolour),
+              sprintf('lwd = %s', base_line_size),
+              sprintf('data = ~ dplyr::filter(.x, !%s),', fixsp(ciunder)))
+    )
   }
+
+
+  # Write code for titles
+  codetext$titles <- c(
+    '# Add titles',
+    sprintf('xlab("%s") +', xlab),
+    sprintf('ylab("%s")', ylab),
+    sprintf('+ ggtitle("%s")', title),
+    ''
+  )
+
+
+  # Write code to use plot_like_ckb function
+  codetext$plot.like.ckb <- make_layer(
+    '# Plot like a CKB plot',
+    f = "plot_like_ckb",
+    arg = c('plot           = plot',
+            sprintf('xlims          = %s', xlims),
+            sprintf('ylims          = %s', ylims),
+            sprintf('gap            = %s', gap),
+            sprintf('ext            = %s', ext),
+            sprintf('ratio          = %s', ratio),
+            sprintf('base_size      = %s', base_size),
+            sprintf('base_line_size = %s', base_line_size))
+  )
+
+  codetext$plot.like.ckb <- sub("\\s\\+$",
+                                "",
+                                codetext$plot.like.ckb)
+
+
+  # Create the plot code
+  plotcode <- c(
+    codetext$start.ggplot,
+    indent(2,
+           codetext$lines,
+           codetext$cis.before,
+           codetext$estimates.points,
+           codetext$estimates.text,
+           codetext$n.events.text,
+           codetext$cis.after,
+           codetext$scales,
+           codetext$axes,
+           codetext$titles),
+    codetext$plot.like.ckb
+  )
+
+
+  # Show code in RStudio viewer.
+  if (showcode){ displaycode(plotcode) }
+
 
   # Create the plot
   plot <- eval(parse(text = plotcode))
