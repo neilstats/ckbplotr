@@ -228,7 +228,6 @@ The remaining elements are added to the generated code just before the first mat
 A list:
 \describe{
   \item{plot}{the plot}
-  \item{data}{a data frame from which the plot is made}
   \item{code}{ggplot2 code to generate the plot}
 }
 }

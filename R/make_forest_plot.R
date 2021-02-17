@@ -472,7 +472,6 @@ make_forest_data <- function(
 #' @return A list:
 #' \describe{
 #'   \item{plot}{the plot}
-#'   \item{data}{a data frame from which the plot is made}
 #'   \item{code}{ggplot2 code to generate the plot}
 #'}
 #'
@@ -1277,7 +1276,6 @@ make_forest_plot <- function(
   }
 
   return(list(plot = plot,
-              data = plot$data,
               code = plotcode) )
 }
 
