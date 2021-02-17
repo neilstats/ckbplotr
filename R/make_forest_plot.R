@@ -349,7 +349,7 @@ make_forest_data <- function(
   }
 
   datatoplot <- datatoplot %>%
-    dplyr::mutate(textresult = dplyr::case_when(
+    dplyr::mutate(auto_estcolumn = dplyr::case_when(
       !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, 2), nsmall = 2),
                                 " (",
                                 format(round(lci_transformed, 2), nsmall = 2),
@@ -424,6 +424,8 @@ make_forest_data <- function(
 #' @param panel.headings Titles to be placed above each forest plot. (Default: panel.names)
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
+#' @param col.right.parse A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
+#' Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)
 #' @param col.left.space A numeric vector. Sizes of the gaps between the plot
 #' and col.left columns. As a multiple of the length of the x-axis. (Default: 0)
 #' @param col.right.space Size of the gap between the plot and column to the
@@ -499,6 +501,7 @@ make_forest_plot <- function(
   col.uci       = NULL,
   col.left      = NULL,
   col.right     = NULL,
+  col.right.parse   = NULL,
   col.left.heading  = "",
   col.right.heading = "HR (95% CI)",
   col.left.space    = 0.02,
@@ -1045,28 +1048,36 @@ make_forest_plot <- function(
 
   # Write code for columns to right of plots
   if (!is.null(col.right) | estcolumn) {
-    col.right.all <- col.right
-    if (estcolumn){
-      col.right.all <- c("textresult", col.right)
+    col.right.all <- c(if (estcolumn){"auto_estcolumn"}, col.right)
+
+    ## if not specified, col.right.parse should be TRUE for textresult and FALSE otherwise
+    if (is.null(col.right.parse)){
+      col.right.parse <- rep(FALSE, length(col.right.all))
+      if (estcolumn){ col.right.parse[[1]] <- TRUE}
     }
 
     codetext$col.right.line <- unlist(purrr::pmap(
-      list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold),
+      list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold, col.right.parse),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'geom_text',
           aes = c(sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                   if(is.character(..5)){
-                    sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(",`%s`,")"), %s)',
-                            ..5, ..5, ..1, ..1)
+                    if(..6){
+                      sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(", %s,")"), %s)',
+                              ..5, ..5, ..1, ..1)
+                    } else {
+                      c(sprintf('label = %s', ..1),
+                        sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..5, ..5))
+                    }
                   } else {
                     sprintf('label = %s', ..1)
                   }),
           arg = c(sprintf('hjust = %s', ..4),
                   sprintf('size  = %s', base_size/(11/3)),
                   'na.rm = TRUE',
-                  'parse = TRUE'),
+                  sprintf('parse = %s', ..6)),
           br = FALSE
         ),
         make_layer(

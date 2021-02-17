@@ -23,6 +23,7 @@ make_forest_plot(
   col.uci = NULL,
   col.left = NULL,
   col.right = NULL,
+  col.right.parse = NULL,
   col.left.heading = "",
   col.right.heading = "HR (95\% CI)",
   col.left.space = 0.02,
@@ -110,6 +111,9 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 \item{col.left}{Names of columns to be printed to the left of the plot.}
 
 \item{col.right}{Names of columns to be printed to the right of the plot.}
+
+\item{col.right.parse}{A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
+Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)}
 
 \item{col.left.heading}{A character vector of titles for col.left columns. (Default: "")}
 
