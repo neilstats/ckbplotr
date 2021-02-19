@@ -67,6 +67,8 @@ make_forest_plot(
   printplot = TRUE,
   showcode = TRUE,
   addcode = NULL,
+  addaes = NULL,
+  addarg = NULL,
   envir = NULL
 )
 }
@@ -221,6 +223,10 @@ estimates. (Default: 3)}
 \item{addcode}{A character vector of code to add to the generated code.
 The first element should be a regular expression.
 The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)}
+
+\item{addaes}{Specify additional aesthetics for some ggplot layers.}
+
+\item{addarg}{Specify additional arguments for some ggplot layers.}
 
 \item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
 }

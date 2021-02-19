@@ -21,8 +21,6 @@
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
 #'   use log scale on the axis. (Default: FALSE)
 #' @param logscale Use log scale for vertical axis. (Default: exponentiate)
-#' @param position Character string. Add position argument to the plotted points, CIs, and text.
-#' Useful to avoid overlapping points, CIs, and text. (Default: NULL)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
@@ -41,6 +39,11 @@
 #' @param stroke Size of outline of shapes. (Default: base_size/22)
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
+#' @param addcode A character vector of code to add to the generated code.
+#'                The first element should be a regular expression.
+#'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
+#' @param addaes Specify additional aesthetics for some ggplot layers.
+#' @param addarg Specify additional arguments for some ggplot layers.
 #'
 #' @return A list:
 #' \describe{
@@ -62,7 +65,6 @@ make_shape_plot <- function(data,
                             col.n         = NULL,
                             exponentiate  = FALSE,
                             logscale      = exponentiate,
-                            position      = NULL,
                             scalepoints   = FALSE,
                             minse         = NA,
                             pointsize     = 3,
@@ -87,7 +89,10 @@ make_shape_plot <- function(data,
                             ylab          = "Estimate (95% CI)",
                             title         = "Figure",
                             printplot     = TRUE,
-                            showcode      = TRUE){
+                            showcode      = TRUE,
+                            addcode       = NULL,
+                            addaes        = NULL,
+                            addarg        = NULL){
 
   # Check arguments
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
@@ -243,12 +248,14 @@ make_shape_plot <- function(data,
     codetext$lines <- make_layer(
       '# Plot lines (linear fit through estimates, weighted by inverse variance)',
       f = "stat_smooth",
-      aes = c(if (!is.null(col.lci)) {
+      aes = c(addaes$lines,
+              if (!is.null(col.lci)) {
         sprintf('weight = 1/((%s - %s)^2)', col.estimate, fixsp(col.lci))
       } else {
         sprintf('weight = 1/(%s^2)', col.stderr)
       }),
-      arg = c('method   = "glm"',
+      arg = c(addarg$lines,
+              'method   = "glm"',
               'formula  = y ~ x',
               'se       = FALSE',
               'colour   = "black"',
@@ -263,6 +270,7 @@ make_shape_plot <- function(data,
     '# Plot the point estimates',
     f = "geom_point",
     aes = c(
+      addaes$point,
       if (scalepoints) {
         if (!is.null(col.lci)) {
           sprintf('size = 1.96/(%s - %s)', col.estimate, fixsp(col.lci))
@@ -275,11 +283,11 @@ make_shape_plot <- function(data,
       sprintf('shape = %s', shape.aes),
       sprintf('%s', fill_string.aes),
       sprintf('colour = %s', colour.aes)),
-    arg = c(sprintf('shape = %s', shape),
+    arg = c(addarg$point,
+            sprintf('shape = %s', shape),
             sprintf('colour = %s', colour),
             sprintf('%s', fill_string),
-            sprintf('stroke = %s', stroke),
-            sprintf('position = %s', position))
+            sprintf('stroke = %s', stroke))
   )
 
 
@@ -287,11 +295,12 @@ make_shape_plot <- function(data,
   codetext$estimates.text <- make_layer(
     '# Plot point estimates text',
     f = "geom_text",
-    aes = c(sprintf('y = %s', uci_string),
+    aes = c(addaes$estimates,
+            sprintf('y = %s', uci_string),
             sprintf('label = format(round(%s, 2), nsmall = 2)', est_string)),
-    arg = c('vjust = -0.8',
-            sprintf('size  = %s', base_size/(11/3)),
-            sprintf('position = %s', position))
+    arg = c(addarg$estimates,
+            'vjust = -0.8',
+            sprintf('size  = %s', base_size/(11/3)))
   )
 
 
@@ -300,11 +309,12 @@ make_shape_plot <- function(data,
     codetext$n.events.text <- make_layer(
       '# Plot n events text',
       f = "geom_text",
-      aes = c(sprintf('y = %s', lci_string),
+      aes = c(addaes$n,
+              sprintf('y = %s', lci_string),
               sprintf('label = %s', col.n)),
-      arg = c('vjust = 1.8',
-              sprintf('size  = %s', base_size/(11/3)),
-              sprintf('position = %s', position))
+      arg = c(addarg$n,
+              'vjust = 1.8',
+              sprintf('size  = %s', base_size/(11/3)))
     )
   }
 
@@ -313,12 +323,13 @@ make_shape_plot <- function(data,
   codetext$cis.before <- make_layer(
     '# Plot the CIs',
     f = "geom_linerange",
-    aes = c(sprintf('ymin = %s', lci_string),
+    aes = c(addaes$ci,
+            sprintf('ymin = %s', lci_string),
             sprintf('ymax = %s', uci_string),
             sprintf('colour = %s', cicolour.aes)),
-    arg = c(sprintf('colour = %s', cicolour),
-            sprintf('lwd = %s', base_line_size),
-            sprintf('position = %s', position))
+    arg = c(addarg$ci,
+            sprintf('colour = %s', cicolour),
+            sprintf('lwd = %s', base_line_size))
   )
 
   if (isFALSE(ciunder) || is.null(ciunder)){
@@ -328,24 +339,26 @@ make_shape_plot <- function(data,
     codetext$cis.before <- make_layer(
       '# Plot the CIs - before plotting points',
       f = "geom_linerange",
-      aes = c(sprintf('ymin = %s', lci_string),
+      aes = c(addaes$ci,
+              sprintf('ymin = %s', lci_string),
               sprintf('ymax = %s', uci_string),
               sprintf('colour = %s', cicolour.aes)),
-      arg = c(sprintf('colour = %s', cicolour),
+      arg = c(addarg$ci,
+              sprintf('colour = %s', cicolour),
               sprintf('lwd = %s', base_line_size),
-              sprintf('data = ~ dplyr::filter(.x, %s),', fixsp(ciunder)),
-              sprintf('position = %s', position))
+              sprintf('data = ~ dplyr::filter(.x, %s),', fixsp(ciunder)))
     )
     codetext$cis.after <- make_layer(
       '# Plot the CIs - after plotting points',
       f = "geom_linerange",
-      aes = c(sprintf('ymin = %s', lci_string),
+      aes = c(addaes$ci,
+              sprintf('ymin = %s', lci_string),
               sprintf('ymax = %s', uci_string),
               sprintf('colour = %s', cicolour.aes)),
-      arg = c(sprintf('colour = %s', cicolour),
+      arg = c(addarg$ci,
+              sprintf('colour = %s', cicolour),
               sprintf('lwd = %s', base_line_size),
-              sprintf('data = ~ dplyr::filter(.x, !%s),', fixsp(ciunder)),
-              sprintf('position = %s', position))
+              sprintf('data = ~ dplyr::filter(.x, !%s),', fixsp(ciunder)))
     )
   }
 
@@ -391,6 +404,12 @@ make_shape_plot <- function(data,
            codetext$titles),
     codetext$plot.like.ckb
   )
+
+
+  # add additional code
+  if (!is.null(addcode)){
+    plotcode <- append(plotcode, addcode[2:length(addcode)], grep(addcode[1], trimws(plotcode))[1]-1)
+  }
 
 
   # Show code in RStudio viewer.

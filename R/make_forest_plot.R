@@ -467,6 +467,8 @@ make_forest_data <- function(
 #' @param addcode A character vector of code to add to the generated code.
 #'                The first element should be a regular expression.
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
+#' @param addaes Specify additional aesthetics for some ggplot layers.
+#' @param addarg Specify additional arguments for some ggplot layers.
 #' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
 #'
 #' @return A list:
@@ -544,6 +546,8 @@ make_forest_plot <- function(
   printplot     = TRUE,
   showcode      = TRUE,
   addcode       = NULL,
+  addaes        = NULL,
+  addarg        = NULL,
   envir         = NULL
 ){
 
@@ -929,10 +933,12 @@ make_forest_plot <- function(
   codetext$plot.cis.before <- make_layer(
     '# Plot the CIs',
     f = 'geom_linerange',
-    aes = c('xmin = lci_transformed',
+    aes = c(addaes$ci,
+            'xmin = lci_transformed',
             'xmax = uci_transformed',
             sprintf('colour = %s', cicolour.aes[1])),
-    arg = c('data = ~ dplyr::filter(.x, !is.na(estimate_transformed))',
+    arg = c(addarg$ci,
+            'data = ~ dplyr::filter(.x, !is.na(estimate_transformed))',
             sprintf('colour = %s', cicolour[1]),
             sprintf('size = %s', base_line_size),
             'na.rm = TRUE')
@@ -945,10 +951,12 @@ make_forest_plot <- function(
     codetext$plot.cis.before <- make_layer(
       '# Plot the CIs - before plotting points',
       f = 'geom_linerange',
-      aes = c('xmin = lci_transformed',
+      aes = c(addaes$ci,
+              'xmin = lci_transformed',
               'xmax = uci_transformed',
               sprintf('colour = %s', cicolour.aes[1])),
-      arg = c(sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s)', ciunder),
+      arg = c(addarg$ci,
+              sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s)', ciunder),
               sprintf('colour = %s', cicolour[1]),
               sprintf('size = %s', base_line_size),
               'na.rm = TRUE')
@@ -956,10 +964,12 @@ make_forest_plot <- function(
     codetext$plot.cis.after <- make_layer(
       '# Plot the CIs - after plotting points',
       f = 'geom_linerange',
-      aes = c('xmin = lci_transformed',
+      aes = c(addaes$ci,
+              'xmin = lci_transformed',
               'xmax = uci_transformed',
               sprintf('colour = %s', cicolour.aes[1])),
-      arg = c(sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s)', ciunder),
+      arg = c(addarg$ci,
+              sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s)', ciunder),
               sprintf('colour = %s', cicolour[1]),
               sprintf('size = %s', base_line_size),
               'na.rm = TRUE')
@@ -973,11 +983,13 @@ make_forest_plot <- function(
       c('# Plot points at the transformed estimates',
         '## Scale by inverse of the SE'),
       f = 'geom_point',
-      aes = c('size = size',
+      aes = c(addaes$point,
+              'size = size',
               sprintf('shape = %s', shape.aes),
               sprintf('colour = %s', colour.aes),
               sprintf('fill = %s', fill.aes)),
-      arg = c(sprintf('data = ~ dplyr::filter(.x, estimate_transformed > %s, estimate_transformed < %s)',
+      arg = c(addarg$point,
+              sprintf('data = ~ dplyr::filter(.x, estimate_transformed > %s, estimate_transformed < %s)',
                       xfrom, xto),
               sprintf('shape = %s', shape),
               sprintf('colour = %s', colour),
@@ -1000,12 +1012,14 @@ make_forest_plot <- function(
     make_layer(
       '# Add tiny segments with arrows when the CIs go outside axis limits',
       f = 'geom_segment',
-      aes = c('y = -row',
+      aes = c(addaes$ci,
+              'y = -row',
               'yend = -row',
               'x = uci_transformed-0.000001',
               'xend = uci_transformed',
               sprintf('colour = %s', cicolour.aes[1])),
-      arg = c('data = ~ dplyr::filter(.x, cioverright == TRUE)',
+      arg = c(addarg$ci,
+              'data = ~ dplyr::filter(.x, cioverright == TRUE)',
               sprintf('colour = %s', cicolour[1]),
               sprintf('size = %s', base_line_size),
               sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
@@ -1014,12 +1028,14 @@ make_forest_plot <- function(
     ),
     make_layer(
       f = 'geom_segment',
-      aes = c('y = -row',
+      aes = c(addaes$ci,
+              'y = -row',
               'yend = -row',
               'x = lci_transformed+0.000001',
               'xend = lci_transformed',
               sprintf('colour = %s', cicolour.aes[1])),
-      arg = c('data = ~ dplyr::filter(.x, cioverleft == TRUE)',
+      arg = c(addarg$ci,
+              'data = ~ dplyr::filter(.x, cioverleft == TRUE)',
               sprintf('colour = %s', cicolour[1]),
               sprintf('size = %s', base_line_size),
               sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
@@ -1061,7 +1077,8 @@ make_forest_plot <- function(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'geom_text',
-          aes = c(sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+          aes = c(addaes$col.right,
+                  sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                   if(is.character(..5)){
                     if(..6){
                       sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(", %s,")"), %s)',
@@ -1073,7 +1090,8 @@ make_forest_plot <- function(
                   } else {
                     sprintf('label = %s', ..1)
                   }),
-          arg = c(sprintf('hjust = %s', ..4),
+          arg = c(addarg$col.right,
+                  sprintf('hjust = %s', ..4),
                   sprintf('size  = %s', base_size/(11/3)),
                   'na.rm = TRUE',
                   sprintf('parse = %s', ..6)),
@@ -1110,14 +1128,16 @@ make_forest_plot <- function(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'geom_text',
-          aes = c(sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+          aes = c(addaes$col.left,
+                  sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
                   sprintf('label = %s,', fixsp(..1)),
                   if(is.character(..5)){
                     sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..5, ..5)
                   } else {
                     'fontface = "plain"'
                   }),
-          arg = c(sprintf('hjust = %s', ..4),
+          arg = c(addarg$col.left,
+                  sprintf('hjust = %s', ..4),
                   sprintf('size  = %s', base_size/(11/3)),
                   'na.rm = TRUE'),
           br = FALSE
@@ -1151,8 +1171,10 @@ make_forest_plot <- function(
     make_layer(
       '# Add xlab below each axis',
       f = 'geom_text',
-      aes = c(sprintf('y = -Inf, x = %s, label = xlab', xmid)),
-      arg = c('hjust = 0.5',
+      aes = c(addaes$xlab,
+              sprintf('y = -Inf, x = %s, label = xlab', xmid)),
+      arg = c(addarg$xlab,
+              'hjust = 0.5',
               sprintf('size  = %s', base_size/(11/3)),
               'vjust = 4.4',
               'fontface = "bold"',
@@ -1164,8 +1186,10 @@ make_forest_plot <- function(
     make_layer(
       '# Add panel name above each panel',
       f = 'geom_text',
-      aes = c(sprintf('y = %s, x = %s, label = title', col.heading.space, xmid)),
-      arg = c('hjust = 0.5',
+      aes = c(addaes$panel.name,
+              sprintf('y = %s, x = %s, label = title', col.heading.space, xmid)),
+      arg = c(addarg$panel.name,
+              'hjust = 0.5',
               'nudge_y = 2',
               sprintf('size  = %s', base_size/(11/3)),
               'fontface = "bold"',

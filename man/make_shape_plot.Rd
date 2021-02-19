@@ -14,7 +14,6 @@ make_shape_plot(
   col.n = NULL,
   exponentiate = FALSE,
   logscale = exponentiate,
-  position = NULL,
   scalepoints = FALSE,
   minse = NA,
   pointsize = 3,
@@ -39,7 +38,10 @@ make_shape_plot(
   ylab = "Estimate (95\% CI)",
   title = "Figure",
   printplot = TRUE,
-  showcode = TRUE
+  showcode = TRUE,
+  addcode = NULL,
+  addaes = NULL,
+  addarg = NULL
 )
 }
 \arguments{
@@ -62,9 +64,6 @@ make_shape_plot(
 use log scale on the axis. (Default: FALSE)}
 
 \item{logscale}{Use log scale for vertical axis. (Default: exponentiate)}
-
-\item{position}{Character string. Add position argument to the plotted points, CIs, and text.
-Useful to avoid overlapping points, CIs, and text. (Default: NULL)}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
@@ -117,6 +116,14 @@ estimates. (Default: 3)}
 \item{printplot}{Print the plot. (Default: TRUE)}
 
 \item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
+
+\item{addcode}{A character vector of code to add to the generated code.
+The first element should be a regular expression.
+The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)}
+
+\item{addaes}{Specify additional aesthetics for some ggplot layers.}
+
+\item{addarg}{Specify additional arguments for some ggplot layers.}
 }
 \value{
 A list:
