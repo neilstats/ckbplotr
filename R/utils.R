@@ -44,7 +44,14 @@ fixq <- function(x){
 #' @keywords internal
 #' @noRd
 #'
-make_layer <- function(name = NULL, f, aes = NULL, arg = NULL, plus = TRUE, br = TRUE){
+make_layer <- function(name = NULL, f, aes = NULL, arg = NULL, plus = TRUE, br = TRUE, duplicates = FALSE){
+
+  if (!duplicates){
+    aes <- aes[!duplicated(trimws(sub("=.*", "", aes)))]
+    arg <- arg[!duplicated(trimws(sub("=.*", "", c(aes, arg))))[(length(aes) + 1):(length(aes) + length(arg))]]
+  }
+
+
   if (!is.null(aes)){
     aes <- indent(4, paste0(aes, ","))
     aes[[1]] <- paste0("aes(", trimws(aes[[1]]))

@@ -1233,7 +1233,7 @@ make_forest_plot <- function(
             'axis.text.x      = element_text(colour = "black"',
             indent(32,
                    sprintf('margin = margin(t = %s)',base_size/(11/4.4)),
-                   'vjust  = 1),'),
+                   'vjust  = 1)'),
             'axis.ticks.y     = element_blank()',
             'axis.line.y      = element_blank()',
             'axis.text.y      = element_text(hjust  = 0',
@@ -1251,7 +1251,8 @@ make_forest_plot <- function(
             'legend.position  = "none"',
             'plot.background  = element_blank()',
             sprintf('plot.margin      = unit(%s, "%s")', paste(deparse(margin), collapse = ''), units)),
-    plus = FALSE
+    plus = FALSE,
+    duplicates = TRUE
   )
 
 
