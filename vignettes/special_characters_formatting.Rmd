@@ -354,9 +354,9 @@ ggplot(datatoplot, aes(y=-row, x=estimate_transformed)) +
              xlim = c(0.9, 1.1)) +
 
   # Add columns to right side of plots
-  ## column textresult
+  ## column auto_estcolumn
   geom_text(aes(y = -row, x = 1.104424,
-            label = textresult),
+            label = auto_estcolumn),
             hjust = 0,
             size = 3,
             na.rm = TRUE,
