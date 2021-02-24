@@ -143,27 +143,12 @@ make_forest_data <- function(
   }
   extrarowkeys <- unique(extrarowkeys)
 
+  # create data frame of row numbers and labels
   if (is.null(row.labels)) {
     out <- panels[[1]] %>%
       dplyr::mutate(row.label = !!rlang::sym(col.key),
-                    key = !!rlang::sym(col.key),
-                    extrarowkey = "") %>%
-      dplyr::select(.data$row.label, .data$key, .data$extrarowkey) %>%
-      dplyr::add_row(row.label = "") %>%
-      dplyr::mutate(row = 1:dplyr::n())
-
-    # Add extra rows for addtext
-    if (!is.null(addtext)) {
-      for (k in 1:length(extrarowkeys)) {
-        out <- out %>%
-          dplyr::add_row(row.label = "", extrarowkey = paste0(extrarowkeys[[k]]),
-                         .after = which(out$key == extrarowkeys[[k]]))
-      }
-    }
-    out <- out %>%
-      dplyr::mutate(row = 1:dplyr::n())
-
-
+                    key = !!rlang::sym(col.key)) %>%
+      dplyr::select(.data$row.label, .data$key)
   } else {
 
     if (is.null(rows)) stop("argument rows must be given if row.labels is used")
@@ -179,99 +164,82 @@ make_forest_data <- function(
       }
     }
 
-    row.labels <- row.labels %>%
-      dplyr::mutate(heading1 = .data$heading1,
-                    heading2 = .data$heading2,
-                    heading3 = .data$heading3,
-                    key = !!rlang::sym(col.key))
+    if (!"heading2" %in% names(row.labels)){ dplyr::mutate(row.labels, heading2 = NA_character_) }
+    if (!"heading3" %in% names(row.labels)){ dplyr::mutate(row.labels, heading3 = NA_character_) }
+    row.labels <- dplyr::mutate(row.labels, key = !!rlang::sym(col.key))
+    row.labels <- dplyr::left_join(tibble::tibble(heading1 = rows),
+                                   row.labels,
+                                   by = "heading1")
 
-    out <- tibble::tibble(row.label = "", key = "", extrarowkey = "", removelater = TRUE)
-
-    for (head1 in rows) {
-      l2headings <- row.labels %>%
-        dplyr::filter(.data$heading1 == head1) %>%
-        dplyr::select(.data$heading2, .data$key) %>%
-        dplyr::distinct(.data$heading2, .keep_all = TRUE)
-
-      if (is.na(l2headings[[1, "heading2"]])) {
-        if (head1 != "") {out <- tibble::add_row(out,
-                                                 row.label = head1,
-                                                 key = row.labels %>%
-                                                   dplyr::filter(.data$heading1 == head1) %>%
-                                                   dplyr::pull(.data$key))}
-
-        # Add extra row for addtext
-        if (row.labels[[which(row.labels$heading1 == head1),"key"]] %in% extrarowkeys) {
-          out <- tibble::add_row(out,
-                                 row.label = "",
-                                 extrarowkey = row.labels[[which(row.labels$heading1 == head1), "key"]])
+    ## function to add headings/subheadings for row labels
+    add_heading <- function(data, heading, blank_after_heading, blank_after_section){
+      if(nrow(data) > 1){
+        out <- dplyr::add_row(data, row.label = heading, .before = 1)
+        if (blank_after_heading > 0){
+          for (i in 1:blank_after_heading) {
+            out <- tibble::add_row(out, row.label = "", .before = 2)
+          }
+        }
+      } else {
+        out <- dplyr::mutate(data, row.label = heading)
+      }
+      if (blank_after_section > 0){
+        for (i in 1:blank_after_section) {
+          out <- tibble::add_row(out, row.label = "")
         }
       }
-      else{
-
-        if (head1 != "") {out <- tibble::add_row(out, row.label = head1)}
-        if (blankrows[[1]] > 0) {for (i in 1:blankrows[[1]]) { out <- tibble::add_row(out, row.label = "") }}
-
-        for (head2 in 1:nrow(l2headings)) {
-
-          l3headings <- row.labels %>%
-            dplyr::filter(.data$heading1 == head1 & .data$heading2 == l2headings[[head2, "heading2"]]) %>%
-            dplyr::select(.data$heading3, .data$key)
-
-          if (is.na(l3headings[[1, "heading3"]])) {
-            if (head2 != "") {out <- tibble::add_row(out,
-                                                     row.label = l2headings[[head2, "heading2"]],
-                                                     key = l2headings[[head2, "key"]])}
-
-            # Add extra row for addtext
-            if (l2headings[[head2, "key"]] %in% extrarowkeys) {
-              out <- tibble::add_row(out,
-                                     row.label = "",
-                                     extrarowkey = l2headings[[head2, "key"]])
-            }
-          }
-          else{
-            if (head2 != "") {out <- tibble::add_row(out,
-                                                     row.label = l2headings[[head2, "heading2"]])}
-            if (blankrows[[3]] > 0) {for (i in 1:blankrows[[3]]) { out <- tibble::add_row(out, row.label = "") }}
-            for (head3 in 1:nrow(l3headings)) {
-              out <- tibble::add_row(out,
-                                     row.label = l3headings[[head3, "heading3"]],
-                                     key = l3headings[[head3, "key"]])
-
-              # Add extra row for addtext
-              if (l3headings[[head3, "key"]] %in% extrarowkeys) {
-                out <- tibble::add_row(out,
-                                       row.label = "",
-                                       extrarowkey = l3headings[[head3, "key"]])
-              }
-            }
-          }
-          if (blankrows[[4]] > 0) {for (i in 1:blankrows[[4]]) { out <- tibble::add_row(out, row.label = "") }}
-        }
-      }
-      if (blankrows[[2]] > 0) {for (i in 1:blankrows[[2]]) { out <- tibble::add_row(out, row.label = "") }}
+      out
     }
 
-
-    # add a blank heading at bottom if needed
-    if (utils::tail(out$row.label, 1) != "") {
-      out <- out %>%
-        tibble::add_row(row.label = "")
-    }
-
-    out <- out %>%
-      dplyr::filter(is.na(.data$removelater) | !.data$removelater) %>%
-      dplyr::select(-.data$removelater) %>%
-      dplyr::mutate(row = 1:dplyr::n())
+    ## add headings/subheadings for row labels
+    out <- row.labels %>%
+      dplyr::mutate(row.label = .data$heading3) %>%
+      dplyr::group_by(.data$heading1, .data$heading2) %>%
+      tidyr::nest() %>%
+      dplyr::mutate(res = purrr::map(.data$data,
+                                     ~ add_heading(.,
+                                                   .data$heading2,
+                                                   blankrows[[3]],
+                                                   blankrows[[4]]))) %>%
+      dplyr::select(-.data$data) %>%
+      tidyr::unnest(cols = "res") %>%
+      dplyr::group_by(.data$heading1) %>%
+      tidyr::nest() %>%
+      dplyr::mutate(res = purrr::map(.data$data,
+                                     ~ add_heading(.,
+                                                   .data$heading1,
+                                                   blankrows[[1]],
+                                                   blankrows[[2]]))) %>%
+      dplyr::select(-.data$data) %>%
+      tidyr::unnest(cols = "res") %>%
+      dplyr::ungroup()
   }
 
+  # Add extra rows for addtext
+  out <- dplyr::mutate(out, extrarowkey = NA_character_)
+  if (!is.null(addtext)) {
+    for (k in 1:length(extrarowkeys)) {
+      out <- out %>%
+        dplyr::add_row(row.label = "",
+                       extrarowkey = paste0(extrarowkeys[[k]]),
+                       .after = which(out$key == extrarowkeys[[k]]))
+    }
+  }
+
+  # add a blank heading at bottom if needed
+  if (utils::tail(out$row.label, 1) != "") {
+    out <- out %>%
+      tibble::add_row(row.label = "")
+  }
+
+  out <- out %>%
+    dplyr::mutate(row = 1:dplyr::n()) %>%
+    dplyr::select(.data$row, .data$row.label, .data$key, .data$extrarowkey)
 
   # make datatoplot
   datatoplot <- tibble::tibble()
 
   for (i in 1:length(panels)) {
-
     if (!is.null(col.lci)) {
       panels[[i]] <- panels[[i]] %>%
         dplyr::select(key = !!rlang::sym(col.key),
@@ -289,7 +257,6 @@ make_forest_data <- function(
                       stderr   = !!rlang::sym(col.stderr),
                       !!!rlang::syms(col.right),
                       !!!rlang::syms(col.keep))
-
     }
 
     out1 <- merge(out, panels[[i]], by = "key", all.x = TRUE) %>%

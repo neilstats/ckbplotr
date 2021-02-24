@@ -21,9 +21,8 @@ remotes::install_github('neilstats/ckbplotr')
 
 If you get an error that reads “Error: Failed to install ‘unknown
 package’ from GitHub: HTTP error 404. No commit found for the ref
-master” then make sure to update to the latest version of the
-`remotes` package, or try
-`remotes::install_github('neilstats/ckbplotr@main')`.
+master” then make sure to update to the latest version of the `remotes`
+package, or try `remotes::install_github('neilstats/ckbplotr@main')`.
 
 If you get an error that reads “Error: (converted from warning) package
 ‘ggplot2’ was built under R version …” you can avoid this by first
@@ -83,8 +82,8 @@ The `make_forest_plot` function creates a forest plot using the
 `ggplot2` graphics package. The function returns a named list
 containing:
 
-  - plot: the plot
-  - code: ggplot2 code to generate the plot
+-   plot: the plot
+-   code: ggplot2 code to generate the plot
 
 In RStudio the ggplot2 code used to generate the plot will be shown in
 the ‘Viewer’ pane. If modifications are needed to the plot, then this

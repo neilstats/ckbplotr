@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   fig.width = 4,
   fig.height = 4,
-  fig.align = "center")
+  fig.align = "center",
+  dpi = 300)
 library(ckbplotr)
 library(grid)
 library(gridExtra)
@@ -99,10 +100,13 @@ plot <- make_shape_plot(results,
                         col.estimate = "est",
                         col.stderr   = "se",
                         col.n        = "n",
+                        col.group    = "is_female",
                         xlims        = c(15,50),
                         ylims        = c(0.5, 3),
                         scalepoints  = TRUE,
-                        title        = NULL)
+                        title        = NULL,
+                        ciunder      = TRUE,
+                        envir        = environment())
 ```
 
 
@@ -143,7 +147,7 @@ resultsC <- exampleresults()
 resultsD <- exampleresults()
 resultsE <- exampleresults()
 
-headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
+mylabels <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
                                         "Triglycerides concentration",
                                         "Cholesterol concentration"), each = 7),
                        heading2 = rep(c("VLDL", "VLDL", "VLDL",
@@ -162,7 +166,7 @@ headings <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
                                     'nmr_idl_c',
                                     'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'))
 
-forestplot <- make_forest_plot(row.labels        = headings,
+forestplot <- make_forest_plot(row.labels        = mylabels,
                                rows              = c("Lipoprotein particle concentration",
                                                      "Triglycerides concentration"),
                                panels            = list(resultsA, resultsB),
@@ -181,7 +185,8 @@ forestplot <- make_forest_plot(row.labels        = headings,
                                col.right.space   = 0.02,
                                col.heading.space = 1.5,
                                label.space        = 2,
-                               panel.space       = 8)
+                               panel.space       = 8,
+                               envir             = environment())
 ```
 
 ### Expected warning

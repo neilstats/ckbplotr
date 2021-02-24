@@ -44,6 +44,7 @@
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
 #' @param addaes Specify additional aesthetics for some ggplot layers.
 #' @param addarg Specify additional arguments for some ggplot layers.
+#' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
 #'
 #' @return A list:
 #' \describe{
@@ -92,7 +93,8 @@ make_shape_plot <- function(data,
                             showcode      = TRUE,
                             addcode       = NULL,
                             addaes        = NULL,
-                            addarg        = NULL){
+                            addarg        = NULL,
+                            envir         = NULL){
 
   # Check arguments
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
@@ -417,7 +419,7 @@ make_shape_plot <- function(data,
 
 
   # Create the plot
-  plot <- eval(parse(text = plotcode))
+  plot <- eval(parse(text = plotcode), envir = envir)
   if (printplot){
     print(plot)
   }

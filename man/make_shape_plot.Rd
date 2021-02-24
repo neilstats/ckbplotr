@@ -41,7 +41,8 @@ make_shape_plot(
   showcode = TRUE,
   addcode = NULL,
   addaes = NULL,
-  addarg = NULL
+  addarg = NULL,
+  envir = NULL
 )
 }
 \arguments{
@@ -124,6 +125,8 @@ The remaining elements are added to the generated code just before the first mat
 \item{addaes}{Specify additional aesthetics for some ggplot layers.}
 
 \item{addarg}{Specify additional arguments for some ggplot layers.}
+
+\item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
 }
 \value{
 A list:
