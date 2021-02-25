@@ -1,3 +1,15 @@
+# ckbplotr 0.5.0.9000
+
+* New spacing arguments added to make_forest_plot().
+* New argument addcode in make_forest_plot() which inserts code into the generated plot code.
+* New arguments addaes and addarg in make_shape_plot() and make_forest_plot() which can be used to specify additional aesthetics and arguments for some ggplot layers.
+* New argument col.right.parse in make_forest_plot() which controls if columns are parsed into expressions when plotted.
+* make_forest_plot() no longer returns data. But the plot data is available at .$plot$data
+* New argument envir added to make_shape_plot (allows the user to specify the environment for evaluating the plot code).
+* ggtext::element_markdown() now used for y-axis labels in make_forest_plot()
+* Improved handling of unicode characters.
+* Fixes and internal code improvements.
+
 # ckbplotr 0.5.0
 
 * In make_forest_plot(), confidence intervals narrower than plotted points can be a different colour (and plotted before/after the points) by using the panel.width argument.

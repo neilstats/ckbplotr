@@ -1,0 +1,176 @@
+---
+title: "Get started with ckbplotr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started with ckbplotr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include = F}
+library(ckbplotr)
+```
+
+## Forest plots
+`make_forest_plot()` creates a forest plot using the [ggplot2 graphics package](https://ggplot2.tidyverse.org/). The function returns a named list containing:
+
+* plot: the plot
+* code: ggplot2 code to generate the plot
+
+In RStudio the ggplot2 code used to generate the plot will be shown in the 
+'Viewer' pane. If modifications are needed to the plot, then this code can be
+copied, edited, and run as needed.
+
+### Prepare data
+First of all, do your analyses and put the results into data frames (one data frame for each forest plot panel). Here is part of some example results:
+```{r example forest plot results, echo = FALSE}
+set.seed(57911624)
+exampleresults <- function(){
+  data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
+                          'nmr_idl_p',
+                          'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
+                          'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
+                          'nmr_idl_tg',
+                          'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
+                          'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
+                          'nmr_idl_c',
+                          'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
+             estimate = rnorm(21, 0, 0.02),
+             stderr   = 0.012 + abs(rnorm(21, 0, 0.015)),
+             n        = round(runif(21, 100, 2000)),
+             nb       = round(runif(21, 100, 2000)),
+             shape    = rep(15, 21),
+             colour   = "black",
+             fill     = "black",
+             bold     = FALSE,
+             diamond  = FALSE,
+             ciunder  = FALSE,
+             stringsAsFactors = FALSE)
+}
+resultsA <- exampleresults()
+resultsB <- exampleresults()
+resultsC <- exampleresults()
+resultsD <- exampleresults()
+resultsE <- exampleresults()
+
+head(resultsA[,c("variable", "estimate", "stderr", "n")])
+```
+
+
+### Simple forest plot
+```{r simple-forest-plot}
+forestplot <- make_forest_plot(panels         = list(resultsA, resultsB),
+                               col.key        = "variable",
+                               exponentiate   = TRUE)
+```
+
+### Using row labels
+To use row labels, first create a data frame of labels.
+
+This data frame must contain columns 'heading1', 'heading2' and 'heading3',
+which can be set to NA if not needed for a particular row. For example, if you 
+do not need a third level of label for a particular row, then set `heading3=NA`
+for that row. If you only need one level of labels, then set `heading2=NA` and
+`heading3=NA` for every row.
+
+The data set must also contain a column with the same name as a column in each 
+of the results data sets. This column is used to match labels to the correct 
+results, and is specified in the argument `col.key`.
+
+```{r forest plot headings, eval=TRUE, echo=FALSE}
+# Example label for every row
+# This could be loaded from a csv containing labels that you use often
+mylabels <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
+                                        "Triglycerides concentration",
+                                        "Cholesterol concentration"), each = 7),
+                       heading2 = rep(c("VLDL", "VLDL", "VLDL",
+                                        "IDL",
+                                        "LDL", "LDL", "LDL"), times = 3),
+                       heading3 = rep(c("Large", "Medium", "Small",
+                                        NA,
+                                        "Large", "Medium", "Small") , times = 3),
+                       variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
+                                    'nmr_idl_p',
+                                    'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
+                                    'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
+                                    'nmr_idl_tg',
+                                    'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
+                                    'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
+                                    'nmr_idl_c',
+                                    'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
+                       stringsAsFactors = FALSE)
+```
+```{r mylabels}
+mylabels
+```
+
+In `make_forest_plot()` specify the `row.labels` argument as the data frame of labels you've created.
+
+Use the `rows` argument to choose the results to be plotted. The function will plot results whose heading1 label is in the `rows` argument. The order given in the `rows` argument decides the order in which the heading1 labels will be in the plot (top to bottom). The heading2 and heading3 labels will be in the order that they are in the `row.labels` data frame.
+
+```{r using-row-labels}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = mylabels,
+                               rows              = c("Triglycerides concentration",
+                                                     "Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.headings    = c("Analysis A", "Analysis B"),
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3)
+```
+
+In this plot we've also use the `panel.headings`, `xlim`, `xticks`, `scalepoints`, and `pointsize` arguments to customise the plot. See `?make_forest_plot`.
+
+
+## Shape plots
+`make_shape_plot()` creates a plot of estimates and CIs against risk factor levels using the `ggplot2` package. The function returns a named list containing:
+
+* plot: the plot
+* code: ggplot2 code to generate the plot
+
+In RStudio, the ggplot2 code used to generate the plot will be shown in the 'Viewer'
+pane. This code can be copied and further edited to adapt the plot.
+
+The function uses `plot_like_ckb()` to modify the theme and control the look of the plot.
+
+### Example data
+```{r prep data, include = FALSE}
+results <- data.frame(
+  est       = c(   1, 1.25,  1.5, 1.75,  1.7, 1.85, 2.25, 2.6),
+  se        = c(0.08, 0.03, 0.07, 0.15, 0.08, 0.08, 0.07, 0.1),
+  rf        = c(  20,   28,   38,   50, 18.5,   25,   37,  47),
+  n         = c( 109,  103,  143,  104,  140,  134,  127,  99),
+  is_female = c(   0,    0,    0,    0,    1,    1,    1,   1)
+)
+```
+
+```{r}
+results
+```
+
+### Simple example
+Given a data frame of estimates and standard errors (to be plotted on the y axis),
+and risk factor levels (to be plotted on the x axis), a plot can be created.
+```{r simple-example}
+plot <- make_shape_plot(results[results$is_female == 0,],
+                        col.x        = "rf",
+                        col.estimate = "est",
+                        col.stderr   = "se",
+                        col.n        = "n",
+                        xlims        = c(15, 50),
+                        ylims        = c(0.5, 3),
+                        scalepoints  = TRUE,
+                        title        = NULL)
+```
+
+## Other plots

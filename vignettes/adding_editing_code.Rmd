@@ -1,0 +1,84 @@
+---
+title: "Changing generated code"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Changing generated code}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include = FALSE}
+library(ckbplotr)
+```
+
+The `make_shape_plot()` and `make_forest_plot()` functions generate code to produce plots. Beyond the function arguments, there are some further methods to change the generated code to produce customised plots.
+
+## Adding layers
+
+## Adding code (the addcode argument)
+The addcode argument in make_shape_plot() and make_forest_plot() can be used to add additional code to the plot code created by the functions.
+
+The argument should be a character vector. The first element defines where the code is added. It will be matched (as a regular expression) to the first line of the generated code (trimmed of any whitespace). The remaining elements will then be inserted as code just before this line. For example, to insert code before the line "# Plot points at the transformed estimates", set "# Plot points at the transformed estimates" as the first element.
+
+### Example
+We wish to use `geom_segment()` to add dashed lines to the plot, and these need to be added to the plot before the point estimates:
+```{r, eval = F}
+make_forest_plot(panels         = list(resultsA, resultsB),
+                 col.key        = "variable",
+                 panel.headings = c("Analysis A", "Analysis B"),
+                 exponentiate   = TRUE,
+                 addcode = c("# Plot points at the transformed estimates",
+                             "# Plot dashed line",
+                             "geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),",
+                             "linetype = 'dashed',",
+                             "data = ~ filter(.,row.label=='nmr_s_ldl_c')) +",
+                             ""))
+```
+
+
+## Adding aesthetics and arguments (the addaes and addarg arguments)
+The addaes and addarg arguments in make_shape_plot() and make_forest_plot() can be used to add additional aesthetics and arguments code to the ggplot layers created by the functions. These arguments must be named lists of character strings, and the names of elements defines where the aesthetics/arguments code is added.
+
+In make_shape_plot()  the following names will add aesthetics and arguments to layers:
+
+| name      | layer that plots                      |
+|-----------|---------------------------------------|
+| lines     | lines of linear fit through estimates |
+| point     | point estimates                       |
+| estimates | text of estimates                     |
+| n         | text of number of events (n)          |
+| ci        | confidence intervals                  |
+
+In make_forest_plot() the following names will add aesthetics and arguments to layers:
+
+| name       | layer that plots     |
+|------------|----------------------|
+| ci         | confidence intervals |
+| point      | point estimates      |
+| col.right  | col.right columns    |
+| col.left   | col.left columns     |
+| xlab       | x-axis label         |
+| panel.name | names above panels   |
+
+Where duplicate aesthetics/arguments might be defined and created, they are kept with the priority: 
+
+1. Aesthetic arguments specified using addaes and addarg
+2. Aesthetic arguments created by the function
+3. Other arguments specified using addaes and addarg
+4. Other arguments created by the function
+
+This can be used to 'overwrite' some of the code that would otherwise be produced by make_shape_plot() and make_forest_plot().
+
+## Changing the code vector and evaluating
+
+## Copying the plot code

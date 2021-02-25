@@ -1,12 +1,12 @@
 ---
-title: "Making shape plots"
+title: "More with shape plots"
 output:
   rmarkdown::html_vignette:
     fig_width: 4
     fig_height: 4
     toc: TRUE
 vignette: >
-  %\VignetteIndexEntry{Making shape plots}
+  %\VignetteIndexEntry{More with shape plots}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -23,24 +23,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, include = FALSE}
 library(ckbplotr)
-```
 
-The `make_shape_plot` function creates a plot of estimates and CIs against risk
-factor levels using the `ggplot2` package.
-
-The function returns a named list containing:
-
-* plot: the plot
-* code: ggplot2 code to generate the plot
-
-The function uses the `plot_like_ckb` function to modify the theme and control
-the look of the plot.
-
-In RStudio, the ggplot2 code used to generate the plot will be shown in the 'Viewer'
-pane. This code can be copied and further edited to adapt the plot.
-
-## Prepare example data
-```{r prep data}
 results <- data.frame(
   est       = c(   1, 1.25,  1.5, 1.75,  1.7, 1.85, 2.25, 2.6),
   se        = c(0.08, 0.03, 0.07, 0.15, 0.08, 0.08, 0.07, 0.1),
@@ -50,20 +33,6 @@ results <- data.frame(
 )
 ```
 
-## Simple example
-Given a data frame of estimates and standard errors (to be plotted on the y axis),
-and risk factor levels (to be plotted on the x axis), a plot can be created.
-```{r simple-example}
-plot <- make_shape_plot(results[results$is_female == 0,],
-                        col.x        = "rf",
-                        col.estimate = "est",
-                        col.stderr   = "se",
-                        col.n        = "n",
-                        xlims        = c(15, 50),
-                        ylims        = c(0.5, 3),
-                        scalepoints  = TRUE,
-                        title        = NULL)
-```
 
 ## Log scale
 Set the `logscale` argument to true to use a log scale on the vertical axis.
@@ -130,8 +99,10 @@ The argument/columns, what they control, and the type:
 | ciunder     | if the CI line should be plotted before the point | logical   |
 
 
+(Note that the approach for using columns to specify colours and shapes in this package does not make use of the automatic scales available in ggplot. We recommend you take a look at the ggplot2 documentation for better examples if you want to write ggplot2 code.)
+
 ### Using values
-If the argument doesn't match the anem of a column in the data, then the value will be used for all points.
+If the argument doesn't match the name of a column in the data, then the value will be used for all points.
 ```{r aesthetics with values}
 plot <- make_shape_plot(results,
                         col.x        = "rf",
@@ -188,6 +159,35 @@ plot <- make_shape_plot(results,
 ```
 
 Note that the size of boxes depends on `pointsize`, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.
+
+
+## Categorical risk factor
+The risk factor can be a factor. In this case, the x-axis coordinates are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of categories plus 0.5. You may need to add position arguments so that points, intervals and text do not overlap:
+```{r}
+results <- data.frame(
+  est       = c(   1, 1.25,  1.5, 1.75,  1.7, 1.85, 2.25, 2.6),
+  se        = c(0.08, 0.03, 0.07, 0.15, 0.08, 0.08, 0.07, 0.1),
+  rf        = c(  "A",   "B",   "C",   "D", "A",   "B",   "C",  "D"),
+  n         = c( 109,  103,  143,  104,  140,  134,  127,  99),
+  is_female = c(   0,    0,    0,    0,    1,    1,    1,   1)
+)
+
+plot <- make_shape_plot(results,
+                        col.x        = "rf",
+                        col.estimate = "est",
+                        col.stderr   = "se",
+                        col.n        = "n",
+                        col.group    = "is_female",
+                        xlims        = c(0.5, 4.5),
+                        ylims        = c(0.5, 3),
+                        scalepoints  = TRUE,
+                        title        = NULL,
+                        ciunder      = TRUE,
+                        addarg = list(point     = "position = position_dodge(width = 0.5)",
+                                      ci        = "position = position_dodge(width = 0.5)",
+                                      n         = "position = position_dodge(width = 0.5)",
+                                      estimates = "position = position_dodge(width = 0.5)"))
+```
 
 ## Stroke
 The `stroke` argument sets the stroke aesthetic for plotted shapes. See https://ggplot2.tidyverse.org/articles/ggplot2-specs.html for more details. The stroke size adds to total size of a shape, so unless `stroke = 0` the scaling of size by inverse variance will be slightly inaccurate (but there are probably more important things to worry about).
