@@ -16,6 +16,8 @@
 #' @param forest.xticks A numeric vector. The tick points of the x axis.
 #' @param col.pval Name of additional column to be printed to the right of the plot,
 #'   and formatted as P value.
+#' @param cols DEPRECATED.
+#' @param headings DEPRECATED.
 #' @param ... Other parameters will be passed to the Jasper::ForestFromCSV function.
 #'
 #' @importFrom rlang .data

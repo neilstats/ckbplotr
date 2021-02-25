@@ -48,8 +48,12 @@ with the same name (which can be specified by col.key).}
 rows of the plot. The data frame must contain columns 'heading1', 'heading2'
 and 'heading3'. Use NA if a lower level heading is not required.}
 
+\item{headings}{DEPRECATED.}
+
 \item{rows}{A character vector. The top level labels (heading1) of rows
 to be included in the plot.}
+
+\item{cols}{DEPRECATED.}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
