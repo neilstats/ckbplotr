@@ -1091,7 +1091,7 @@ make_forest_plot <- function(
                   indent(36,
                          'ordered = TRUE)'),
                   indent(21,
-                         sprintf('title = %s)',paste(deparse(unlist(..3)), collapse = ''))))
+                         sprintf('title = %s)', ds(unlist(..3)))))
         )
       )
     )
@@ -1136,7 +1136,7 @@ make_forest_plot <- function(
                   indent(36,
                          'ordered = TRUE)'),
                   indent(21,
-                         sprintf('title = %s)',paste(deparse(unlist(..3)), collapse = ''))))
+                         sprintf('title = %s)', ds(unlist(..3)))))
         )
       )
     )
@@ -1162,7 +1162,7 @@ make_forest_plot <- function(
               sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
               indent(36, sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
               indent(36, 'ordered = TRUE)'),
-              indent(21, sprintf('xlab = %s)', paste(deparse(xlab), collapse = ''))))
+              indent(21, sprintf('xlab = %s)', ds(xlab))))
     ),
     make_layer(
       '# Add panel name above each panel',
@@ -1177,7 +1177,7 @@ make_forest_plot <- function(
               sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
               indent(36, sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
               indent(36, 'ordered = TRUE)'),
-              indent(21, sprintf('title = %s)', paste(deparse(panel.headings), collapse = ''))))
+              indent(21, sprintf('title = %s)', ds(panel.headings))))
     )
   )
 

@@ -81,3 +81,19 @@ displaycode <- function(plotcode){
   viewer <- getOption("viewer", default = function(url){})
   viewer(file.path(tempdir(), "plotcode.txt"))
 }
+
+
+#' Use deparse, escape and unescape unicode, and collapse to a single string
+#'
+#' @keywords internal
+#'@noRd
+#'
+ds <- function(x){
+  paste(
+    stringi::stri_unescape_unicode(
+      deparse(
+        stringi::stri_escape_unicode(x)
+      )
+    ),
+    collapse = '')
+}
