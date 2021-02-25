@@ -7,15 +7,11 @@
 make_forest_plot(
   panels,
   row.labels = NULL,
-  headings = NULL,
   rows = NULL,
-  cols = panels,
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
-  colnames = NULL,
   panel.headings = panel.names,
-  colheadings = colnames,
   col.key = "key",
   col.estimate = "estimate",
   col.stderr = "stderr",
@@ -44,7 +40,6 @@ make_forest_plot(
   diamond = NULL,
   col.bold = NULL,
   bold.labels = NULL,
-  boldheadings = NULL,
   scalepoints = FALSE,
   minse = NULL,
   pointsize = 3,
@@ -54,22 +49,31 @@ make_forest_plot(
   fill = NULL,
   ciunder = NULL,
   addtext = NULL,
-  label.space = 4,
-  heading.space = NULL,
-  panel.space = 8,
-  plot.space = NULL,
+  left.space = 1 + 2 * length(col.left),
+  right.space = 4 + 2 * length(col.right),
+  mid.space = 0,
+  plot.margin = c(2, 1, 2, 1),
+  units = "lines",
   panel.width = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
-  margin = c(2, 6, 2, 1),
-  units = "lines",
   printplot = TRUE,
   showcode = TRUE,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
-  envir = NULL
+  envir = NULL,
+  cols = panels,
+  headings = NULL,
+  colnames = NULL,
+  colheadings = colnames,
+  boldheadings = NULL,
+  heading.space = NULL,
+  panel.space = right.space + mid.space + left.space,
+  label.space = left.space,
+  plot.space = NULL,
+  margin = plot.margin + c(0, right.space, 0, 0)
 )
 }
 \arguments{
@@ -123,10 +127,10 @@ Should the contents of the columns be parsed into expressions. (Default: All FAL
 (if estcolumn = TRUE) and col.right columns. (Default: "HR (95\% CI)")}
 
 \item{col.left.space}{A numeric vector. Sizes of the gaps between the plot
-and col.left columns. As a multiple of the length of the x-axis. (Default: 0)}
+and col.left columns. As a multiple of the length of the x-axis. (Default: 0.02)}
 
-\item{col.right.space}{Size of the gap between the plot and column to the
-right of the plot. As a multiple of the length of the x-axis. (Default: 0)}
+\item{col.right.space}{A numeric vector. Sizes of the gaps between the plot
+and col.right columns. As a multiple of the length of the x-axis. (Default: 0.02)}
 
 \item{col.left.hjust}{A numeric vector. The horizontal justification of
 col.left columns. (Default: 1)}
@@ -200,9 +204,15 @@ estimates. (Default: 3)}
   be plotted in the column of estimates and CIs, below the row with the key
   given in the col.key column.}
 
-\item{label.space}{Size of the gap between row labels and the first panel. (Default: 4)}
+\item{left.space}{Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))}
 
-\item{panel.space}{Size of the gap between forest plot panels. (Default: 8)}
+\item{right.space}{Size of gap to leave to the right of panels. (Default: 4 + 2*length(col.right))}
+
+\item{mid.space}{Size of additional gap to leave between panels. (Default: 0)}
+
+\item{plot.margin}{Plot margin (top, right, bottom, left). (Default: c(2, 1, 2, 1))}
+
+\item{units}{Units to use for left.space, right.space, mid.space, plot.margin. (Default: "Lines")}
 
 \item{panel.width}{Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".}
 
@@ -211,10 +221,6 @@ estimates. (Default: 3)}
 \item{base_line_size}{base size for line elements}
 
 \item{stroke}{Size of outline of shapes. (Default: 0)}
-
-\item{margin}{Plot margin (top, right, bottom, left). (Default: c(2, 6, 2, 1))}
-
-\item{units}{Units to use for label.space, panel.space and margin (Default: "Lines")}
 
 \item{printplot}{Print the plot. (Default: TRUE)}
 
@@ -229,6 +235,26 @@ The remaining elements are added to the generated code just before the first mat
 \item{addarg}{Specify additional arguments for some ggplot layers.}
 
 \item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
+
+\item{cols}{DEPRECATED.}
+
+\item{headings}{DEPRECATED.}
+
+\item{colnames}{DEPRECATED.}
+
+\item{colheadings}{DEPRECATED.}
+
+\item{boldheadings}{DEPRECATED.}
+
+\item{heading.space}{DEPRECATED. Even older method for specifying spacing.}
+
+\item{panel.space}{DEPRECATED. Old method for specifying spacing.}
+
+\item{label.space}{DEPRECATED. Old method for specifying spacing.}
+
+\item{plot.space}{DEPRECATED. Even older method for specifying spacing.}
+
+\item{margin}{DEPRECATED. Old method for specifying margins.}
 }
 \value{
 A list:
@@ -238,9 +264,9 @@ A list:
 }
 }
 \description{
-\code{make_forest_plot} creates a forest plot with ggplot
+Creates a forest plot with ggplot
 }
 \details{
-The function returns the plot, data and ggplot2 code to create the plot.
+The function returns the plot and ggplot2 code to create the plot.
 In RStudio, the ggplot2 code will be shown in the viewer.
 }

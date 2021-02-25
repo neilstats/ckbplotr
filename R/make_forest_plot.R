@@ -378,9 +378,9 @@ make_forest_data <- function(
 
 #' Make forest plot with ggplot2
 #'
-#' \code{make_forest_plot} creates a forest plot with ggplot
+#' Creates a forest plot with ggplot
 #'
-#' The function returns the plot, data and ggplot2 code to create the plot.
+#' The function returns the plot and ggplot2 code to create the plot.
 #' In RStudio, the ggplot2 code will be shown in the viewer.
 #'
 #'
@@ -394,9 +394,9 @@ make_forest_data <- function(
 #' @param col.right.parse A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
 #' Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)
 #' @param col.left.space A numeric vector. Sizes of the gaps between the plot
-#' and col.left columns. As a multiple of the length of the x-axis. (Default: 0)
-#' @param col.right.space Size of the gap between the plot and column to the
-#' right of the plot. As a multiple of the length of the x-axis. (Default: 0)
+#' and col.left columns. As a multiple of the length of the x-axis. (Default: 0.02)
+#' @param col.right.space A numeric vector. Sizes of the gaps between the plot
+#' and col.right columns. As a multiple of the length of the x-axis. (Default: 0.02)
 #' @param col.left.hjust A numeric vector. The horizontal justification of
 #' col.left columns. (Default: 1)
 #' @param col.right.hjust A numeric vector. The horizontal justification of
@@ -423,12 +423,13 @@ make_forest_data <- function(
 #'                (using the key values) for which the estimate and CI should be plotted using a diamond.
 #' @param col.bold Plot text as bold. Name of a column of logical values.
 #' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
-#' @param label.space Size of the gap between row labels and the first panel. (Default: 4)
-#' @param panel.space Size of the gap between forest plot panels. (Default: 8)
+#' @param left.space Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))
+#' @param right.space Size of gap to leave to the right of panels. (Default: 4 + 2*length(col.right))
+#' @param mid.space Size of additional gap to leave between panels. (Default: 0)
+#' @param plot.margin Plot margin (top, right, bottom, left). (Default: c(2, 1, 2, 1))
+#' @param units Units to use for left.space, right.space, mid.space, plot.margin. (Default: "Lines")
 #' @param panel.width Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".
 #' @param stroke Size of outline of shapes. (Default: 0)
-#' @param margin Plot margin (top, right, bottom, left). (Default: c(2, 6, 2, 1))
-#' @param units Units to use for label.space, panel.space and margin (Default: "Lines")
 #' @param printplot Print the plot. (Default: TRUE)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
 #' @param addcode A character vector of code to add to the generated code.
@@ -437,6 +438,16 @@ make_forest_data <- function(
 #' @param addaes Specify additional aesthetics for some ggplot layers.
 #' @param addarg Specify additional arguments for some ggplot layers.
 #' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
+#' @param label.space DEPRECATED. Old method for specifying spacing.
+#' @param panel.space DEPRECATED. Old method for specifying spacing.
+#' @param margin DEPRECATED. Old method for specifying margins.
+#' @param cols DEPRECATED.
+#' @param headings DEPRECATED.
+#' @param colnames DEPRECATED.
+#' @param colheadings DEPRECATED.
+#' @param boldheadings DEPRECATED.
+#' @param heading.space DEPRECATED. Even older method for specifying spacing.
+#' @param plot.space DEPRECATED. Even older method for specifying spacing.
 #'
 #' @return A list:
 #' \describe{
@@ -453,15 +464,11 @@ make_forest_data <- function(
 make_forest_plot <- function(
   panels,
   row.labels    = NULL,
-  headings      = NULL,
   rows          = NULL,
-  cols          = panels,
   exponentiate  = TRUE,
   logscale      = exponentiate,
   panel.names   = NULL,
-  colnames      = NULL,
   panel.headings = panel.names,
-  colheadings   = colnames,
   col.key       = "key",
   col.estimate  = "estimate",
   col.stderr    = "stderr",
@@ -490,7 +497,6 @@ make_forest_plot <- function(
   diamond       = NULL,
   col.bold      = NULL,
   bold.labels   = NULL,
-  boldheadings  = NULL,
   scalepoints   = FALSE,
   minse         = NULL,
   pointsize     = 3,
@@ -500,22 +506,31 @@ make_forest_plot <- function(
   fill      = NULL,
   ciunder   = NULL,
   addtext       = NULL,
-  label.space   = 4,
-  heading.space = NULL,
-  panel.space   = 8,
-  plot.space    = NULL,
+  left.space    = 1 + 2*length(col.left),
+  right.space   = 4 + 2*length(col.right),
+  mid.space     = 0,
+  plot.margin   = c(2, 1, 2, 1),
+  units         = "lines",
   panel.width   = NULL,
   base_size     = 11,
   base_line_size = base_size/22,
   stroke        = 0,
-  margin        = c(2, 6, 2, 1),
-  units         = "lines",
   printplot     = TRUE,
   showcode      = TRUE,
   addcode       = NULL,
   addaes        = NULL,
   addarg        = NULL,
-  envir         = NULL
+  envir         = NULL,
+  cols          = panels,
+  headings      = NULL,
+  colnames      = NULL,
+  colheadings   = colnames,
+  boldheadings  = NULL,
+  heading.space = NULL,
+  panel.space   = right.space + mid.space + left.space,
+  label.space   = left.space,
+  plot.space    = NULL,
+  margin        = plot.margin + c(0, right.space, 0, 0)
 ){
 
   # legacy arguments
@@ -547,7 +562,6 @@ make_forest_plot <- function(
     panel.space <- plot.space
     message("Note: plot.space argument is now called panel.space")
   }
-
 
   # check arguments
   if (!missing(col.diamond) &&  !missing(diamond)) stop("Use either col.diamond or diamond, not both.")
