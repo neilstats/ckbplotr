@@ -91,13 +91,6 @@ code can be copied, edited, and run as needed.
 
 <img src="man/figures/README-example-forest-plot-1.png" style="display: block; margin: auto;" />
 
-### Expected warning
-
-You may get the following warning when using this function.
-
-> Vectorized input to `element_text()` is not officially supported.
-> Results may be unexpected or may change in future versions of ggplot2.
-
 ## make\_jasper\_forest\_plot function
 
 The `make_jasper_forest_plot` function requires the in-house Jasper

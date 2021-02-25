@@ -21,14 +21,14 @@ Imports:
     readr,
     purrr,
     tidyr,
-    utils
+    utils,
+    ggtext
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown,
     grid,
-    gridExtra,
-    ggtext
+    gridExtra
 VignetteBuilder: knitr
 URL: https://github.com/neilstats/ckbplotr
 BugReports: https://github.com/neilstats/ckbplotr/issues
