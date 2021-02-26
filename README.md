@@ -3,6 +3,14 @@
 
 # ckbplotr
 
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg)](https://github.com/neilstats/ckbplotr/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/neilstats/ckbplotr/branch/master/graph/badge.svg)](https://codecov.io/gh/neilstats/ckbplotr?branch=master)
+<!-- badges: end -->
+
 `ckbplotr` provides functions to help create and style plots in R. It is
 being developed by, and primarily for, [China Kadoorie
 Biobank](http://www.ckbiobank.org) researchers.
@@ -33,16 +41,15 @@ with the `remotes` package.)
 ### Or from source package
 
 `ckbplotr` can also be installed from its source package. The R packages
-`ggplot2`, `magrittr`, `readr`, `tibble`, `dplyr`, `purrr` and `rlang`
-must first be installed. These are part of the collection of tidyverse
-packages.
+`ggplot2`, `magrittr`, `readr`, `tibble`, `dplyr`, `purrr`, `rlang`, and
+`ggtext` must first be installed.
 
 ``` r
-# The easiest way is to install the whole tidyverse:
-install.packages("tidyverse")
+# The easiest way is to install the whole tidyverse and ggtext:
+install.packages("tidyverse", "ggtext")
 
 # # Or install just these packages:
-# install.packages(c("ggplot2", "readr", "dplyr", "purrr"))
+# install.packages(c("ggplot2", "readr", "dplyr", "purrr", "ggtext"))
 ```
 
 Then `ckbplotr` can be installed from its source package using the code:
@@ -58,40 +65,43 @@ the “Install from…” box select “Package Archive File”, and in the
 The source package for the latest release version is available
 [here](https://github.com/neilstats/ckbplotr/releases/latest).
 
-## The plot\_like\_ckb function
+## Shape plots
 
-The `plot_like_ckb` function does three things to a ggplot2 plot:
+`make_shape_plot()` creates a plot of estimates and CIs against risk
+factor levels using the [ggplot2](https://ggplot2.tidyverse.org/)
+graphics package. The function returns both a plot and the ggplot2 code
+used to create the plot. In RStudio the ggplot2 code used to create the
+plot will be shown in the Viewer pane (with syntax highlighting if the
+[highlights](https://cran.r-project.org/package=highlight) package is
+installed).
+
+<img src="man/figures/README-make_shape_plot-example-1-1.png" width="50%" style="display: block; margin: auto;" />
+
+## Forest plots
+
+`make_forest_plot()` creates a forest plot using the
+[ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function
+returns both a plot and the ggplot2 code used to create the plot. In
+RStudio the code used to create the plot will be shown in the Viewer
+pane (with syntax highlighting if the
+[highlights](https://cran.r-project.org/package=highlight) package is
+installed).
+
+<img src="man/figures/README-example-forest-plot-1.png" width="90%" style="display: block; margin: auto;" />
+
+#### make\_jasper\_forest\_plot function
+
+`make_jasper_forest_plot()` requires the in-house Jasper package, which
+is not publicly available.
+
+## Other plots
+
+`plot_like_ckb()` does three things to a
+[ggplot2](https://ggplot2.tidyverse.org/) plot:
 
 1.  applies a CKB theme (i.e. change the overall appearance)
 2.  extends the plotting area and manually adds axis lines (so that you
     can have a custom sized gap between the plotting area and the axes)
 3.  applies a fixed aspect ratio
 
-<img src="man/figures/README-a-plot-1.png" style="display: block; margin: auto;" />
-
-## The make\_shape\_plot function
-
-The `make_shape_plot` function creates a plot of estimates and CIs
-against risk factor levels using the `ggplot2` package.
-
-<img src="man/figures/README-make_shape_plot-example-1-1.png" style="display: block; margin: auto;" />
-
-## The make\_forest\_plot function
-
-The `make_forest_plot` function creates a forest plot using the
-`ggplot2` graphics package. The function returns a named list
-containing:
-
--   plot: the plot
--   code: ggplot2 code to generate the plot
-
-In RStudio the ggplot2 code used to generate the plot will be shown in
-the ‘Viewer’ pane. If modifications are needed to the plot, then this
-code can be copied, edited, and run as needed.
-
-<img src="man/figures/README-example-forest-plot-1.png" style="display: block; margin: auto;" />
-
-## make\_jasper\_forest\_plot function
-
-The `make_jasper_forest_plot` function requires the in-house Jasper
-package, which is not publicly available.
+<img src="man/figures/README-a-plot-1.png" width="80%" style="display: block; margin: auto;" />

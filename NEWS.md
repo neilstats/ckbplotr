@@ -8,6 +8,7 @@
 * New argument envir added to make_shape_plot (allows the user to specify the environment for evaluating the plot code).
 * ggtext::element_markdown() now used for y-axis labels in make_forest_plot()
 * Improved handling of unicode characters.
+* Updated documentation.
 * Fixes and internal code improvements.
 
 # ckbplotr 0.5.0

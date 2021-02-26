@@ -20,6 +20,10 @@ library(grid)
 library(gridExtra)
 ```
 # ckbplotr
+<!-- badges: start -->
+[![R build status](https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg)](https://github.com/neilstats/ckbplotr/actions)
+[![Codecov test coverage](https://codecov.io/gh/neilstats/ckbplotr/branch/master/graph/badge.svg)](https://codecov.io/gh/neilstats/ckbplotr?branch=master)
+<!-- badges: end -->
 
 `ckbplotr` provides functions to help create and style plots in R. It is being
 developed by, and primarily for, [China Kadoorie Biobank](http://www.ckbiobank.org) 
@@ -40,15 +44,13 @@ If you get an error that reads "Error: Failed to install 'unknown package' from 
 If you get an error that reads "Error: (converted from warning) package 'ggplot2' was built under R version ..." you can avoid this by first running `Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")`. (This is a [known issue](https://github.com/r-lib/remotes/issues/403) with the `remotes` package.) 
 
 ### Or from source package
-`ckbplotr` can also be installed from its source package. The R packages 
-`ggplot2`, `magrittr`, `readr`, `tibble`, `dplyr`, `purrr` and `rlang` must 
-first be installed. These are part of the collection of tidyverse packages.
+`ckbplotr` can also be installed from its source package. The R packages  `ggplot2`, `magrittr`, `readr`, `tibble`, `dplyr`, `purrr`,  `rlang`, and `ggtext` must  first be installed.
 ```{r install tidyverse, eval = FALSE}
-# The easiest way is to install the whole tidyverse:
-install.packages("tidyverse")
+# The easiest way is to install the whole tidyverse and ggtext:
+install.packages("tidyverse", "ggtext")
 
 # # Or install just these packages:
-# install.packages(c("ggplot2", "readr", "dplyr", "purrr"))
+# install.packages(c("ggplot2", "readr", "dplyr", "purrr", "ggtext"))
 ```
 Then `ckbplotr` can be installed from its source package using the code:
 ```{r install from source, eval = FALSE}
@@ -63,37 +65,18 @@ The source package for the latest release version is available [here](https://gi
 
 
 
-## The plot_like_ckb function
+## Shape plots
+`make_shape_plot()` creates a plot of estimates and CIs against risk factor levels using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
 
-The `plot_like_ckb` function does three things to a ggplot2 plot:
-
-1. applies a CKB theme (i.e. change the overall appearance)
-2. extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)
-3. applies a fixed aspect ratio
-
-```{r a-plot, echo = FALSE, fig.width=8}
-plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
-ckbplot <- plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
-grid.arrange(plot, ckbplot, ncol = 2)
-```
-
-
-
-
-
-## The make_shape_plot function
-
-The `make_shape_plot` function creates a plot of estimates and CIs against risk
-factor levels using the `ggplot2` package.
-
-```{r make_shape_plot-example-1, echo = FALSE}
+```{r make_shape_plot-example-1, echo = FALSE, out.width = "50%"}
 results <- data.frame(
   est = c(1, 1.25, 1.5, 1.75, 1.1, 1.35, 1.75, 2),
   se = c(0.08, 0.02, 0.07, 0.15, 0.05, 0.02, 0.07, 0.1),
   rf = c(20, 28, 35, 50, 18.5, 25, 32, 47),
   n = c(109, 103, 143, 104, 140, 134, 127, 99),
   is_female = c(0, 0, 0, 0, 1, 1, 1, 1)
-)
+) %>% 
+  dplyr::filter(is_female == 0)
 
 plot <- make_shape_plot(results,
                         col.x        = "rf",
@@ -102,7 +85,7 @@ plot <- make_shape_plot(results,
                         col.n        = "n",
                         col.group    = "is_female",
                         xlims        = c(15,50),
-                        ylims        = c(0.5, 3),
+                        ylims        = c(0.5, 2.5),
                         scalepoints  = TRUE,
                         title        = NULL,
                         ciunder      = TRUE,
@@ -113,18 +96,10 @@ plot <- make_shape_plot(results,
 
 
 
-## The make_forest_plot function
-The `make_forest_plot` function creates a forest plot using the `ggplot2` graphics 
-package. The function returns a named list containing:
+## Forest plots
+`make_forest_plot()` creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
 
-* plot: the plot
-* code: ggplot2 code to generate the plot
-
-In RStudio the ggplot2 code used to generate the plot will be shown in the 
-'Viewer' pane. If modifications are needed to the plot, then this code can be
-copied, edited, and run as needed.
-
-```{r example-forest-plot, echo = FALSE, warning = FALSE, fig.width = 8, fig.height = 6}
+```{r example-forest-plot, echo = FALSE, warning = FALSE, fig.width = 8, fig.height = 6, out.width = "90%"}
 set.seed(57911624)
 exampleresults <- function(){
   data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
@@ -184,18 +159,26 @@ forestplot <- make_forest_plot(row.labels        = mylabels,
                                col.left.heading  = c("No. of\nevents"),
                                col.right.space   = 0.02,
                                col.heading.space = 1.5,
-                               label.space        = 2,
-                               panel.space       = 8,
                                envir             = environment())
 ```
 
-### Expected warning
-You may get the following warning when using this function.
+#### make_jasper_forest_plot function
+`make_jasper_forest_plot()` requires the in-house Jasper package,  which is not publicly available.
 
-> Vectorized input to `element_text()` is not officially supported.
-> Results may be unexpected or may change in future versions of ggplot2.
 
-## make_jasper_forest_plot function
-The `make_jasper_forest_plot` function requires the in-house Jasper package, 
-which is not publicly available.
+
+
+## Other plots
+
+`plot_like_ckb()` does three things to a [ggplot2](https://ggplot2.tidyverse.org/) plot:
+
+1. applies a CKB theme (i.e. change the overall appearance)
+2. extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)
+3. applies a fixed aspect ratio
+
+```{r a-plot, echo = FALSE, fig.width=8, out.width = "80%"}
+plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
+ckbplot <- plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
+grid.arrange(plot, ckbplot, ncol = 2)
+```
 
