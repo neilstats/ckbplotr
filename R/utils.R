@@ -38,6 +38,17 @@ fixq <- function(x){
   paste0('\"', x, '\"')
 }
 
+#. Write code for preparing data using make_forest_data
+#'
+#' @keywords internal
+#' @noRd
+#'
+argset <- function(x){
+  sprintf('%s = %s,',
+          paste(deparse(substitute(x)), collapse = ''),
+          paste(deparse(x), collapse = ''))
+}
+
 
 #' write ggplot layer code
 #'
@@ -78,8 +89,17 @@ displaycode <- function(plotcode){
                      plotcode),
                    collapse = "\n"),
              file.path(tempdir(), "plotcode.txt"))
+  codefile <- file.path(tempdir(), "plotcode.txt")
+
+  if (requireNamespace("highlight", quietly = TRUE)) {
+    highlight::highlight(file.path(tempdir(), "plotcode.txt"),
+                         output = file.path(tempdir(), "highlight-plotcode.html"),
+                         renderer = highlight::renderer_html(document = TRUE))
+    codefile <- file.path(tempdir(), "highlight-plotcode.html")
+  }
+
   viewer <- getOption("viewer", default = function(url){})
-  viewer(file.path(tempdir(), "plotcode.txt"))
+  viewer(codefile)
 }
 
 
