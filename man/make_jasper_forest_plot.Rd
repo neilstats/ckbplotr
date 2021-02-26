@@ -45,12 +45,11 @@ with the same name (which can be specified by col.key).}
   (Default: "key")}
 
 \item{row.labels}{A data frame that contains the labels to be used for the
-rows of the plot. The data frame must contain columns 'heading1', 'heading2'
-and 'heading3'. Use NA if a lower level heading is not required.}
+rows of the plot. Use NA if a lower level heading is not required for a given row.}
 
 \item{headings}{DEPRECATED.}
 
-\item{rows}{A character vector. The top level labels (heading1) of rows
+\item{rows}{A character vector. The top level labels of rows
 to be included in the plot.}
 
 \item{cols}{DEPRECATED.}

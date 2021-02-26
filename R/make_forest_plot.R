@@ -14,9 +14,10 @@
 #'
 #'   (Default: "key")
 #' @param row.labels A data frame that contains the labels to be used for the
-#'   rows of the plot. The data frame must contain columns 'heading1', 'heading2'
-#'   and 'heading3'. Use NA if a lower level heading is not required.
-#' @param rows A character vector. The top level labels (heading1) of rows
+#'   rows of the plot. Use NA if a lower level heading is not required for a given row.
+#' @param row.labels.levels A character vector up to length 3. The names of columns in row.labels
+#'   to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))
+#' @param rows A character vector. The top level labels of rows
 #'   to be included in the plot.
 #' @param panel.names A character vector. The names to be used for each forest plot panel.
 #'   If none provided, then they will be numbered 1, 2, 3 ...
@@ -50,7 +51,9 @@
 #'   The character strings, heterogeneity test, and trend test results will
 #'   be plotted in the column of estimates and CIs, below the row with the key
 #'   given in the col.key column.
-#'
+#' @param cols DEPRECATED.
+#' @param headings DEPRECATED.
+#' @param colnames DEPRECATED.
 #'
 #' @return A dataset from which a forest plot can be generated.
 #'
@@ -63,13 +66,11 @@
 
 make_forest_data <- function(
   panels,
-  cols          = panels,
   col.key       = "key",
   row.labels    = NULL,
-  headings      = NULL,
+  row.labels.levels = c("heading1", "heading2", "heading3"),
   rows          = NULL,
   panel.names   = NULL,
-  colnames      = NULL,
   col.estimate  = "estimate",
   col.stderr    = "stderr",
   col.lci       = NULL,
@@ -82,7 +83,10 @@ make_forest_data <- function(
   blankrows     = c(1, 1, 0, 0),
   scalepoints   = FALSE,
   minse         = NULL,
-  addtext       = NULL
+  addtext       = NULL,
+  cols          = panels,
+  headings      = NULL,
+  colnames      = NULL
 ){
 
   # legacy arguments
@@ -159,14 +163,23 @@ make_forest_data <- function(
     }
 
     for (head1 in rows) {
-      if (!(head1 %in% row.labels$heading1)) {
-        stop(paste(head1,"is not in heading1 column of", deparse(substitute(row.labels))))
+      if (!(head1 %in% row.labels[[ row.labels.levels[[1]] ]])) {
+        stop(paste(head1,"is not in",  row.labels.levels[[1]], "column of", deparse(substitute(row.labels))))
       }
     }
 
-    if (!"heading2" %in% names(row.labels)){ dplyr::mutate(row.labels, heading2 = NA_character_) }
-    if (!"heading3" %in% names(row.labels)){ dplyr::mutate(row.labels, heading3 = NA_character_) }
-    row.labels <- dplyr::mutate(row.labels, key = !!rlang::sym(col.key))
+    ## make row.labels.levels length 3
+    row.labels.levels <- c(row.labels.levels, rep("NAcol", max(0, 3-length(row.labels.levels))))
+
+    ## create key and heading* columns
+    row.labels <- dplyr::mutate(row.labels,
+                                key = !!rlang::sym(col.key),
+                                NAcol = NA_character_,
+                                heading1 = !!rlang::sym(row.labels.levels[[1]]),
+                                heading2 = !!rlang::sym(row.labels.levels[[2]]),
+                                heading3 = !!rlang::sym(row.labels.levels[[3]]))
+
+    ## keep only rows where heading1 is in rows
     row.labels <- dplyr::left_join(tibble::tibble(heading1 = rows),
                                    row.labels,
                                    by = "heading1")
@@ -441,9 +454,6 @@ make_forest_data <- function(
 #' @param label.space DEPRECATED. Old method for specifying spacing.
 #' @param panel.space DEPRECATED. Old method for specifying spacing.
 #' @param margin DEPRECATED. Old method for specifying margins.
-#' @param cols DEPRECATED.
-#' @param headings DEPRECATED.
-#' @param colnames DEPRECATED.
 #' @param colheadings DEPRECATED.
 #' @param boldheadings DEPRECATED.
 #' @param heading.space DEPRECATED. Even older method for specifying spacing.
@@ -464,6 +474,7 @@ make_forest_data <- function(
 make_forest_plot <- function(
   panels,
   row.labels    = NULL,
+  row.labels.levels = c("heading1", "heading2", "heading3"),
   rows          = NULL,
   exponentiate  = TRUE,
   logscale      = exponentiate,
@@ -688,12 +699,6 @@ make_forest_plot <- function(
     )
   )
 
-  # Write code for preparing data using make_forest_data
-  argset <- function(x){
-    sprintf('%s = %s,',
-            paste(deparse(substitute(x)), collapse = ''),
-            paste(deparse(x), collapse = ''))
-  }
 
   codetext$prep.data <- c(
     '# Prepare data to be plotted using ckbplotr::make_forest_data()',
@@ -706,6 +711,7 @@ make_forest_plot <- function(
                      paste(deparse(substitute(row.labels)), collapse = '')
                    }
            ),
+           argset(row.labels.levels),
            argset(rows),
            sprintf('panels = %s,',
                    if (!missing(cols)) {

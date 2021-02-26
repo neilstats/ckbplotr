@@ -7,6 +7,7 @@
 make_forest_plot(
   panels,
   row.labels = NULL,
+  row.labels.levels = c("heading1", "heading2", "heading3"),
   rows = NULL,
   exponentiate = TRUE,
   logscale = exponentiate,
@@ -83,10 +84,12 @@ specify a row.labels data frame, then they must also all contain a key column
 with the same name (which can be specified by col.key).}
 
 \item{row.labels}{A data frame that contains the labels to be used for the
-rows of the plot. The data frame must contain columns 'heading1', 'heading2'
-and 'heading3'. Use NA if a lower level heading is not required.}
+rows of the plot. Use NA if a lower level heading is not required for a given row.}
 
-\item{rows}{A character vector. The top level labels (heading1) of rows
+\item{row.labels.levels}{A character vector up to length 3. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))}
+
+\item{rows}{A character vector. The top level labels of rows
 to be included in the plot.}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
