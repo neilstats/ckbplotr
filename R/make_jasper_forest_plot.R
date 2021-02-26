@@ -29,6 +29,7 @@ make_jasper_forest_plot <- function(
   panels,
   col.key       = "key",
   row.labels    = NULL,
+  row.labels.levels = c("heading1", "heading2", "heading3"),
   headings      = NULL,
   rows          = NULL,
   cols          = panels,
@@ -68,6 +69,7 @@ make_jasper_forest_plot <- function(
 
   out <- make_forest_data(
     row.labels    = row.labels,
+    row.labels.levels = row.labels.levels,
     rows          = rows,
     panels        = panels,
     col.key       = col.key,
