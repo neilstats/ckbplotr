@@ -30,7 +30,8 @@ Suggests:
     rmarkdown,
     grid,
     gridExtra,
-    highlight
+    highlight,
+    covr
 VignetteBuilder: knitr
 URL: https://github.com/neilstats/ckbplotr
 BugReports: https://github.com/neilstats/ckbplotr/issues
