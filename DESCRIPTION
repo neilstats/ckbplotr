@@ -31,7 +31,8 @@ Suggests:
     grid,
     gridExtra,
     highlight,
-    covr
+    covr,
+    testthat
 VignetteBuilder: knitr
 URL: https://github.com/neilstats/ckbplotr
 BugReports: https://github.com/neilstats/ckbplotr/issues
