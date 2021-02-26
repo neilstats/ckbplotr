@@ -745,7 +745,7 @@ make_forest_plot <- function(
     'rowlabels <- datatoplot %>%',
     indent(14,
            'dplyr::group_by(row) %>%',
-           'dplyr::summarise(row.label = dplyr::first(row.label)) %>%',
+           'dplyr::summarise(row.label = dplyr::first(row.label), .groups = "drop") %>%',
            'dplyr::arrange(row) %>%',
            'dplyr::pull(row.label)'),
     ''
@@ -758,7 +758,7 @@ make_forest_plot <- function(
     'boldlabels <- datatoplot %>%',
     indent(18,
            'dplyr::group_by(row) %>%',
-           sprintf('dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %%in%% %s)), "bold", "plain")) %%>%%',
+           sprintf('dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %%in%% %s)), "bold", "plain"), .groups = "drop") %%>%%',
                    paste(deparse(bold.labels), collapse = '')),
            'dplyr::arrange(row) %>%',
            'dplyr::pull(bold)'),
