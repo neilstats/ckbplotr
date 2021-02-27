@@ -44,9 +44,11 @@ fixq <- function(x){
 #' @noRd
 #'
 argset <- function(x){
-  sprintf('%s = %s,',
-          paste(deparse(substitute(x)), collapse = ''),
-          paste(deparse(x), collapse = ''))
+  name <- paste(deparse(substitute(x)), collapse = '')
+  value <- paste(deparse(x), collapse = '')
+  if (!identical(x, eval(formals(ckbplotr::make_forest_data)[[name]]))){
+    sprintf('%s = %s', name, value)
+  }
 }
 
 

@@ -700,43 +700,49 @@ make_forest_plot <- function(
   )
 
 
-  codetext$prep.data <- c(
-    '# Prepare data to be plotted using ckbplotr::make_forest_data()',
-    'datatoplot <- ckbplotr::make_forest_data(',
-    indent(16,
-           sprintf('row.labels = %s,',
-                   if (!missing(headings)) {
-                     paste(deparse(substitute(headings)), collapse = '')
-                   } else {
-                     paste(deparse(substitute(row.labels)), collapse = '')
-                   }
-           ),
-           argset(row.labels.levels),
-           argset(rows),
-           sprintf('panels = %s,',
-                   if (!missing(cols)) {
-                     paste(deparse(substitute(cols)), collapse = '')
-                   } else {
-                     paste(deparse(substitute(panels)), collapse = '')
-                   }
-           ),
-           argset(panel.names),
-           argset(col.key),
-           argset(col.estimate),
-           argset(col.stderr),
-           argset(col.lci),
-           argset(col.uci),
-           argset(col.left),
-           argset(col.right),
-           argset(col.keep),
-           argset(ci.delim),
-           argset(exponentiate),
-           argset(blankrows),
-           argset(scalepoints),
-           argset(minse),
-           sprintf('addtext = %s)',
-                   paste(deparse(substitute(addtext)), collapse = ''))),
-    '')
+  codetext$prep.data <- make_layer(
+    name = '# Prepare data to be plotted using ckbplotr::make_forest_data()',
+    plus = FALSE,
+    f = 'datatoplot <- ckbplotr::make_forest_data',
+    arg = c(
+      if (!identical(row.labels,
+                     eval(formals(ckbplotr::make_forest_data)[["row.labels"]]))){
+        sprintf('row.labels = %s',
+                if (!missing(headings)) {
+                  paste(deparse(substitute(headings)), collapse = '')
+                } else {
+                  paste(deparse(substitute(row.labels)), collapse = '')
+                }
+        )
+      },
+      argset(row.labels.levels),
+      argset(rows),
+      sprintf('panels = %s',
+              if (!missing(cols)) {
+                paste(deparse(substitute(cols)), collapse = '')
+              } else {
+                paste(deparse(substitute(panels)), collapse = '')
+              }
+      ),
+      argset(panel.names),
+      argset(col.key),
+      argset(col.estimate),
+      argset(col.stderr),
+      argset(col.lci),
+      argset(col.uci),
+      argset(col.left),
+      argset(col.right),
+      argset(col.keep),
+      argset(ci.delim),
+      argset(exponentiate),
+      argset(blankrows),
+      argset(scalepoints),
+      argset(minse),
+      if (!identical(addtext,
+                     eval(formals(ckbplotr::make_forest_data)[["addtext"]]))){
+        sprintf('addtext = %s',
+                paste(deparse(substitute(addtext)), collapse = ''))
+      }))
 
 
   # Write code to create a vector of row labels
