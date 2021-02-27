@@ -51,7 +51,7 @@ make_forest_plot(
   ciunder = NULL,
   addtext = NULL,
   left.space = 1 + 2 * length(col.left),
-  right.space = 4 + 2 * length(col.right),
+  right.space = 5 + 2 * length(col.right),
   mid.space = 0,
   plot.margin = c(2, 1, 2, 1),
   units = "lines",
@@ -209,7 +209,7 @@ estimates. (Default: 3)}
 
 \item{left.space}{Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))}
 
-\item{right.space}{Size of gap to leave to the right of panels. (Default: 4 + 2*length(col.right))}
+\item{right.space}{Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))}
 
 \item{mid.space}{Size of additional gap to leave between panels. (Default: 0)}
 
