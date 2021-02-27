@@ -745,23 +745,15 @@ make_forest_plot <- function(
     'rowlabels <- datatoplot %>%',
     indent(14,
            'dplyr::group_by(row) %>%',
-           'dplyr::summarise(row.label = dplyr::first(row.label), .groups = "drop") %>%',
+           'dplyr::summarise(row.label = dplyr::first(row.label),',
+           indent(17, sprintf('bold = all(is.na(estimate_transformed) | all(key %%in%% %s)),',
+                              ds(bold.labels)),
+                  '.groups = "drop") %>%'),
+           'dplyr::mutate(row.label = dplyr::if_else(bold & row.label != "",',
+           indent(41, 'paste0("**", row.label, "**"),',
+           'as.character(row.label))) %>% '),
            'dplyr::arrange(row) %>%',
            'dplyr::pull(row.label)'),
-    ''
-  )
-
-
-  # Write code to create a vector of styles for row labels
-  codetext$row.styles.vec <- c(
-    '# Get a character vector of the style for row labels',
-    'boldlabels <- datatoplot %>%',
-    indent(18,
-           'dplyr::group_by(row) %>%',
-           sprintf('dplyr::summarise(bold = dplyr::if_else(all(is.na(estimate_transformed) | all(key %%in%% %s)), "bold", "plain"), .groups = "drop") %%>%%',
-                   paste(deparse(bold.labels), collapse = '')),
-           'dplyr::arrange(row) %>%',
-           'dplyr::pull(bold)'),
     ''
   )
 
@@ -1226,7 +1218,6 @@ make_forest_plot <- function(
             'axis.text.y      = ggtext::element_markdown(hjust  = 0',
             indent(45,
                    'colour = "black"',
-                   'face   = boldlabels',
                    sprintf('margin = margin(r = %s, unit = "%s"))',
                            label.space, units)),
             'panel.border     = element_blank()',
@@ -1247,7 +1238,6 @@ make_forest_plot <- function(
   plotcode <- c(
     codetext$prep.data,
     codetext$row.labels.vec,
-    codetext$row.styles.vec,
     codetext$check.cis,
     codetext$diamondscode,
     codetext$cicolourcode,
