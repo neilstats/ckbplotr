@@ -437,7 +437,7 @@ make_forest_data <- function(
 #' @param col.bold Plot text as bold. Name of a column of logical values.
 #' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
 #' @param left.space Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))
-#' @param right.space Size of gap to leave to the right of panels. (Default: 4 + 2*length(col.right))
+#' @param right.space Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))
 #' @param mid.space Size of additional gap to leave between panels. (Default: 0)
 #' @param plot.margin Plot margin (top, right, bottom, left). (Default: c(2, 1, 2, 1))
 #' @param units Units to use for left.space, right.space, mid.space, plot.margin. (Default: "Lines")
@@ -518,7 +518,7 @@ make_forest_plot <- function(
   ciunder   = NULL,
   addtext       = NULL,
   left.space    = 1 + 2*length(col.left),
-  right.space   = 4 + 2*length(col.right),
+  right.space   = 5 + 2*length(col.right),
   mid.space     = 0,
   plot.margin   = c(2, 1, 2, 1),
   units         = "lines",
