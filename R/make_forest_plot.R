@@ -659,11 +659,13 @@ make_forest_plot <- function(
 
   ## calculate automatic col.right.pos and col.right.space
   ### get maximum width of each columns
-  colspaceauto <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
+  colspaces <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
   ### initial gap, then space for autoestcolumn, and gap between each column
   colspaceauto <- cumsum(c(gettextwidths("I"),
                            if(estcolumn){gettextwidths("9.99 (9.99-9.99)") + gettextwidths("W")},
-                           colspaceauto + gettextwidths("W")))
+                           colspaces + gettextwidths("W")))
+  ## adjust for hjust
+  colspaceauto <- colspaceauto + c(c(if(estcolumn){gettextwidths("9.99 (9.99-9.99)")}, colspaces)*col.right.hjust, 0)
   ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
   if (length(colspaceauto) == 1){colspaceauto <- 0}
   if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
@@ -675,10 +677,12 @@ make_forest_plot <- function(
 
   ## calculate automatic col.left.pos and col.left.space
   ### get maximum width of each columns
-  colspaceauto <- gettextwidths(lapply(col.left, function(y) c(sapply(panels, function(x) x[[y]]))))
+  colspaces <- gettextwidths(lapply(col.left, function(y) c(sapply(panels, function(x) x[[y]]))))
   ### initial gap, and gap between each column
   colspaceauto <- cumsum(c(gettextwidths("I"),
-                           colspaceauto + gettextwidths("W")))
+                           colspaces + gettextwidths("W")))
+  ## adjust for hjust
+  colspaceauto <- colspaceauto + c(colspaces*(1 - col.left.hjust), 0)
   ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
   if (length(colspaceauto) == 1){colspaceauto <- 0}
   if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
