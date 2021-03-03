@@ -389,7 +389,7 @@ make_forest_data <- function(
 
 
 
-#' Make forest plot with ggplot2
+#' Make a forest plot with ggplot2
 #'
 #' Creates a forest plot with ggplot
 #'
@@ -406,10 +406,8 @@ make_forest_data <- function(
 #' right of each plot. (Default: TRUE)
 #' @param col.right.parse A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
 #' Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)
-#' @param col.left.space A numeric vector. Sizes of the gaps between the plot
-#' and col.left columns. As a multiple of the length of the x-axis. (Default: 0.02)
-#' @param col.right.space A numeric vector. Sizes of the gaps between the plot
-#' and col.right columns. As a multiple of the length of the x-axis. (Default: 0.02)
+#' @param col.left.pos A unit vector to position col.right columns.
+#' @param col.right.pos A unit vector to position col.right columns.
 #' @param col.left.hjust A numeric vector. The horizontal justification of
 #' col.left columns. (Default: 1)
 #' @param col.right.hjust A numeric vector. The horizontal justification of
@@ -438,9 +436,9 @@ make_forest_data <- function(
 #' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
 #' @param left.space Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))
 #' @param right.space Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))
-#' @param mid.space Size of additional gap to leave between panels. (Default: 0)
-#' @param plot.margin Plot margin (top, right, bottom, left). (Default: c(2, 1, 2, 1))
-#' @param units Units to use for left.space, right.space, mid.space, plot.margin. (Default: "Lines")
+#' @param mid.space Size of additional gap to leave between panels. (Default: unit(5, "mm"))
+#' @param plot.margin Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
+
 #' @param panel.width Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".
 #' @param stroke Size of outline of shapes. (Default: 0)
 #' @param printplot Print the plot. (Default: TRUE)
@@ -456,6 +454,7 @@ make_forest_data <- function(
 #' @param margin DEPRECATED. Old method for specifying margins.
 #' @param colheadings DEPRECATED.
 #' @param boldheadings DEPRECATED.
+#' @param units DEPRECATED
 #' @param heading.space DEPRECATED. Even older method for specifying spacing.
 #' @param plot.space DEPRECATED. Even older method for specifying spacing.
 #'
@@ -490,8 +489,8 @@ make_forest_plot <- function(
   col.right.parse   = NULL,
   col.left.heading  = "",
   col.right.heading = "HR (95% CI)",
-  col.left.space    = 0.02,
-  col.right.space   = 0.02,
+  col.left.pos    = NULL,
+  col.right.pos   = NULL,
   col.left.hjust    = 1,
   col.right.hjust   = 0,
   col.heading.space = 0,
@@ -517,11 +516,10 @@ make_forest_plot <- function(
   fill      = NULL,
   ciunder   = NULL,
   addtext       = NULL,
-  left.space    = 1 + 2*length(col.left),
-  right.space   = 5 + 2*length(col.right),
-  mid.space     = 0,
-  plot.margin   = c(2, 1, 2, 1),
-  units         = "lines",
+  left.space    = NULL,
+  right.space   = NULL,
+  mid.space     = unit(5, "mm"),
+  plot.margin   = margin(8, 8, 8, 8, "mm"),
   panel.width   = NULL,
   base_size     = 11,
   base_line_size = base_size/22,
@@ -537,11 +535,7 @@ make_forest_plot <- function(
   colnames      = NULL,
   colheadings   = colnames,
   boldheadings  = NULL,
-  heading.space = NULL,
-  panel.space   = right.space + mid.space + left.space,
-  label.space   = left.space,
-  plot.space    = NULL,
-  margin        = plot.margin + c(0, right.space, 0, 0)
+  heading.space = NULL
 ){
 
   # legacy arguments
@@ -568,10 +562,6 @@ make_forest_plot <- function(
   if (!missing(heading.space)) {
     label.space <- heading.space
     message("Note: heading.space argument is now called label.space")
-  }
-  if (!missing(plot.space)) {
-    panel.space <- plot.space
-    message("Note: plot.space argument is now called panel.space")
   }
 
   # check arguments
@@ -652,6 +642,51 @@ make_forest_plot <- function(
   }
 
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- fixsp(col.bold)}
+
+
+
+  # spacing
+  if((is.null(right.space) & !is.null(col.right.pos)) |
+     is.null(left.space) & !is.null(col.left.pos) ){
+    message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
+  }
+
+  gettextwidths <- function(x){
+    purrr::map_dbl(x, ~ max(purrr::map_dbl(., ~ grid::convertWidth(unit(1, "strwidth", data = as.character(.)),
+                                                                   "mm",
+                                                                   valueOnly = T))))
+  }
+
+  ## calculate automatic col.right.pos and col.right.space
+  ### get maximum width of each columns
+  colspaceauto <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
+  ### initial gap, then space for autoestcolumn, and gap between each column
+  colspaceauto <- cumsum(c(gettextwidths("I"),
+                           if(estcolumn){gettextwidths("9.99 (9.99-9.99)") + gettextwidths("W")},
+                           colspaceauto + gettextwidths("W")))
+  ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
+  if (length(colspaceauto) == 1){colspaceauto <- 0}
+  if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
+  ### text on plot is 0.8 size, and adjust for base_size
+  colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 4)
+  if (is.null(right.space)){right.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
+  if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
+  if (is.null(col.right.pos)){col.right.pos <- unit(colspaceauto, "mm")}
+
+  ## calculate automatic col.left.pos and col.left.space
+  ### get maximum width of each columns
+  colspaceauto <- gettextwidths(lapply(col.left, function(y) c(sapply(panels, function(x) x[[y]]))))
+  ### initial gap, and gap between each column
+  colspaceauto <- cumsum(c(gettextwidths("I"),
+                           colspaceauto + gettextwidths("W")))
+  ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
+  if (length(colspaceauto) == 1){colspaceauto <- 0}
+  if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
+  ### text on plot is 0.8 size, and adjust for base_size
+  colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 4)
+  if (is.null(left.space)){left.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
+  if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
+  if (is.null(col.left.pos)){col.left.pos <- unit(colspaceauto, "mm")}
 
 
   # codetext - list of character vectors for writing plot code
@@ -1057,17 +1092,23 @@ make_forest_plot <- function(
     }
 
     codetext$col.right.line <- unlist(purrr::pmap(
-      list(col.right.all, col.right.space, col.right.heading, col.right.hjust, col.bold, col.right.parse),
+      list(col.right.all,
+           as.numeric(col.right.pos),
+           rep(attr(col.right.pos, 'unit'), length=length(col.right.pos)),
+           col.right.heading,
+           col.right.hjust,
+           col.bold,
+           col.right.parse),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
-          f = 'geom_text',
+          f = 'geom_text_move',
           aes = c(addaes$col.right,
-                  sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
-                  if(is.character(..5)){
-                    if(..6){
+                  sprintf('y = -row, x = %s', xto),
+                  if(is.character(..6)){
+                    if(..7){
                       sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(", %s,")"), %s)',
-                              ..5, ..5, ..1, ..1)
+                              ..6, ..6, ..1, ..1)
                     } else {
                       c(sprintf('label = %s', ..1),
                         sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..5, ..5))
@@ -1076,17 +1117,19 @@ make_forest_plot <- function(
                     sprintf('label = %s', ..1)
                   }),
           arg = c(addarg$col.right,
-                  sprintf('hjust = %s', ..4),
+                  sprintf('move_x = unit(%s, "%s")', ..2, ..3),
+                  sprintf('hjust = %s', ..5),
                   sprintf('size  = %s', base_size/(11/3)),
                   'na.rm = TRUE',
-                  sprintf('parse = %s', ..6)),
+                  sprintf('parse = %s', ..7)),
           br = FALSE
         ),
         make_layer(
-          f = 'geom_text',
-          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+          f = 'geom_text_move',
+          aes = c(sprintf('y = %s, x = %s', col.heading.space, xto),
                   'label = title'),
-          arg = c(sprintf('hjust    = %s', ..4),
+          arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
+                  sprintf('hjust    = %s', ..5),
                   sprintf('size     = %s', base_size/(11/3)),
                   'fontface = "bold"',
                   sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -1095,7 +1138,7 @@ make_forest_plot <- function(
                   indent(36,
                          'ordered = TRUE)'),
                   indent(21,
-                         sprintf('title = %s)', ds(unlist(..3)))))
+                         sprintf('title = %s)', ds(unlist(..4)))))
         )
       )
     )
@@ -1108,30 +1151,37 @@ make_forest_plot <- function(
   # Write code for columns to left of plots
   if (!is.null(col.left)) {
     codetext$col.left.line <- unlist(purrr::pmap(
-      list(col.left, col.left.space, col.left.heading, col.left.hjust, col.bold),
+      list(col.left,
+           as.numeric(col.left.pos),
+           rep(attr(col.left.pos, 'unit'), length=length(col.left.pos)),
+           col.left.heading,
+           col.left.hjust,
+           col.bold),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
-          f = 'geom_text',
+          f = 'geom_text_move',
           aes = c(addaes$col.left,
-                  sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+                  sprintf('y = -row, x = %s', xfrom),
                   sprintf('label = %s,', fixsp(..1)),
-                  if(is.character(..5)){
-                    sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..5, ..5)
+                  if(is.character(..6)){
+                    sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..6, ..6)
                   } else {
                     'fontface = "plain"'
                   }),
           arg = c(addarg$col.left,
-                  sprintf('hjust = %s', ..4),
+                  sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
+                  sprintf('hjust = %s', ..5),
                   sprintf('size  = %s', base_size/(11/3)),
                   'na.rm = TRUE'),
           br = FALSE
         ),
         make_layer(
-          f = 'geom_text',
-          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..2), 6)),
+          f = 'geom_text_move',
+          aes = c(sprintf('y = %s, x = %s', col.heading.space, xfrom),
                   'label = title'),
-          arg = c(sprintf('hjust    = %s', ..4),
+          arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
+                  sprintf('hjust    = %s', ..5),
                   sprintf('size     = %s', base_size/(11/3)),
                   'fontface = "bold"',
                   sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -1140,7 +1190,7 @@ make_forest_plot <- function(
                   indent(36,
                          'ordered = TRUE)'),
                   indent(21,
-                         sprintf('title = %s)', ds(unlist(..3)))))
+                         sprintf('title = %s)', ds(unlist(..4)))))
         )
       )
     )
@@ -1222,19 +1272,26 @@ make_forest_plot <- function(
             'axis.ticks.y     = element_blank()',
             'axis.line.y      = element_blank()',
             'axis.text.y      = ggtext::element_markdown(hjust  = 0',
-            indent(45,
+            indent(44,
                    'colour = "black"',
                    sprintf('margin = margin(r = %s, unit = "%s"))',
-                           label.space, units)),
+                           as.numeric(left.space), attr(left.space, "unit"))),
             'panel.border     = element_blank()',
-            sprintf('panel.spacing    = unit(%s, "%s")',
-                    panel.space, units),
+            sprintf('panel.spacing    = unit(%s, "%s") + %s + unit(%s, "%s")',
+                    as.numeric(right.space),
+                    attr(right.space, "unit"),
+                    paste(deparse(substitute(mid.space)), collapse = ''),
+                    as.numeric(left.space),
+                    attr(left.space, "unit")),
             'strip.background = element_blank()',
             'strip.placement  = "outside"',
             'strip.text       = element_blank()',
             'legend.position  = "none"',
             'plot.background  = element_blank()',
-            sprintf('plot.margin      = unit(%s, "%s")', paste(deparse(margin), collapse = ''), units)),
+            sprintf('plot.margin      = %s + unit(c(0, %s, 0, 0), "%s")',
+                    paste(deparse(substitute(plot.margin)), collapse = ''),
+                    as.numeric(right.space),
+                    attr(right.space, "unit"))),
     plus = FALSE,
     duplicates = TRUE
   )
@@ -1272,7 +1329,6 @@ make_forest_plot <- function(
     plotcode <- append(plotcode, addcode[2:length(addcode)], grep(addcode[1], trimws(plotcode))[1]-1)
   }
 
-
   # Show code in RStudio viewer.
   if (showcode){ displaycode(plotcode) }
 
@@ -1301,8 +1357,7 @@ make_forest_plot <- function(
 #' \code{fix_panel_width} fixes the panel width of a forest plot
 #'
 #' @param plot A plot (created by make_forest_plot()).
-#' @param width Width of panels.
-#' @param units Units (Default: mm).
+#' @param width Width of panels. (e.g unit(100, "mm"))
 #'
 #' @return A gtable object
 #'
@@ -1310,8 +1365,8 @@ make_forest_plot <- function(
 #' @export
 
 
-fix_panel_width <- function(plot, width, units = "mm"){
+fix_panel_width <- function(plot, width){
   gtable <- ggplot2::ggplotGrob(plot)
-  gtable$widths[gtable$layout$l[grepl("panel", gtable$layout$name)]] <- unit(x = width, units = units)
+  gtable$widths[gtable$layout$l[grepl("panel", gtable$layout$name)]] <- width
   gtable
 }
