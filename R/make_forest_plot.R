@@ -658,26 +658,30 @@ make_forest_plot <- function(
   }
 
   ## calculate automatic col.right.pos and col.right.space
-  ### get maximum width of each columns
+  ### get maximum width of each columns (incl. heading)
   colspaces <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
+  colspaces <- c(if(estcolumn){gettextwidths("9.99 (9.99-9.99)")}, colspaces)
+  headspaces <- gettextwidths(col.right.heading)
+  colspaces <- pmax(colspaces, headspaces)
   ### initial gap, then space for autoestcolumn, and gap between each column
   colspaceauto <- cumsum(c(gettextwidths("I"),
-                           if(estcolumn){gettextwidths("9.99 (9.99-9.99)") + gettextwidths("W")},
                            colspaces + gettextwidths("W")))
   ## adjust for hjust
-  colspaceauto <- colspaceauto + c(c(if(estcolumn){gettextwidths("9.99 (9.99-9.99)")}, colspaces)*col.right.hjust, 0)
+  colspaceauto <- colspaceauto + c(colspaces*col.right.hjust, 0)
   ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
   if (length(colspaceauto) == 1){colspaceauto <- 0}
   if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
   ### text on plot is 0.8 size, and adjust for base_size
-  colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 4)
+  colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
   if (is.null(right.space)){right.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
   if (is.null(col.right.pos)){col.right.pos <- unit(colspaceauto, "mm")}
 
   ## calculate automatic col.left.pos and col.left.space
-  ### get maximum width of each columns
+  ### get maximum width of each columns (incl. heading)
   colspaces <- gettextwidths(lapply(col.left, function(y) c(sapply(panels, function(x) x[[y]]))))
+  headspaces <- gettextwidths(col.left.heading)
+  colspaces <- pmax(colspaces, headspaces)
   ### initial gap, and gap between each column
   colspaceauto <- cumsum(c(gettextwidths("I"),
                            colspaces + gettextwidths("W")))
@@ -687,7 +691,7 @@ make_forest_plot <- function(
   if (length(colspaceauto) == 1){colspaceauto <- 0}
   if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
   ### text on plot is 0.8 size, and adjust for base_size
-  colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 4)
+  colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
   if (is.null(left.space)){left.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
   if (is.null(col.left.pos)){col.left.pos <- unit(colspaceauto, "mm")}
