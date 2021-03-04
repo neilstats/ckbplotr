@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_forest_plot.R
 \name{make_forest_plot}
 \alias{make_forest_plot}
-\title{Make forest plot with ggplot2}
+\title{Make a forest plot with ggplot2}
 \usage{
 make_forest_plot(
   panels,
@@ -23,8 +23,8 @@ make_forest_plot(
   col.right.parse = NULL,
   col.left.heading = "",
   col.right.heading = "HR (95\% CI)",
-  col.left.space = 0.02,
-  col.right.space = 0.02,
+  col.left.pos = NULL,
+  col.right.pos = NULL,
   col.left.hjust = 1,
   col.right.hjust = 0,
   col.heading.space = 0,
@@ -50,11 +50,10 @@ make_forest_plot(
   fill = NULL,
   ciunder = NULL,
   addtext = NULL,
-  left.space = 1 + 2 * length(col.left),
-  right.space = 5 + 2 * length(col.right),
-  mid.space = 0,
-  plot.margin = c(2, 1, 2, 1),
-  units = "lines",
+  left.space = NULL,
+  right.space = NULL,
+  mid.space = unit(5, "mm"),
+  plot.margin = margin(8, 8, 8, 8, "mm"),
   panel.width = NULL,
   base_size = 11,
   base_line_size = base_size/22,
@@ -71,10 +70,13 @@ make_forest_plot(
   colheadings = colnames,
   boldheadings = NULL,
   heading.space = NULL,
-  panel.space = right.space + mid.space + left.space,
-  label.space = left.space,
+  panel.space = NULL,
+  label.space = NULL,
   plot.space = NULL,
-  margin = plot.margin + c(0, right.space, 0, 0)
+  col.right.space = NULL,
+  col.left.space = NULL,
+  margin = NULL,
+  units = NULL
 )
 }
 \arguments{
@@ -129,11 +131,9 @@ Should the contents of the columns be parsed into expressions. (Default: All FAL
 \item{col.right.heading}{A character vector of titles for the column of estimates
 (if estcolumn = TRUE) and col.right columns. (Default: "HR (95\% CI)")}
 
-\item{col.left.space}{A numeric vector. Sizes of the gaps between the plot
-and col.left columns. As a multiple of the length of the x-axis. (Default: 0.02)}
+\item{col.left.pos}{A unit vector to position col.right columns.}
 
-\item{col.right.space}{A numeric vector. Sizes of the gaps between the plot
-and col.right columns. As a multiple of the length of the x-axis. (Default: 0.02)}
+\item{col.right.pos}{A unit vector to position col.right columns.}
 
 \item{col.left.hjust}{A numeric vector. The horizontal justification of
 col.left columns. (Default: 1)}
@@ -211,11 +211,9 @@ estimates. (Default: 3)}
 
 \item{right.space}{Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))}
 
-\item{mid.space}{Size of additional gap to leave between panels. (Default: 0)}
+\item{mid.space}{Size of additional gap to leave between panels. (Default: unit(5, "mm"))}
 
-\item{plot.margin}{Plot margin (top, right, bottom, left). (Default: c(2, 1, 2, 1))}
-
-\item{units}{Units to use for left.space, right.space, mid.space, plot.margin. (Default: "Lines")}
+\item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))}
 
 \item{panel.width}{Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".}
 
@@ -257,7 +255,13 @@ The remaining elements are added to the generated code just before the first mat
 
 \item{plot.space}{DEPRECATED. Even older method for specifying spacing.}
 
+\item{col.right.space}{DEPRACTED}
+
+\item{col.left.space}{DEPRACTED}
+
 \item{margin}{DEPRECATED. Old method for specifying margins.}
+
+\item{units}{DEPRECATED}
 }
 \value{
 A list:

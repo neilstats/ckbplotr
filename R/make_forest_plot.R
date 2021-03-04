@@ -456,6 +456,7 @@ make_forest_data <- function(
 #' @param boldheadings DEPRECATED.
 #' @param units DEPRECATED
 #' @param col.right.space DEPRACTED
+#' @param col.left.space DEPRACTED
 #' @param heading.space DEPRECATED. Even older method for specifying spacing.
 #' @param plot.space DEPRECATED. Even older method for specifying spacing.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/make_jasper_forest_plot.R
 \name{make_jasper_forest_plot}
 \alias{make_jasper_forest_plot}
-\title{Make forest plot with Jasper}
+\title{Make a forest plot with Jasper}
 \usage{
 make_jasper_forest_plot(
   filestem = "_test",

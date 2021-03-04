@@ -4,14 +4,12 @@
 \alias{fix_panel_width}
 \title{Fix panel width of a forest plot}
 \usage{
-fix_panel_width(plot, width, units = "mm")
+fix_panel_width(plot, width)
 }
 \arguments{
 \item{plot}{A plot (created by make_forest_plot()).}
 
-\item{width}{Width of panels.}
-
-\item{units}{Units (Default: mm).}
+\item{width}{Width of panels. (e.g unit(100, "mm"))}
 }
 \value{
 A gtable object

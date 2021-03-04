@@ -21,4 +21,4 @@ articles:
 news:
   releases:
   - text: "Latest"
-    href: https://neilstats.github.io/ckbplotr/news/index.html
+    href: https://github.com/neilstats/ckbplotr/releases/latest

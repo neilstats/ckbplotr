@@ -97,7 +97,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
 ```
 
 
-Multiple columns can be added by specifying vectors for `col.left`/`col.right` and `col.left.heading`/`col.right.heading`. Make sure to also use a vector for `col.left.space`/`col.right.space` so that the columns do not overlap.
+Multiple columns can be added by specifying vectors for `col.left`/`col.right` and `col.left.heading`/`col.right.heading`.
 ```{r adding-columns-of-text-2}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
@@ -115,7 +115,6 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                pointsize         = 3,
                                col.left          = c("nb", "n"),
                                col.left.heading  = c("Some other\nnumbers", "No. of\nevents"),
-                               col.left.space    = c(0.6, 0.02),
                                col.heading.space = 1.5)
 ```
 
@@ -123,16 +122,7 @@ The `col.left.hjust` and `col.right.hjust` arguments set the horizontal justific
 
 ## Spacing
 ### Horizontal
-Controlling horizontal spacing when using `make_forest_plot()` can be tedious. The suggested workflow is:
-
-1. Set `plot.margin`. This is a numerical vector of length four. The 2nd element controls the margin to the right of the plot, and the 4th element controls the margin to the left of the plot (the 1st and 3rd are the top and bottom margins). The unit is set by the `units` argument which has default "lines".
-2. Set `left.space` and `right.space` to allow space to the left and right of each panel, for example for columns of text. The unit is given by the `units` argument.
-3. Set `mid.space` to add additional space between panels.
-4. Create your plot and output it to the final file. For example, use `ggplot2::ggsave()` to save it as a PDF. The x-axes of the panels will fill the remaing horizontal space available.
-5. Now use the `col.left.space` and `col.right.space` arguments to position the your `col.left` and `col.right` columns. A value of 1 is equal to the width of the x-axis. If there is not enough space for your columns, go back to step 2.
-
-For a visual guide to this workflow, see [https://github.com/neilstats/ckbplotr-help/make_forest_plot_hspacing.pdf](https://github.com/neilstats/ckbplotr-help/make_forest_plot_hspacing.pdf).
-
+The function attempts to set the positions of columns of text and spacing automatically. Where this does not produce a satisfactory layout, you can use the arguments `col.left.pos`, `col.right.pos`, `left.space`, `right.space`, and `mid.space` to control positions and spacing manually.
 
 ### Vertical
 The plot will fill the vertical space available. Use `plot.margin` to change the top and bottom margins as needed.
@@ -241,6 +231,8 @@ forestplot1 <- make_forest_plot(panels           = list(resultsA),
 ## Adding heterogeneity and trend test results and other text
 The `addtext` argument can be used to add results of heterogeneity or trend test, or some other text, in the text column of estimates and CIs.
 
+The automatic positioning of columns and spacing of panels does not take into account this additional text, so you may need to use the `right.space` and `col.right.pos` arguments for a satisfactory layout.
+
 ```{r, echo = FALSE}
 resultsA_extra <- data.frame(variable   = c("nmr_s_ldl_p", "nmr_s_vldl_p"),
                              het_dof    = c("2",           NA),
@@ -282,9 +274,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.left.heading  = c("No. of\nevents"),
                                col.heading.space = 1.5,
                                addtext           = list(resultsA_extra, resultsB_extra),
-                               printplot         = FALSE)
-
-forestplot$plot + theme(plot.margin = unit(c(2,10,2,1), "lines"))
+                               right.space = unit(35, "mm"))
 ```
 
 
@@ -376,7 +366,7 @@ When making a forest plot, if a confidence interval line is narrower than the po
 
 
 ### Changing the colour
-To plot narrow confidence widths a different colour, set the `panel.width` argument of `make_forest_plot()` equal to the width (in mm) each  panel will be in the final drawn output. The `cicolour` argument should also be a character vector - the last element will be used for narrow confidence intervals.
+To plot narrow confidence widths a different colour, set the `panel.width` argument of `make_forest_plot()` equal to the width each  panel will be in the final drawn output. The `cicolour` argument should also be a character vector - the last element will be used for narrow confidence intervals.
 
 Then use the `fix_panel_width()` function, where the first argument is the plot just created and the second is the same panel width. This function returns a gtable object, which can be plotted using `grid::grid.draw` (or `plot()`). The panels widths will be fixed.
 
@@ -409,7 +399,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                cicolour          = c("black", "white"),
                                printplot         = FALSE)
 
-plot <- fix_panel_width(forestplot$plot, 25)
+plot <- fix_panel_width(forestplot$plot, unit(25, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -447,7 +437,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                cicolour          = c("cicol1", "cicol2"),
                                printplot         = FALSE)
 
-plot <- fix_panel_width(forestplot$plot, 25)
+plot <- fix_panel_width(forestplot$plot, unit(25, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -485,7 +475,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                ciunder           = c(TRUE, FALSE),
                                printplot         = FALSE)
 
-plot <- fix_panel_width(forestplot$plot, 25)
+plot <- fix_panel_width(forestplot$plot, unit(25, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -532,7 +522,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                fill              = "white",
                                printplot         = FALSE)
 
-plot <- fix_panel_width(forestplot$plot, 25)
+plot <- fix_panel_width(forestplot$plot, unit(25, "mm"))
 grid::grid.draw(plot)
 ```
 

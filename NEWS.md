@@ -1,6 +1,6 @@
 # ckbplotr 0.5.0.9000
 
-* New spacing arguments added to make_forest_plot().
+* New spacing and column positioning arguments added to make_forest_plot(). By default, these will be calculated automatically.
 * New argument addcode in make_forest_plot() which inserts code into the generated plot code.
 * New arguments addaes and addarg in make_shape_plot() and make_forest_plot() which can be used to specify additional aesthetics and arguments for some ggplot layers.
 * New argument col.right.parse in make_forest_plot() which controls if columns are parsed into expressions when plotted.

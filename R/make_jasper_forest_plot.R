@@ -1,4 +1,4 @@
-#' Make forest plot with Jasper
+#' Make a forest plot with Jasper
 #'
 #' \code{make_jasper_forest_plot} creates a forest plot with Jasper
 #'
