@@ -2,6 +2,7 @@
 
 export("%>%")
 export(fix_panel_width)
+export(geom_text_move)
 export(make_forest_data)
 export(make_forest_plot)
 export(make_jasper_forest_plot)

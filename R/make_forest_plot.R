@@ -455,6 +455,7 @@ make_forest_data <- function(
 #' @param colheadings DEPRECATED.
 #' @param boldheadings DEPRECATED.
 #' @param units DEPRECATED
+#' @param col.right.space DEPRACTED
 #' @param heading.space DEPRECATED. Even older method for specifying spacing.
 #' @param plot.space DEPRECATED. Even older method for specifying spacing.
 #'
@@ -535,7 +536,14 @@ make_forest_plot <- function(
   colnames      = NULL,
   colheadings   = colnames,
   boldheadings  = NULL,
-  heading.space = NULL
+  heading.space = NULL,
+  panel.space   = NULL,
+  label.space   = NULL,
+  plot.space    = NULL,
+  col.right.space = NULL,
+  col.left.space = NULL,
+  margin        = NULL,
+  units = NULL
 ){
 
   # legacy arguments
@@ -558,10 +566,6 @@ make_forest_plot <- function(
   if (!missing(boldheadings)) {
     bold.labels <- boldheadings
     message("Note: boldheadings argument is now called bold.labels")
-  }
-  if (!missing(heading.space)) {
-    label.space <- heading.space
-    message("Note: heading.space argument is now called label.space")
   }
 
   # check arguments
@@ -646,6 +650,38 @@ make_forest_plot <- function(
 
 
   # spacing
+
+  ## handle old methods for horizontal spacing and column positioning >>>
+  if(!is.null(margin) | !is.null(label.space) | !is.null(panel.space) |
+     !is.null(plot.space) | !is.null(heading.space) |
+     !is.null(col.right.space) | !is.null(col.left.space) |
+     !is.null(col.left.space) | !is.null(col.right.space)){
+    message("You're using old arguments for horizontal spacing and positioning.\n",
+            "See the package documentation for details on current methods.\n",
+            "For now, I will try to convert these...")
+
+    ## spacing
+    units       <- if(!is.null(units)){units}else{"lines"}
+    margin      <- if(!is.null(margin)){margin}else{c(2,6,2,1)}
+    label.space <- ifelse(is.null(label.space), ifelse(is.null(heading.space), 4, heading.space), label.space)
+    panel.space <- ifelse(is.null(panel.space), ifelse(is.null(plot.space), 8, plot.space), panel.space)
+    left.space  <- unit(label.space, units)
+    right.space <- unit(margin[2] - margin[4], units)
+    mid.space   <- unit(panel.space - as.numeric(left.space) - as.numeric(right.space), units)
+    plot.margin <- unit(margin - c(0, as.numeric(right.space), 0, 0), units)
+
+    ## positioning
+    col.left.space  <- if(!is.null(col.left.space)){col.left.space}else{0.02}
+    col.right.space <- if(!is.null(col.right.space)){col.right.space}else{0.02}
+    col.left.pos <- unit(0, "mm")
+    col.right.pos <- unit(0, "mm")
+  } else {
+    col.left.space <- 0
+    col.right.space <- 0
+  }
+  ## <<< end of handling old methods
+
+
   if((is.null(right.space) & !is.null(col.right.pos)) |
      is.null(left.space) & !is.null(col.left.pos) ){
     message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
@@ -1106,13 +1142,14 @@ make_forest_plot <- function(
            col.right.heading,
            col.right.hjust,
            col.bold,
-           col.right.parse),
+           col.right.parse,
+           col.right.space),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'geom_text_move',
           aes = c(addaes$col.right,
-                  sprintf('y = -row, x = %s', xto),
+                  sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   if(is.character(..6)){
                     if(..7){
                       sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(", %s,")"), %s)',
@@ -1134,7 +1171,7 @@ make_forest_plot <- function(
         ),
         make_layer(
           f = 'geom_text_move',
-          aes = c(sprintf('y = %s, x = %s', col.heading.space, xto),
+          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   'label = title'),
           arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                   sprintf('hjust    = %s', ..5),
@@ -1164,13 +1201,14 @@ make_forest_plot <- function(
            rep(attr(col.left.pos, 'unit'), length=length(col.left.pos)),
            col.left.heading,
            col.left.hjust,
-           col.bold),
+           col.bold,
+           col.left.space),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'geom_text_move',
           aes = c(addaes$col.left,
-                  sprintf('y = -row, x = %s', xfrom),
+                  sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
                   sprintf('label = %s,', fixsp(..1)),
                   if(is.character(..6)){
                     sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..6, ..6)
@@ -1186,7 +1224,7 @@ make_forest_plot <- function(
         ),
         make_layer(
           f = 'geom_text_move',
-          aes = c(sprintf('y = %s, x = %s', col.heading.space, xfrom),
+          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
                   'label = title'),
           arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                   sprintf('hjust    = %s', ..5),
