@@ -69,13 +69,7 @@ The source package for the latest release version is available [here](https://gi
 `make_shape_plot()` creates a plot of estimates and CIs against risk factor levels using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
 
 ```{r make_shape_plot-example-1, echo = FALSE, out.width = "50%"}
-results <- data.frame(
-  est = c(1, 1.25, 1.5, 1.75, 1.1, 1.35, 1.75, 2),
-  se = c(0.08, 0.02, 0.07, 0.15, 0.05, 0.02, 0.07, 0.1),
-  rf = c(20, 28, 35, 50, 18.5, 25, 32, 47),
-  n = c(109, 103, 143, 104, 140, 134, 127, 99),
-  is_female = c(0, 0, 0, 0, 1, 1, 1, 1)
-) %>% 
+results <- ckbplotr_shape_data %>% 
   dplyr::filter(is_female == 0)
 
 plot <- make_shape_plot(results,
@@ -100,48 +94,11 @@ plot <- make_shape_plot(results,
 `make_forest_plot()` creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
 
 ```{r example-forest-plot, echo = FALSE, warning = FALSE, fig.width = 8, fig.height = 6, out.width = "90%"}
-set.seed(57911624)
-exampleresults <- function(){
-  data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
-                          'nmr_idl_p',
-                          'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
-                          'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
-                          'nmr_idl_tg',
-                          'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
-                          'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
-                          'nmr_idl_c',
-                          'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
-             estimate = rnorm(21, 0, 0.02),
-             stderr   = 0.012 + abs(rnorm(21, 0, 0.015)),
-             n        = round(runif(21, 100, 2000)),
-             nb       = round(runif(21, 100, 2000)))
-}
-resultsA <- exampleresults()
-resultsB <- exampleresults()
-resultsC <- exampleresults()
-resultsD <- exampleresults()
-resultsE <- exampleresults()
+resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
+resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
 
-mylabels <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
-                                        "Triglycerides concentration",
-                                        "Cholesterol concentration"), each = 7),
-                       heading2 = rep(c("VLDL", "VLDL", "VLDL",
-                                        "IDL",
-                                        "LDL", "LDL", "LDL"), times = 3),
-                       heading3 = rep(c("Large", "Medium", "Small",
-                                        NA,
-                                        "Large", "Medium", "Small") , times = 3),
-                       variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
-                                    'nmr_idl_p',
-                                    'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
-                                    'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
-                                    'nmr_idl_tg',
-                                    'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
-                                    'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
-                                    'nmr_idl_c',
-                                    'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'))
-
-forestplot <- make_forest_plot(row.labels        = mylabels,
+forestplot <- make_forest_plot(row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Lipoprotein particle concentration",
                                                      "Triglycerides concentration"),
                                panels            = list(resultsA, resultsB),
@@ -155,9 +112,7 @@ forestplot <- make_forest_plot(row.labels        = mylabels,
                                scalepoints       = TRUE,
                                pointsize         = 3,
                                col.left          = c("n"),
-                               col.left.space    = c(0.02),
                                col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
                                col.heading.space = 1.5,
                                envir             = environment())
 ```

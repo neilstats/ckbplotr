@@ -12,7 +12,8 @@ Authors@R:
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    ggplot2 (>= 3.3.0)
+    ggplot2 (>= 3.3.0),
+    R (>= 2.10)
 Imports: 
     magrittr,
     dplyr,
@@ -23,12 +24,12 @@ Imports:
     tidyr,
     utils,
     stringi,
+    grid,
     ggtext
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown,
-    grid,
     gridExtra,
     highlight,
     covr,

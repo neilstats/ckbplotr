@@ -19,3 +19,6 @@ The package does not currently include any functions for composing multiple plot
 * grid and [gridExtra](https://cran.r-project.org/package=gridExtra)
 * [patchwork](https://patchwork.data-imaginist.com/)
 * [cowplot](https://cran.r-project.org/package=cowplot)
+* [egg](https://cran.r-project.org/package=egg)
+* [multipanelfigure](https://cran.r-project.org/package=multipanelfigure)
+

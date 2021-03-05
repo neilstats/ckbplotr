@@ -23,63 +23,17 @@ knitr::opts_chunk$set(
 
 ```{r setup, include = FALSE}
 library(ckbplotr)
-
-set.seed(57911624)
-exampleresults <- function(){
-  data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
-                          'nmr_idl_p',
-                          'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
-                          'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
-                          'nmr_idl_tg',
-                          'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
-                          'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
-                          'nmr_idl_c',
-                          'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
-             estimate = rnorm(21, 0, 0.02),
-             stderr   = 0.012 + abs(rnorm(21, 0, 0.015)),
-             n        = round(runif(21, 100, 2000)),
-             nb       = round(runif(21, 100, 2000)),
-             shape    = rep(15, 21),
-             colour   = "black",
-             fill     = "black",
-             bold     = FALSE,
-             diamond  = FALSE,
-             ciunder  = FALSE,
-             stringsAsFactors = FALSE)
-}
-resultsA <- exampleresults()
-resultsB <- exampleresults()
-resultsC <- exampleresults()
-resultsD <- exampleresults()
-resultsE <- exampleresults()
-
-mylabels <- data.frame(heading = rep(c("Lipoprotein particle concentration",
-                                        "Triglycerides concentration",
-                                        "Cholesterol concentration"), each = 7),
-                       subheading = rep(c("VLDL", "VLDL", "VLDL",
-                                        "IDL",
-                                        "LDL", "LDL", "LDL"), times = 3),
-                       label = rep(c("Large", "Medium", "Small",
-                                        NA,
-                                        "Large", "Medium", "Small") , times = 3),
-                       variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
-                                    'nmr_idl_p',
-                                    'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
-                                    'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
-                                    'nmr_idl_tg',
-                                    'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
-                                    'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
-                                    'nmr_idl_c',
-                                    'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
-                       stringsAsFactors = FALSE)
 ```
 
 
 ## Adding columns of text
 ```{r adding-columns-of-text}
+resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
+resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
+
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
+                               row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Triglycerides concentration",
                                                      "Lipoprotein particle concentration"),
@@ -101,7 +55,7 @@ Multiple columns can be added by specifying vectors for `col.left`/`col.right` a
 ```{r adding-columns-of-text-2}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
+                               row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Triglycerides concentration",
                                                      "Lipoprotein particle concentration"),
@@ -151,7 +105,7 @@ Note that `col.bold`, and `col.diamond` must be column names in the supplied dat
 ```{r}
 forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 col.key          = "variable",
-                                row.labels       = mylabels,
+                                row.labels       = ckbplotr_row_labels,
                                 row.labels.levels = c("heading", "subheading", "label"),
                                 rows             = c("Triglycerides concentration"),
                                 exponentiate     = TRUE,
@@ -182,7 +136,7 @@ resultsA[13, "fill"] <- "white"
 
 forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 col.key          = "variable",
-                                row.labels       = mylabels,
+                                row.labels       = ckbplotr_row_labels,
                                 row.labels.levels = c("heading", "subheading", "label"),
                                 rows             = c("Triglycerides concentration"),
                                 exponentiate     = TRUE,
@@ -209,7 +163,7 @@ As an alternative to using `col.diamond`, provide a character vector in the `dia
 ```{r}
 forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 col.key          = "variable",
-                                row.labels       = mylabels,
+                                row.labels       = ckbplotr_row_labels,
                                 row.labels.levels = c("heading", "subheading", "label"),
                                 rows             = c("Triglycerides concentration"),
                                 exponentiate     = TRUE,
@@ -258,7 +212,7 @@ resultsB_extra
 ```{r, fig.width = 10}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
+                               row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Lipoprotein particle concentration",
                                                      "Triglycerides concentration"),
@@ -307,7 +261,7 @@ Step 1: Use `make_forest_plot()` for each plot.
 ```{r}
 forestplot1 <- make_forest_plot(panels            = list(resultsA),
                                 col.key           = "variable",
-                                row.labels        = mylabels,
+                                row.labels        = ckbplotr_row_labels,
                                 row.labels.levels = c("heading", "subheading", "label"),
                                 rows              = c("Lipoprotein particle concentration",
                                                       "Triglycerides concentration"),
@@ -326,7 +280,7 @@ forestplot1 <- make_forest_plot(panels            = list(resultsA),
 
 forestplot2 <- make_forest_plot(panels            = list(resultsB),
                                 col.key           = "variable",
-                                row.labels        = mylabels,
+                                row.labels        = ckbplotr_row_labels,
                                 row.labels.levels = c("heading", "subheading", "label"),
                                 rows              = c("Lipoprotein particle concentration",
                                                       "Triglycerides concentration"),
@@ -375,7 +329,7 @@ Notes: This has been designed to work well for shape 15 (the default) and 22. Us
 ```{r forest-plot}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
+                               row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Lipoprotein particle concentration"),
                                exponentiate      = TRUE,
@@ -413,7 +367,7 @@ resultsB$cicol2 <- "white"
 
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
+                               row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Lipoprotein particle concentration"),
                                exponentiate      = TRUE,
@@ -448,7 +402,7 @@ As well as changing colour, we may also wish to change if confidence interval li
 ```{r forest-plot-3}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
+                               row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Lipoprotein particle concentration"),
                                exponentiate      = TRUE,
@@ -494,7 +448,7 @@ resultsB$shape <- 22
 
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
+                               row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Lipoprotein particle concentration"),
                                exponentiate      = TRUE,
