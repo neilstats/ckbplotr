@@ -61,6 +61,8 @@
 #' @keywords internal
 #'
 #' @importFrom rlang .data
+#' @importFrom utils compareVersion
+#' @importFrom utils packageVersion
 #'
 #' @export
 
@@ -546,6 +548,13 @@ make_forest_plot <- function(
   margin        = NULL,
   units = NULL
 ){
+
+  ## handle different unit object types (for grid>=4.0)
+  if (compareVersion(as.character(packageVersion("grid")), "4.0")){
+    makeunit <- grid::unitType
+  } else {
+    makeunit <- function(x){attr(x, "units")}
+  }
 
   # legacy arguments
   if (!missing(cols)) {
@@ -1139,7 +1148,7 @@ make_forest_plot <- function(
     codetext$col.right.line <- unlist(purrr::pmap(
       list(col.right.all,
            as.numeric(col.right.pos),
-           rep(attr(col.right.pos, 'unit'), length=length(col.right.pos)),
+           rep(makeunit(col.right.pos), length=length(col.right.pos)),
            col.right.heading,
            col.right.hjust,
            col.bold,
@@ -1199,7 +1208,7 @@ make_forest_plot <- function(
     codetext$col.left.line <- unlist(purrr::pmap(
       list(col.left,
            as.numeric(col.left.pos),
-           rep(attr(col.left.pos, 'unit'), length=length(col.left.pos)),
+           rep(makeunit(col.left.pos), length=length(col.left.pos)),
            col.left.heading,
            col.left.hjust,
            col.bold,
@@ -1322,14 +1331,14 @@ make_forest_plot <- function(
             indent(44,
                    'colour = "black"',
                    sprintf('margin = margin(r = %s, unit = "%s"))',
-                           as.numeric(left.space), attr(left.space, "unit"))),
+                           as.numeric(left.space), makeunit(left.space))),
             'panel.border     = element_blank()',
             sprintf('panel.spacing    = unit(%s, "%s") + %s + unit(%s, "%s")',
                     as.numeric(right.space),
-                    attr(right.space, "unit"),
+                    makeunit(right.space),
                     paste(deparse(substitute(mid.space)), collapse = ''),
                     as.numeric(left.space),
-                    attr(left.space, "unit")),
+                    makeunit(left.space)),
             'strip.background = element_blank()',
             'strip.placement  = "outside"',
             'strip.text       = element_blank()',
@@ -1338,11 +1347,10 @@ make_forest_plot <- function(
             sprintf('plot.margin      = %s + unit(c(0, %s, 0, 0), "%s")',
                     paste(deparse(substitute(plot.margin)), collapse = ''),
                     as.numeric(right.space),
-                    attr(right.space, "unit"))),
+                    makeunit(right.space))),
     plus = FALSE,
     duplicates = TRUE
   )
-
 
   # Create the plot code
   plotcode <- c(
