@@ -550,10 +550,10 @@ make_forest_plot <- function(
 ){
 
   ## handle different unit object types (for grid>=4.0)
-  if (compareVersion(as.character(packageVersion("grid")), "4.0")){
+  if (compareVersion(as.character(packageVersion("grid")), "4.0") >= 0){
     makeunit <- grid::unitType
   } else {
-    makeunit <- function(x){attr(x, "units")}
+    makeunit <- function(x){attr(x, "unit")}
   }
 
   # legacy arguments
