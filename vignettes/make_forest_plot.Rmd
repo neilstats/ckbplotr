@@ -52,7 +52,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
 
 
 Multiple columns can be added by specifying vectors for `col.left`/`col.right` and `col.left.heading`/`col.right.heading`.
-```{r adding-columns-of-text-2}
+```{r adding-columns-of-text-2, fig.width = 10}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
                                row.labels        = ckbplotr_row_labels,
@@ -102,7 +102,7 @@ The argument/columns, what they control, and the type:
 Note that `col.bold`, and `col.diamond` must be column names in the supplied data frames, while the others can be fixed values or column names.
 
 ### Using values
-```{r}
+```{r, fig.height = 4}
 forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 col.key          = "variable",
                                 row.labels       = ckbplotr_row_labels,
@@ -110,14 +110,9 @@ forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 rows             = c("Triglycerides concentration"),
                                 exponentiate     = TRUE,
                                 panel.names      = c("Analysis A"),
-                                ci.delim         = " - ",
-                                xlim             = c(0.9, 1.1),
-                                xticks           = c(0.9, 1, 1.1),
                                 blankrows        = c(0, 1, 0, 1),
                                 scalepoints      = TRUE,
                                 pointsize        = 3,
-                                col.left         = c("n"),
-                                col.left.heading = c("No. of\nevents"),
                                 shape            = 16,
                                 colour           = "red",
                                 cicolour         = "black",
@@ -125,7 +120,7 @@ forestplot1 <- make_forest_plot(panels           = list(resultsA),
 ```
 
 ### Using column names
-```{r}
+```{r, fig.height = 4}
 resultsA[9,"shape"] <- 16
 resultsA[10, "bold"] <- TRUE
 resultsA[11, "colour"] <- "red"
@@ -141,14 +136,9 @@ forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 rows             = c("Triglycerides concentration"),
                                 exponentiate     = TRUE,
                                 panel.names      = c("Analysis A"),
-                                ci.delim         = " - ",
-                                xlim             = c(0.9, 1.1),
-                                xticks           = c(0.9, 1, 1.1),
                                 blankrows        = c(0, 1, 0, 1),
                                 scalepoints      = TRUE,
                                 pointsize        = 3,
-                                col.left         = c("n"),
-                                col.left.heading = c("No. of\nevents"),
                                 shape            = "shape",
                                 colour           = "colour",
                                 col.bold         = "bold",
@@ -160,7 +150,7 @@ If a parameter is not set, then default values are used for these aesthetics. If
 
 ### Diamond shortcut
 As an alternative to using `col.diamond`, provide a character vector in the `diamond` argument. In rows with these key values, estimates and CIs will be plotted using a diamond. (If a list is supplied, only the first element will be used.)
-```{r}
+```{r, fig.height = 4}
 forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 col.key          = "variable",
                                 row.labels       = ckbplotr_row_labels,
@@ -169,8 +159,6 @@ forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 exponentiate     = TRUE,
                                 panel.names      = c("Analysis A"),
                                 ci.delim         = " - ",
-                                xlim             = c(0.9, 1.1),
-                                xticks           = c(0.9, 1, 1.1),
                                 blankrows        = c(0, 1, 0, 1),
                                 scalepoints      = TRUE,
                                 pointsize        = 3,
@@ -316,13 +304,13 @@ Note that if `scalepoints = TRUE` (and `minse` is not specified the same for eac
 
 
 ## Changing narrow confidence interval lines
-When making a forest plot, if a confidence interval line is narrower than the point representing the estimate we may wish to plot the line differently. In this package, this is possible by using the `panel.width` argument in the `make_forest_plot()` function, then using the `fix_panel_width()` function.
+When making a forest plot, if a confidence interval line is narrower than the point representing the estimate we may wish to plot the line differently. In this package, this is possible by using the `panel.width` argument in the `make_forest_plot()` function, then using the `fix_panel()` function.
 
 
 ### Changing the colour
 To plot narrow confidence widths a different colour, set the `panel.width` argument of `make_forest_plot()` equal to the width each  panel will be in the final drawn output. The `cicolour` argument should also be a character vector - the last element will be used for narrow confidence intervals.
 
-Then use the `fix_panel_width()` function, where the first argument is the plot just created and the second is the same panel width. This function returns a gtable object, which can be plotted using `grid::grid.draw` (or `plot()`). The panels widths will be fixed.
+Then use the `fix_panel()` function, where the first argument is the plot just created and the second is the same panel width. This function returns a gtable object, which can be plotted using `grid::grid.draw` (or `plot()`). The panels widths will be fixed.
 
 Notes: This has been designed to work well for shape 15 (the default) and 22. Use a small value for stroke (< 0.5) to avoid a wide border which is not accounted for. The calculation of sizes may not be entirely accurate, so check the plot and change the `plot.width` argument as needed. Confidence intervals are assumed to be centred on the point estimate.
 
@@ -341,19 +329,15 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                scalepoints       = TRUE,
                                pointsize         = 16,
                                col.left          = c("n"),
-                               col.left.space    = c(0.02),
                                col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
                                col.heading.space = 0,
-                               label.space       = 2,
-                               panel.space       = 8,
 
                                # set panel width + CI colours
                                panel.width       = 25,
                                cicolour          = c("black", "white"),
                                printplot         = FALSE)
 
-plot <- fix_panel_width(forestplot$plot, unit(25, "mm"))
+plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -379,19 +363,15 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                scalepoints       = TRUE,
                                pointsize         = 16,
                                col.left          = c("n"),
-                               col.left.space    = c(0.02),
                                col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
                                col.heading.space = 0,
-                               label.space       = 2,
-                               panel.space       = 8,
 
                                # set panel width + CI colours
                                panel.width       = 25,
                                cicolour          = c("cicol1", "cicol2"),
                                printplot         = FALSE)
 
-plot <- fix_panel_width(forestplot$plot, unit(25, "mm"))
+plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -414,12 +394,8 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                scalepoints       = TRUE,
                                pointsize         = 18,
                                col.left          = c("n"),
-                               col.left.space    = c(0.02),
                                col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
                                col.heading.space = 0,
-                               label.space       = 2,
-                               panel.space       = 8,
 
                                # set panel width + CI under or over
                                panel.width       = 25,
@@ -429,7 +405,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                ciunder           = c(TRUE, FALSE),
                                printplot         = FALSE)
 
-plot <- fix_panel_width(forestplot$plot, unit(25, "mm"))
+plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -476,7 +452,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                fill              = "white",
                                printplot         = FALSE)
 
-plot <- fix_panel_width(forestplot$plot, unit(25, "mm"))
+plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
 grid::grid.draw(plot)
 ```
 

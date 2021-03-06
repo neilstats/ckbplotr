@@ -1407,12 +1407,13 @@ make_forest_plot <- function(
 
 
 
-#' Fix panel width of a forest plot
+#' Fix panel width and height of a forest plot
 #'
-#' \code{fix_panel_width} fixes the panel width of a forest plot
+#' \code{fix_panel} fixes the panel width and height of a forest plot
 #'
 #' @param plot A plot (created by make_forest_plot()).
-#' @param width Width of panels. (e.g unit(100, "mm"))
+#' @param width Width of panels. (e.g unit(50, "mm"))
+#' @param height Height of panels. (e.g unit(150, "mm"))
 #'
 #' @return A gtable object
 #'
@@ -1420,8 +1421,9 @@ make_forest_plot <- function(
 #' @export
 
 
-fix_panel_width <- function(plot, width){
+fix_panel <- function(plot, width = NULL, height = NULL){
   gtable <- ggplot2::ggplotGrob(plot)
-  gtable$widths[gtable$layout$l[grepl("panel", gtable$layout$name)]] <- width
+  if(!is.null(width)){gtable$widths[gtable$layout$l[grepl("panel", gtable$layout$name)]] <- width}
+  if(!is.null(height)){gtable$heights[gtable$layout$t[grepl("panel", gtable$layout$name)]] <- height}
   gtable
 }
