@@ -29,6 +29,63 @@ library(gridExtra)
 developed by, and primarily for, [China Kadoorie Biobank](http://www.ckbiobank.org) 
 researchers.
 
+It can be used to: create plots of estimates and CIs against risk factor levels...
+```{r make_shape_plot-example, echo = FALSE, out.width = "50%"}
+results <- ckbplotr_shape_data %>% 
+  dplyr::filter(is_female == 0)
+
+plot <- make_shape_plot(results,
+                        col.x        = "rf",
+                        col.estimate = "est",
+                        col.stderr   = "se",
+                        col.n        = "n",
+                        col.group    = "is_female",
+                        xlims        = c(15,50),
+                        ylims        = c(0.5, 2.5),
+                        scalepoints  = TRUE,
+                        title        = NULL,
+                        ciunder      = TRUE,
+                        printplot     = FALSE,
+                        envir        = environment())
+
+plot$plot + theme(plot.margin = margin(8, 8, 8, 8, "mm"))
+```
+
+
+...create forest plots...
+```{r example-forest-plot, echo = FALSE, warning = FALSE, fig.width = 8, fig.height = 6, out.width = "90%"}
+resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
+resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
+
+forestplot <- make_forest_plot(row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration",
+                                                     "Triglycerides concentration"),
+                               panels            = list(resultsA, resultsB),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               col.key           = "variable",
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3,
+                               col.left          = c("n"),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.heading.space = 1.5,
+                               envir             = environment())
+```
+
+...and convert other ggplots to CKB style.
+```{r a-plot, echo = FALSE, fig.width=8, out.width = "80%"}
+plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
+arrow <- grid::textGrob("\u2192")
+ckbplot <- plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
+grid.arrange(plot, arrow, ckbplot, ncol = 3, widths = c(1, 0.25, 1))
+```
+
+
 ## Installation
 
 ### Directly from github
@@ -65,75 +122,12 @@ The source package for the latest release version is available [here](https://gi
 
 
 
-## Shape plots
-`make_shape_plot()` creates a plot of estimates and CIs against risk factor levels using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
+## ggplot2 code
 
-```{r make_shape_plot-example-1, echo = FALSE, out.width = "50%"}
-results <- ckbplotr_shape_data %>% 
-  dplyr::filter(is_female == 0)
-
-plot <- make_shape_plot(results,
-                        col.x        = "rf",
-                        col.estimate = "est",
-                        col.stderr   = "se",
-                        col.n        = "n",
-                        col.group    = "is_female",
-                        xlims        = c(15,50),
-                        ylims        = c(0.5, 2.5),
-                        scalepoints  = TRUE,
-                        title        = NULL,
-                        ciunder      = TRUE,
-                        envir        = environment())
-```
+The `make_shape_plot()` and `make_forest_plot()` functions return both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
 
 
 
-
-
-## Forest plots
-`make_forest_plot()` creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
-
-```{r example-forest-plot, echo = FALSE, warning = FALSE, fig.width = 8, fig.height = 6, out.width = "90%"}
-resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
-resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
-
-forestplot <- make_forest_plot(row.labels        = ckbplotr_row_labels,
-                               row.labels.levels = c("heading", "subheading", "label"),
-                               rows              = c("Lipoprotein particle concentration",
-                                                     "Triglycerides concentration"),
-                               panels            = list(resultsA, resultsB),
-                               exponentiate      = TRUE,
-                               panel.names       = c("Analysis A", "Analysis B"),
-                               col.key           = "variable",
-                               ci.delim          = " - ",
-                               xlim              = c(0.9, 1.1),
-                               xticks            = c(0.9, 1, 1.1),
-                               blankrows         = c(1, 1, 0, 1),
-                               scalepoints       = TRUE,
-                               pointsize         = 3,
-                               col.left          = c("n"),
-                               col.left.heading  = c("No. of\nevents"),
-                               col.heading.space = 1.5,
-                               envir             = environment())
-```
-
-#### make_jasper_forest_plot function
+## Jasper forest plots
 `make_jasper_forest_plot()` requires the in-house Jasper package,  which is not publicly available.
-
-
-
-
-## Other plots
-
-`plot_like_ckb()` does three things to a [ggplot2](https://ggplot2.tidyverse.org/) plot:
-
-1. applies a CKB theme (i.e. change the overall appearance)
-2. extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)
-3. applies a fixed aspect ratio
-
-```{r a-plot, echo = FALSE, fig.width=8, out.width = "80%"}
-plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
-ckbplot <- plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
-grid.arrange(plot, ckbplot, ncol = 2)
-```
 
