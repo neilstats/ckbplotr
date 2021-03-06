@@ -176,10 +176,11 @@ make_forest_data <- function(
     ## create key and heading* columns
     row.labels <- dplyr::mutate(row.labels,
                                 key = !!rlang::sym(col.key),
-                                NAcol = NA_character_,
-                                heading1 = !!rlang::sym(row.labels.levels[[1]]),
-                                heading2 = !!rlang::sym(row.labels.levels[[2]]),
-                                heading3 = !!rlang::sym(row.labels.levels[[3]]))
+                                NAcol = NA_character_) %>%
+      dplyr::mutate(heading2 = dplyr::if_else(is.na(!!rlang::sym(row.labels.levels[[2]])) & !is.na(!!rlang::sym(row.labels.levels[[3]])), !!rlang::sym(row.labels.levels[[3]]), !!rlang::sym(row.labels.levels[[2]])),
+                    heading3 = dplyr::if_else(is.na(!!rlang::sym(row.labels.levels[[2]])) & !is.na(!!rlang::sym(row.labels.levels[[3]])), NA_character_, !!rlang::sym(row.labels.levels[[3]]))) %>%
+      dplyr::mutate(heading1 = dplyr::if_else(is.na(!!rlang::sym(row.labels.levels[[1]])) & !is.na(.data$heading2), .data$heading2, !!rlang::sym(row.labels.levels[[1]])),
+                    heading2 = dplyr::if_else(is.na(!!rlang::sym(row.labels.levels[[1]])) & !is.na(.data$heading2), NA_character_, .data$heading2))
 
     ## keep only rows where heading1 is in rows
     row.labels <- dplyr::left_join(tibble::tibble(heading1 = rows),
@@ -189,14 +190,14 @@ make_forest_data <- function(
     ## function to add headings/subheadings for row labels
     add_heading <- function(data, heading, blank_after_heading, blank_after_section){
       if(nrow(data) > 1){
-        out <- dplyr::add_row(data, row.label = heading, .before = 1)
+        out <- dplyr::add_row(data, row.label = !!heading, .before = 1)
         if (blank_after_heading > 0){
           for (i in 1:blank_after_heading) {
             out <- tibble::add_row(out, row.label = "", .before = 2)
           }
         }
       } else {
-        out <- dplyr::mutate(data, row.label = heading)
+        out <- dplyr::mutate(data, row.label = !!heading)
       }
       if (blank_after_section > 0){
         for (i in 1:blank_after_section) {
