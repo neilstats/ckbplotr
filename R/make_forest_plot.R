@@ -999,7 +999,7 @@ make_forest_plot <- function(
     '# Add a line at null effect',
     f = "annotate",
     arg = c('geom = "segment"',
-            'y = -1, yend = -Inf',
+            'y = -0.7, yend = -Inf',
             sprintf('x = %s, xend = %s', nullval, nullval),
             sprintf('size = %s', base_line_size))
   )
