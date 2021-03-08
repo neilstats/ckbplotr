@@ -1007,7 +1007,7 @@ make_forest_plot <- function(
   # Write code for plotting CIs
   codetext$plot.cis.before <- make_layer(
     '# Plot the CIs',
-    f = 'geom_linerange',
+    f = 'geom_errorbar',
     aes = c(addaes$ci,
             'xmin = lci_transformed',
             'xmax = uci_transformed',
@@ -1015,6 +1015,7 @@ make_forest_plot <- function(
     arg = c(addarg$ci,
             'data = ~ dplyr::filter(.x, !is.na(estimate_transformed))',
             sprintf('colour = %s', cicolour[1]),
+            'width = 0',
             sprintf('size = %s', base_line_size),
             'na.rm = TRUE')
   )
@@ -1025,7 +1026,7 @@ make_forest_plot <- function(
   } else if (is.character(ciunder)){
     codetext$plot.cis.before <- make_layer(
       '# Plot the CIs - before plotting points',
-      f = 'geom_linerange',
+      f = 'geom_errorbar',
       aes = c(addaes$ci,
               'xmin = lci_transformed',
               'xmax = uci_transformed',
@@ -1034,11 +1035,12 @@ make_forest_plot <- function(
               sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s)', ciunder),
               sprintf('colour = %s', cicolour[1]),
               sprintf('size = %s', base_line_size),
+              'width = 0',
               'na.rm = TRUE')
     )
     codetext$plot.cis.after <- make_layer(
       '# Plot the CIs - after plotting points',
-      f = 'geom_linerange',
+      f = 'geom_errorbar',
       aes = c(addaes$ci,
               'xmin = lci_transformed',
               'xmax = uci_transformed',
@@ -1047,6 +1049,7 @@ make_forest_plot <- function(
               sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s)', ciunder),
               sprintf('colour = %s', cicolour[1]),
               sprintf('size = %s', base_line_size),
+              'width = 0',
               'na.rm = TRUE')
     )
   }
