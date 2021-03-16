@@ -737,9 +737,9 @@ make_forest_plot <- function(
                            colspaces + gettextwidths("W")))
   ## adjust for hjust
   colspaceauto <- colspaceauto + c(colspaces*(1 - col.left.hjust), 0)
-  ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
-  if (length(colspaceauto) == 1){colspaceauto <- 0}
-  if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
+  ### if no column to plot (i.e. length 1) then width of W, if longer keep extra space on last element
+  if (length(colspaceauto) == 1){colspaceauto <- gettextwidths("W")}
+  # if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
   ### text on plot is 0.8 size, and adjust for base_size
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
   if (is.null(left.space)){left.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
