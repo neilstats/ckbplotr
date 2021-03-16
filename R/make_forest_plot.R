@@ -113,6 +113,9 @@ make_forest_data <- function(
   if (!all(!duplicated(panel.names))) stop("panel.names must be unique")
   if (length(panels) != length(panel.names)) stop("panels and panel.names must be the same length")
   if (!(length(blankrows == 4) & is.numeric(blankrows))) stop("blankrows must be a length 4 vector")
+  if(length(row.labels.levels) > 3) stop("row.labels.levels has maximum length of 3")
+  if(!all(row.labels.levels %in% names(row.labels))) stop("row.labels.levels must be columns in row.labels")
+  if(!all(sapply(row.labels[row.labels.levels], is.character))) stop("row.labels.levels columns must be character")
 
   # Make vector of keys after which extra rows are added for addtext
   extrarowkeys <- c()
