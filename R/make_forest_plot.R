@@ -114,8 +114,8 @@ make_forest_data <- function(
   if (length(panels) != length(panel.names)) stop("panels and panel.names must be the same length")
   if (!(length(blankrows == 4) & is.numeric(blankrows))) stop("blankrows must be a length 4 vector")
   if(length(row.labels.levels) > 3) stop("row.labels.levels has maximum length of 3")
-  if(!all(row.labels.levels %in% names(row.labels))) stop("row.labels.levels must be columns in row.labels")
-  if(!all(sapply(row.labels[row.labels.levels], is.character))) stop("row.labels.levels columns must be character")
+  if(!is.null(row.labels) & !all(row.labels.levels %in% names(row.labels))) stop("row.labels.levels must be columns in row.labels")
+  if(!is.null(row.labels) & !all(sapply(row.labels[row.labels.levels], is.character))) stop("row.labels.levels columns must be character")
 
   # Make vector of keys after which extra rows are added for addtext
   extrarowkeys <- c()
@@ -192,15 +192,15 @@ make_forest_data <- function(
 
     ## function to add headings/subheadings for row labels
     add_heading <- function(data, heading, blank_after_heading, blank_after_section){
-      if(nrow(data) > 1){
+      if(all(is.na(data$row.label))){
+        out <- dplyr::mutate(data, row.label = !!heading)
+      } else {
         out <- dplyr::add_row(data, row.label = !!heading, .before = 1)
         if (blank_after_heading > 0){
           for (i in 1:blank_after_heading) {
             out <- tibble::add_row(out, row.label = "", .before = 2)
           }
         }
-      } else {
-        out <- dplyr::mutate(data, row.label = !!heading)
       }
       if (blank_after_section > 0){
         for (i in 1:blank_after_section) {
