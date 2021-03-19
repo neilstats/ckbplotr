@@ -600,7 +600,7 @@ make_forest_plot <- function(
     tf       <- exp
     inv_tf   <- log
     scale    <- "log"
-    if (is.null(nullval)) {nullval <- 1}
+    if (missing(nullval)) {nullval <- 1}
   } else {
     tf       <- identity
     inv_tf   <- identity
@@ -998,14 +998,16 @@ make_forest_plot <- function(
 
 
   # Write code for line at null
-  codetext$nullline <- make_layer(
-    '# Add a line at null effect',
-    f = "annotate",
-    arg = c('geom = "segment"',
-            'y = -0.7, yend = -Inf',
-            sprintf('x = %s, xend = %s', nullval, nullval),
-            sprintf('size = %s', base_line_size))
-  )
+  codetext$nullline <- if (!is.null(nullval)) {
+    make_layer(
+      '# Add a line at null effect',
+      f = "annotate",
+      arg = c('geom = "segment"',
+              'y = -0.7, yend = -Inf',
+              sprintf('x = %s, xend = %s', nullval, nullval),
+              sprintf('size = %s', base_line_size))
+    )
+  }
 
   # Write code for plotting CIs
   codetext$plot.cis.before <- make_layer(
