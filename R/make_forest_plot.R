@@ -1284,21 +1284,23 @@ make_forest_plot <- function(
               indent(36, 'ordered = TRUE)'),
               indent(21, sprintf('xlab = %s)', ds(xlab))))
     ),
-    make_layer(
-      '# Add panel name above each panel',
-      f = 'geom_text',
-      aes = c(addaes$panel.name,
-              sprintf('y = %s, x = %s, label = title', col.heading.space, xmid)),
-      arg = c(addarg$panel.name,
-              'hjust = 0.5',
-              'nudge_y = 2',
-              sprintf('size  = %s', base_size/(11/3)),
-              'fontface = "bold"',
-              sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
-              indent(36, sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
-              indent(36, 'ordered = TRUE)'),
-              indent(21, sprintf('title = %s)', ds(panel.headings))))
-    )
+    if (!all(panel.headings == "")){
+      make_layer(
+        '# Add panel name above each panel',
+        f = 'geom_text',
+        aes = c(addaes$panel.name,
+                sprintf('y = %s, x = %s, label = title', col.heading.space, xmid)),
+        arg = c(addarg$panel.name,
+                'hjust = 0.5',
+                'nudge_y = 2',
+                sprintf('size  = %s', base_size/(11/3)),
+                'fontface = "bold"',
+                sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
+                indent(36, sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
+                indent(36, 'ordered = TRUE)'),
+                indent(21, sprintf('title = %s)', ds(panel.headings))))
+      )
+    }
   )
 
 
