@@ -777,17 +777,18 @@ make_forest_plot <- function(
 
   codetext$axes <- c(
     make_layer(
-      '# Set the scale for the y axis (the estimates and CIs)',
+      '# Set the scale for the x axis (the estimates and CIs)',
       f = "scale_x_continuous",
       arg = c(sprintf('trans  = "%s"', scale),
               paste0("breaks = ",paste(deparse(xticks), collapse = "")),
               'expand = c(0,0)')
     ),
     make_layer(
-      '# Set the scale for the x axis (the rows)',
+      '# Set the scale for the y axis (the rows)',
       f = "scale_y_continuous",
       arg = c('breaks = -1:-max(datatoplot$row)',
               'labels = rowlabels',
+              'limits = c(-max(datatoplot$row), NA),',
               'expand = c(0,0)')
     )
   )
