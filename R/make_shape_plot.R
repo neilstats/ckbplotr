@@ -378,7 +378,7 @@ make_shape_plot <- function(data,
   # Write code to use plot_like_ckb function
   codetext$plot.like.ckb <- make_layer(
     '# Plot like a CKB plot',
-    f = "plot_like_ckb",
+    f = "ckbplotr::plot_like_ckb",
     arg = c('plot           = plot',
             sprintf('xlims          = %s', xlims),
             sprintf('ylims          = %s', ylims),
@@ -393,6 +393,8 @@ make_shape_plot <- function(data,
 
   # Create the plot code
   plotcode <- c(
+    'library(ggplot2)',
+    '',
     codetext$start.ggplot,
     indent(2,
            codetext$lines,

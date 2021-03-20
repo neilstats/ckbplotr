@@ -1167,7 +1167,7 @@ make_forest_plot <- function(
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
-          f = 'geom_text_move',
+          f = 'ckbplotr::geom_text_move',
           aes = c(addaes$col.right,
                   sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   if(is.character(..6)){
@@ -1190,7 +1190,7 @@ make_forest_plot <- function(
           br = FALSE
         ),
         make_layer(
-          f = 'geom_text_move',
+          f = 'ckbplotr::geom_text_move',
           aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   'label = title'),
           arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
@@ -1226,7 +1226,7 @@ make_forest_plot <- function(
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
-          f = 'geom_text_move',
+          f = 'ckbplotr::geom_text_move',
           aes = c(addaes$col.left,
                   sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
                   sprintf('label = %s,', fixsp(..1)),
@@ -1243,7 +1243,7 @@ make_forest_plot <- function(
           br = FALSE
         ),
         make_layer(
-          f = 'geom_text_move',
+          f = 'ckbplotr::geom_text_move',
           aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
                   'label = title'),
           arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
@@ -1366,6 +1366,8 @@ make_forest_plot <- function(
 
   # Create the plot code
   plotcode <- c(
+    'library(ggplot2)',
+    '',
     codetext$prep.data,
     codetext$row.labels.vec,
     codetext$check.cis,
