@@ -27,6 +27,8 @@ library(ckbplotr)
 
 
 ## Adding columns of text
+
+Use the `col.left` and `col.right` arguments to add columns of text either side of each panel. Use `col.left.heading` and `col.right.heading` to customise the column headings.
 ```{r adding-columns-of-text}
 resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
 resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
@@ -51,7 +53,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
 ```
 
 
-Multiple columns can be added by specifying vectors for `col.left`/`col.right` and `col.left.heading`/`col.right.heading`.
+Multiple columns can be added by specifying vectors for `col.left`, `col.right`, `col.left.heading` and `col.right.heading`.
 ```{r adding-columns-of-text-2, fig.width = 10}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
@@ -69,10 +71,12 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                pointsize         = 3,
                                col.left          = c("nb", "n"),
                                col.left.heading  = c("Some other\nnumbers", "No. of\nevents"),
+                               col.right         = "n",
+                               col.right.heading = c("HR", "N"),
                                col.heading.space = 1.5)
 ```
 
-The `col.left.hjust` and `col.right.hjust` arguments set the horizontal justification of the columns (left = 0, center = 0.5, right = 1).
+The `col.left.hjust` and `col.right.hjust` arguments set the horizontal justification of the columns (0 = left, 0.5 = center , 1 = right).
 
 ## Spacing
 ### Horizontal

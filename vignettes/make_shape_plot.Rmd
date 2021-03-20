@@ -27,8 +27,8 @@ library(ckbplotr)
 
 
 ## Log scale
-Set the `logscale` argument to true to use a log scale on the vertical axis.
-```{r log-scale}
+Set the `logscale` argument to true to use a log scale on the vertical axis. If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set `exponentiate` to true. This will plot exp(estimates) and use a log scale for the axis (if `logscale` is not set).
+```{r log-scale, fig.height = 4, fig.width = 4, out.width = "50%"}
 plot <- make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
                         col.x        = "rf",
                         col.estimate = "est",
@@ -41,11 +41,11 @@ plot <- make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,]
                         title        = NULL,
                         logscale     = TRUE)
 ```
-If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set `exponentiate` to true. This will plot exp(estimates) and use a log scale for the axis (if `logscale` is not set).
+
 
 ## Using groups
 The `col.group` argument can be supplied to plot results for different groups (using shades of grey for the fill colour). (Set `ciunder` to `TRUE` so that the confidence interval lines are hidden behind behind the point estimate squares.)
-```{r groups}
+```{r groups, fig.height = 4, fig.width = 4, out.width = "50%"}
 plot <- make_shape_plot(ckbplotr_shape_data,
                         col.x        = "rf",
                         col.estimate = "est",
@@ -59,9 +59,10 @@ plot <- make_shape_plot(ckbplotr_shape_data,
                         ciunder      = TRUE)
 ```
 
+
 ## Adding lines
 The `lines` argument will add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.
-```{r lines}
+```{r lines, fig.height = 4, fig.width = 4, out.width = "50%"}
 plot <- make_shape_plot(ckbplotr_shape_data,
                         col.x        = "rf",
                         col.estimate = "est",
@@ -95,7 +96,7 @@ The argument/columns, what they control, and the type:
 
 ### Using values
 If the argument doesn't match the name of a column in the data, then the value will be used for all points.
-```{r aesthetics with values}
+```{r aesthetics with values, fig.height = 4, fig.width = 4, out.width = "50%"}
 plot <- make_shape_plot(ckbplotr_shape_data,
                         col.x        = "rf",
                         col.estimate = "est",
@@ -114,7 +115,7 @@ plot <- make_shape_plot(ckbplotr_shape_data,
 
 ### Using columns
 If the argument matches a column name, then the values in the column will be used.
-```{r aesthetics with columns}
+```{r aesthetics with columns, fig.height = 4, fig.width = 4, out.width = "50%"}
 ckbplotr_shape_data$fillcol <- "black"
 ckbplotr_shape_data[ckbplotr_shape_data$is_female == 1,]$fillcol <- "orange"
 
@@ -133,7 +134,7 @@ plot <- make_shape_plot(ckbplotr_shape_data,
 ```
 
 Specify a column for `cicolour` is useful for changing the colour of confidence interval lines that would otherwise be hidden.
-```{r small ci}
+```{r small ci, fig.height = 4, fig.width = 4, out.width = "50%"}
 ckbplotr_shape_data$cicol <- "black"
 ckbplotr_shape_data[2,]$cicol <- "white"
 
@@ -155,7 +156,7 @@ Note that the size of boxes depends on `pointsize`, but the true length of confi
 
 ## Categorical risk factor
 The risk factor can be a factor. In this case, the x-axis coordinates are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of categories plus 0.5. You may need to add position arguments so that points, intervals and text do not overlap:
-```{r}
+```{r, fig.height = 4, fig.width = 4, out.width = "50%"}
 ckbplotr_shape_data$rf <- c(  "A",   "B",   "C",   "D", "A",   "B",   "C",  "D")
 
 plot <- make_shape_plot(ckbplotr_shape_data,

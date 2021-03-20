@@ -15,6 +15,11 @@ coverage](https://codecov.io/gh/neilstats/ckbplotr/branch/master/graph/badge.svg
 being developed by, and primarily for, [China Kadoorie
 Biobank](http://www.ckbiobank.org) researchers.
 
+*This package is under development. If you find an error or bug or have
+a suggestion for improvement please create an issue on GitHub or contact
+the author at <neil.wright@ndph.ox.ac.uk> or
+[@NeilStats](https://twitter.com/NeilStats).*
+
 It can be used to: create plots of estimates and CIs against risk factor
 levels…
 <img src="man/figures/README-make_shape_plot-example-1.png" width="50%" style="display: block; margin: auto;" />
@@ -75,6 +80,12 @@ the “Install from…” box select “Package Archive File”, and in the
 The source package for the latest release version is available
 [here](https://github.com/neilstats/ckbplotr/releases/latest).
 
+## Get started
+
+Go to [“Get started with ckbplotr”](articles/ckbplotr.html) to see how
+to use the `make_shape_plot()`, `make_forest_plot()`, and
+`plot_like_ckb()` functions.
+
 ## ggplot2 code
 
 The `make_shape_plot()` and `make_forest_plot()` functions return both a
@@ -83,8 +94,3 @@ ggplot2 code used to create the plot will be shown in the Viewer pane
 (with syntax highlighting if the
 [highlights](https://cran.r-project.org/package=highlight) package is
 installed).
-
-## Jasper forest plots
-
-`make_jasper_forest_plot()` requires the in-house Jasper package, which
-is not publicly available.

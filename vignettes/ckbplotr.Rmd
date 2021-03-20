@@ -51,20 +51,23 @@ For more details on customising these forest plots, see ["More with shape plots"
 `make_forest_plot()` creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
 
 ### Prepare data
-First of all, do your analyses and put the results into data frames (one data frame for each forest plot panel). Here is part of some example results:
-```{r example forest plot results, echo = FALSE}
-head(ckbplotr_forest_data[,c("variable", "estimate", "stderr", "n")])
+First of all, do your analyses and put the results into data frames (one data frame for each forest plot panel). Here we take subsets of the example data provided in the package.
+```{r example forest plot results}
+resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
+resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
+
+head(resultsA[,c("variable", "estimate", "stderr", "n")])
 ```
 
 
 ### Simple forest plot
-```{r simple-forest-plot, fig.height = 5, out.width = "90%"}
-resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
-resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
+The `panels` argument is a list of data frames with results to be plotted, the `col.key` argument is the name of the column that defines which results should be plotted on the same row, and the `exponentiate` argument is a logical value telling the function we are providing estimates on the log scale.
 
-forestplot <- make_forest_plot(panels         = list(resultsA, resultsB),
-                               col.key        = "variable",
-                               exponentiate   = TRUE)
+By default, the function assumes that estimates and standard errors are in columns named "estimate" and "stderr", but this can also be set by the `col.estimate` and `col.stderr` arguments.
+```{r simple-forest-plot, fig.height = 5, out.width = "90%"}
+forestplot <- make_forest_plot(panels       = list(resultsA, resultsB),
+                               col.key      = "variable",
+                               exponentiate = TRUE)
 ```
 
 ### Using row labels
@@ -81,7 +84,7 @@ head(ckbplotr_row_labels)
 
 In `make_forest_plot()` specify the `row.labels` argument as the data frame of labels you've created. Use the `row.labels.levels` argument to choose which columns are used as headings/subheadings/labels.
 
-Use the `rows` argument to choose the results to be plotted. The function will plot results whose heading1 label is in the `rows` argument. The order given in the `rows` argument decides the order in which the heading1 labels will be in the plot (top to bottom). The heading2 and heading3 labels will be in the order that they are in the `row.labels` data frame.
+Use the `rows` argument to choose the results to be plotted. The first level (heading) labels will be included in the plot from top to bottom. Other labels will be in the order that they are in the `row.labels` data frame.
 
 ```{r using-row-labels, fig.height = 5, out.width = "90%"}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
@@ -119,3 +122,14 @@ gridExtra::grid.arrange(plot, ckbplot, ncol = 2)
 ```
 
 See ["Make any ggplot like a CKB plot"](plot_like_ckb.html) for more details.
+
+
+## Confidence intervals
+
+When standard errors are supplied to the `make_` functions, confidence intervals are calculated as 95\% confidence intervals using the Normal approximation method (with critical value 1.96).
+
+
+## Jasper forest plots
+`make_jasper_forest_plot()` requires the in-house Jasper package,  which is not publicly available.
+
+
