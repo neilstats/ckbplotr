@@ -1,4 +1,4 @@
-# ckbplotr 0.5.0.9000
+# ckbplotr 0.6.0
 
 * New spacing and column positioning arguments added to make_forest_plot(). By default, these will be calculated automatically.
 * New argument addcode in make_forest_plot() which inserts code into the generated plot code.
