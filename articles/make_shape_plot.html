@@ -5,14 +5,21 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Making shape plots • ckbplotr</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<title>More with shape plots • ckbplotr</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Making shape plots">
+<script src="../pkgdown.js"></script><meta property="og:title" content="More with shape plots">
 <meta property="og:description" content="ckbplotr">
+<meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -31,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -39,9 +46,12 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="../articles/ckbplotr.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -54,33 +64,48 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/ggplot2.html">ggplot2</a>
+      <a href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
     </li>
     <li>
-      <a href="../articles/make_forest_plot.html">Making forest plots</a>
+      <a href="../articles/make_forest_plot.html">More with forest plots</a>
     </li>
     <li>
-      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+      <a href="../articles/make_shape_plot.html">More with shape plots</a>
     </li>
     <li>
-      <a href="../articles/narrow_cis.html">Changing narrow forest plot confidence interval lines</a>
-    </li>
-    <li>
-      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
+      <a href="../articles/adding_editing_code.html">Changing generated code</a>
     </li>
     <li>
       <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
+    <li class="divider">
+    <li>
+      <a href="../articles/index.html">More...</a>
+    </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li class="dropdown-header">Releases</li>
+    <li>
+      <a href="https://github.com/neilstats/ckbplotr/releases/latest">Latest</a>
+    </li>
+    <li class="divider">
+    <li>
+      <a href="../news/index.html">Changelog</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/neilstats/ckbplotr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -94,11 +119,10 @@
 
       
 
-      </header><script src="make_shape_plot_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="make_shape_plot_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="make_shape_plot_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="make_shape_plot_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Making shape plots</h1>
+      <h1 data-toc-skip>More with shape plots</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/master/vignettes/make_shape_plot.Rmd"><code>vignettes/make_shape_plot.Rmd</code></a></small>
@@ -108,48 +132,12 @@
 
     
     
-<p>The <code>make_shape_plot</code> function creates a plot of estimates and CIs against risk factor levels using the <code>ggplot2</code> package.</p>
-<p>The function returns a named list containing:</p>
-<ul>
-<li>plot: the plot</li>
-<li>code: ggplot2 code to generate the plot</li>
-</ul>
-<p>The function uses the <code>plot_like_ckb</code> function to modify the theme and control the look of the plot.</p>
-<p>In RStudio, the ggplot2 code used to generate the plot will be shown in the ‘Viewer’ pane. This code can be copied and further edited to adapt the plot.</p>
-<div id="prepare-example-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#prepare-example-data" class="anchor"></a>Prepare example data</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-  est       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>   <span class="fl">1</span>, <span class="fl">1.25</span>,  <span class="fl">1.5</span>, <span class="fl">1.75</span>,  <span class="fl">1.7</span>, <span class="fl">1.85</span>, <span class="fl">2.25</span>, <span class="fl">2.6</span><span class="op">)</span>,
-  se        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.08</span>, <span class="fl">0.03</span>, <span class="fl">0.07</span>, <span class="fl">0.15</span>, <span class="fl">0.08</span>, <span class="fl">0.08</span>, <span class="fl">0.07</span>, <span class="fl">0.1</span><span class="op">)</span>,
-  rf        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>  <span class="fl">20</span>,   <span class="fl">28</span>,   <span class="fl">38</span>,   <span class="fl">50</span>, <span class="fl">18.5</span>,   <span class="fl">25</span>,   <span class="fl">37</span>,  <span class="fl">47</span><span class="op">)</span>,
-  n         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span> <span class="fl">109</span>,  <span class="fl">103</span>,  <span class="fl">143</span>,  <span class="fl">104</span>,  <span class="fl">140</span>,  <span class="fl">134</span>,  <span class="fl">127</span>,  <span class="fl">99</span><span class="op">)</span>,
-  is_female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>   <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">0</span>,    <span class="fl">1</span>,    <span class="fl">1</span>,    <span class="fl">1</span>,   <span class="fl">1</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
-</div>
-<div id="simple-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simple-example" class="anchor"></a>Simple example</h2>
-<p>Given a data frame of estimates and standard errors (to be plotted on the y axis), and risk factor levels (to be plotted on the x axis), a plot can be created.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">results</span><span class="op">[</span><span class="va">results</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,
-                        col.x        <span class="op">=</span> <span class="st">"rf"</span>,
-                        col.estimate <span class="op">=</span> <span class="st">"est"</span>,
-                        col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
-                        col.n        <span class="op">=</span> <span class="st">"n"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
-                        scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
-                        title        <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
-<p><img src="make_shape_plot_files/figure-html/simple-example-1.png" width="384" style="display: block; margin: auto;"></p>
-</div>
 <div id="log-scale" class="section level2">
 <h2 class="hasAnchor">
 <a href="#log-scale" class="anchor"></a>Log scale</h2>
-<p>Set the <code>logscale</code> argument to true to use a log scale on the vertical axis.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">results</span><span class="op">[</span><span class="va">results</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,
+<p>Set the <code>logscale</code> argument to true to use a log scale on the vertical axis. If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set <code>exponentiate</code> to true. This will plot exp(estimates) and use a log scale for the axis (if <code>logscale</code> is not set).</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,
                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
@@ -160,14 +148,14 @@
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         logscale     <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="make_shape_plot_files/figure-html/log-scale-1.png" width="384" style="display: block; margin: auto;"> If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set <code>exponentiate</code> to true. This will plot exp(estimates) and use a log scale for the axis (if <code>logscale</code> is not set).</p>
+<p><img src="make_shape_plot_files/figure-html/log-scale-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div id="using-groups" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-groups" class="anchor"></a>Using groups</h2>
 <p>The <code>col.group</code> argument can be supplied to plot results for different groups (using shades of grey for the fill colour). (Set <code>ciunder</code> to <code>TRUE</code> so that the confidence interval lines are hidden behind behind the point estimate squares.)</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">results</span>,
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
@@ -178,14 +166,14 @@
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="make_shape_plot_files/figure-html/groups-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="make_shape_plot_files/figure-html/groups-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div id="adding-lines" class="section level2">
 <h2 class="hasAnchor">
 <a href="#adding-lines" class="anchor"></a>Adding lines</h2>
 <p>The <code>lines</code> argument will add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">results</span>,
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
@@ -197,7 +185,7 @@
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,
                         lines        <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
-<p><img src="make_shape_plot_files/figure-html/lines-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="make_shape_plot_files/figure-html/lines-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div id="setting-aesthetics" class="section level2">
 <h2 class="hasAnchor">
@@ -238,12 +226,13 @@
 </tr>
 </tbody>
 </table>
+<p>(Note that the approach for using columns to specify colours and shapes in this package does not make use of the automatic scales available in ggplot. We recommend you take a look at the ggplot2 documentation for better examples if you want to write ggplot2 code.)</p>
 <div id="using-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-values" class="anchor"></a>Using values</h3>
-<p>If the argument doesn’t match the anem of a column in the data, then the value will be used for all points.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">results</span>,
+<p>If the argument doesn’t match the name of a column in the data, then the value will be used for all points.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
@@ -257,17 +246,17 @@
                         colour       <span class="op">=</span> <span class="st">"black"</span>,
                         fill         <span class="op">=</span> <span class="st">"red"</span>,
                         cicolour     <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></code></pre></div>
-<p><img src="make_shape_plot_files/figure-html/aesthetics%20with%20values-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="make_shape_plot_files/figure-html/aesthetics%20with%20values-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div id="using-columns" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-columns" class="anchor"></a>Using columns</h3>
 <p>If the argument matches a column name, then the values in the column will be used.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span><span class="op">$</span><span class="va">fillcol</span> <span class="op">&lt;-</span> <span class="st">"black"</span>
-<span class="va">results</span><span class="op">[</span><span class="va">results</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">1</span>,<span class="op">]</span><span class="op">$</span><span class="va">fillcol</span> <span class="op">&lt;-</span> <span class="st">"orange"</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">fillcol</span> <span class="op">&lt;-</span> <span class="st">"black"</span>
+<span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">1</span>,<span class="op">]</span><span class="op">$</span><span class="va">fillcol</span> <span class="op">&lt;-</span> <span class="st">"orange"</span>
 
-<span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">results</span>,
+<span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
@@ -279,13 +268,13 @@
                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,
                         colour       <span class="op">=</span> <span class="st">"fillcol"</span>,
                         fill         <span class="op">=</span> <span class="st">"fillcol"</span><span class="op">)</span></code></pre></div>
-<p><img src="make_shape_plot_files/figure-html/aesthetics%20with%20columns-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="make_shape_plot_files/figure-html/aesthetics%20with%20columns-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>Specify a column for <code>cicolour</code> is useful for changing the colour of confidence interval lines that would otherwise be hidden.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">results</span><span class="op">$</span><span class="va">cicol</span> <span class="op">&lt;-</span> <span class="st">"black"</span>
-<span class="va">results</span><span class="op">[</span><span class="fl">2</span>,<span class="op">]</span><span class="op">$</span><span class="va">cicol</span> <span class="op">&lt;-</span> <span class="st">"white"</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">cicol</span> <span class="op">&lt;-</span> <span class="st">"black"</span>
+<span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="fl">2</span>,<span class="op">]</span><span class="op">$</span><span class="va">cicol</span> <span class="op">&lt;-</span> <span class="st">"white"</span>
 
-<span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">results</span>,
+<span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
@@ -296,9 +285,33 @@
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         pointsize    <span class="op">=</span> <span class="fl">7</span>,
                         cicolour     <span class="op">=</span> <span class="st">"cicol"</span><span class="op">)</span></code></pre></div>
-<p><img src="make_shape_plot_files/figure-html/small%20ci-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="make_shape_plot_files/figure-html/small%20ci-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>Note that the size of boxes depends on <code>pointsize</code>, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.</p>
 </div>
+</div>
+<div id="categorical-risk-factor" class="section level2">
+<h2 class="hasAnchor">
+<a href="#categorical-risk-factor" class="anchor"></a>Categorical risk factor</h2>
+<p>The risk factor can be a factor. In this case, the x-axis coordinates are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of categories plus 0.5. You may need to add position arguments so that points, intervals and text do not overlap:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>  <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,   <span class="st">"D"</span>, <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,  <span class="st">"D"</span><span class="op">)</span>
+
+<span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
+                        col.x        <span class="op">=</span> <span class="st">"rf"</span>,
+                        col.estimate <span class="op">=</span> <span class="st">"est"</span>,
+                        col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
+                        col.n        <span class="op">=</span> <span class="st">"n"</span>,
+                        col.group    <span class="op">=</span> <span class="st">"is_female"</span>,
+                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span><span class="op">)</span>,
+                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
+                        scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
+                        title        <span class="op">=</span> <span class="cn">NULL</span>,
+                        ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,
+                        addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>point     <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,
+                                      ci        <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,
+                                      n         <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,
+                                      estimates <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="make_shape_plot_files/figure-html/unnamed-chunk-2-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div id="stroke" class="section level2">
 <h2 class="hasAnchor">

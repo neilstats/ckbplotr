@@ -2,11 +2,13 @@ pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
+  adding_editing_code: adding_editing_code.html
+  ckbplotr: ckbplotr.html
   ggplot2: ggplot2.html
   make_forest_plot: make_forest_plot.html
   make_shape_plot: make_shape_plot.html
-  narrow_cis: narrow_cis.html
+  page_layouts: page_layouts.html
   plot_like_ckb: plot_like_ckb.html
   special_characters_formatting: special_characters_formatting.html
-last_built: 2020-11-30T17:58Z
+last_built: 2021-03-22T11:09Z
 

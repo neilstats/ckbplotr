@@ -6,13 +6,20 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Using special characters and formatting • ckbplotr</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Using special characters and formatting">
 <meta property="og:description" content="ckbplotr">
+<meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -31,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -39,9 +46,12 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="../articles/ckbplotr.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -54,33 +64,48 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/ggplot2.html">ggplot2</a>
+      <a href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
     </li>
     <li>
-      <a href="../articles/make_forest_plot.html">Making forest plots</a>
+      <a href="../articles/make_forest_plot.html">More with forest plots</a>
     </li>
     <li>
-      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+      <a href="../articles/make_shape_plot.html">More with shape plots</a>
     </li>
     <li>
-      <a href="../articles/narrow_cis.html">Changing narrow forest plot confidence interval lines</a>
-    </li>
-    <li>
-      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
+      <a href="../articles/adding_editing_code.html">Changing generated code</a>
     </li>
     <li>
       <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
+    <li class="divider">
+    <li>
+      <a href="../articles/index.html">More...</a>
+    </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li class="dropdown-header">Releases</li>
+    <li>
+      <a href="https://github.com/neilstats/ckbplotr/releases/latest">Latest</a>
+    </li>
+    <li class="divider">
+    <li>
+      <a href="../news/index.html">Changelog</a>
+    </li>
+  </ul>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/neilstats/ckbplotr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -94,8 +119,7 @@
 
       
 
-      </header><script src="special_characters_formatting_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="special_characters_formatting_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="special_characters_formatting_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="special_characters_formatting_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Using special characters and formatting</h1>
@@ -108,397 +132,20 @@
 
     
     
-<p>It is not always possible to use special characters or apply formatting to labels, headings and other text directly in the plots produced by <code>make_shape_plot</code> and <code>make_forest_plot</code>. However, there are ways to create plots with the text (and formatting) you need. The two main methods are described below followed by some examples.</p>
-<div id="copy-and-edit-the-ggplot2-code" class="section level2">
+<div id="special-characters" class="section level2">
 <h2 class="hasAnchor">
-<a href="#copy-and-edit-the-ggplot2-code" class="anchor"></a>Copy and edit the ggplot2 code</h2>
-<p>Both <code>make_shape_plot</code> and <code>make_forest_plot</code> return a character vector of ggplot2 code that is used to produce the plot. The code is also displayed in the Viewer pane in RStudio. You can copy this code, edit as needed, then use it in your R scripts directly. See the examples below for hints on where and how you need to edit the code.</p>
+<a href="#special-characters" class="anchor"></a>Special characters</h2>
+<p>To use special characters, put the unicode codepoint in your text (e.g. <code>\u2265</code> for a greater-than-or-equal sign, and <code>\u00B2</code> for a superscript 2). In <code><a href="../reference/make_forest_plot.html">make_forest_plot()</a></code> row labels you need to use HTML entities (e.g. <code>&amp;#xb2;</code> for a superscript 2). If these does not work, you may need to add the required <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">ggplot2::geom_text()</a></code> layer to your plot manually.</p>
 </div>
-<div id="add-layers-to-a-plot" class="section level2">
+<div id="expressions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#add-layers-to-a-plot" class="anchor"></a>Add layers to a plot</h2>
-<p>If you want more control over some text on a plot but to still use a <code>make_*</code> function, you can add layers to the plot afterwards. I suggest you run the function first with some placeholder text, note which <code>geom_text</code> (or <code>annotate</code>) code is responsible for the text, rerun without that text (or replace it with ""), then add your own <code>geom_text</code>.</p>
+<a href="#expressions" class="anchor"></a>Expressions</h2>
+<p>The <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">ggplot2::geom_text()</a></code> function has an argument <code>parse</code> which tells ggplot2 to parse text into expressions and display as described in <a href="https://rdrr.io/r/grDevices/plotmath.html">plotmath</a>. In <code><a href="../reference/make_forest_plot.html">make_forest_plot()</a></code>, the <code>col.right.parse</code> argument in <code><a href="../reference/make_forest_plot.html">make_forest_plot()</a></code> can be used to choose which of the <code>col.right</code> columns should be parsed as expressions. For other plot text (such as <code>col.left</code>) use the <code>addarg</code> argument to parse the text as expressions.</p>
 </div>
-<div id="examples" class="section level2">
+<div id="ggtext" class="section level2">
 <h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
-<div id="special-characters" class="section level3">
-<h3 class="hasAnchor">
-<a href="#special-characters" class="anchor"></a>Special characters</h3>
-<p>You can include some special characters just by putting their unicode in your text. But sometimes this does not work correctly, for example on Windows the code for a ‘greater than or equal to’ symbol “\u2265” gets replaced by an equals sign. This can be fixed by using it in your own <code>geom_text</code> code (use either the ‘copy and edit’ or ‘add layers’ method).</p>
-<p>Use a unicode symbol in column headings:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
-                               col.key           <span class="op">=</span> <span class="st">"variable"</span>,
-                               row.labels        <span class="op">=</span> <span class="va">varheadings</span>,
-                               rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
-                               exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,
-                               panel.names       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                               panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">""</span>, <span class="st">""</span><span class="op">)</span>,
-                               ci.delim          <span class="op">=</span> <span class="st">" - "</span>,
-                               xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                               xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                               blankrows         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
-                               scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,
-                               pointsize         <span class="op">=</span> <span class="fl">3</span>,
-                               col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,
-                               col.left.space    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.02</span><span class="op">)</span>,
-                               col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,
-                               col.right.space   <span class="op">=</span> <span class="fl">0.02</span>,
-                               col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,
-                               label.space       <span class="op">=</span> <span class="fl">2</span>,
-                               panel.space       <span class="op">=</span> <span class="fl">8</span>,
-                               printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-
-<span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
-  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.99498743710662</span>, label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,
-            hjust <span class="op">=</span> <span class="fl">0.5</span>,
-            nudge_y <span class="op">=</span> <span class="fl">2</span>,
-            size  <span class="op">=</span> <span class="fl">3</span>,
-            fontface <span class="op">=</span> <span class="st">"bold"</span>,
-            data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                                                levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                                                ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-1-1.png" width="700"></p>
-</div>
-<div id="formatting" class="section level3">
-<h3 class="hasAnchor">
-<a href="#formatting" class="anchor"></a>Formatting</h3>
-<p>Various formatting (called “aesthetics”) such as colour, bold, italics, and angle can be controlled in <code>geom_text</code>. Make use of the arguments of <code>geom_text</code> (<a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="uri">https://ggplot2.tidyverse.org/reference/geom_text.html</a>) as you need.</p>
-<p>Make column headings bold and italic:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
-  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.99498743710662</span>, label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,
-            hjust <span class="op">=</span> <span class="fl">0.5</span>,
-            nudge_y <span class="op">=</span> <span class="fl">2</span>,
-            size  <span class="op">=</span> <span class="fl">3</span>,
-            fontface <span class="op">=</span> <span class="st">"bold.italic"</span>,
-            data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                                                levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                                                ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A \u2265 10"</span>, <span class="st">" A &lt; 10"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
-</div>
-<div id="expressions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#expressions" class="anchor"></a>Expressions</h3>
-<p>The <code>geom_text</code> function has an argument <code>parse</code> which tells ggplot2 to parse text into expressions and display as described in <a href="https://rdrr.io/r/grDevices/plotmath.html">plotmath</a>. (Note that text in columns given by <code>col.right</code> in <code>make_forest_plot</code> already use <code>parse = TRUE</code>.)</p>
-<p>Evaluate column headings as expressions:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
-  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.99498743710662</span>, label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,
-            hjust <span class="op">=</span> <span class="fl">0.5</span>,
-            nudge_y <span class="op">=</span> <span class="fl">2</span>,
-            size  <span class="op">=</span> <span class="fl">3</span>,
-            parse <span class="op">=</span> <span class="cn">TRUE</span>,
-            data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                                                levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                                                ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"bold("</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A&gt;=10"</span>, <span class="st">"A^b"</span><span class="op">)</span>, <span class="st">")"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-3-1.png" width="700"> Note the expressions will remove the <code>fontface</code> and other formatting, but we can use <code>bold</code> inside the text instead (though it does not apply to symbols or numbers).</p>
-</div>
-<div id="ggtext" class="section level3">
-<h3 class="hasAnchor">
-<a href="#ggtext" class="anchor"></a>ggtext</h3>
-<p>The <a href="https://wilkelab.org/ggtext/">ggtext packge</a> adds support for some Markdown and HTML. You could install this package and use <code>geom_richtext()</code> in place of <code>geom_text()</code> to use some markdown (or HTML).</p>
-<p>Bold and italics using markdown:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
-  <span class="fu">ggtext</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/ggtext/reference/geom_richtext.html">geom_richtext</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.99498743710662</span>, label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,
-                        hjust <span class="op">=</span> <span class="fl">0.5</span>,
-                        size  <span class="op">=</span> <span class="fl">3</span>,
-                        nudge_y <span class="op">=</span> <span class="fl">2</span>,
-                        data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                                                            levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                                                            ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                             title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"*A*"</span>, <span class="st">"**B&lt;sup&gt;2&lt;/sup&gt;**"</span><span class="op">)</span><span class="op">)</span>,
-                        fill <span class="op">=</span> <span class="cn">NA</span>,
-                        label.color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
-<p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<p>You could also use <code>element_markdown</code> inside <code>theme</code> to make use of markdown just in row headings.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">varheadings</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>heading1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>, each <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,
-                          heading2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"VLDL^a"</span>, <span class="st">"VLDL^a"</span>, <span class="st">"VLDL^a"</span>,
-                                       <span class="st">"**IDL**"</span>,
-                                       <span class="st">"*LDL*"</span>, <span class="st">"*LDL*"</span>, <span class="st">"*LDL*"</span><span class="op">)</span>,
-                          heading3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Large"</span>, <span class="st">"Medium"</span>, <span class="st">"Small"</span>,
-                                       <span class="cn">NA</span>,
-                                       <span class="st">"*Large*"</span>, <span class="st">"*Medium*"</span>, <span class="st">"*Small*"</span><span class="op">)</span>,
-                          variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">'nmr_l_vldl_tg'</span>, <span class="st">'nmr_m_vldl_tg'</span>, <span class="st">'nmr_s_vldl_tg'</span>,
-                                       <span class="st">'nmr_idl_tg'</span>,
-                                       <span class="st">'nmr_l_ldl_tg'</span>, <span class="st">'nmr_m_ldl_tg'</span>, <span class="st">'nmr_s_ldl_tg'</span><span class="op">)</span>,
-                          stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
-                               col.key           <span class="op">=</span> <span class="st">"variable"</span>,
-                               row.labels        <span class="op">=</span> <span class="va">varheadings</span>,
-                               rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
-                               exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,
-                               panel.names       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>,
-                               panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                               ci.delim          <span class="op">=</span> <span class="st">" - "</span>,
-                               xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                               xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                               blankrows         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
-                               scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,
-                               pointsize         <span class="op">=</span> <span class="fl">3</span>,
-                               col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,
-                               col.left.space    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.02</span><span class="op">)</span>,
-                               col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,
-                               col.right.space   <span class="op">=</span> <span class="fl">0.02</span>,
-                               col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,
-                               label.space       <span class="op">=</span> <span class="fl">2</span>,
-                               panel.space       <span class="op">=</span> <span class="fl">8</span>,
-                               printplot         <span class="op">=</span> <span class="cn">FALSE</span>,
-                               showcode          <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span>
-
-<span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> 
-  <span class="fu">theme</span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu">ggtext</span><span class="fu">::</span><span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-</div>
-<div id="change-labels-in-make_forest_plot-using-expression" class="section level3">
-<h3 class="hasAnchor">
-<a href="#change-labels-in-make_forest_plot-using-expression" class="anchor"></a>Change labels in make_forest_plot using expression</h3>
-<p>If you want to use different formatting and characters for row labels in <code>make_forest_plot</code> you can use the ‘copy and edit’ method. Just replace the section of code that creates the rowlabels vector. For example you could replace it by a vector of expressions.</p>
-<p>First start by using <code>make_forest_plot</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
-                               col.key           <span class="op">=</span> <span class="st">"variable"</span>,
-                               row.labels        <span class="op">=</span> <span class="va">varheadings</span>,
-                               rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
-                               exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,
-                               panel.names       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                               ci.delim          <span class="op">=</span> <span class="st">" - "</span>,
-                               xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                               xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                               blankrows         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
-                               scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,
-                               pointsize         <span class="op">=</span> <span class="fl">3</span>,
-                               col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,
-                               col.left.space    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.02</span><span class="op">)</span>,
-                               col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,
-                               col.right.space   <span class="op">=</span> <span class="fl">0.02</span>,
-                               col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,
-                               label.space       <span class="op">=</span> <span class="fl">2</span>,
-                               panel.space       <span class="op">=</span> <span class="fl">8</span>,
-                               printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
-<p>Now copy the code from the RStudio Viewer pane, and edit the section under the comment “# Get a character vector of the row labels, so these can be used in the plot”.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># ggplot2 code ------------------</span>
-
-<span class="co"># Prepare data to be plotted using ckbplotr::make_forest_data()</span>
-<span class="va">datatoplot</span> <span class="op">&lt;-</span> <span class="fu">ckbplotr</span><span class="fu">::</span><span class="fu"><a href="../reference/make_forest_data.html">make_forest_data</a></span><span class="op">(</span>
-                row.labels <span class="op">=</span> <span class="va">varheadings</span>,
-                rows <span class="op">=</span> <span class="st">"Triglycerides concentration"</span>,
-                panels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
-                panel.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                col.key <span class="op">=</span> <span class="st">"variable"</span>,
-                col.estimate <span class="op">=</span> <span class="st">"estimate"</span>,
-                col.stderr <span class="op">=</span> <span class="st">"stderr"</span>,
-                col.lci <span class="op">=</span> <span class="cn">NULL</span>,
-                col.uci <span class="op">=</span> <span class="cn">NULL</span>,
-                col.left <span class="op">=</span> <span class="st">"n"</span>,
-                col.right <span class="op">=</span> <span class="cn">NULL</span>,
-                col.keep <span class="op">=</span> <span class="cn">NULL</span>,
-                ci.delim <span class="op">=</span> <span class="st">" - "</span>,
-                exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,
-                blankrows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
-                scalepoints <span class="op">=</span> <span class="cn">TRUE</span>,
-                minse <span class="op">=</span> <span class="cn">NULL</span>,
-                addtext <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="co"># Get a character vector of the row labels, so these can be used in the plot</span>
-<span class="va">rowlabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">bolditalic</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,
-                       <span class="st">""</span>,
-                       <span class="st">"VLDL"</span>,
-                       <span class="st">"Large"</span>,
-                       <span class="st">"Medium"</span>,
-                       <span class="st">"Small"</span>,
-                       <span class="st">""</span>,
-                       <span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">bold</a></span><span class="op">(</span><span class="st">"IDL"</span><span class="op">)</span>,
-                       <span class="st">""</span>,
-                       <span class="st">"LDL"</span>,
-                       <span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">italic</a></span><span class="op">(</span><span class="st">"Large"</span><span class="op">)</span>,
-                       <span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">italic</a></span><span class="op">(</span><span class="st">"Medium"</span><span class="op">)</span>,
-                       <span class="fu"><a href="https://rdrr.io/r/grDevices/plotmath.html">italic</a></span><span class="op">(</span><span class="st">"Small"</span><span class="op">)</span>,
-                       <span class="st">""</span>,
-                       <span class="st">""</span><span class="op">)</span>
-
-<span class="co"># Get a character vector of the style for row labels</span>
-<span class="va">boldlabels</span> <span class="op">&lt;-</span> <span class="va">datatoplot</span> <span class="op">%&gt;%</span>
-                  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">row</span><span class="op">)</span> <span class="op">%&gt;%</span>
-                  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>bold <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">estimate_transformed</span><span class="op">)</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/all.html">all</a></span><span class="op">(</span><span class="va">key</span> <span class="op">%in%</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span>, <span class="st">"bold"</span>, <span class="st">"plain"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-                  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">row</span><span class="op">)</span> <span class="op">%&gt;%</span>
-                  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">bold</span><span class="op">)</span>
-<span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span>
-
-<span class="co"># Identify any CIs that extend outside axis limits</span>
-<span class="va">datatoplot</span> <span class="op">&lt;-</span> <span class="va">datatoplot</span> <span class="op">%&gt;%</span>
-                <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cioverright  <span class="op">=</span> <span class="op">(</span><span class="va">uci_transformed</span> <span class="op">&gt;</span> <span class="fl">1.1</span><span class="op">)</span>,
-                              uci_transformed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmin</a></span><span class="op">(</span><span class="va">uci_transformed</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                              cioverleft  <span class="op">=</span> <span class="op">(</span><span class="va">lci_transformed</span> <span class="op">&lt;</span> <span class="fl">0.9</span><span class="op">)</span>,
-                              lci_transformed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmax</a></span><span class="op">(</span><span class="va">lci_transformed</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co"># Create the ggplot</span>
-<span class="fu">ggplot</span><span class="op">(</span><span class="va">datatoplot</span>, <span class="fu">aes</span><span class="op">(</span>y<span class="op">=</span><span class="op">-</span><span class="va">row</span>, x<span class="op">=</span><span class="va">estimate_transformed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Put the different panels in side-by-side plots using facets</span>
-  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">panel</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Add a line at null effect</span>
-  <span class="fu">annotate</span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"segment"</span>, y<span class="op">=</span><span class="op">-</span><span class="fl">1</span>, yend<span class="op">=</span><span class="op">-</span><span class="cn">Inf</span>, x<span class="op">=</span><span class="fl">1</span>, xend<span class="op">=</span><span class="fl">1</span>, size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Plot points at the transformed estimates</span>
-  <span class="co">## Scale by inverse of the SE</span>
-  <span class="fu">geom_point</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>size <span class="op">=</span> <span class="va">size</span>, shape <span class="op">=</span> <span class="fl">15</span>, colour <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,
-             stroke <span class="op">=</span> <span class="fl">0.5</span>,
-             na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Scale the size of points by their side length</span>
-  <span class="co"># and make the scale range from zero upwards</span>
-  <span class="fu">scale_radius</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,
-               range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Plot the CIs</span>
-  <span class="fu">geom_linerange</span><span class="op">(</span>data <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.x</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">estimate_transformed</span><span class="op">)</span><span class="op">)</span>,
-                 <span class="fu">aes</span><span class="op">(</span>xmin <span class="op">=</span> <span class="va">lci_transformed</span>,
-                     xmax <span class="op">=</span> <span class="va">uci_transformed</span>,
-                     colour <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>, 
-                 size <span class="op">=</span> <span class="fl">0.5</span>,
-                 na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Add tiny segments with arrows when the CIs go outside axis limits</span>
-  <span class="fu">geom_segment</span><span class="op">(</span>data <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.x</span>, <span class="va">cioverright</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span>,
-               <span class="fu">aes</span><span class="op">(</span>y<span class="op">=</span><span class="op">-</span><span class="va">row</span>,
-                   x<span class="op">=</span><span class="va">uci_transformed</span><span class="op">-</span><span class="fl">0.000001</span>,
-                   yend<span class="op">=</span><span class="op">-</span><span class="va">row</span>,
-                   xend<span class="op">=</span><span class="va">uci_transformed</span><span class="op">)</span>,
-               colour <span class="op">=</span> <span class="st">"black"</span>,
-               size <span class="op">=</span> <span class="fl">0.5</span>,
-               arrow <span class="op">=</span> <span class="fu">arrow</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"closed"</span>, length <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">4</span>, <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span>,
-               na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_segment</span><span class="op">(</span>data <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">.x</span>, <span class="va">cioverleft</span> <span class="op">==</span> <span class="cn">TRUE</span><span class="op">)</span>,
-               <span class="fu">aes</span><span class="op">(</span>y<span class="op">=</span><span class="op">-</span><span class="va">row</span>,
-                   x<span class="op">=</span><span class="va">lci_transformed</span><span class="op">+</span><span class="fl">0.000001</span>,
-                   yend<span class="op">=</span><span class="op">-</span><span class="va">row</span>,
-                   xend<span class="op">=</span><span class="va">lci_transformed</span><span class="op">)</span>,
-               colour <span class="op">=</span> <span class="st">"black"</span>,
-               size <span class="op">=</span> <span class="fl">0.5</span>,
-               arrow <span class="op">=</span> <span class="fu">arrow</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"closed"</span>, length <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">4</span>, <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span>,
-               na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Use identity for aesthetic scales</span>
-  <span class="fu">scale_shape_identity</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_fill_identity</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_colour_identity</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Flip x and y coordinates</span>
-  <span class="fu">coord_cartesian</span><span class="op">(</span>clip <span class="op">=</span> <span class="st">"off"</span>,
-             xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Add columns to right side of plots</span>
-  <span class="co">## column textresult</span>
-  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="op">-</span><span class="va">row</span>, x <span class="op">=</span> <span class="fl">1.104424</span>,
-            label <span class="op">=</span> <span class="va">textresult</span><span class="op">)</span>,
-            hjust <span class="op">=</span> <span class="fl">0</span>,
-            size <span class="op">=</span> <span class="fl">3</span>,
-            na.rm <span class="op">=</span> <span class="cn">TRUE</span>,
-            parse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">annotate</span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"text"</span>,
-           y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">1.104424</span>,
-           label <span class="op">=</span> <span class="st">"HR (95% CI)"</span>,
-           hjust <span class="op">=</span> <span class="fl">0</span>,
-           size <span class="op">=</span> <span class="fl">3</span>,
-           fontface <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Add columns to left side of plots</span>
-  <span class="co">## column n</span>
-  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="op">-</span><span class="va">row</span>, x <span class="op">=</span> <span class="fl">0.896395</span>,
-                label <span class="op">=</span> <span class="va">`n`</span>,
-            fontface <span class="op">=</span> <span class="st">"plain"</span><span class="op">)</span>,
-           hjust <span class="op">=</span> <span class="fl">1</span>,
-           size <span class="op">=</span> <span class="fl">3</span>,
-            na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">annotate</span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"text"</span>,
-           y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.896395</span>,
-           label <span class="op">=</span> <span class="st">"No. of
-events"</span>,
-           hjust <span class="op">=</span> <span class="fl">1</span>,
-           size <span class="op">=</span> <span class="fl">3</span>,
-           fontface <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Add xlab below each axis</span>
-  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="op">-</span><span class="cn">Inf</span>, x <span class="op">=</span> <span class="fl">0.994987</span>, label <span class="op">=</span> <span class="va">xlab</span><span class="op">)</span>,
-            hjust <span class="op">=</span> <span class="fl">0.5</span>,
-            size  <span class="op">=</span> <span class="fl">3</span>,
-            vjust <span class="op">=</span> <span class="fl">4.4</span>,
-            fontface <span class="op">=</span> <span class="st">"bold"</span>,
-            data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                                                 levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                                                 ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                 xlab <span class="op">=</span> <span class="st">"HR (95% CI)"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Add panel name above each panel</span>
-  <span class="fu">geom_text</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="fl">1.5</span>, x <span class="op">=</span> <span class="fl">0.994987</span>, label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,
-            hjust <span class="op">=</span> <span class="fl">0.5</span>,
-            nudge_y <span class="op">=</span> <span class="fl">2</span>,
-            size  <span class="op">=</span> <span class="fl">3</span>,
-            fontface <span class="op">=</span> <span class="st">"bold"</span>,
-            data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                                                 levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                                                 ordered <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,
-                                 title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Set the scale for the y axis (the estimates and CIs)</span>
-  <span class="fu">scale_x_continuous</span><span class="op">(</span>trans  <span class="op">=</span> <span class="st">"log"</span>,
-                     breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                     expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Set the scale for the x axis (the rows)</span>
-  <span class="fu">scale_y_continuous</span><span class="op">(</span>breaks <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">:</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">datatoplot</span><span class="op">$</span><span class="va">row</span><span class="op">)</span>,
-                     labels <span class="op">=</span> <span class="va">rowlabels</span>,
-                     name   <span class="op">=</span> <span class="st">""</span>,
-                     expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="co"># Add the title</span>
-  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op">+</span>
-
-  <span class="co"># Control the overall look of the plots</span>
-  <span class="fu">theme</span><span class="op">(</span>text             <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>,
-        line             <span class="op">=</span> <span class="fu">element_line</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,
-        panel.background <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        panel.grid.major <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        panel.grid.minor <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        axis.line.x      <span class="op">=</span> <span class="fu">element_line</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.5</span>, lineend <span class="op">=</span> <span class="st">"round"</span><span class="op">)</span>,
-        axis.title.x     <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        axis.ticks.x     <span class="op">=</span> <span class="fu">element_line</span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,
-        axis.text.x      <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span>,
-                                        margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span>t <span class="op">=</span> <span class="fl">4.4</span><span class="op">)</span>,
-                                        vjust  <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,
-        axis.ticks.y     <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        axis.line.y      <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        axis.text.y      <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>hjust  <span class="op">=</span> <span class="fl">0</span>,
-                                        colour <span class="op">=</span> <span class="st">"black"</span>,
-                                        face   <span class="op">=</span> <span class="va">boldlabels</span>,
-                                        margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span>r <span class="op">=</span> <span class="fl">2</span>, unit <span class="op">=</span> <span class="st">"lines"</span><span class="op">)</span><span class="op">)</span>,
-        panel.border     <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        panel.spacing    <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">8</span>, <span class="st">"lines"</span><span class="op">)</span>,
-        strip.background <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        strip.placement  <span class="op">=</span> <span class="st">"outside"</span>,
-        strip.text       <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        legend.position  <span class="op">=</span> <span class="st">"none"</span>,
-        plot.background  <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span>,
-        plot.margin      <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">6</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"lines"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Warning: Vectorized input to `element_text()` is not officially supported.</span>
-<span class="co">#&gt; Results may be unexpected or may change in future versions of ggplot2.</span></code></pre></div>
-<p><img src="special_characters_formatting_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-</div>
+<a href="#ggtext" class="anchor"></a>ggtext</h2>
+<p>The <a href="https://wilkelab.org/ggtext/">ggtext package</a> adds support for some Markdown and HTML when plotting text. Row labels in <code><a href="../reference/make_forest_plot.html">make_forest_plot()</a></code> already use <code><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">ggtext::element_markdown()</a></code>. For other parts of plots, you may want add <code><a href="https://wilkelab.org/ggtext/reference/geom_richtext.html">ggtext::geom_richtext()</a></code> layers to include formatted text.</p>
 </div>
   </div>
 

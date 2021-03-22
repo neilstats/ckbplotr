@@ -8,12 +8,19 @@
 
 <title>Prepares data set for a forest plot — make_forest_data • ckbplotr</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -41,6 +48,7 @@
 
 <meta property="og:title" content="Prepares data set for a forest plot — make_forest_data" />
 <meta property="og:description" content="make_forest_data" />
+<meta property="og:image" content="/logo.png" />
 
 
 
@@ -72,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -80,9 +88,12 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="../articles/ckbplotr.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -95,33 +106,48 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ggplot2.html">ggplot2</a>
+      <a href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
     </li>
     <li>
-      <a href="../articles/make_forest_plot.html">Making forest plots</a>
+      <a href="../articles/make_forest_plot.html">More with forest plots</a>
     </li>
     <li>
-      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+      <a href="../articles/make_shape_plot.html">More with shape plots</a>
     </li>
     <li>
-      <a href="../articles/narrow_cis.html">Changing narrow forest plot confidence interval lines</a>
-    </li>
-    <li>
-      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
+      <a href="../articles/adding_editing_code.html">Changing generated code</a>
     </li>
     <li>
       <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../articles/index.html">More...</a>
+    </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Releases</li>
+    <li>
+      <a href="https://github.com/neilstats/ckbplotr/releases/latest">Latest</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../news/index.html">Changelog</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/neilstats/ckbplotr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -149,13 +175,11 @@
 
     <pre class="usage"><span class='fu'>make_forest_data</span><span class='op'>(</span>
   <span class='va'>panels</span>,
-  cols <span class='op'>=</span> <span class='va'>panels</span>,
   col.key <span class='op'>=</span> <span class='st'>"key"</span>,
   row.labels <span class='op'>=</span> <span class='cn'>NULL</span>,
-  headings <span class='op'>=</span> <span class='cn'>NULL</span>,
+  row.labels.levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"heading1"</span>, <span class='st'>"heading2"</span>, <span class='st'>"heading3"</span><span class='op'>)</span>,
   rows <span class='op'>=</span> <span class='cn'>NULL</span>,
   panel.names <span class='op'>=</span> <span class='cn'>NULL</span>,
-  colnames <span class='op'>=</span> <span class='cn'>NULL</span>,
   col.estimate <span class='op'>=</span> <span class='st'>"estimate"</span>,
   col.stderr <span class='op'>=</span> <span class='st'>"stderr"</span>,
   col.lci <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -168,7 +192,10 @@
   blankrows <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span>,
   scalepoints <span class='op'>=</span> <span class='cn'>FALSE</span>,
   minse <span class='op'>=</span> <span class='cn'>NULL</span>,
-  addtext <span class='op'>=</span> <span class='cn'>NULL</span>
+  addtext <span class='op'>=</span> <span class='cn'>NULL</span>,
+  cols <span class='op'>=</span> <span class='va'>panels</span>,
+  headings <span class='op'>=</span> <span class='cn'>NULL</span>,
+  colnames <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -191,12 +218,16 @@ with the same name (which can be specified by col.key).</p></td>
     <tr>
       <th>row.labels</th>
       <td><p>A data frame that contains the labels to be used for the
-rows of the plot. The data frame must contain columns 'heading1', 'heading2'
-and 'heading3'. Use NA if a lower level heading is not required.</p></td>
+rows of the plot. Use NA if a lower level heading is not required for a given row.</p></td>
+    </tr>
+    <tr>
+      <th>row.labels.levels</th>
+      <td><p>A character vector up to length 3. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))</p></td>
     </tr>
     <tr>
       <th>rows</th>
-      <td><p>A character vector. The top level labels (heading1) of rows
+      <td><p>A character vector. The top level labels of rows
 to be included in the plot.</p></td>
     </tr>
     <tr>
@@ -268,6 +299,18 @@ error? (Default: FALSE)</p></td>
 <p>The character strings, heterogeneity test, and trend test results will
   be plotted in the column of estimates and CIs, below the row with the key
   given in the col.key column.</p></td>
+    </tr>
+    <tr>
+      <th>cols</th>
+      <td><p>DEPRECATED.</p></td>
+    </tr>
+    <tr>
+      <th>headings</th>
+      <td><p>DEPRECATED.</p></td>
+    </tr>
+    <tr>
+      <th>colnames</th>
+      <td><p>DEPRECATED.</p></td>
     </tr>
     </table>
 

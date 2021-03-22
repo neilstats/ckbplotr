@@ -8,12 +8,19 @@
 
 <title>Changelog • ckbplotr</title>
 
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -40,6 +47,7 @@
 
 
 <meta property="og:title" content="Changelog" />
+<meta property="og:image" content="/logo.png" />
 
 
 
@@ -71,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -79,9 +87,12 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
+</li>
+<li>
+  <a href="../articles/ckbplotr.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -94,33 +105,48 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ggplot2.html">ggplot2</a>
+      <a href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
     </li>
     <li>
-      <a href="../articles/make_forest_plot.html">Making forest plots</a>
+      <a href="../articles/make_forest_plot.html">More with forest plots</a>
     </li>
     <li>
-      <a href="../articles/make_shape_plot.html">Making shape plots</a>
+      <a href="../articles/make_shape_plot.html">More with shape plots</a>
     </li>
     <li>
-      <a href="../articles/narrow_cis.html">Changing narrow forest plot confidence interval lines</a>
-    </li>
-    <li>
-      <a href="../articles/plot_like_ckb.html">Make a ggplot like a CKB plot</a>
+      <a href="../articles/adding_editing_code.html">Changing generated code</a>
     </li>
     <li>
       <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../articles/index.html">More...</a>
+    </li>
   </ul>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    News
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Releases</li>
+    <li>
+      <a href="https://github.com/neilstats/ckbplotr/releases/latest">Latest</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="../news/index.html">Changelog</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/neilstats/ckbplotr/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -141,6 +167,24 @@
       <small>Source: <a href='https://github.com/neilstats/ckbplotr/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="ckbplotr-060" class="section level1">
+<h1 class="page-header" data-toc-text="0.6.0">
+<a href="#ckbplotr-060" class="anchor"></a>ckbplotr 0.6.0</h1>
+<ul>
+<li>New spacing and column positioning arguments added to make_forest_plot(). By default, these will be calculated automatically.</li>
+<li>New argument addcode in make_forest_plot() which inserts code into the generated plot code.</li>
+<li>New arguments addaes and addarg in make_shape_plot() and make_forest_plot() which can be used to specify additional aesthetics and arguments for some ggplot layers.</li>
+<li>New argument col.right.parse in make_forest_plot() which controls if columns are parsed into expressions when plotted.</li>
+<li>New argument <code>row.labels.levels</code> in make_forest_plot() and make_forest_data() to specify which columns of row.labels data frame to use. And better handling of missing values.</li>
+<li>make_forest_plot() no longer returns data. But the plot data is available at .$plot$data</li>
+<li>New argument envir added to make_shape_plot (allows the user to specify the environment for evaluating the plot code).</li>
+<li>ggtext::element_markdown() now used for y-axis labels in make_forest_plot()</li>
+<li>fix_panel_width() replaced by fix_panel()</li>
+<li>Improved handling of unicode characters.</li>
+<li>Updated documentation.</li>
+<li>Fixes and internal code improvements.</li>
+</ul>
+</div>
     <div id="ckbplotr-050" class="section level1">
 <h1 class="page-header" data-toc-text="0.5.0">
 <a href="#ckbplotr-050" class="anchor"></a>ckbplotr 0.5.0</h1>
