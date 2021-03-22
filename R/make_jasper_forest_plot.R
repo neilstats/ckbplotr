@@ -1,4 +1,4 @@
-#' Make forest plot with Jasper
+#' Make a forest plot with Jasper
 #'
 #' \code{make_jasper_forest_plot} creates a forest plot with Jasper
 #'
@@ -16,7 +16,11 @@
 #' @param forest.xticks A numeric vector. The tick points of the x axis.
 #' @param col.pval Name of additional column to be printed to the right of the plot,
 #'   and formatted as P value.
+#' @param cols DEPRECATED.
+#' @param headings DEPRECATED.
 #' @param ... Other parameters will be passed to the Jasper::ForestFromCSV function.
+#'
+#' @importFrom rlang .data
 #'
 #' @export
 
@@ -25,6 +29,7 @@ make_jasper_forest_plot <- function(
   panels,
   col.key       = "key",
   row.labels    = NULL,
+  row.labels.levels = c("heading1", "heading2", "heading3"),
   headings      = NULL,
   rows          = NULL,
   cols          = panels,
@@ -64,6 +69,7 @@ make_jasper_forest_plot <- function(
 
   out <- make_forest_data(
     row.labels    = row.labels,
+    row.labels.levels = row.labels.levels,
     rows          = rows,
     panels        = panels,
     col.key       = col.key,
@@ -77,8 +83,8 @@ make_jasper_forest_plot <- function(
     exponentiate  = exponentiate,
     blankrows     = blankrows) %>%
     dplyr::group_by(row) %>%
-    dplyr::summarise(Heading = dplyr::first(row.label),
-                     key = dplyr::first(key))
+    dplyr::summarise(Heading = dplyr::first(.data$row.label),
+                     key = dplyr::first(.data$key))
 
   # drop last row (which is blank)
   out <- out %>%
@@ -111,15 +117,15 @@ make_jasper_forest_plot <- function(
     names(tres[[x]])[-1] <- paste0(names(tres[[x]])[-1], x)
 
     tres[[x]] <- tres[[x]] %>%
-      dplyr::filter(!is.na(key))
+      dplyr::filter(!is.na(.data$key))
   }
 
 
   res <- purrr::reduce(tres, function(x, y) merge(x, y, by = "key", all = TRUE))
 
   out2 <- merge(out, res, by = "key", all.x = TRUE) %>%
-    dplyr::arrange(row) %>%
-    dplyr::select(-row, -key)
+    dplyr::arrange(.data$row) %>%
+    dplyr::select(-.data$row, -.data$key)
 
   readr::write_csv(out2,
                    file.path(getwd(),paste0(filestem, "_csv_for_jasper_forest.csv")),

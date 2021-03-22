@@ -2,13 +2,14 @@
 % Please edit documentation in R/make_jasper_forest_plot.R
 \name{make_jasper_forest_plot}
 \alias{make_jasper_forest_plot}
-\title{Make forest plot with Jasper}
+\title{Make a forest plot with Jasper}
 \usage{
 make_jasper_forest_plot(
   filestem = "_test",
   panels,
   col.key = "key",
   row.labels = NULL,
+  row.labels.levels = c("heading1", "heading2", "heading3"),
   headings = NULL,
   rows = NULL,
   cols = panels,
@@ -45,11 +46,17 @@ with the same name (which can be specified by col.key).}
   (Default: "key")}
 
 \item{row.labels}{A data frame that contains the labels to be used for the
-rows of the plot. The data frame must contain columns 'heading1', 'heading2'
-and 'heading3'. Use NA if a lower level heading is not required.}
+rows of the plot. Use NA if a lower level heading is not required for a given row.}
 
-\item{rows}{A character vector. The top level labels (heading1) of rows
+\item{row.labels.levels}{A character vector up to length 3. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))}
+
+\item{headings}{DEPRECATED.}
+
+\item{rows}{A character vector. The top level labels of rows
 to be included in the plot.}
+
+\item{cols}{DEPRECATED.}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 

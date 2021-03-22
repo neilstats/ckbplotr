@@ -3,7 +3,7 @@ Title: Create CKB Plots
 Description: ckbplotr provides functions to help create and style plots in R.
     It is being developed by, and primarily for, China Kadoorie Biobank 
     researchers.
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: 
     person(given = "Neil",
            family = "Wright",
@@ -12,7 +12,8 @@ Authors@R:
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    ggplot2 (>= 3.3.0)
+    ggplot2 (>= 3.3.0),
+    R (>= 2.10)
 Imports: 
     magrittr,
     dplyr,
@@ -21,14 +22,18 @@ Imports:
     readr,
     purrr,
     tidyr,
-    utils
+    utils,
+    stringi,
+    grid,
+    ggtext
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
     rmarkdown,
-    grid,
     gridExtra,
-    ggtext
+    highlight,
+    covr,
+    testthat
 VignetteBuilder: knitr
 URL: https://github.com/neilstats/ckbplotr
 BugReports: https://github.com/neilstats/ckbplotr/issues

@@ -1,0 +1,21 @@
+ckbplotr_row_labels <- data.frame(heading = rep(c("Lipoprotein particle concentration",
+                                              "Triglycerides concentration",
+                                              "Cholesterol concentration"), each = 7),
+                              subheading = rep(c("VLDL", "VLDL", "VLDL",
+                                                 "IDL",
+                                                 "LDL", "LDL", "LDL"), times = 3),
+                              label = rep(c("Large", "Medium", "Small",
+                                            NA,
+                                            "Large", "Medium", "Small") , times = 3),
+                              variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
+                                           'nmr_idl_p',
+                                           'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
+                                           'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
+                                           'nmr_idl_tg',
+                                           'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
+                                           'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
+                                           'nmr_idl_c',
+                                           'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
+                              stringsAsFactors = FALSE)
+
+usethis::use_data(ckbplotr_row_labels, overwrite = TRUE)

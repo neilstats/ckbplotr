@@ -2,20 +2,17 @@
 % Please edit documentation in R/make_forest_plot.R
 \name{make_forest_plot}
 \alias{make_forest_plot}
-\title{Make forest plot with ggplot2}
+\title{Make a forest plot with ggplot2}
 \usage{
 make_forest_plot(
   panels,
   row.labels = NULL,
-  headings = NULL,
+  row.labels.levels = c("heading1", "heading2", "heading3"),
   rows = NULL,
-  cols = panels,
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
-  colnames = NULL,
   panel.headings = panel.names,
-  colheadings = colnames,
   col.key = "key",
   col.estimate = "estimate",
   col.stderr = "stderr",
@@ -23,10 +20,11 @@ make_forest_plot(
   col.uci = NULL,
   col.left = NULL,
   col.right = NULL,
+  col.right.parse = NULL,
   col.left.heading = "",
   col.right.heading = "HR (95\% CI)",
-  col.left.space = 0.02,
-  col.right.space = 0.02,
+  col.left.pos = NULL,
+  col.right.pos = NULL,
   col.left.hjust = 1,
   col.right.hjust = 0,
   col.heading.space = 0,
@@ -43,7 +41,6 @@ make_forest_plot(
   diamond = NULL,
   col.bold = NULL,
   bold.labels = NULL,
-  boldheadings = NULL,
   scalepoints = FALSE,
   minse = NULL,
   pointsize = 3,
@@ -53,19 +50,33 @@ make_forest_plot(
   fill = NULL,
   ciunder = NULL,
   addtext = NULL,
-  label.space = 4,
-  heading.space = NULL,
-  panel.space = 8,
-  plot.space = NULL,
+  left.space = NULL,
+  right.space = NULL,
+  mid.space = unit(5, "mm"),
+  plot.margin = margin(8, 8, 8, 8, "mm"),
   panel.width = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
-  margin = c(2, 6, 2, 1),
-  units = "lines",
   printplot = TRUE,
   showcode = TRUE,
-  envir = NULL
+  addcode = NULL,
+  addaes = NULL,
+  addarg = NULL,
+  envir = NULL,
+  cols = panels,
+  headings = NULL,
+  colnames = NULL,
+  colheadings = colnames,
+  boldheadings = NULL,
+  heading.space = NULL,
+  panel.space = NULL,
+  label.space = NULL,
+  plot.space = NULL,
+  col.right.space = NULL,
+  col.left.space = NULL,
+  margin = NULL,
+  units = NULL
 )
 }
 \arguments{
@@ -75,10 +86,12 @@ specify a row.labels data frame, then they must also all contain a key column
 with the same name (which can be specified by col.key).}
 
 \item{row.labels}{A data frame that contains the labels to be used for the
-rows of the plot. The data frame must contain columns 'heading1', 'heading2'
-and 'heading3'. Use NA if a lower level heading is not required.}
+rows of the plot. Use NA if a lower level heading is not required for a given row.}
 
-\item{rows}{A character vector. The top level labels (heading1) of rows
+\item{row.labels.levels}{A character vector up to length 3. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))}
+
+\item{rows}{A character vector. The top level labels of rows
 to be included in the plot.}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
@@ -110,16 +123,17 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.right}{Names of columns to be printed to the right of the plot.}
 
+\item{col.right.parse}{A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
+Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)}
+
 \item{col.left.heading}{A character vector of titles for col.left columns. (Default: "")}
 
 \item{col.right.heading}{A character vector of titles for the column of estimates
 (if estcolumn = TRUE) and col.right columns. (Default: "HR (95\% CI)")}
 
-\item{col.left.space}{A numeric vector. Sizes of the gaps between the plot
-and col.left columns. As a multiple of the length of the x-axis. (Default: 0)}
+\item{col.left.pos}{A unit vector to position col.right columns.}
 
-\item{col.right.space}{Size of the gap between the plot and column to the
-right of the plot. As a multiple of the length of the x-axis. (Default: 0)}
+\item{col.right.pos}{A unit vector to position col.right columns.}
 
 \item{col.left.hjust}{A numeric vector. The horizontal justification of
 col.left columns. (Default: 1)}
@@ -193,9 +207,13 @@ estimates. (Default: 3)}
   be plotted in the column of estimates and CIs, below the row with the key
   given in the col.key column.}
 
-\item{label.space}{Size of the gap between row labels and the first panel. (Default: 4)}
+\item{left.space}{Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))}
 
-\item{panel.space}{Size of the gap between forest plot panels. (Default: 8)}
+\item{right.space}{Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))}
+
+\item{mid.space}{Size of additional gap to leave between panels. (Default: unit(5, "mm"))}
+
+\item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))}
 
 \item{panel.width}{Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".}
 
@@ -205,28 +223,57 @@ estimates. (Default: 3)}
 
 \item{stroke}{Size of outline of shapes. (Default: 0)}
 
-\item{margin}{Plot margin (top, right, bottom, left). (Default: c(2, 6, 2, 1))}
-
-\item{units}{Units to use for label.space, panel.space and margin (Default: "Lines")}
-
 \item{printplot}{Print the plot. (Default: TRUE)}
 
 \item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
 
+\item{addcode}{A character vector of code to add to the generated code.
+The first element should be a regular expression.
+The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)}
+
+\item{addaes}{Specify additional aesthetics for some ggplot layers.}
+
+\item{addarg}{Specify additional arguments for some ggplot layers.}
+
 \item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
+
+\item{cols}{DEPRECATED.}
+
+\item{headings}{DEPRECATED.}
+
+\item{colnames}{DEPRECATED.}
+
+\item{colheadings}{DEPRECATED.}
+
+\item{boldheadings}{DEPRECATED.}
+
+\item{heading.space}{DEPRECATED. Even older method for specifying spacing.}
+
+\item{panel.space}{DEPRECATED. Old method for specifying spacing.}
+
+\item{label.space}{DEPRECATED. Old method for specifying spacing.}
+
+\item{plot.space}{DEPRECATED. Even older method for specifying spacing.}
+
+\item{col.right.space}{DEPRACTED}
+
+\item{col.left.space}{DEPRACTED}
+
+\item{margin}{DEPRECATED. Old method for specifying margins.}
+
+\item{units}{DEPRECATED}
 }
 \value{
 A list:
 \describe{
   \item{plot}{the plot}
-  \item{data}{a data frame from which the plot is made}
   \item{code}{ggplot2 code to generate the plot}
 }
 }
 \description{
-\code{make_forest_plot} creates a forest plot with ggplot
+Creates a forest plot with ggplot
 }
 \details{
-The function returns the plot, data and ggplot2 code to create the plot.
+The function returns the plot and ggplot2 code to create the plot.
 In RStudio, the ggplot2 code will be shown in the viewer.
 }

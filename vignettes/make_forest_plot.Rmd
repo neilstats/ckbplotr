@@ -1,12 +1,12 @@
 ---
-title: "Making forest plots"
+title: "More with forest plots"
 output:
   rmarkdown::html_vignette:
     fig_width: 7
     fig_height: 7
     toc: TRUE
 vignette: >
-  %\VignetteIndexEntry{Making forest plots}
+  %\VignetteIndexEntry{More with forest plots}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,141 +21,26 @@ knitr::opts_chunk$set(
 )
 ```
 
-The `make_forest_plot` function creates a forest plot using the `ggplot2` graphics 
-package. It is available as part of the `ckbplotr` package.
-
-The function returns a named list containing:
-
-* plot: the plot
-* data: a data frame from which the plot is generated
-* code: ggplot2 code to generate the plot
-
-In RStudio the ggplot2 code used to generate the plot will be shown in the 
-'Viewer' pane. If modifications are needed to the plot, then this code can be
-copied, edited, and run as needed.
-
-
-## Expected warning
-You may get the following warning when using this function.
-
-> Vectorized input to `element_text()` is not officially supported.
-> Results may be unexpected or may change in future versions of ggplot2. 
-
-This is related to how some headings used to label the rows of the forest plot are
-made bold. This should not be a problem if the forest plot produced appears as expected.
-(This hack is discussed [here](https://github.com/tidyverse/ggplot2/issues/3492).)
-
-
-
 ```{r setup, include = FALSE}
 library(ckbplotr)
 ```
 
-## Prepare data
-First of all, do your analyses and put the results into data frames 
-(one data frame for each forest plot panel). Here we generate some example results.
-```{r example forest plot results}
-set.seed(57911624)
-exampleresults <- function(){
-  data.frame(variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
-                          'nmr_idl_p',
-                          'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
-                          'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
-                          'nmr_idl_tg',
-                          'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
-                          'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
-                          'nmr_idl_c',
-                          'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
-             estimate = rnorm(21, 0, 0.02),
-             stderr   = 0.012 + abs(rnorm(21, 0, 0.015)),
-             n        = round(runif(21, 100, 2000)),
-             nb       = round(runif(21, 100, 2000)),
-             shape    = rep(15, 21),
-             colour   = "black",
-             fill     = "black",
-             bold     = FALSE,
-             diamond  = FALSE,
-             ciunder  = FALSE,
-             stringsAsFactors = FALSE)
-}
-resultsA <- exampleresults()
-resultsB <- exampleresults()
-resultsC <- exampleresults()
-resultsD <- exampleresults()
-resultsE <- exampleresults()
 
-resultsA[9,"shape"] <- 16
-resultsA[10, "bold"] <- TRUE
-resultsA[11, "colour"] <- "red"
-resultsA[12, "diamond"] <- TRUE
-resultsA[13, "ciunder"] <- TRUE
-resultsA[13, "shape"] <- 22
-resultsA[13, "fill"] <- "white"
-```
+## Adding columns of text
 
+Use the `col.left` and `col.right` arguments to add columns of text either side of each panel. Use `col.left.heading` and `col.right.heading` to customise the column headings.
+```{r adding-columns-of-text}
+resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
+resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
 
-## Simple forest plot
-```{r make_forest_plot-example-1}
-forestplot <- make_forest_plot(panels         = list(resultsA, resultsB),
-                               col.key        = "variable",
-                               panel.headings = c("Analysis A", "Analysis B"),
-                               exponentiate   = TRUE)
-```
-
-## Forest plot with row labels
-To use row labels, create a data frame of labels and specify arguments `row.labels` and
-`rows`.
-
-This data frame must contain columns 'heading1', 'heading2' and 'heading3',
-which can be set to NA if not needed for a particular row. For example, if you 
-do not need a third level of label for a particular row, then set `heading3=NA`
-for that row. If you only need one level of labels, then set `heading2=NA` and
-`heading3=NA` for every row.
-
-The data set must also contain a column with the same name as a column in each 
-of the results data sets. This column is used to match labels to the correct 
-results, and is specified in the argument `col.key`.
-
-The argument `rows` specifies which results should be included in the plot, by
-giving labels from the heading1 column of the row.labels data frame.
-
-(The order given in the `rows` argument decides the order in which the heading1 
-labels will be in the plot (top to bottom). The heading2 and heading3 labels
-will be in the order that they are in the row.labels data frame.)
-
-```{r forest plot headings, eval=TRUE, echo=FALSE}
-# Example label for every row
-# This could be loaded from a csv containing labels that you use often
-mylabels <- data.frame(heading1 = rep(c("Lipoprotein particle concentration",
-                                        "Triglycerides concentration",
-                                        "Cholesterol concentration"), each = 7),
-                       heading2 = rep(c("VLDL", "VLDL", "VLDL",
-                                        "IDL",
-                                        "LDL", "LDL", "LDL"), times = 3),
-                       heading3 = rep(c("Large", "Medium", "Small",
-                                        NA,
-                                        "Large", "Medium", "Small") , times = 3),
-                       variable = c('nmr_l_vldl_p', 'nmr_m_vldl_p', 'nmr_s_vldl_p',
-                                    'nmr_idl_p',
-                                    'nmr_l_ldl_p', 'nmr_m_ldl_p', 'nmr_s_ldl_p',
-                                    'nmr_l_vldl_tg', 'nmr_m_vldl_tg', 'nmr_s_vldl_tg',
-                                    'nmr_idl_tg',
-                                    'nmr_l_ldl_tg', 'nmr_m_ldl_tg', 'nmr_s_ldl_tg',
-                                    'nmr_l_vldl_c', 'nmr_m_vldl_c', 'nmr_s_vldl_c',
-                                    'nmr_idl_c',
-                                    'nmr_l_ldl_c', 'nmr_m_ldl_c', 'nmr_s_ldl_c'),
-                       stringsAsFactors = FALSE)
-mylabels
-```
-
-```{r make_forest_plot-example-2}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
-                               rows              = c("Lipoprotein particle concentration",
-                                                     "Triglycerides concentration"),
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Triglycerides concentration",
+                                                     "Lipoprotein particle concentration"),
                                exponentiate      = TRUE,
-                               panel.names       = c("Analysis A", "Analysis B"),
+                               panel.headings    = c("Analysis A", "Analysis B"),
                                ci.delim          = " - ",
                                xlim              = c(0.9, 1.1),
                                xticks            = c(0.9, 1, 1.1),
@@ -163,13 +48,43 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                scalepoints       = TRUE,
                                pointsize         = 3,
                                col.left          = c("n"),
-                               col.left.space    = c(0.02),
                                col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
-                               col.heading.space = 1.5,
-                               label.space       = 2,
-                               panel.space       = 8)
+                               col.heading.space = 1.5)
 ```
+
+
+Multiple columns can be added by specifying vectors for `col.left`, `col.right`, `col.left.heading` and `col.right.heading`.
+```{r adding-columns-of-text-2, fig.width = 10}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Triglycerides concentration",
+                                                     "Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.headings    = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3,
+                               col.left          = c("nb", "n"),
+                               col.left.heading  = c("Some other\nnumbers", "No. of\nevents"),
+                               col.right         = "n",
+                               col.right.heading = c("HR", "N"),
+                               col.heading.space = 1.5)
+```
+
+The `col.left.hjust` and `col.right.hjust` arguments set the horizontal justification of the columns (0 = left, 0.5 = center , 1 = right).
+
+## Spacing
+### Horizontal
+The function attempts to set the positions of columns of text and spacing automatically. Where this does not produce a satisfactory layout, you can use the arguments `col.left.pos`, `col.right.pos`, `left.space`, `right.space`, and `mid.space` to control positions and spacing manually.
+
+### Vertical
+The plot will fill the vertical space available. Use `plot.margin` to change the top and bottom margins as needed.
+
 
 
 ## Setting colours and shapes, bold text and diamonds
@@ -191,25 +106,17 @@ The argument/columns, what they control, and the type:
 Note that `col.bold`, and `col.diamond` must be column names in the supplied data frames, while the others can be fixed values or column names.
 
 ### Using values
-```{r}
+```{r, fig.height = 4}
 forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 col.key          = "variable",
-                                row.labels       = mylabels,
+                                row.labels       = ckbplotr_row_labels,
+                                row.labels.levels = c("heading", "subheading", "label"),
                                 rows             = c("Triglycerides concentration"),
                                 exponentiate     = TRUE,
                                 panel.names      = c("Analysis A"),
-                                ci.delim         = " - ",
-                                xlim             = c(0.9, 1.1),
-                                xticks           = c(0.9, 1, 1.1),
                                 blankrows        = c(0, 1, 0, 1),
                                 scalepoints      = TRUE,
                                 pointsize        = 3,
-                                col.left         = c("n"),
-                                col.left.space   = c(0.02),
-                                col.left.heading = c("No. of\nevents"),
-                                col.right.space  = 0.02,
-                                label.space      = 2,
-                                panel.space      = 8,
                                 shape            = 16,
                                 colour           = "red",
                                 cicolour         = "black",
@@ -217,25 +124,25 @@ forestplot1 <- make_forest_plot(panels           = list(resultsA),
 ```
 
 ### Using column names
-```{r}
+```{r, fig.height = 4}
+resultsA[9,"shape"] <- 16
+resultsA[10, "bold"] <- TRUE
+resultsA[11, "colour"] <- "red"
+resultsA[12, "diamond"] <- TRUE
+resultsA[13, "ciunder"] <- TRUE
+resultsA[13, "shape"] <- 22
+resultsA[13, "fill"] <- "white"
+
 forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 col.key          = "variable",
-                                row.labels       = mylabels,
+                                row.labels       = ckbplotr_row_labels,
+                                row.labels.levels = c("heading", "subheading", "label"),
                                 rows             = c("Triglycerides concentration"),
                                 exponentiate     = TRUE,
                                 panel.names      = c("Analysis A"),
-                                ci.delim         = " - ",
-                                xlim             = c(0.9, 1.1),
-                                xticks           = c(0.9, 1, 1.1),
                                 blankrows        = c(0, 1, 0, 1),
                                 scalepoints      = TRUE,
                                 pointsize        = 3,
-                                col.left         = c("n"),
-                                col.left.space   = c(0.02),
-                                col.left.heading = c("No. of\nevents"),
-                                col.right.space  = 0.02,
-                                label.space      = 2,
-                                panel.space      = 8,
                                 shape            = "shape",
                                 colour           = "colour",
                                 col.bold         = "bold",
@@ -247,25 +154,20 @@ If a parameter is not set, then default values are used for these aesthetics. If
 
 ### Diamond shortcut
 As an alternative to using `col.diamond`, provide a character vector in the `diamond` argument. In rows with these key values, estimates and CIs will be plotted using a diamond. (If a list is supplied, only the first element will be used.)
-```{r}
+```{r, fig.height = 4}
 forestplot1 <- make_forest_plot(panels           = list(resultsA),
                                 col.key          = "variable",
-                                row.labels       = mylabels,
+                                row.labels       = ckbplotr_row_labels,
+                                row.labels.levels = c("heading", "subheading", "label"),
                                 rows             = c("Triglycerides concentration"),
                                 exponentiate     = TRUE,
                                 panel.names      = c("Analysis A"),
                                 ci.delim         = " - ",
-                                xlim             = c(0.9, 1.1),
-                                xticks           = c(0.9, 1, 1.1),
                                 blankrows        = c(0, 1, 0, 1),
                                 scalepoints      = TRUE,
                                 pointsize        = 3,
                                 col.left         = c("n"),
-                                col.left.space   = c(0.02),
                                 col.left.heading = c("No. of\nevents"),
-                                col.right.space  = 0.02,
-                                label.space      = 2,
-                                panel.space      = 8,
                                 diamond          = c("nmr_l_ldl_tg", "nmr_m_ldl_tg"))
 ```
 
@@ -275,8 +177,9 @@ forestplot1 <- make_forest_plot(panels           = list(resultsA),
 ## Adding heterogeneity and trend test results and other text
 The `addtext` argument can be used to add results of heterogeneity or trend test, or some other text, in the text column of estimates and CIs.
 
-You will probably need to increase `panel.space` and widen the right margin as shown to stop overlapping text or overrunning the edge of the plot.
-```{r, fig.width = 10}
+The automatic positioning of columns and spacing of panels does not take into account this additional text, so you may need to use the `right.space` and `col.right.pos` arguments for a satisfactory layout.
+
+```{r, echo = FALSE}
 resultsA_extra <- data.frame(variable   = c("nmr_s_ldl_p", "nmr_s_vldl_p"),
                              het_dof    = c("2",           NA),
                              het_stat   = c("12",          NA),
@@ -291,14 +194,22 @@ resultsB_extra <- data.frame(variable   = c("nmr_s_ldl_p", "nmr_s_vldl_p"),
                              trend_stat = c(NA,             "7"),
                              trend_p    = c(NA,             "=0.83"),
                              stringsAsFactors = FALSE)
+```
 
+```{r}
+resultsA_extra
+resultsB_extra
+```
+
+```{r, fig.width = 10}
 forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.key           = "variable",
-                               row.labels        = mylabels,
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
                                rows              = c("Lipoprotein particle concentration",
                                                      "Triglycerides concentration"),
                                exponentiate      = TRUE,
-                               panel.names       = c("Analysis A", "Analysis B"),
+                               panel.headings    = c("Analysis A", "Analysis B"),
                                ci.delim          = " - ",
                                xlim              = c(0.9, 1.1),
                                xticks            = c(0.9, 1, 1.1),
@@ -306,16 +217,10 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                scalepoints       = TRUE,
                                pointsize         = 3,
                                col.left          = c("n"),
-                               col.left.space    = c(0.02),
                                col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
                                col.heading.space = 1.5,
-                               label.space       = 2,
-                               panel.space       = 10,
                                addtext           = list(resultsA_extra, resultsB_extra),
-                               printplot         = FALSE)
-
-forestplot$plot + theme(plot.margin = unit(c(2,10,2,1), "lines"))
+                               right.space = unit(35, "mm"))
 ```
 
 
@@ -340,15 +245,16 @@ forestplot$plot + theme(plot.margin = unit(c(2,10,2,1), "lines"))
 
 ## Different limits and ticks on each plot
 
-The `make_forest_plot` function uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales (or limits or ticks) applied, so it's not directly possible to have different limits and ticks on each forest plot.
+`make_forest_plot()` uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales (or limits or ticks) applied, so it's not directly possible to have different limits and ticks on each forest plot.
 
-However, one approach to work around this is to use `make_forest_plot` for each plot you need, remove the labels from all but the first, then arrange them side-by-side. The `gridExtra` package can be used for this last step.
+However, one approach to work around this is to use `make_forest_plot()` for each plot you need, remove the labels from all but the first, then arrange them side-by-side. The `gridExtra` package can be used for this last step.
 
-Step 1: Use `make_forest_plot` for each plot.
+Step 1: Use `make_forest_plot()` for each plot.
 ```{r}
 forestplot1 <- make_forest_plot(panels            = list(resultsA),
                                 col.key           = "variable",
-                                row.labels        = mylabels,
+                                row.labels        = ckbplotr_row_labels,
+                                row.labels.levels = c("heading", "subheading", "label"),
                                 rows              = c("Lipoprotein particle concentration",
                                                       "Triglycerides concentration"),
                                 exponentiate      = TRUE,
@@ -360,17 +266,14 @@ forestplot1 <- make_forest_plot(panels            = list(resultsA),
                                 scalepoints       = TRUE,
                                 pointsize         = 3,
                                 col.left          = c("n"),
-                                col.left.space    = c(0.02),
                                 col.left.heading  = c("No. of\nevents"),
-                                col.right.space   = 0.02,
                                 col.heading.space = 1.5,
-                                label.space       = 2,
-                                panel.space       = 8,
                                 printplot         = FALSE)
 
 forestplot2 <- make_forest_plot(panels            = list(resultsB),
                                 col.key           = "variable",
-                                row.labels        = mylabels,
+                                row.labels        = ckbplotr_row_labels,
+                                row.labels.levels = c("heading", "subheading", "label"),
                                 rows              = c("Lipoprotein particle concentration",
                                                       "Triglycerides concentration"),
                                 exponentiate      = TRUE,
@@ -382,12 +285,8 @@ forestplot2 <- make_forest_plot(panels            = list(resultsB),
                                 scalepoints       = TRUE,
                                 pointsize         = 3,
                                 col.left          = c("n"),
-                                col.left.space    = c(0.02),
                                 col.left.heading  = c("No. of\nevents"),
-                                col.right.space   = 0.02,
                                 col.heading.space = 1.5,
-                                label.space       = 2,
-                                panel.space       = 8,
                                 printplot         = FALSE)
 ```
 
@@ -405,6 +304,164 @@ gridExtra::grid.arrange(p1, p2, nrow = 1, widths = c(1, 0.52))
 ```
 
 Note that if `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots. However, if different axis scales are used then confidence intervals are not comparable either so this may be not be a problem.
+
+
+
+## Changing narrow confidence interval lines
+When making a forest plot, if a confidence interval line is narrower than the point representing the estimate we may wish to plot the line differently. In this package, this is possible by using the `panel.width` argument in the `make_forest_plot()` function, then using the `fix_panel()` function.
+
+
+### Changing the colour
+To plot narrow confidence widths a different colour, set the `panel.width` argument of `make_forest_plot()` equal to the width each  panel will be in the final drawn output. The `cicolour` argument should also be a character vector - the last element will be used for narrow confidence intervals.
+
+Then use the `fix_panel()` function, where the first argument is the plot just created and the second is the same panel width. This function returns a gtable object, which can be plotted using `grid::grid.draw` (or `plot()`). The panels widths will be fixed.
+
+Notes: This has been designed to work well for shape 15 (the default) and 22. Use a small value for stroke (< 0.5) to avoid a wide border which is not accounted for. The calculation of sizes may not be entirely accurate, so check the plot and change the `plot.width` argument as needed. Confidence intervals are assumed to be centred on the point estimate.
+
+```{r forest-plot}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 16,
+                               col.left          = c("n"),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.heading.space = 0,
+
+                               # set panel width + CI colours
+                               panel.width       = 25,
+                               cicolour          = c("black", "white"),
+                               printplot         = FALSE)
+
+plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
+grid::grid.draw(plot)
+```
+
+The `cicolour` argument can be a vector of all names of colours, or all names of columns (which contain colour names).
+```{r forest-plot-2}
+
+resultsA$cicol1 <- "red"
+resultsB$cicol1 <- "blue"
+resultsA$cicol2 <- "white"
+resultsB$cicol2 <- "white"
+
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 16,
+                               col.left          = c("n"),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.heading.space = 0,
+
+                               # set panel width + CI colours
+                               panel.width       = 25,
+                               cicolour          = c("cicol1", "cicol2"),
+                               printplot         = FALSE)
+
+plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
+grid::grid.draw(plot)
+```
+
+
+### Plotting lines under or over points
+As well as changing colour, we may also wish to change if confidence interval lines are plotted under or over the point estimates. This can be done using the `plot.width` argument and using a logical (or character) vector for the `ciunder` argument.
+
+```{r forest-plot-3}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 18,
+                               col.left          = c("n"),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.heading.space = 0,
+
+                               # set panel width + CI under or over
+                               panel.width       = 25,
+                               shape             = 22,
+                               stroke            = 0.5,
+                               fill              = "white",
+                               ciunder           = c(TRUE, FALSE),
+                               printplot         = FALSE)
+
+plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
+grid::grid.draw(plot)
+```
+
+### Changing colour and plotting of lines
+
+```{r forest-plot-4}
+resultsA <- dplyr::select(resultsA, -ciunder)
+resultsA$cicol1 <- "black"
+resultsA$cicol2 <- "white"
+resultsA$shape <- 15
+
+resultsB <- dplyr::select(resultsB, -ciunder)
+resultsB$cicol1 <- "black"
+resultsB$cicol2 <- "black"
+resultsB$shape <- 22
+
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 18,
+                               col.left          = c("n"),
+                               col.left.space    = c(0.02),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.right.space   = 0.02,
+                               col.heading.space = 0,
+                               label.space       = 2,
+                               panel.space       = 8,
+
+                               # set panel width + CI colours
+                               panel.width       = 25,
+                               shape             = "shape",
+                               stroke            = 0.5,
+                               cicolour          = c("cicol1", "cicol2"),
+                               ciunder           = c(TRUE, FALSE),
+                               fill              = "white",
+                               printplot         = FALSE)
+
+plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
+grid::grid.draw(plot)
+```
+
+
+
 
 ## Stroke
 The `stroke` argument sets the stroke aesthetic for plotted shapes. See https://ggplot2.tidyverse.org/articles/ggplot2-specs.html for more details. The stroke size adds to total size of a shape, so unless `stroke = 0` the scaling of size by inverse variance will be slightly inaccurate (but there are probably more important things to worry about).

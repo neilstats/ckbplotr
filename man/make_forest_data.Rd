@@ -6,13 +6,11 @@
 \usage{
 make_forest_data(
   panels,
-  cols = panels,
   col.key = "key",
   row.labels = NULL,
-  headings = NULL,
+  row.labels.levels = c("heading1", "heading2", "heading3"),
   rows = NULL,
   panel.names = NULL,
-  colnames = NULL,
   col.estimate = "estimate",
   col.stderr = "stderr",
   col.lci = NULL,
@@ -25,7 +23,10 @@ make_forest_data(
   blankrows = c(1, 1, 0, 0),
   scalepoints = FALSE,
   minse = NULL,
-  addtext = NULL
+  addtext = NULL,
+  cols = panels,
+  headings = NULL,
+  colnames = NULL
 )
 }
 \arguments{
@@ -42,10 +43,12 @@ with the same name (which can be specified by col.key).}
   (Default: "key")}
 
 \item{row.labels}{A data frame that contains the labels to be used for the
-rows of the plot. The data frame must contain columns 'heading1', 'heading2'
-and 'heading3'. Use NA if a lower level heading is not required.}
+rows of the plot. Use NA if a lower level heading is not required for a given row.}
 
-\item{rows}{A character vector. The top level labels (heading1) of rows
+\item{row.labels.levels}{A character vector up to length 3. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))}
+
+\item{rows}{A character vector. The top level labels of rows
 to be included in the plot.}
 
 \item{panel.names}{A character vector. The names to be used for each forest plot panel.
@@ -93,6 +96,12 @@ error? (Default: FALSE)}
   The character strings, heterogeneity test, and trend test results will
   be plotted in the column of estimates and CIs, below the row with the key
   given in the col.key column.}
+
+\item{cols}{DEPRECATED.}
+
+\item{headings}{DEPRECATED.}
+
+\item{colnames}{DEPRECATED.}
 }
 \value{
 A dataset from which a forest plot can be generated.

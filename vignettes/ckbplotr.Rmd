@@ -1,0 +1,135 @@
+---
+title: "Get started with ckbplotr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started with ckbplotr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 7,
+  fig.align = "center"
+)
+```
+
+```{r setup, include = F}
+library(ckbplotr)
+```
+## Shape plots
+`make_shape_plot()` creates a plot of estimates and CIs against risk factor levels using the `ggplot2` package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the  Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
+
+The function uses `plot_like_ckb()` to modify the theme and control the look of the plot.
+
+### Example data
+```{r}
+ckbplotr_shape_data
+```
+
+### Simple example
+Given a data frame of estimates and standard errors (to be plotted on the y axis),
+and risk factor levels (to be plotted on the x axis), a plot can be created.
+```{r simple-example, fig.height = 4, fig.width = 4, out.width = "50%"}
+plot <- make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
+                        col.x        = "rf",
+                        col.estimate = "est",
+                        col.stderr   = "se",
+                        col.n        = "n",
+                        xlims        = c(15, 50),
+                        ylims        = c(0.5, 3),
+                        scalepoints  = TRUE,
+                        title        = NULL)
+```
+
+For more details on customising these forest plots, see ["More with shape plots"](make_shape_plot.html).
+
+## Forest plots
+`make_forest_plot()` creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
+
+### Prepare data
+First of all, do your analyses and put the results into data frames (one data frame for each forest plot panel). Here we take subsets of the example data provided in the package.
+```{r example forest plot results}
+resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
+resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
+
+head(resultsA[,c("variable", "estimate", "stderr", "n")])
+```
+
+
+### Simple forest plot
+The `panels` argument is a list of data frames with results to be plotted, the `col.key` argument is the name of the column that defines which results should be plotted on the same row, and the `exponentiate` argument is a logical value telling the function we are providing estimates on the log scale.
+
+By default, the function assumes that estimates and standard errors are in columns named "estimate" and "stderr", but this can also be set by the `col.estimate` and `col.stderr` arguments.
+```{r simple-forest-plot, fig.height = 5, out.width = "90%"}
+forestplot <- make_forest_plot(panels       = list(resultsA, resultsB),
+                               col.key      = "variable",
+                               exponentiate = TRUE)
+```
+
+### Using row labels
+To use row labels, first create a data frame of labels. The data set must contain:
+
+* a column used to match labels to the correct results, specified in the argument `col.key`.
+* up to three columns with headings/subheadings/labels for rows.
+
+If a particular level of label is not required it can be set to missing.
+
+```{r rowlabels}
+head(ckbplotr_row_labels)
+```
+
+In `make_forest_plot()` specify the `row.labels` argument as the data frame of labels you've created. Use the `row.labels.levels` argument to choose which columns are used as headings/subheadings/labels.
+
+Use the `rows` argument to choose the results to be plotted. The first level (heading) labels will be included in the plot from top to bottom. Other labels will be in the order that they are in the `row.labels` data frame.
+
+```{r using-row-labels, fig.height = 5, out.width = "90%"}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Triglycerides concentration",
+                                                     "Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.headings    = c("Analysis A", "Analysis B"),
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3)
+```
+
+In this plot we've also use the `panel.headings`, `xlim`, `xticks`, `scalepoints`, and `pointsize` arguments to customise the plot.
+
+For more details on customising these forest plots, see ["More with forest plots"](make_forest_plot.html).
+
+
+
+## Other plots
+Supply an existing [ggplot2](https://ggplot2.tidyverse.org/) plot as the `plot` argument to `plot_like_ckb()`:
+```{r a-plot, fig.height = 4, fig.width=8, out.width = "80%"}
+plot <- ggplot(data = mpg,
+               aes(x = displ, y = hwy)) +
+  geom_point(size = 1)
+
+ckbplot <- plot_like_ckb(plot = plot,
+                         xlims = c(0, 8),
+                         ylims = c(10, 50))
+
+gridExtra::grid.arrange(plot, ckbplot, ncol = 2)
+```
+
+See ["Make any ggplot like a CKB plot"](plot_like_ckb.html) for more details.
+
+
+## Confidence intervals
+
+When standard errors are supplied to the `make_` functions, confidence intervals are calculated as 95\% confidence intervals using the Normal approximation method (with critical value 1.96).
+
+
+## Jasper forest plots
+`make_jasper_forest_plot()` requires the in-house Jasper package,  which is not publicly available.
+
+

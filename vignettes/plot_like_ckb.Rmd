@@ -1,12 +1,12 @@
 ---
-title: "Make a ggplot like a CKB plot"
+title: "Make any ggplot like a CKB plot"
 output:
   rmarkdown::html_vignette:
     fig_width: 4
     fig_height: 4
     toc: TRUE
 vignette: >
-  %\VignetteIndexEntry{Make a ggplot like a CKB plot}
+  %\VignetteIndexEntry{Make any ggplot like a CKB plot}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 library(ckbplotr)
 ```
 
-The `plot_like_ckb` function does three things to a ggplot2 plot:
+`plot_like_ckb()` does three things to a ggplot2 plot:
 
 1. applies a CKB theme (i.e. change the overall appearance)
 2. extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)

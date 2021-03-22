@@ -1,1 +1,28 @@
 destination: docs
+
+template:
+  params:
+    bootswatch: cosmo
+
+articles:
+- title: Introduction
+  navbar: ~
+  contents:
+  - ckbplotr
+  - plot_like_ckb
+- title: Plot customisation
+  navbar: ~
+  contents:
+  - make_forest_plot
+  - make_shape_plot
+  - adding_editing_code
+  - special_characters_formatting
+- title: Related packages
+  contents:
+  - ggplot2
+  - page_layouts
+
+news:
+  releases:
+  - text: "Latest"
+    href: https://github.com/neilstats/ckbplotr/releases/latest
