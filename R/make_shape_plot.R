@@ -369,8 +369,12 @@ make_shape_plot <- function(data,
   codetext$titles <- c(
     '# Add titles',
     sprintf('xlab("%s") +', xlab),
-    sprintf('ylab("%s")', ylab),
-    sprintf('+ ggtitle("%s")', title),
+    if (!is.null(title) && !title %in% c("", NA)){
+      c(sprintf('ylab("%s") +', ylab),
+        sprintf('ggtitle("%s")', title))
+    } else {
+      sprintf('ylab("%s")', ylab)
+    },
     ''
   )
 
