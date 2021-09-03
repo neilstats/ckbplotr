@@ -1163,12 +1163,14 @@ make_forest_plot <- function(
            col.right.hjust,
            col.bold,
            col.right.parse,
-           col.right.space),
+           col.right.space,
+           if(is.null(addaes$col.right)){""} else{addaes$col.right},
+           if(is.null(addarg$col.right)){""} else{addarg$col.right}),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'ckbplotr::geom_text_move',
-          aes = c(addaes$col.right,
+          aes = c(..9[..9!=""],
                   sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   if(is.character(..6)){
                     if(..7){
@@ -1181,7 +1183,7 @@ make_forest_plot <- function(
                   } else {
                     sprintf('label = %s', ..1)
                   }),
-          arg = c(addarg$col.right,
+          arg = c(..10[..10!=""],
                   sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                   sprintf('hjust = %s', ..5),
                   sprintf('size  = %s', base_size/(11/3)),
@@ -1222,12 +1224,14 @@ make_forest_plot <- function(
            col.left.heading,
            col.left.hjust,
            col.bold,
-           col.left.space),
+           col.left.space,
+           if(is.null(addaes$col.left)){""} else{addaes$col.left},
+           if(is.null(addarg$col.left)){""} else{addarg$col.left}),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'ckbplotr::geom_text_move',
-          aes = c(addaes$col.left,
+          aes = c(..8[..8!=""],
                   sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
                   sprintf('label = %s,', fixsp(..1)),
                   if(is.character(..6)){
@@ -1235,7 +1239,7 @@ make_forest_plot <- function(
                   } else {
                     'fontface = "plain"'
                   }),
-          arg = c(addarg$col.left,
+          arg = c(..9[..9!=""],
                   sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                   sprintf('hjust = %s', ..5),
                   sprintf('size  = %s', base_size/(11/3)),

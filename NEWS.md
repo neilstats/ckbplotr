@@ -1,3 +1,9 @@
+# ckbplotr 0.6.1.9000
+* Allow use of vectors for col.left and col.right in the addaes and addarg arguments. (So that different aesthetics and arguments can be added for each column.)
+
+# ckbplotr 0.6.1
+* Fixes
+
 # ckbplotr 0.6.0
 
 * New spacing and column positioning arguments added to make_forest_plot(). By default, these will be calculated automatically.
