@@ -119,3 +119,28 @@ ds <- function(x){
     ),
     collapse = '')
 }
+
+
+#' Turn unit object into a string
+#'
+#' @keywords internal
+#' @noRd
+printunit <- function(x){
+  paste0('unit(', gsub('"', '', ds(as.numeric(x))), ', "', makeunit(x), '")')
+}
+
+
+#' Turn unit object into name of unit
+#'
+#' @keywords internal
+#' @noRd
+makeunit <- function(x){
+  ## handle different unit object types (for grid>=4.0)
+  if (compareVersion(as.character(packageVersion("grid")), "4.0") >= 0){
+    grid::unitType(x)
+  } else {
+    attr(x, "unit")
+  }
+
+}
+

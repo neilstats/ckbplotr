@@ -551,17 +551,10 @@ make_forest_plot <- function(
   label.space   = NULL,
   plot.space    = NULL,
   col.right.space = NULL,
-  col.left.space = NULL,
-  margin        = NULL,
-  units = NULL
+  col.left.space  = NULL,
+  margin          = NULL,
+  units          = NULL
 ){
-
-  ## handle different unit object types (for grid>=4.0)
-  if (compareVersion(as.character(packageVersion("grid")), "4.0") >= 0){
-    makeunit <- grid::unitType
-  } else {
-    makeunit <- function(x){attr(x, "unit")}
-  }
 
   # legacy arguments
   if (!missing(cols)) {
@@ -664,6 +657,8 @@ make_forest_plot <- function(
 
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- fixsp(col.bold)}
 
+  # codetext - list of character vectors for writing plot code
+  codetext <- list()
 
 
   # spacing
@@ -712,7 +707,7 @@ make_forest_plot <- function(
 
   ## calculate automatic col.right.pos and col.right.space
   if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
-    message("Automatically calculated horizontal spacing and positioning:")
+    codetext$spacing <- "## Automatically calculated horizontal spacing and positioning:"
   }
   ### get maximum width of each columns (incl. heading)
   colspaces <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
@@ -739,12 +734,12 @@ make_forest_plot <- function(
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
   if (is.null(right.space)){
     right.space <- unit(colspaceauto[length(colspaceauto)], "mm")
-    message("right.space = ", ds(right.space))
+    codetext$spacing <- c(codetext$spacing, paste0("## right.space   = ", printunit(right.space)))
   }
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
   if (is.null(col.right.pos)){
     col.right.pos <- unit(colspaceauto, "mm")
-    message("col.right.pos = ", ds(col.right.pos))
+    codetext$spacing <- c(codetext$spacing, paste0("## col.right.pos = ", printunit(col.right.pos)))
   }
 
   ## calculate automatic col.left.pos and col.left.space
@@ -764,17 +759,14 @@ make_forest_plot <- function(
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
   if (is.null(left.space)){
     left.space <- unit(colspaceauto[length(colspaceauto)], "mm")
-    message("left.space = ", ds(left.space))
+    codetext$spacing <- c(codetext$spacing, paste0("## left.space    = ", printunit(left.space)))
   }
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
   if (is.null(col.left.pos)){
     col.left.pos <- unit(colspaceauto, "mm")
-    message("col.left.pos = ", ds(col.left.pos))
+    codetext$spacing <- c(codetext$spacing, paste0("## col.left.pos  = ", printunit(col.left.pos)))
   }
 
-
-  # codetext - list of character vectors for writing plot code
-  codetext <- list()
 
   # Write code for the axes
   ## xfrom, xto, etc. are used by other code sections, so this must come first
@@ -1401,6 +1393,8 @@ make_forest_plot <- function(
 
   # Create the plot code
   plotcode <- c(
+    codetext$spacing,
+    '',
     'library(ggplot2)',
     '',
     codetext$prep.data,

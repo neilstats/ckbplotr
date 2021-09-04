@@ -22,10 +22,6 @@ the author at <neil.wright@ndph.ox.ac.uk> or
 
 It can be used to: create plots of estimates and CIs against risk factor
 levels…
-
-    #> Warning: It is deprecated to specify `guide = FALSE` to remove a guide. Please
-    #> use `guide = "none"` instead.
-
 <img src="man/figures/README-make_shape_plot-example-1.png" width="50%" style="display: block; margin: auto;" />
 
 …create forest plots…
