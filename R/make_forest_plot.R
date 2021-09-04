@@ -31,6 +31,7 @@
 #' @param col.keep Names of additional columns to be kept in returned data frame.
 #' @param ci.delim Character string to separate lower and upper limits of
 #'   confidence interval. (Default: ", ")
+#' @param digits Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
 #' @param blankrows A numeric vector of length 4 specifying the number of blank rows
 #'   after a heading1, at the end of a heading1 'section', after
@@ -81,6 +82,7 @@ make_forest_data <- function(
   col.right     = NULL,
   col.keep      = NULL,
   ci.delim      = ", ",
+  digits        = 2,
   exponentiate  = TRUE,
   blankrows     = c(1, 1, 0, 0),
   scalepoints   = FALSE,
@@ -336,11 +338,11 @@ make_forest_data <- function(
 
   datatoplot <- datatoplot %>%
     dplyr::mutate(auto_estcolumn = dplyr::case_when(
-      !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, 2), nsmall = 2),
+      !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, digits), nsmall = digits),
                                 " (",
-                                format(round(lci_transformed, 2), nsmall = 2),
+                                format(round(lci_transformed, digits), nsmall = digits),
                                 ci.delim,
-                                format(round(uci_transformed, 2), nsmall = 2),
+                                format(round(uci_transformed, digits), nsmall = digits),
                                 ")'"),
       !is.na(.data$extratext) ~ .data$extratext,
       TRUE              ~ "''")) %>%
@@ -505,6 +507,7 @@ make_forest_plot <- function(
   estcolumn     = TRUE,
   col.keep      = NULL,
   ci.delim      = ", ",
+  digits        = 2,
   title         = "",
   xlab          = "HR (95% CI)",
   xlim          = NULL,
@@ -548,17 +551,10 @@ make_forest_plot <- function(
   label.space   = NULL,
   plot.space    = NULL,
   col.right.space = NULL,
-  col.left.space = NULL,
-  margin        = NULL,
-  units = NULL
+  col.left.space  = NULL,
+  margin          = NULL,
+  units          = NULL
 ){
-
-  ## handle different unit object types (for grid>=4.0)
-  if (compareVersion(as.character(packageVersion("grid")), "4.0") >= 0){
-    makeunit <- grid::unitType
-  } else {
-    makeunit <- function(x){attr(x, "unit")}
-  }
 
   # legacy arguments
   if (!missing(cols)) {
@@ -661,6 +657,8 @@ make_forest_plot <- function(
 
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- fixsp(col.bold)}
 
+  # codetext - list of character vectors for writing plot code
+  codetext <- list()
 
 
   # spacing
@@ -672,7 +670,7 @@ make_forest_plot <- function(
      !is.null(col.left.space) | !is.null(col.right.space)){
     message("You're using old arguments for horizontal spacing and positioning.\n",
             "See the package documentation for details on current methods.\n",
-            "For now, I will try to convert these...")
+            "For now, I will try to convert these.")
 
     ## spacing
     units       <- if(!is.null(units)){units}else{"lines"}
@@ -708,9 +706,20 @@ make_forest_plot <- function(
   }
 
   ## calculate automatic col.right.pos and col.right.space
+  if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
+    codetext$spacing <- "## Automatically calculated horizontal spacing and positioning:"
+  }
   ### get maximum width of each columns (incl. heading)
   colspaces <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
-  colspaces <- c(if(estcolumn){gettextwidths("9.99 (9.99-9.99)")}, colspaces)
+  estcolumnwidth <- gettextwidths(paste0("9.",
+                                         paste0(rep(9, digits), collapse = ""),
+                                         "(9.",
+                                         paste0(rep(9, digits), collapse = ""),
+                                         ci.delim,
+                                         "99.",
+                                         paste0(rep(9, digits), collapse = ""),
+                                         ")"))
+  colspaces <- c(if(estcolumn){estcolumnwidth}, colspaces)
   headspaces <- gettextwidths(col.right.heading)
   colspaces <- pmax(colspaces, headspaces)
   ### initial gap, then space for autoestcolumn, and gap between each column
@@ -723,9 +732,15 @@ make_forest_plot <- function(
   if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
   ### text on plot is 0.8 size, and adjust for base_size
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
-  if (is.null(right.space)){right.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
+  if (is.null(right.space)){
+    right.space <- unit(colspaceauto[length(colspaceauto)], "mm")
+    codetext$spacing <- c(codetext$spacing, paste0("## right.space   = ", printunit(right.space)))
+  }
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
-  if (is.null(col.right.pos)){col.right.pos <- unit(colspaceauto, "mm")}
+  if (is.null(col.right.pos)){
+    col.right.pos <- unit(colspaceauto, "mm")
+    codetext$spacing <- c(codetext$spacing, paste0("## col.right.pos = ", printunit(col.right.pos)))
+  }
 
   ## calculate automatic col.left.pos and col.left.space
   ### get maximum width of each columns (incl. heading)
@@ -742,13 +757,16 @@ make_forest_plot <- function(
   # if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
   ### text on plot is 0.8 size, and adjust for base_size
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
-  if (is.null(left.space)){left.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
+  if (is.null(left.space)){
+    left.space <- unit(colspaceauto[length(colspaceauto)], "mm")
+    codetext$spacing <- c(codetext$spacing, paste0("## left.space    = ", printunit(left.space)))
+  }
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
-  if (is.null(col.left.pos)){col.left.pos <- unit(colspaceauto, "mm")}
+  if (is.null(col.left.pos)){
+    col.left.pos <- unit(colspaceauto, "mm")
+    codetext$spacing <- c(codetext$spacing, paste0("## col.left.pos  = ", printunit(col.left.pos)))
+  }
 
-
-  # codetext - list of character vectors for writing plot code
-  codetext <- list()
 
   # Write code for the axes
   ## xfrom, xto, etc. are used by other code sections, so this must come first
@@ -828,6 +846,7 @@ make_forest_plot <- function(
       argset(col.right),
       argset(col.keep),
       argset(ci.delim),
+      argset(digits),
       argset(exponentiate),
       argset(blankrows),
       argset(scalepoints),
@@ -1137,7 +1156,7 @@ make_forest_plot <- function(
     'scale_colour_identity() +',
     '',
     make_layer(
-      '# Flip x and y coordinates',
+      '# Set coordinate system',
       f = 'coord_cartesian',
       arg = c('clip = "off"',
               sprintf('xlim = c(%s, %s)', xfrom, xto))
@@ -1163,25 +1182,28 @@ make_forest_plot <- function(
            col.right.hjust,
            col.bold,
            col.right.parse,
-           col.right.space),
+           col.right.space,
+           if(is.null(addaes$col.right)){""} else{addaes$col.right},
+           if(is.null(addarg$col.right)){""} else{addarg$col.right}),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'ckbplotr::geom_text_move',
-          aes = c(addaes$col.right,
-                  sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
+          aes = c(..9[..9!=""],
+                  'y = -row',
+                  sprintf('x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   if(is.character(..6)){
                     if(..7){
                       sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(", %s,")"), %s)',
-                              ..6, ..6, ..1, ..1)
+                              ..6, ..6, fixsp(..1), fixsp(..1))
                     } else {
-                      c(sprintf('label = %s', ..1),
+                      c(sprintf('label = %s', fixsp(..1)),
                         sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..5, ..5))
                     }
                   } else {
-                    sprintf('label = %s', ..1)
+                    sprintf('label = %s', fixsp(..1))
                   }),
-          arg = c(addarg$col.right,
+          arg = c(..10[..10!=""],
                   sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                   sprintf('hjust = %s', ..5),
                   sprintf('size  = %s', base_size/(11/3)),
@@ -1191,7 +1213,8 @@ make_forest_plot <- function(
         ),
         make_layer(
           f = 'ckbplotr::geom_text_move',
-          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
+          aes = c(sprintf('y = %s', col.heading.space),
+                  sprintf('x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   'label = title'),
           arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                   sprintf('hjust    = %s', ..5),
@@ -1222,20 +1245,23 @@ make_forest_plot <- function(
            col.left.heading,
            col.left.hjust,
            col.bold,
-           col.left.space),
+           col.left.space,
+           if(is.null(addaes$col.left)){""} else{addaes$col.left},
+           if(is.null(addarg$col.left)){""} else{addarg$col.left}),
       ~ c(
         make_layer(
           sprintf('## column %s', ..1),
           f = 'ckbplotr::geom_text_move',
-          aes = c(addaes$col.left,
-                  sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
-                  sprintf('label = %s,', fixsp(..1)),
+          aes = c(..8[..8!=""],
+                  'y = -row',
+                  sprintf('x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
+                  sprintf('label = %s', fixsp(..1)),
                   if(is.character(..6)){
                     sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..6, ..6)
                   } else {
                     'fontface = "plain"'
                   }),
-          arg = c(addarg$col.left,
+          arg = c(..9[..9!=""],
                   sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                   sprintf('hjust = %s', ..5),
                   sprintf('size  = %s', base_size/(11/3)),
@@ -1244,7 +1270,8 @@ make_forest_plot <- function(
         ),
         make_layer(
           f = 'ckbplotr::geom_text_move',
-          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
+          aes = c(sprintf('y = %s', col.heading.space),
+                  sprintf('x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
                   'label = title'),
           arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                   sprintf('hjust    = %s', ..5),
@@ -1366,6 +1393,8 @@ make_forest_plot <- function(
 
   # Create the plot code
   plotcode <- c(
+    codetext$spacing,
+    '',
     'library(ggplot2)',
     '',
     codetext$prep.data,

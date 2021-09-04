@@ -187,7 +187,7 @@ make_shape_plot <- function(data,
     group_string <- sprintf(', group = as.factor(%s)', fixsp(col.group))
     scale_fill_string <- c('',
                            '# Set the scale for fill colours',
-                           'scale_fill_grey(start = 0, end = 1, guide = FALSE) +')
+                           'scale_fill_grey(start = 0, end = 1, guide = "none") +')
     fill_string.aes <- sprintf('fill = as.factor(%s)', fixsp(col.group))
   } else {
     group_string <- ''

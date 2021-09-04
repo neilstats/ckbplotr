@@ -31,6 +31,7 @@ make_forest_plot(
   estcolumn = TRUE,
   col.keep = NULL,
   ci.delim = ", ",
+  digits = 2,
   title = "",
   xlab = "HR (95\% CI)",
   xlim = NULL,
@@ -151,6 +152,8 @@ right of each plot. (Default: TRUE)}
 
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}
+
+\item{digits}{Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)}
 
 \item{title}{Title to appear at the top of the plot.}
 

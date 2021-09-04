@@ -19,6 +19,7 @@ make_forest_data(
   col.right = NULL,
   col.keep = NULL,
   ci.delim = ", ",
+  digits = 2,
   exponentiate = TRUE,
   blankrows = c(1, 1, 0, 0),
   scalepoints = FALSE,
@@ -71,6 +72,8 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}
+
+\item{digits}{Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
