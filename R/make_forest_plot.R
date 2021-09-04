@@ -710,7 +710,7 @@ make_forest_plot <- function(
   ## calculate automatic col.right.pos and col.right.space
   ### get maximum width of each columns (incl. heading)
   colspaces <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
-  colspaces <- c(if(estcolumn){gettextwidths("9.99 (9.99-9.99)")}, colspaces)
+  colspaces <- c(if(estcolumn){gettextwidths(paste0("9.99 (9.99", ci.delim,"99.99)"))}, colspaces)
   headspaces <- gettextwidths(col.right.heading)
   colspaces <- pmax(colspaces, headspaces)
   ### initial gap, then space for autoestcolumn, and gap between each column
