@@ -1176,13 +1176,13 @@ make_forest_plot <- function(
                   if(is.character(..6)){
                     if(..7){
                       sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(", %s,")"), %s)',
-                              ..6, ..6, ..1, ..1)
+                              ..6, ..6, fixsp(..1), fixsp(..1))
                     } else {
-                      c(sprintf('label = %s', ..1),
+                      c(sprintf('label = %s', fixsp(..1)),
                         sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..5, ..5))
                     }
                   } else {
-                    sprintf('label = %s', ..1)
+                    sprintf('label = %s', fixsp(..1))
                   }),
           arg = c(..10[..10!=""],
                   sprintf('move_x = unit(%s, "%s")', ..2, ..3),

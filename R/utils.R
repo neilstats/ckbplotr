@@ -20,7 +20,7 @@ indent <- function(n, ...){
 
 fixsp <- function(x){
   for (i in 1:length(x)){
-    if (grepl("[[:blank:]]", x[[i]])){
+    if (grepl("[[:blank:]]|[[:punct:]]", x[[i]])){
       x[[i]] <- paste0("`", x[[i]], "`")
     }
   }
