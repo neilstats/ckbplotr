@@ -31,6 +31,7 @@
 #' @param col.keep Names of additional columns to be kept in returned data frame.
 #' @param ci.delim Character string to separate lower and upper limits of
 #'   confidence interval. (Default: ", ")
+#' @param digits Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
 #' @param blankrows A numeric vector of length 4 specifying the number of blank rows
 #'   after a heading1, at the end of a heading1 'section', after
@@ -81,6 +82,7 @@ make_forest_data <- function(
   col.right     = NULL,
   col.keep      = NULL,
   ci.delim      = ", ",
+  digits        = 2,
   exponentiate  = TRUE,
   blankrows     = c(1, 1, 0, 0),
   scalepoints   = FALSE,
@@ -336,11 +338,11 @@ make_forest_data <- function(
 
   datatoplot <- datatoplot %>%
     dplyr::mutate(auto_estcolumn = dplyr::case_when(
-      !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, 2), nsmall = 2),
+      !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, digits), nsmall = digits),
                                 " (",
-                                format(round(lci_transformed, 2), nsmall = 2),
+                                format(round(lci_transformed, digits), nsmall = digits),
                                 ci.delim,
-                                format(round(uci_transformed, 2), nsmall = 2),
+                                format(round(uci_transformed, digits), nsmall = digits),
                                 ")'"),
       !is.na(.data$extratext) ~ .data$extratext,
       TRUE              ~ "''")) %>%
@@ -505,6 +507,7 @@ make_forest_plot <- function(
   estcolumn     = TRUE,
   col.keep      = NULL,
   ci.delim      = ", ",
+  digits        = 2,
   title         = "",
   xlab          = "HR (95% CI)",
   xlim          = NULL,
@@ -710,7 +713,15 @@ make_forest_plot <- function(
   ## calculate automatic col.right.pos and col.right.space
   ### get maximum width of each columns (incl. heading)
   colspaces <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
-  colspaces <- c(if(estcolumn){gettextwidths(paste0("9.99 (9.99", ci.delim,"99.99)"))}, colspaces)
+  estcolumnwidth <- gettextwidths(paste0("9.",
+                                         paste0(rep(9, digits), collapse = ""),
+                                         "(9.",
+                                         paste0(rep(9, digits), collapse = ""),
+                                         ci.delim,
+                                         "99.",
+                                         paste0(rep(9, digits), collapse = ""),
+                                         ")"))
+  colspaces <- c(if(estcolumn){estcolumnwidth}, colspaces)
   headspaces <- gettextwidths(col.right.heading)
   colspaces <- pmax(colspaces, headspaces)
   ### initial gap, then space for autoestcolumn, and gap between each column
@@ -828,6 +839,7 @@ make_forest_plot <- function(
       argset(col.right),
       argset(col.keep),
       argset(ci.delim),
+      argset(digits),
       argset(exponentiate),
       argset(blankrows),
       argset(scalepoints),
