@@ -1171,7 +1171,8 @@ make_forest_plot <- function(
           sprintf('## column %s', ..1),
           f = 'ckbplotr::geom_text_move',
           aes = c(..9[..9!=""],
-                  sprintf('y = -row, x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
+                  'y = -row',
+                  sprintf('x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   if(is.character(..6)){
                     if(..7){
                       sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(", %s,")"), %s)',
@@ -1193,7 +1194,8 @@ make_forest_plot <- function(
         ),
         make_layer(
           f = 'ckbplotr::geom_text_move',
-          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
+          aes = c(sprintf('y = %s', col.heading.space),
+                  sprintf('x = %s', round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * ..8), 6)),
                   'label = title'),
           arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                   sprintf('hjust    = %s', ..5),
@@ -1232,8 +1234,9 @@ make_forest_plot <- function(
           sprintf('## column %s', ..1),
           f = 'ckbplotr::geom_text_move',
           aes = c(..8[..8!=""],
-                  sprintf('y = -row, x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
-                  sprintf('label = %s,', fixsp(..1)),
+                  'y = -row',
+                  sprintf('x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
+                  sprintf('label = %s', fixsp(..1)),
                   if(is.character(..6)){
                     sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..6, ..6)
                   } else {
@@ -1248,7 +1251,8 @@ make_forest_plot <- function(
         ),
         make_layer(
           f = 'ckbplotr::geom_text_move',
-          aes = c(sprintf('y = %s, x = %s', col.heading.space, round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
+          aes = c(sprintf('y = %s', col.heading.space),
+                  sprintf('x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
                   'label = title'),
           arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                   sprintf('hjust    = %s', ..5),
