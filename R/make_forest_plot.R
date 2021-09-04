@@ -675,7 +675,7 @@ make_forest_plot <- function(
      !is.null(col.left.space) | !is.null(col.right.space)){
     message("You're using old arguments for horizontal spacing and positioning.\n",
             "See the package documentation for details on current methods.\n",
-            "For now, I will try to convert these...")
+            "For now, I will try to convert these.")
 
     ## spacing
     units       <- if(!is.null(units)){units}else{"lines"}
@@ -711,6 +711,9 @@ make_forest_plot <- function(
   }
 
   ## calculate automatic col.right.pos and col.right.space
+  if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
+    message("Automatically calculated horizontal spacing and positioning:")
+  }
   ### get maximum width of each columns (incl. heading)
   colspaces <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
   estcolumnwidth <- gettextwidths(paste0("9.",
@@ -734,9 +737,15 @@ make_forest_plot <- function(
   if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
   ### text on plot is 0.8 size, and adjust for base_size
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
-  if (is.null(right.space)){right.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
+  if (is.null(right.space)){
+    right.space <- unit(colspaceauto[length(colspaceauto)], "mm")
+    message("right.space = ", ds(right.space))
+  }
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
-  if (is.null(col.right.pos)){col.right.pos <- unit(colspaceauto, "mm")}
+  if (is.null(col.right.pos)){
+    col.right.pos <- unit(colspaceauto, "mm")
+    message("col.right.pos = ", ds(col.right.pos))
+  }
 
   ## calculate automatic col.left.pos and col.left.space
   ### get maximum width of each columns (incl. heading)
@@ -753,9 +762,15 @@ make_forest_plot <- function(
   # if (length(colspaceauto) > 1){colspaceauto[length(colspaceauto)] <- colspaceauto[length(colspaceauto)] - gettextwidths("W")}
   ### text on plot is 0.8 size, and adjust for base_size
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
-  if (is.null(left.space)){left.space <- unit(colspaceauto[length(colspaceauto)], "mm")}
+  if (is.null(left.space)){
+    left.space <- unit(colspaceauto[length(colspaceauto)], "mm")
+    message("left.space = ", ds(left.space))
+  }
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
-  if (is.null(col.left.pos)){col.left.pos <- unit(colspaceauto, "mm")}
+  if (is.null(col.left.pos)){
+    col.left.pos <- unit(colspaceauto, "mm")
+    message("col.left.pos = ", ds(col.left.pos))
+  }
 
 
   # codetext - list of character vectors for writing plot code
