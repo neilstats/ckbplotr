@@ -1,5 +1,9 @@
-# ckbplotr 0.6.1.9000
+# ckbplotr 0.6.2
+
 * Allow use of vectors for col.left and col.right in the addaes and addarg arguments. (So that different aesthetics and arguments can be added for each column.)
+* Add digits argument to make_forest_data() and make_forest_plot().
+* make_forest_plot() will report the results of automatic horizontal column positioning and spacing.
+* Various minor fixes.
 
 # ckbplotr 0.6.1
 * Fixes
