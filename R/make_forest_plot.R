@@ -1137,7 +1137,7 @@ make_forest_plot <- function(
     'scale_colour_identity() +',
     '',
     make_layer(
-      '# Flip x and y coordinates',
+      '# Set coordinate system',
       f = 'coord_cartesian',
       arg = c('clip = "off"',
               sprintf('xlim = c(%s, %s)', xfrom, xto))
