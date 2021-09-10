@@ -581,6 +581,11 @@ make_forest_plot <- function(
   # check arguments
   if (!missing(col.diamond) &&  !missing(diamond)) stop("Use either col.diamond or diamond, not both.")
 
+  for (c in c(col.left, col.right)){
+    if (any(unlist(lapply(panels, function(x) !c %in% names(x))))){
+      stop("Column '", c, "' does not exist in every panels data frame.")
+    }
+  }
 
   # take first element if diamond is a list
   if (is.list(diamond)){ diamond <- diamond[[1]] }
