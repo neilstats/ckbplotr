@@ -338,11 +338,11 @@ make_forest_data <- function(
 
   datatoplot <- datatoplot %>%
     dplyr::mutate(auto_estcolumn = dplyr::case_when(
-      !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, digits), nsmall = digits),
+      !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, digits), nsmall = digits, trim = T),
                                 " (",
-                                format(round(lci_transformed, digits), nsmall = digits),
+                                format(round(lci_transformed, digits), nsmall = digits, trim = T),
                                 ci.delim,
-                                format(round(uci_transformed, digits), nsmall = digits),
+                                format(round(uci_transformed, digits), nsmall = digits, trim = T),
                                 ")'"),
       !is.na(.data$extratext) ~ .data$extratext,
       TRUE              ~ "''")) %>%
