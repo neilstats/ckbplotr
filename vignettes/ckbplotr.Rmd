@@ -128,8 +128,3 @@ See ["Make any ggplot like a CKB plot"](plot_like_ckb.html) for more details.
 
 When standard errors are supplied to the `make_` functions, confidence intervals are calculated as 95\% confidence intervals using the Normal approximation method (with critical value 1.96).
 
-
-## Jasper forest plots
-`make_jasper_forest_plot()` requires the in-house Jasper package,  which is not publicly available.
-
-
