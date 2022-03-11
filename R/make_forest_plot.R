@@ -130,7 +130,7 @@ make_forest_data <- function(
   if (!is.null(addtext)) {
     for (i in 1:length(addtext)) {
       addtext[[i]] <- dplyr::bind_rows(addtextcols, addtext[[i]]) %>%
-        dplyr::mutate(extratext = dplyr::case_when(
+        dplyr::mutate(addtext = dplyr::case_when(
           !is.na(text) ~ paste0("'", text, "'"),
           !is.na(het_stat) ~ paste0("paste('Heterogeneity: ', chi[",
                                     het_dof,
@@ -146,7 +146,7 @@ make_forest_data <- function(
                                       ")', sep='')")
         )) %>%
         dplyr::select(key = !!rlang::sym(col.key),
-                      .data$extratext) %>%
+                      .data$addtext) %>%
         dplyr::mutate(key = as.character(.data$key))
 
       extrarowkeys <- c(extrarowkeys, addtext[[i]][["key"]])
@@ -286,7 +286,7 @@ make_forest_data <- function(
     if (!is.null(addtext)){
       out1 <- merge(out1, addtext[[i]], by.x = "extrarowkey", by.y = "key", all.x = TRUE)
     } else {
-      out1 <- dplyr::mutate(out1, extratext = as.character(NA))
+      out1 <- dplyr::mutate(out1, addtext = as.character(NA))
     }
 
     datatoplot <- dplyr::bind_rows(datatoplot, out1)
@@ -338,15 +338,13 @@ make_forest_data <- function(
 
   datatoplot <- datatoplot %>%
     dplyr::mutate(auto_estcolumn = dplyr::case_when(
-      !is.na(estimate) ~ paste0("'",format(round(estimate_transformed, digits), nsmall = digits, trim = T),
+      !is.na(estimate) ~ paste0(format(round(estimate_transformed, digits), nsmall = digits, trim = T),
                                 " (",
                                 format(round(lci_transformed, digits), nsmall = digits, trim = T),
                                 ci.delim,
                                 format(round(uci_transformed, digits), nsmall = digits, trim = T),
-                                ")'"),
-      !is.na(.data$extratext) ~ .data$extratext,
-      TRUE              ~ "''")) %>%
-    dplyr::select(-.data$extrarowkey, -.data$extratext) %>%
+                                ")"))) %>%
+    dplyr::select(-.data$extrarowkey) %>%
     dplyr::arrange(panel, row)
 
 
@@ -496,7 +494,7 @@ make_forest_plot <- function(
   col.uci       = NULL,
   col.left      = NULL,
   col.right     = NULL,
-  col.right.parse   = NULL,
+  col.right.parse   = FALSE,
   col.left.heading  = "",
   col.right.heading = "HR (95% CI)",
   col.left.pos    = NULL,
@@ -875,7 +873,7 @@ make_forest_plot <- function(
                   '.groups = "drop") %>%'),
            'dplyr::mutate(row.label = dplyr::if_else(bold & row.label != "",',
            indent(41, 'paste0("**", row.label, "**"),',
-           'as.character(row.label))) %>% '),
+                  'as.character(row.label))) %>% '),
            'dplyr::arrange(row) %>%',
            'dplyr::pull(row.label)'),
     ''
@@ -1173,12 +1171,6 @@ make_forest_plot <- function(
   if (!is.null(col.right) | estcolumn) {
     col.right.all <- c(if (estcolumn){"auto_estcolumn"}, col.right)
 
-    ## if not specified, col.right.parse should be TRUE for textresult and FALSE otherwise
-    if (is.null(col.right.parse)){
-      col.right.parse <- rep(FALSE, length(col.right.all))
-      if (estcolumn){ col.right.parse[[1]] <- TRUE}
-    }
-
     codetext$col.right.line <- unlist(purrr::pmap(
       list(col.right.all,
            as.numeric(col.right.pos),
@@ -1203,7 +1195,7 @@ make_forest_plot <- function(
                               ..6, ..6, fixsp(..1), fixsp(..1))
                     } else {
                       c(sprintf('label = %s', fixsp(..1)),
-                        sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..5, ..5))
+                        sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..6, ..6))
                     }
                   } else {
                     sprintf('label = %s', fixsp(..1))
@@ -1240,6 +1232,37 @@ make_forest_plot <- function(
                                  codetext$col.right.line)
   }
 
+
+  # Write code for addtext
+  if (!is.null(addtext)){
+    codetext$addtext <- make_layer(
+      '## addtext',
+      f = 'ckbplotr::geom_text_move',
+      aes = c('y = -row',
+              sprintf('x = %s',
+                      round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space[[1]]),
+                            6)),
+              if(is.character(col.bold[[1]])){
+                if(col.parse[[1]]){
+                  sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(addtext)"), addtext)',
+                          col.bold[[1]], col.bold[[1]])
+                } else {
+                  c('label = addtext',
+                    sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")',
+                            col.bold[[1]], col.bold[[1]]))
+                }
+              } else {
+                'label = addtext'
+              }),
+      arg = c(sprintf('move_x = unit(%s, "%s")',
+                      as.numeric(col.right.pos[[1]]),
+                      makeunit(col.right.pos[[1]])),
+              sprintf('hjust = %s', col.right.hjust[[1]]),
+              sprintf('size  = %s', base_size/(11/3)),
+              'na.rm = TRUE',
+              'parse = TRUE')
+    )
+  }
 
   # Write code for columns to left of plots
   if (!is.null(col.left)) {
@@ -1419,6 +1442,7 @@ make_forest_plot <- function(
            codetext$plotdiamondscode,
            codetext$scales.coords,
            codetext$col.right.line,
+           codetext$addtext,
            codetext$col.left.line,
            codetext$xlab.panel.headings,
            codetext$axes,
