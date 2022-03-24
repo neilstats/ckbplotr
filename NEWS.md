@@ -1,6 +1,7 @@
-# ckbplotr 0.6.2.9000
+# ckbplotr 0.6.3
 
 * Removed make_jasper_forest_plot function.
+* Minor improvements to make_forest_plot().
 
 # ckbplotr 0.6.2
 
