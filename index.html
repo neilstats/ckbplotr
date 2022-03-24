@@ -28,6 +28,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -40,18 +42,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/ckbplotr.html">Get started</a>
 </li>
@@ -59,7 +55,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -81,13 +77,14 @@
       <a href="articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
     <li class="divider">
-    <li>
-      <a href="articles/index.html">More...</a>
+    </li>
+<li>
+      <a href="articles/index.html">More articles...</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -95,10 +92,11 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Releases</li>
     <li>
-      <a href="https://github.com/neilstats/ckbplotr/releases/latest">Latest</a>
+      <a href="https://github.com/neilstats/ckbplotr/releases/latest" class="external-link">Latest</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="news/index.html">Changelog</a>
     </li>
   </ul>
@@ -106,7 +104,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/neilstats/ckbplotr/">
+  <a href="https://github.com/neilstats/ckbplotr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -123,100 +121,110 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="ckbplotr-" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#ckbplotr-" class="anchor"></a>ckbplotr <img src="reference/figures/logo.png" align="right" width="120">
+<div class="section level1">
+<div class="page-header"><h1 id="ckbplotr-">ckbplotr <img src="reference/figures/logo.png" align="right" width="120"><a class="anchor" aria-label="anchor" href="#ckbplotr-"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p><code>ckbplotr</code> provides functions to help create and style plots in R. It is being developed by, and primarily for, <a href="http://www.ckbiobank.org">China Kadoorie Biobank</a> researchers.</p>
-<p><em>This package is under development. If you find an error or bug or have a suggestion for improvement please create an issue on GitHub or contact the author at <a href="mailto:neil.wright@ndph.ox.ac.uk" class="email">neil.wright@ndph.ox.ac.uk</a> or <a href="https://twitter.com/NeilStats">@NeilStats</a>.</em></p>
+<p><code>ckbplotr</code> provides functions to help create and style plots in R. It is being developed by, and primarily for, <a href="http://www.ckbiobank.org" class="external-link">China Kadoorie Biobank</a> researchers.</p>
+<p><em>This package is under development. If you find an error or bug or have a suggestion for improvement please create an issue on GitHub or contact the author at <a href="mailto:neil.wright@ndph.ox.ac.uk" class="email">neil.wright@ndph.ox.ac.uk</a> or <a href="https://twitter.com/NeilStats" class="external-link">@NeilStats</a>.</em></p>
 <p>It can be used to: create plots of estimates and CIs against risk factor levels… <img src="reference/figures/README-make_shape_plot-example-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>…create forest plots… <img src="reference/figures/README-example-forest-plot-1.png" width="90%" style="display: block; margin: auto;"></p>
 <p>…and convert other ggplots to CKB style. <img src="reference/figures/README-a-plot-1.png" width="80%" style="display: block; margin: auto;"></p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<div id="directly-from-github" class="section level3">
-<h3 class="hasAnchor">
-<a href="#directly-from-github" class="anchor"></a>Directly from github</h3>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<div class="section level3">
+<h3 id="directly-from-github">Directly from github<a class="anchor" aria-label="anchor" href="#directly-from-github"></a>
+</h3>
 <p>The latest version of <code>ckbplotr</code> can be installed directly from github using the <code>remotes</code> package.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">'remotes'</span><span class="op">)</span>
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">'neilstats/ckbplotr'</span><span class="op">)</span></code></pre></div>
-<p>If you get an error that reads “Error: Failed to install ‘unknown package’ from GitHub: HTTP error 404. No commit found for the ref master” then make sure to update to the latest version of the <code>remotes</code> package, or try <code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github('neilstats/ckbplotr@main')</a></code>.</p>
-<p>If you get an error that reads “Error: (converted from warning) package ‘ggplot2’ was built under R version …” you can avoid this by first running <code><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")</a></code>. (This is a <a href="https://github.com/r-lib/remotes/issues/403">known issue</a> with the <code>remotes</code> package.)</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'remotes'</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">'neilstats/ckbplotr'</span><span class="op">)</span></code></pre></div>
+<p>If you get an error that reads “Error: Failed to install ‘unknown package’ from GitHub: HTTP error 404. No commit found for the ref master” then make sure to update to the latest version of the <code>remotes</code> package, or try <code>remotes::install_github('neilstats/ckbplotr@main')</code>.</p>
+<p>If you get an error that reads “Error: (converted from warning) package ‘ggplot2’ was built under R version …” you can avoid this by first running <code>Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")</code>. (This is a <a href="https://github.com/r-lib/remotes/issues/403" class="external-link">known issue</a> with the <code>remotes</code> package.)</p>
 </div>
-<div id="or-from-source-package" class="section level3">
-<h3 class="hasAnchor">
-<a href="#or-from-source-package" class="anchor"></a>Or from source package</h3>
+<div class="section level3">
+<h3 id="or-from-source-package">Or from source package<a class="anchor" aria-label="anchor" href="#or-from-source-package"></a>
+</h3>
 <p><code>ckbplotr</code> can also be installed from its source package. The R packages <code>ggplot2</code>, <code>magrittr</code>, <code>readr</code>, <code>tibble</code>, <code>dplyr</code>, <code>purrr</code>, <code>rlang</code>, and <code>ggtext</code> must first be installed.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># The easiest way is to install the whole tidyverse and ggtext:</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"tidyverse"</span>, <span class="st">"ggtext"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"tidyverse"</span>, <span class="st">"ggtext"</span><span class="op">)</span>
 
 <span class="co"># # Or install just these packages:</span>
 <span class="co"># install.packages(c("ggplot2", "readr", "dplyr", "purrr", "ggtext"))</span></code></pre></div>
 <p>Then <code>ckbplotr</code> can be installed from its source package using the code:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"ckbplotr.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ckbplotr.tar.gz"</span>, repos <span class="op">=</span> <span class="cn">NULL</span>, type <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></code></pre></div>
 <p>Or, in RStudio, open the “Tools” menu and select “Install Packages…”. In the “Install from…” box select “Package Archive File”, and in the “Package archive” box browse to the ckbplotr.tar.gz file.</p>
-<p>The source package for the latest release version is available <a href="https://github.com/neilstats/ckbplotr/releases/latest">here</a>.</p>
+<p>The source package for the latest release version is available <a href="https://github.com/neilstats/ckbplotr/releases/latest" class="external-link">here</a>.</p>
 </div>
 </div>
-<div id="get-started" class="section level2">
-<h2 class="hasAnchor">
-<a href="#get-started" class="anchor"></a>Get started</h2>
+<div class="section level2">
+<h2 id="get-started">Get started<a class="anchor" aria-label="anchor" href="#get-started"></a>
+</h2>
 <p>Read <code><a href="articles/ckbplotr.html">vignette("ckbplotr")</a></code> to see how to use the <code><a href="reference/make_shape_plot.html">make_shape_plot()</a></code>, <code><a href="reference/make_forest_plot.html">make_forest_plot()</a></code>, and <code><a href="reference/plot_like_ckb.html">plot_like_ckb()</a></code> functions.</p>
 </div>
-<div id="ggplot2-code" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ggplot2-code" class="anchor"></a>ggplot2 code</h2>
-<p>The <code><a href="reference/make_shape_plot.html">make_shape_plot()</a></code> and <code><a href="reference/make_forest_plot.html">make_forest_plot()</a></code> functions return both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the <a href="https://cran.r-project.org/package=highlight">highlights</a> package is installed).</p>
+<div class="section level2">
+<h2 id="ggplot2-code">ggplot2 code<a class="anchor" aria-label="anchor" href="#ggplot2-code"></a>
+</h2>
+<p>The <code><a href="reference/make_shape_plot.html">make_shape_plot()</a></code> and <code><a href="reference/make_forest_plot.html">make_forest_plot()</a></code> functions return both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the <a href="https://cran.r-project.org/package=highlight" class="external-link">highlights</a> package is installed).</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/neilstats/ckbplotr/">https://​github.com/​neilstats/​ckbplotr/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/neilstats/ckbplotr/issues">https://​github.com/​neilstats/​ckbplotr/​issues</a>
-</li>
+<li><a href="https://github.com/neilstats/ckbplotr/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/neilstats/ckbplotr/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-2" class="external-link">GPL-2</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing ckbplotr</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Neil Wright <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/neilstats/ckbplotr/actions"><img src="https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/neilstats/ckbplotr?branch=main"><img src="https://codecov.io/gh/neilstats/ckbplotr/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://github.com/neilstats/ckbplotr/actions" class="external-link"><img src="https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/neilstats/ckbplotr?branch=main" class="external-link"><img src="https://codecov.io/gh/neilstats/ckbplotr/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Neil Wright.</p>
+  <p></p>
+<p>Developed by Neil Wright.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -224,6 +232,8 @@
 
   
 
+
+  
 
   </body>
 </html>

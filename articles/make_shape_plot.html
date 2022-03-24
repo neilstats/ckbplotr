@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,18 +40,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/ckbplotr.html">Get started</a>
 </li>
@@ -57,7 +53,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -79,13 +75,14 @@
       <a href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     </li>
     <li class="divider">
-    <li>
-      <a href="../articles/index.html">More...</a>
+    </li>
+<li>
+      <a href="../articles/index.html">More articles...</a>
     </li>
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     News
      
     <span class="caret"></span>
@@ -93,10 +90,11 @@
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Releases</li>
     <li>
-      <a href="https://github.com/neilstats/ckbplotr/releases/latest">Latest</a>
+      <a href="https://github.com/neilstats/ckbplotr/releases/latest" class="external-link">Latest</a>
     </li>
     <li class="divider">
-    <li>
+    </li>
+<li>
       <a href="../news/index.html">Changelog</a>
     </li>
   </ul>
@@ -104,7 +102,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/neilstats/ckbplotr/">
+  <a href="https://github.com/neilstats/ckbplotr/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -125,16 +123,16 @@
       <h1 data-toc-skip>More with shape plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/master/vignettes/make_shape_plot.Rmd"><code>vignettes/make_shape_plot.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/HEAD/vignettes/make_shape_plot.Rmd" class="external-link"><code>vignettes/make_shape_plot.Rmd</code></a></small>
       <div class="hidden name"><code>make_shape_plot.Rmd</code></div>
 
     </div>
 
     
     
-<div id="log-scale" class="section level2">
-<h2 class="hasAnchor">
-<a href="#log-scale" class="anchor"></a>Log scale</h2>
+<div class="section level2">
+<h2 id="log-scale">Log scale<a class="anchor" aria-label="anchor" href="#log-scale"></a>
+</h2>
 <p>Set the <code>logscale</code> argument to true to use a log scale on the vertical axis. If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set <code>exponentiate</code> to true. This will plot exp(estimates) and use a log scale for the axis (if <code>logscale</code> is not set).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,
@@ -142,9 +140,9 @@
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
                         col.n        <span class="op">=</span> <span class="st">"n"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">3</span><span class="op">)</span>,
-                        ybreaks      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,
+                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,
+                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">3</span><span class="op">)</span>,
+                        ybreaks      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         logscale     <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -152,9 +150,9 @@
 <span class="co">#&gt; by format '%s$'</span></code></pre></div>
 <p><img src="make_shape_plot_files/figure-html/log-scale-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
-<div id="using-groups" class="section level2">
-<h2 class="hasAnchor">
-<a href="#using-groups" class="anchor"></a>Using groups</h2>
+<div class="section level2">
+<h2 id="using-groups">Using groups<a class="anchor" aria-label="anchor" href="#using-groups"></a>
+</h2>
 <p>The <code>col.group</code> argument can be supplied to plot results for different groups (using shades of grey for the fill colour). (Set <code>ciunder</code> to <code>TRUE</code> so that the confidence interval lines are hidden behind behind the point estimate squares.)</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
@@ -163,8 +161,8 @@
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
                         col.n        <span class="op">=</span> <span class="st">"n"</span>,
                         col.group    <span class="op">=</span> <span class="st">"is_female"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
+                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
+                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -172,9 +170,9 @@
 <span class="co">#&gt; by format '%s$'</span></code></pre></div>
 <p><img src="make_shape_plot_files/figure-html/groups-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
-<div id="adding-lines" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-lines" class="anchor"></a>Adding lines</h2>
+<div class="section level2">
+<h2 id="adding-lines">Adding lines<a class="anchor" aria-label="anchor" href="#adding-lines"></a>
+</h2>
 <p>The <code>lines</code> argument will add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
@@ -183,8 +181,8 @@
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
                         col.n        <span class="op">=</span> <span class="st">"n"</span>,
                         col.group    <span class="op">=</span> <span class="st">"is_female"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
+                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
+                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -193,9 +191,9 @@
 <span class="co">#&gt; by format '%s$'</span></code></pre></div>
 <p><img src="make_shape_plot_files/figure-html/lines-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
-<div id="setting-aesthetics" class="section level2">
-<h2 class="hasAnchor">
-<a href="#setting-aesthetics" class="anchor"></a>Setting aesthetics</h2>
+<div class="section level2">
+<h2 id="setting-aesthetics">Setting aesthetics<a class="anchor" aria-label="anchor" href="#setting-aesthetics"></a>
+</h2>
 <p>The shape and fill colour of points, and colour of points and confidence interval lines can be set overall or on a per-point basis. This is done by setting arguments <code>shape</code>, <code>colour</code>, <code>cicolour</code>, <code>fill</code>, and <code>ciunder</code> to appropriate values, or to the name of a column containing values for each point.</p>
 <p>The argument/columns, what they control, and the type:</p>
 <table class="table">
@@ -233,9 +231,9 @@
 </tbody>
 </table>
 <p>(Note that the approach for using columns to specify colours and shapes in this package does not make use of the automatic scales available in ggplot. We recommend you take a look at the ggplot2 documentation for better examples if you want to write ggplot2 code.)</p>
-<div id="using-values" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-values" class="anchor"></a>Using values</h3>
+<div class="section level3">
+<h3 id="using-values">Using values<a class="anchor" aria-label="anchor" href="#using-values"></a>
+</h3>
 <p>If the argument doesn’t match the name of a column in the data, then the value will be used for all points.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
@@ -243,8 +241,8 @@
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
                         col.n        <span class="op">=</span> <span class="st">"n"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
+                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
+                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -256,9 +254,9 @@
 <span class="co">#&gt; by format '%s$'</span></code></pre></div>
 <p><img src="make_shape_plot_files/figure-html/aesthetics%20with%20values-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
-<div id="using-columns" class="section level3">
-<h3 class="hasAnchor">
-<a href="#using-columns" class="anchor"></a>Using columns</h3>
+<div class="section level3">
+<h3 id="using-columns">Using columns<a class="anchor" aria-label="anchor" href="#using-columns"></a>
+</h3>
 <p>If the argument matches a column name, then the values in the column will be used.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">fillcol</span> <span class="op">&lt;-</span> <span class="st">"black"</span>
@@ -269,8 +267,8 @@
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
                         col.n        <span class="op">=</span> <span class="st">"n"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
+                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
+                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,
@@ -289,8 +287,8 @@
                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
                         col.n        <span class="op">=</span> <span class="st">"n"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
+                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,
+                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         pointsize    <span class="op">=</span> <span class="fl">7</span>,
@@ -301,12 +299,12 @@
 <p>Note that the size of boxes depends on <code>pointsize</code>, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.</p>
 </div>
 </div>
-<div id="categorical-risk-factor" class="section level2">
-<h2 class="hasAnchor">
-<a href="#categorical-risk-factor" class="anchor"></a>Categorical risk factor</h2>
+<div class="section level2">
+<h2 id="categorical-risk-factor">Categorical risk factor<a class="anchor" aria-label="anchor" href="#categorical-risk-factor"></a>
+</h2>
 <p>The risk factor can be a factor. In this case, the x-axis coordinates are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of categories plus 0.5. You may need to add position arguments so that points, intervals and text do not overlap:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>  <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,   <span class="st">"D"</span>, <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,  <span class="st">"D"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>  <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,   <span class="st">"D"</span>, <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,  <span class="st">"D"</span><span class="op">)</span>
 
 <span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,
                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,
@@ -314,12 +312,12 @@
                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
                         col.n        <span class="op">=</span> <span class="st">"n"</span>,
                         col.group    <span class="op">=</span> <span class="st">"is_female"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
+                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span><span class="op">)</span>,
+                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
                         title        <span class="op">=</span> <span class="cn">NULL</span>,
                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,
-                        addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>point     <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,
+                        addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point     <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,
                                       ci        <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,
                                       n         <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,
                                       estimates <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span><span class="op">)</span><span class="op">)</span>
@@ -327,10 +325,10 @@
 <span class="co">#&gt; by format '%s$'</span></code></pre></div>
 <p><img src="make_shape_plot_files/figure-html/unnamed-chunk-2-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
-<div id="stroke" class="section level2">
-<h2 class="hasAnchor">
-<a href="#stroke" class="anchor"></a>Stroke</h2>
-<p>The <code>stroke</code> argument sets the stroke aesthetic for plotted shapes. See <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html" class="uri">https://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a> for more details. The stroke size adds to total size of a shape, so unless <code>stroke = 0</code> the scaling of size by inverse variance will be slightly inaccurate (but there are probably more important things to worry about).</p>
+<div class="section level2">
+<h2 id="stroke">Stroke<a class="anchor" aria-label="anchor" href="#stroke"></a>
+</h2>
+<p>The <code>stroke</code> argument sets the stroke aesthetic for plotted shapes. See <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html" class="external-link uri">https://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a> for more details. The stroke size adds to total size of a shape, so unless <code>stroke = 0</code> the scaling of size by inverse variance will be slightly inaccurate (but there are probably more important things to worry about).</p>
 </div>
   </div>
 
@@ -345,11 +343,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Neil Wright.</p>
+  <p></p>
+<p>Developed by Neil Wright.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -357,6 +357,8 @@
 
   
 
+
+  
 
   </body>
 </html>
