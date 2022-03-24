@@ -20,7 +20,7 @@ make_forest_plot(
   col.uci = NULL,
   col.left = NULL,
   col.right = NULL,
-  col.right.parse = NULL,
+  col.right.parse = FALSE,
   col.left.heading = "",
   col.right.heading = "HR (95\% CI)",
   col.left.pos = NULL,

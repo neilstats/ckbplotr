@@ -1,3 +1,8 @@
+# ckbplotr 0.6.3
+
+* Removed make_jasper_forest_plot function.
+* Minor improvements to make_forest_plot().
+
 # ckbplotr 0.6.2
 
 * Allow use of vectors for col.left and col.right in the addaes and addarg arguments. (So that different aesthetics and arguments can be added for each column.)
