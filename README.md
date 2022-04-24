@@ -9,6 +9,7 @@
 status](https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg)](https://github.com/neilstats/ckbplotr/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/neilstats/ckbplotr/branch/main/graph/badge.svg)](https://codecov.io/gh/neilstats/ckbplotr?branch=main)
+[![DOI](https://zenodo.org/badge/189028664.svg)](https://zenodo.org/badge/latestdoi/189028664)
 <!-- badges: end -->
 
 `ckbplotr` provides functions to help create and style plots in R. It is
