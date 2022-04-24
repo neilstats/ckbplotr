@@ -28,6 +28,8 @@
 #'                  estimates. (Default: 3)
 #' @param xlab Label for x-axis. (Default: "Risk factor")
 #' @param ylab Label for y-axis. (Default: "Estimate (95\% CI)")
+#' @param legend.name The name of the colour scale/legend for groups. (Default: "")
+#' @param legend.position Position of the legend for groups ("none", "left", "right", "bottom", "top", or two-element numeric vector). (Default: "top")
 #' @param title Plot title. (Default: "Figure")
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
@@ -88,6 +90,8 @@ make_shape_plot <- function(data,
                             ybreaks       = NULL,
                             xlab          = "Risk factor",
                             ylab          = "Estimate (95% CI)",
+                            legend.name   = "",
+                            legend.position = "top",
                             title         = "Figure",
                             printplot     = TRUE,
                             showcode      = TRUE,
@@ -153,7 +157,6 @@ make_shape_plot <- function(data,
     fill <- fixq(fill)
   }
 
-
   # Check for log scale and exponentiate estimates
   if (logscale == TRUE){
     scale    <- "log"
@@ -186,8 +189,12 @@ make_shape_plot <- function(data,
   if (!is.null(col.group)) {
     group_string <- sprintf(', group = as.factor(%s)', fixsp(col.group))
     scale_fill_string <- c('',
-                           '# Set the scale for fill colours',
-                           'scale_fill_grey(start = 0, end = 1, guide = "none") +')
+                           make_layer('# Set the scale for fill colours',
+                                    f = "scale_fill_grey",
+                                    arg = c("start = 0",
+                                            "end   = 1",
+                                            sprintf('name  = "%s"', legend.name)),
+                                    br = FALSE))
     fill_string.aes <- sprintf('fill = as.factor(%s)', fixsp(col.group))
   } else {
     group_string <- ''
@@ -241,8 +248,7 @@ make_shape_plot <- function(data,
     'scale_shape_identity() +',
     'scale_colour_identity() +',
     scale_fill_string,
-    ''
-  )
+    '')
 
 
   # Write code for plotting lines
@@ -378,7 +384,6 @@ make_shape_plot <- function(data,
     ''
   )
 
-
   # Write code to use plot_like_ckb function
   codetext$plot.like.ckb <- make_layer(
     '# Plot like a CKB plot',
@@ -391,9 +396,16 @@ make_shape_plot <- function(data,
             sprintf('ratio          = %s', ratio),
             sprintf('base_size      = %s', base_size),
             sprintf('base_line_size = %s', base_line_size)),
-    plus = FALSE
+    plus = TRUE
   )
 
+  # Write code for theme
+  codetext$theme <- make_layer(
+    '# Add theme',
+    f = "theme",
+    arg = c(sprintf('legend.position = %s', ds(legend.position))),
+    plus = FALSE
+  )
 
   # Create the plot code
   plotcode <- c(
@@ -409,8 +421,10 @@ make_shape_plot <- function(data,
            codetext$cis.after,
            codetext$scales,
            codetext$axes,
-           codetext$titles),
-    codetext$plot.like.ckb
+           codetext$titles,
+           codetext$theme),
+    codetext$plot.like.ckb,
+    indent(2, codetext$theme)
   )
 
 
