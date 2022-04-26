@@ -33,10 +33,22 @@ levels…
 
 ## Installation
 
-### Directly from github
+### From R-universe
 
-The latest version of `ckbplotr` can be installed directly from github
-using the `remotes` package.
+The latest version of `ckbplotr` can be installed from the neilstats
+R-universe using `install.packages()`.
+
+``` r
+install.packages('ckbplotr',
+                 repos = c('https://neilstats.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
+This will also install dependencies from the CRAN repository.
+
+### From github
+
+The latest version of `ckbplotr` can be installed from github using the
+`remotes` package.
 
 ``` r
 install.packages('remotes')
