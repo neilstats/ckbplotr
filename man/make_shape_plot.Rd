@@ -36,6 +36,8 @@ make_shape_plot(
   ybreaks = NULL,
   xlab = "Risk factor",
   ylab = "Estimate (95\% CI)",
+  legend.name = "",
+  legend.position = "top",
   title = "Figure",
   printplot = TRUE,
   showcode = TRUE,
@@ -111,6 +113,10 @@ estimates. (Default: 3)}
 \item{xlab}{Label for x-axis. (Default: "Risk factor")}
 
 \item{ylab}{Label for y-axis. (Default: "Estimate (95\% CI)")}
+
+\item{legend.name}{The name of the colour scale/legend for groups. (Default: "")}
+
+\item{legend.position}{Position of the legend for groups ("none", "left", "right", "bottom", "top", or two-element numeric vector). (Default: "top")}
 
 \item{title}{Plot title. (Default: "Figure")}
 

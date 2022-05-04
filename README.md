@@ -9,6 +9,7 @@
 status](https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg)](https://github.com/neilstats/ckbplotr/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/neilstats/ckbplotr/branch/main/graph/badge.svg)](https://codecov.io/gh/neilstats/ckbplotr?branch=main)
+[![DOI](https://zenodo.org/badge/189028664.svg)](https://zenodo.org/badge/latestdoi/189028664)
 <!-- badges: end -->
 
 `ckbplotr` provides functions to help create and style plots in R. It is
@@ -32,10 +33,22 @@ levels…
 
 ## Installation
 
-### Directly from github
+### From R-universe
 
-The latest version of `ckbplotr` can be installed directly from github
-using the `remotes` package.
+The latest version of `ckbplotr` can be installed from the neilstats
+R-universe using `install.packages()`.
+
+``` r
+install.packages('ckbplotr',
+                 repos = c('https://neilstats.r-universe.dev', 'https://cloud.r-project.org'))
+```
+
+This will also install dependencies from the CRAN repository.
+
+### From github
+
+The latest version of `ckbplotr` can be installed from github using the
+`remotes` package.
 
 ``` r
 install.packages('remotes')

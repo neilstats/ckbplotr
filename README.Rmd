@@ -23,6 +23,7 @@ library(gridExtra)
 <!-- badges: start -->
 [![R build status](https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg)](https://github.com/neilstats/ckbplotr/actions)
 [![Codecov test coverage](https://codecov.io/gh/neilstats/ckbplotr/branch/main/graph/badge.svg)](https://codecov.io/gh/neilstats/ckbplotr?branch=main)
+[![DOI](https://zenodo.org/badge/189028664.svg)](https://zenodo.org/badge/latestdoi/189028664)
 <!-- badges: end -->
 
 `ckbplotr` provides functions to help create and style plots in R. It is being
@@ -41,7 +42,6 @@ plot <- make_shape_plot(results,
                         col.estimate = "est",
                         col.stderr   = "se",
                         col.n        = "n",
-                        col.group    = "is_female",
                         xlims        = c(15,50),
                         ylims        = c(0.5, 2.5),
                         scalepoints  = TRUE,
@@ -90,8 +90,16 @@ grid.arrange(plot, arrow, ckbplot, ncol = 3, widths = c(1, 0.25, 1))
 
 ## Installation
 
-### Directly from github
-The latest version of `ckbplotr` can be installed directly from 
+### From R-universe
+The latest version of `ckbplotr` can be installed from the neilstats R-universe using `install.packages()`.
+```{r install from runiverse, eval = FALSE}
+install.packages('ckbplotr',
+                 repos = c('https://neilstats.r-universe.dev', 'https://cloud.r-project.org'))
+```
+This will also install dependencies from the CRAN repository.
+
+### From github
+The latest version of `ckbplotr` can be installed from 
 github using the `remotes` package.
 ```{r install from github, eval = FALSE}
 install.packages('remotes')

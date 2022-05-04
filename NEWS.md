@@ -1,3 +1,9 @@
+# ckbplotr 0.6.4
+
+* Added legend.name and legend.position arguments to make_shape_plot().
+* Added DOI badge and R-universe installation instructions.
+* Updated license (and add ggplot2 reference)
+
 # ckbplotr 0.6.3
 
 * Removed make_jasper_forest_plot function.
@@ -11,6 +17,7 @@
 * Various minor fixes.
 
 # ckbplotr 0.6.1
+
 * Fixes
 
 # ckbplotr 0.6.0
