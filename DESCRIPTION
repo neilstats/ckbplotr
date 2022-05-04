@@ -37,4 +37,4 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://github.com/neilstats/ckbplotr
 BugReports: https://github.com/neilstats/ckbplotr/issues
-License: GPL-2
+License: GPL (>= 3)
