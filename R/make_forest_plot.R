@@ -1243,7 +1243,7 @@ make_forest_plot <- function(
                       round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space[[1]]),
                             6)),
               if(is.character(col.bold[[1]])){
-                if(col.parse[[1]]){
+                if(col.right.parse[[1]]){
                   sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(addtext)"), addtext)',
                           col.bold[[1]], col.bold[[1]])
                 } else {
