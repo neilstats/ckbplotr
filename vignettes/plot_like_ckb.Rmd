@@ -68,6 +68,11 @@ plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), ratio = 0.3)
 
 
 ### Modifying the appearance of the plot
+The `colour` arguments of `theme_ckb()` and `plot_like_ckb()` can be used to change the colour of the non-data components of the plot.
+```{r colour}
+plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), colour = "darkred")
+```
+
 If you wish to override some aspect of the theme applied by `plot_like_ckb`, 
 then this can be done by adding a theme after the function.
 ```{r plot_like_ckb-example-3}
