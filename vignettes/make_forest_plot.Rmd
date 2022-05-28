@@ -86,6 +86,27 @@ The function attempts to set the positions of columns of text and spacing automa
 The plot will fill the vertical space available. Use `plot.margin` to change the top and bottom margins as needed.
 
 
+## Plot colour
+The colour used for the plot can be changed with the `plotcolour` argument. This can be useful to create plots that fit a colour scheme (or use a dark grey for less contrast when viewing on a screen or projector). See the next section for details on customising the colour(s) of point and confidence interval lines. 
+
+```{r plot-colour}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Triglycerides concentration",
+                                                     "Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.headings    = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3,
+                               plotcolour        = "navyblue")
+```
+
 
 ## Setting colours and shapes, bold text and diamonds
 

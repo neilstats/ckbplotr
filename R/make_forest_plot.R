@@ -431,9 +431,10 @@ make_forest_data <- function(
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
 #' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
-#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
-#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)
-#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param plotcolour Colour for all parts of the plot. (Default: "black")
+#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
+#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
 #' @param diamond Alternative to col.diamond. A character vectors identify the rows
@@ -520,6 +521,7 @@ make_forest_plot <- function(
   minse         = NULL,
   pointsize     = 3,
   shape     = NULL,
+  plotcolour = "black",
   colour    = NULL,
   cicolour  = colour,
   fill      = NULL,
@@ -627,9 +629,11 @@ make_forest_plot <- function(
     shape <- NULL
   }
 
+  plotcolour <- fixq(plotcolour)
+
   cicolour.aes <- NULL
   if (is.null(cicolour)) {
-    cicolour <- fixq("black")
+    cicolour <- plotcolour
   }
   else if (all(cicolour %in% names(panels[[1]]))){
     cicolour.aes <- fixsp(cicolour)
@@ -640,7 +644,7 @@ make_forest_plot <- function(
 
   colour.aes <- NULL
   if (is.null(colour)) {
-    colour <- fixq("black")
+    colour <- plotcolour
   } else if (all(colour %in% names(panels[[1]]))){
     colour.aes <- fixsp(colour)
     colour <- NULL
@@ -650,7 +654,7 @@ make_forest_plot <- function(
 
   fill.aes <- NULL
   if (is.null(fill)) {
-    fill <- fixq("black")
+    fill <- plotcolour
   } else if (fill %in% names(panels[[1]])){
     fill.aes <- fixsp(fill)
     fill <- NULL
@@ -1028,7 +1032,8 @@ make_forest_plot <- function(
       arg = c('geom = "segment"',
               'y = -0.7, yend = -Inf',
               sprintf('x = %s, xend = %s', nullval, nullval),
-              sprintf('size = %s', base_line_size))
+              sprintf('size = %s', base_line_size),
+              sprintf('colour = %s', plotcolour))
     )
   }
 
@@ -1204,6 +1209,7 @@ make_forest_plot <- function(
                   sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                   sprintf('hjust = %s', ..5),
                   sprintf('size  = %s', base_size/(11/3)),
+                  sprintf('colour  = %s', plotcolour),
                   'na.rm = TRUE',
                   sprintf('parse = %s', ..7)),
           br = FALSE
@@ -1216,6 +1222,7 @@ make_forest_plot <- function(
           arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                   sprintf('hjust    = %s', ..5),
                   sprintf('size     = %s', base_size/(11/3)),
+                  sprintf('colour  = %s', plotcolour),
                   'fontface = "bold"',
                   sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
                   indent(36,
@@ -1259,6 +1266,7 @@ make_forest_plot <- function(
                       makeunit(col.right.pos[[1]])),
               sprintf('hjust = %s', col.right.hjust[[1]]),
               sprintf('size  = %s', base_size/(11/3)),
+              sprintf('colour  = %s', plotcolour),
               'na.rm = TRUE',
               'parse = TRUE')
     )
@@ -1293,6 +1301,7 @@ make_forest_plot <- function(
                   sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                   sprintf('hjust = %s', ..5),
                   sprintf('size  = %s', base_size/(11/3)),
+                  sprintf('colour  = %s', plotcolour),
                   'na.rm = TRUE'),
           br = FALSE
         ),
@@ -1304,6 +1313,7 @@ make_forest_plot <- function(
           arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                   sprintf('hjust    = %s', ..5),
                   sprintf('size     = %s', base_size/(11/3)),
+                  sprintf('colour  = %s', plotcolour),
                   'fontface = "bold"',
                   sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
                   indent(36,
@@ -1332,6 +1342,7 @@ make_forest_plot <- function(
       arg = c(addarg$xlab,
               'hjust = 0.5',
               sprintf('size  = %s', base_size/(11/3)),
+              sprintf('colour  = %s', plotcolour),
               'vjust = 4.4',
               'fontface = "bold"',
               sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -1349,6 +1360,7 @@ make_forest_plot <- function(
                 'hjust = 0.5',
                 'nudge_y = 2',
                 sprintf('size  = %s', base_size/(11/3)),
+                sprintf('colour  = %s', plotcolour),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
                 indent(36, sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
@@ -1374,7 +1386,7 @@ make_forest_plot <- function(
   codetext$theme <- make_layer(
     '# Control the overall look of the plots',
     f = 'theme',
-    arg = c(sprintf('text             = element_text(size = %s)', base_size),
+    arg = c(sprintf('text             = element_text(size = %s, colour = %s)', base_size, plotcolour),
             sprintf('line             = element_line(size = %s)', base_line_size),
             'panel.background = element_blank()',
             'panel.grid.major = element_blank()',
@@ -1384,11 +1396,11 @@ make_forest_plot <- function(
             } else {
               'plot.title.position = "plot"'
             },
-            sprintf('axis.line.x      = element_line(size = %s, lineend = "round")',
-                    base_line_size),
+            sprintf('axis.line.x      = element_line(colour = %s, size = %s, lineend = "round")',
+                    plotcolour, base_line_size),
             'axis.title       = element_blank()',
-            'axis.ticks.x     = element_line(colour = "black")',
-            'axis.text.x      = element_text(colour = "black"',
+            sprintf('axis.ticks.x     = element_line(colour = %s)', plotcolour),
+            sprintf('axis.text.x      = element_text(colour = %s,', plotcolour),
             indent(32,
                    sprintf('margin = margin(t = %s)',base_size/(11/4.4)),
                    'vjust  = 1)'),
@@ -1396,7 +1408,7 @@ make_forest_plot <- function(
             'axis.line.y      = element_blank()',
             'axis.text.y      = ggtext::element_markdown(hjust  = 0',
             indent(44,
-                   'colour = "black"',
+                   sprintf('colour = %s', plotcolour),
                    sprintf('margin = margin(r = %s, unit = "%s"))',
                            as.numeric(left.space), makeunit(left.space))),
             'panel.border     = element_blank()',
