@@ -410,7 +410,7 @@ make_shape_plot <- function(data,
   codetext$theme <- make_layer(
     '# Add theme',
     f = "theme",
-    arg = c(sprintf('legend.position = %s', ds(legend.position))),
+    arg = c(sprintf('legend.position = %s', deparse(legend.position))),
     plus = FALSE
   )
 
@@ -428,8 +428,7 @@ make_shape_plot <- function(data,
            codetext$cis.after,
            codetext$scales,
            codetext$axes,
-           codetext$titles,
-           codetext$theme),
+           codetext$titles),
     codetext$plot.like.ckb,
     indent(2, codetext$theme)
   )
