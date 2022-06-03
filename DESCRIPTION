@@ -25,13 +25,12 @@ Imports:
     utils,
     stringi,
     grid,
-    ggtext
-RoxygenNote: 7.1.2
-Suggests: 
+    ggtext,
     knitr,
     rmarkdown,
+RoxygenNote: 7.1.2
+Suggests:
     gridExtra,
-    highlight,
     covr,
     testthat
 VignetteBuilder: knitr

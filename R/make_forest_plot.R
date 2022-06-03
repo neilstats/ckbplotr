@@ -714,7 +714,7 @@ make_forest_plot <- function(
 
   ## calculate automatic col.right.pos and col.right.space
   if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
-    codetext$spacing <- "## Automatically calculated horizontal spacing and positioning:"
+    text_auto_spacing <- "Automatically calculated horizontal spacing and positioning:\n"
   }
   ### get maximum width of each columns (incl. heading)
   colspaces <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
@@ -741,12 +741,12 @@ make_forest_plot <- function(
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
   if (is.null(right.space)){
     right.space <- unit(colspaceauto[length(colspaceauto)], "mm")
-    codetext$spacing <- c(codetext$spacing, paste0("## right.space   = ", printunit(right.space)))
+    text_auto_spacing <- c(text_auto_spacing, paste0("- right.space   = ", printunit(right.space)))
   }
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
   if (is.null(col.right.pos)){
     col.right.pos <- unit(colspaceauto, "mm")
-    codetext$spacing <- c(codetext$spacing, paste0("## col.right.pos = ", printunit(col.right.pos)))
+    text_auto_spacing <- c(text_auto_spacing, paste0("- col.right.pos = ", printunit(col.right.pos)))
   }
 
   ## calculate automatic col.left.pos and col.left.space
@@ -766,12 +766,12 @@ make_forest_plot <- function(
   colspaceauto <-  round(0.8 * base_size/grid::get.gpar()$fontsize * colspaceauto, 1)
   if (is.null(left.space)){
     left.space <- unit(colspaceauto[length(colspaceauto)], "mm")
-    codetext$spacing <- c(codetext$spacing, paste0("## left.space    = ", printunit(left.space)))
+    text_auto_spacing <- c(text_auto_spacing, paste0("- left.space    = ", printunit(left.space)))
   }
   if (length(colspaceauto) > 1){colspaceauto <- colspaceauto[-length(colspaceauto)]}
   if (is.null(col.left.pos)){
     col.left.pos <- unit(colspaceauto, "mm")
-    codetext$spacing <- c(codetext$spacing, paste0("## col.left.pos  = ", printunit(col.left.pos)))
+    text_auto_spacing <- c(text_auto_spacing, paste0("- col.left.pos  = ", printunit(col.left.pos)))
   }
 
 
@@ -1433,8 +1433,6 @@ make_forest_plot <- function(
 
   # Create the plot code
   plotcode <- c(
-    codetext$spacing,
-    '',
     'library(ggplot2)',
     '',
     codetext$prep.data,
@@ -1469,7 +1467,7 @@ make_forest_plot <- function(
   }
 
   # Show code in RStudio viewer.
-  if (showcode){ displaycode(plotcode) }
+  if (showcode){ displaycode(plotcode, text_auto_spacing) }
 
 
   # Create plot and print
