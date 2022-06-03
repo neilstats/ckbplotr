@@ -62,7 +62,7 @@ plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), gap = c(0, 0))
 
 ### Aspect ratio
 Change the aspect ratio of the plot.
-```{r aspect ratio, fig.width = 6}
+```{r aspect-ratio, fig.width = 6}
 plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), ratio = 0.3)
 ```
 
