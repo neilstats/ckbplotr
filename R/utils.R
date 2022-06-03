@@ -101,7 +101,7 @@ displaycode <- function(plotcode, note = ""){
       ".no-border {border: 0px;}",
       "```",
       note,
-      "```{r plotcode class.source='no-border', eval = FALSE}",
+      "```{r plotcode, class.source='no-border', eval = FALSE}",
       plotcode,
       "```"),
     file.path(tempdir(), "plotcode.Rmd"),
