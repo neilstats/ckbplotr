@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
       </span>
     </div>
 
@@ -163,9 +163,7 @@
                         xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,
                         ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
                         scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
-                        title        <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-<span class="co">#&gt; Warning in sprintf("%s$", extension, ignore.case = TRUE): one argument not used</span>
-<span class="co">#&gt; by format '%s$'</span></code></pre></div>
+                        title        <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/simple-example-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>For more details on customising these forest plots, see <a href="make_shape_plot.html">“More with shape plots”</a>.</p>
 </div>
@@ -199,9 +197,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
                                col.key      <span class="op">=</span> <span class="st">"variable"</span>,
-                               exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
-<span class="co">#&gt; Warning in sprintf("%s$", extension, ignore.case = TRUE): one argument not used</span>
-<span class="co">#&gt; by format '%s$'</span></code></pre></div>
+                               exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/simple-forest-plot-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
@@ -236,9 +232,7 @@
                                xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,
                                xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,
                                scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,
-                               pointsize         <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="co">#&gt; Warning in sprintf("%s$", extension, ignore.case = TRUE): one argument not used</span>
-<span class="co">#&gt; by format '%s$'</span></code></pre></div>
+                               pointsize         <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/using-row-labels-1.png" width="90%" style="display: block; margin: auto;"></p>
 <p>In this plot we’ve also use the <code>panel.headings</code>, <code>xlim</code>, <code>xticks</code>, <code>scalepoints</code>, and <code>pointsize</code> arguments to customise the plot.</p>
 <p>For more details on customising these forest plots, see <a href="make_forest_plot.html">“More with forest plots”</a>.</p>

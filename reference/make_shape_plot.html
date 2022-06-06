@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
       </span>
     </div>
 
@@ -109,6 +109,7 @@
   pointsize <span class="op">=</span> <span class="fl">3</span>,
   col.group <span class="op">=</span> <span class="cn">NULL</span>,
   shape <span class="op">=</span> <span class="cn">NULL</span>,
+  plotcolour <span class="op">=</span> <span class="st">"black"</span>,
   colour <span class="op">=</span> <span class="cn">NULL</span>,
   cicolour <span class="op">=</span> <span class="va">colour</span>,
   fill <span class="op">=</span> <span class="cn">NULL</span>,
@@ -172,12 +173,14 @@ estimates. (Default: 3)</p></dd>
 <dd><p>Name of column that groups the estimates. (Default: NULL)</p></dd>
 <dt>shape</dt>
 <dd><p>Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)</p></dd>
+<dt>plotcolour</dt>
+<dd><p>Colour for non-data aspects of the plot. (Default: "black")</p></dd>
 <dt>colour</dt>
-<dd><p>Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)</p></dd>
+<dd><p>Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)</p></dd>
 <dt>cicolour</dt>
-<dd><p>Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)</p></dd>
+<dd><p>Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour)</p></dd>
 <dt>fill</dt>
-<dd><p>Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)</p></dd>
+<dd><p>Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)</p></dd>
 <dt>ciunder</dt>
 <dd><p>Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)</p></dd>
 <dt>lines</dt>
