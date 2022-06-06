@@ -12,7 +12,8 @@ plot_like_ckb(
   ext = c(0.025, 0.025),
   ratio = 1.5,
   base_size = 11,
-  base_line_size = base_size/22
+  base_line_size = base_size/22,
+  colour = "black"
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ plot_like_ckb(
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
+
+\item{colour}{Colour for non-data aspects of the plot. (Default: "black")}
 }
 \value{
 A ggplot2 plot.

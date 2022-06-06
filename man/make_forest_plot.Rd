@@ -46,6 +46,7 @@ make_forest_plot(
   minse = NULL,
   pointsize = 3,
   shape = NULL,
+  plotcolour = "black",
   colour = NULL,
   cicolour = colour,
   fill = NULL,
@@ -188,11 +189,13 @@ estimates. (Default: 3)}
 
 \item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)}
 
-\item{colour}{Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)}
+\item{plotcolour}{Colour for all parts of the plot. (Default: "black")}
 
-\item{cicolour}{Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)}
+\item{colour}{Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)}
 
-\item{fill}{Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)}
+\item{cicolour}{Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)}
+
+\item{fill}{Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)}
 
 \item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 

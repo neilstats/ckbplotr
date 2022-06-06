@@ -4,27 +4,29 @@
 #'
 #' @param base_size base font size, given in pts.
 #' @param base_line_size base size for line elements
+#' @param colour Colour for non-data aspects of the plot. (Default: "black")
 #'
 #' @export
 
 theme_ckb <- function(base_size = 11,
-                      base_line_size = base_size/22){
+                      base_line_size = base_size/22,
+                      colour = "black"){
   theme_bw(base_size = base_size,
            base_line_size = base_line_size) %+replace%
     theme(panel.grid        = element_blank(),
           panel.border      = element_blank(),
-          axis.ticks        = element_line(colour = "black"),
-          axis.text         = element_text(colour = "black"),
+          axis.ticks        = element_line(colour = colour),
+          axis.text         = element_text(colour = colour),
           axis.text.x       = element_text(margin = margin(t = base_size/(11/4.4)), vjust = 1),
           axis.text.x.top   = element_text(margin = margin(b = base_size/(11/4.4)), vjust = 0),
           axis.text.y       = element_text(margin = margin(r = base_size/(11/4.4)), hjust = 1),
           axis.text.y.right = element_text(margin = margin(l = base_size/(11/4.4)), hjust = 0),
-          axis.title        = element_text(face = "bold"),
+          axis.title        = element_text(face = "bold", colour = colour),
           axis.title.x      = element_text(margin = unit(c(1,0,0,0), "lines")),
           axis.title.y      = element_text(margin = unit(c(0,1,0,0), "lines"), angle = 90),
           plot.margin       = unit(c(0,0,0.5,0), "lines"),
           plot.background   = element_blank(),
-          plot.title        = element_text(hjust = 0.5, face = "bold"),
+          plot.title        = element_text(hjust = 0.5, face = "bold", colour = colour),
           complete          = TRUE)
 }
 
@@ -40,6 +42,7 @@ theme_ckb <- function(base_size = 11,
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
+#' @param colour Colour for non-data aspects of the plot. (Default: "black")
 #'
 #' @return A ggplot2 plot.
 #'
@@ -54,7 +57,8 @@ plot_like_ckb <- function(
   ext=c(0.025,0.025),
   ratio=1.5,
   base_size = 11,
-  base_line_size = base_size/22
+  base_line_size = base_size/22,
+  colour = "black"
 ){
 
   # get plot axis transformations
@@ -109,7 +113,7 @@ plot_like_ckb <- function(
              yend = limits[["yaxis"]][[2]],
              lwd  = base_line_size,
              lineend = "round",
-             colour = "black") +
+             colour = colour) +
     annotate(geom = "segment",
              x    = limits[["xaxis"]][[1]],
              xend = limits[["xaxis"]][[2]],
@@ -117,6 +121,6 @@ plot_like_ckb <- function(
              yend = limits[["y"]][[1]],
              lwd  = base_line_size,
              lineend = "round",
-             colour = "black") +
-    theme_ckb(base_size = base_size, base_line_size = base_line_size)
+             colour = colour) +
+    theme_ckb(base_size = base_size, base_line_size = base_line_size, colour = colour)
 }

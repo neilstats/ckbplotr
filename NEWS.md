@@ -1,3 +1,8 @@
+# ckbplotr 0.6.5
+* Added arguments to control the colour of non-data components of a plot.
+* Use R markdown to render plot code to display in Viewer pane of RStudio. (Replacing use of highlight package.)
+* Updates to vignettes.
+
 # ckbplotr 0.6.4
 
 * Added legend.name and legend.position arguments to make_shape_plot().

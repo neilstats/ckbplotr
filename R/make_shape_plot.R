@@ -13,9 +13,10 @@
 #' @param col.n Name of column that provides number to be plotted below CIs.
 #' @param col.group Name of column that groups the estimates. (Default: NULL)
 #' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
-#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
-#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use black.)
-#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use black.)
+#' @param plotcolour Colour for non-data aspects of the plot. (Default: "black")
+#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
+#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param lines Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
@@ -73,6 +74,7 @@ make_shape_plot <- function(data,
                             pointsize     = 3,
                             col.group     = NULL,
                             shape         = NULL,
+                            plotcolour    = "black",
                             colour        = NULL,
                             cicolour      = colour,
                             fill          = NULL,
@@ -126,9 +128,11 @@ make_shape_plot <- function(data,
     shape <- NULL
   }
 
+  plotcolour <- fixq(plotcolour)
+
   cicolour.aes <- NULL
   if (is.null(cicolour)) {
-    cicolour <- fixq("black")
+    cicolour <- plotcolour
   }
   else if (cicolour %in% names(data)){
     cicolour.aes <- fixsp(cicolour)
@@ -139,7 +143,7 @@ make_shape_plot <- function(data,
 
   colour.aes <- NULL
   if (is.null(colour)) {
-    colour <- fixq("black")
+    colour <- plotcolour
   } else if (colour %in% names(data)){
     colour.aes <- fixsp(colour)
     colour <- NULL
@@ -149,7 +153,7 @@ make_shape_plot <- function(data,
 
   fill.aes <- NULL
   if (is.null(fill)) {
-    fill <- fixq("black")
+    fill <- plotcolour
   } else if (fill %in% names(data)){
     fill.aes <- fixsp(fill)
     fill <- NULL
@@ -266,7 +270,7 @@ make_shape_plot <- function(data,
               'method   = "glm"',
               'formula  = y ~ x',
               'se       = FALSE',
-              'colour   = "black"',
+              sprintf('colour = %s', plotcolour),
               'linetype = "dashed"',
               'size     = 0.25')
     )
@@ -308,7 +312,8 @@ make_shape_plot <- function(data,
             sprintf('label = format(round(%s, 2), nsmall = 2)', est_string)),
     arg = c(addarg$estimates,
             'vjust = -0.8',
-            sprintf('size  = %s', base_size/(11/3)))
+            sprintf('size  = %s', base_size/(11/3)),
+            sprintf('colour = %s', plotcolour))
   )
 
 
@@ -322,7 +327,8 @@ make_shape_plot <- function(data,
               sprintf('label = %s', col.n)),
       arg = c(addarg$n,
               'vjust = 1.8',
-              sprintf('size  = %s', base_size/(11/3)))
+              sprintf('size  = %s', base_size/(11/3)),
+              sprintf('colour = %s', plotcolour))
     )
   }
 
@@ -395,7 +401,8 @@ make_shape_plot <- function(data,
             sprintf('ext            = %s', ext),
             sprintf('ratio          = %s', ratio),
             sprintf('base_size      = %s', base_size),
-            sprintf('base_line_size = %s', base_line_size)),
+            sprintf('base_line_size = %s', base_line_size),
+            sprintf('colour         = %s', plotcolour)),
     plus = TRUE
   )
 
@@ -403,7 +410,7 @@ make_shape_plot <- function(data,
   codetext$theme <- make_layer(
     '# Add theme',
     f = "theme",
-    arg = c(sprintf('legend.position = %s', ds(legend.position))),
+    arg = c(sprintf('legend.position = %s', deparse(legend.position))),
     plus = FALSE
   )
 
@@ -421,8 +428,7 @@ make_shape_plot <- function(data,
            codetext$cis.after,
            codetext$scales,
            codetext$axes,
-           codetext$titles,
-           codetext$theme),
+           codetext$titles),
     codetext$plot.like.ckb,
     indent(2, codetext$theme)
   )

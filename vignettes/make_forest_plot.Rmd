@@ -86,6 +86,27 @@ The function attempts to set the positions of columns of text and spacing automa
 The plot will fill the vertical space available. Use `plot.margin` to change the top and bottom margins as needed.
 
 
+## Plot colour
+The colour used for the plot can be changed with the `plotcolour` argument. This can be useful to create plots that fit a colour scheme (or use a dark grey for less contrast when viewing on a screen or projector). See the next section for details on customising the colour(s) of point and confidence interval lines. 
+
+```{r plot-colour}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Triglycerides concentration",
+                                                     "Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.headings    = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3,
+                               plotcolour        = "navyblue")
+```
+
 
 ## Setting colours and shapes, bold text and diamonds
 
@@ -298,9 +319,12 @@ p2 <- forestplot2$plot +
   theme(axis.text.y = element_blank())
 ```
 
-Step 3: Arrange the plots using `gridExtra` (there may be other packages that also work). Adjust `widths` until the plots are the desired widths in your final output file. 
+Step 3: Arrange the plots using `gridExtra` (there may be other packages that also work), using `fix_panel()` to set the same width for both panels. (Adjust the `widths` argument until you get a suitable layout.)
 ```{r}
-gridExtra::grid.arrange(p1, p2, nrow = 1, widths = c(1, 0.52))
+gridExtra::grid.arrange(fix_panel(p1, width = unit(20, "mm")),
+                        fix_panel(p2, width = unit(20, "mm")),
+                        nrow = 1,
+                        widths = c(1, 0.5))
 ```
 
 Note that if `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots. However, if different axis scales are used then confidence intervals are not comparable either so this may be not be a problem.
@@ -331,17 +355,17 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                xticks            = c(0.9, 1, 1.1),
                                blankrows         = c(1, 1, 0, 1),
                                scalepoints       = TRUE,
-                               pointsize         = 16,
+                               pointsize         = 8,
                                col.left          = c("n"),
                                col.left.heading  = c("No. of\nevents"),
                                col.heading.space = 0,
 
                                # set panel width + CI colours
-                               panel.width       = 25,
+                               panel.width       = 20,
                                cicolour          = c("black", "white"),
                                printplot         = FALSE)
 
-plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
+plot <- fix_panel(forestplot$plot, width = unit(20, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -365,17 +389,16 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                xticks            = c(0.9, 1, 1.1),
                                blankrows         = c(1, 1, 0, 1),
                                scalepoints       = TRUE,
-                               pointsize         = 16,
+                               pointsize         = 8,
                                col.left          = c("n"),
                                col.left.heading  = c("No. of\nevents"),
-                               col.heading.space = 0,
 
                                # set panel width + CI colours
-                               panel.width       = 25,
+                               panel.width       = 20,
                                cicolour          = c("cicol1", "cicol2"),
                                printplot         = FALSE)
 
-plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
+plot <- fix_panel(forestplot$plot, width = unit(20, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -396,20 +419,19 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                xticks            = c(0.9, 1, 1.1),
                                blankrows         = c(1, 1, 0, 1),
                                scalepoints       = TRUE,
-                               pointsize         = 18,
+                               pointsize         = 8,
                                col.left          = c("n"),
                                col.left.heading  = c("No. of\nevents"),
-                               col.heading.space = 0,
 
                                # set panel width + CI under or over
-                               panel.width       = 25,
+                               panel.width       = 20,
                                shape             = 22,
                                stroke            = 0.5,
                                fill              = "white",
                                ciunder           = c(TRUE, FALSE),
                                printplot         = FALSE)
 
-plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
+plot <- fix_panel(forestplot$plot, width = unit(20, "mm"))
 grid::grid.draw(plot)
 ```
 
@@ -438,17 +460,12 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                xticks            = c(0.9, 1, 1.1),
                                blankrows         = c(1, 1, 0, 1),
                                scalepoints       = TRUE,
-                               pointsize         = 18,
+                               pointsize         = 8,
                                col.left          = c("n"),
-                               col.left.space    = c(0.02),
                                col.left.heading  = c("No. of\nevents"),
-                               col.right.space   = 0.02,
-                               col.heading.space = 0,
-                               label.space       = 2,
-                               panel.space       = 8,
 
                                # set panel width + CI colours
-                               panel.width       = 25,
+                               panel.width       = 20,
                                shape             = "shape",
                                stroke            = 0.5,
                                cicolour          = c("cicol1", "cicol2"),
@@ -456,7 +473,7 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                fill              = "white",
                                printplot         = FALSE)
 
-plot <- fix_panel(forestplot$plot, width = unit(25, "mm"))
+plot <- fix_panel(forestplot$plot, width = unit(20, "mm"))
 grid::grid.draw(plot)
 ```
 

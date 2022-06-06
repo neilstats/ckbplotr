@@ -85,23 +85,34 @@ make_layer <- function(name = NULL, f, aes = NULL, arg = NULL, plus = TRUE, br =
 #' @keywords internal
 #'@noRd
 #'
-displaycode <- function(plotcode){
-  writeLines(paste(c('# Generated plot code ------------------',
-                     '',
-                     plotcode),
-                   collapse = "\n"),
-             file.path(tempdir(), "plotcode.txt"))
-  codefile <- file.path(tempdir(), "plotcode.txt")
+displaycode <- function(plotcode, note = ""){
 
-  if (requireNamespace("highlight", quietly = TRUE)) {
-    highlight::highlight(file.path(tempdir(), "plotcode.txt"),
-                         output = file.path(tempdir(), "highlight-plotcode.html"),
-                         renderer = highlight::renderer_html(document = TRUE))
-    codefile <- file.path(tempdir(), "highlight-plotcode.html")
+  if (!is.null(knitr::opts_knit$get("out.format"))){
+    return(NULL)
   }
+  writeLines(
+    c("---",
+      "title: 'Generated R code'",
+      "output:",
+      "  html_document:",
+      "    highlight: kate",
+      "---",
+      "```{css, echo=FALSE}",
+      ".no-border {border: 0px;}",
+      "```",
+      note,
+      "```{r plotcode, class.source='no-border', eval = FALSE}",
+      plotcode,
+      "```"),
+    file.path(tempdir(), "plotcode.Rmd"),
+    sep = "\n")
+
+  rmarkdown::render(file.path(tempdir(), "plotcode.Rmd"),
+                    output_file = "plotcode.html",
+                    quiet = TRUE)
 
   viewer <- getOption("viewer", default = function(url){})
-  viewer(codefile)
+  viewer(file.path(tempdir(), "plotcode.html"))
 }
 
 

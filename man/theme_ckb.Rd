@@ -4,12 +4,14 @@
 \alias{theme_ckb}
 \title{CKB ggplot theme}
 \usage{
-theme_ckb(base_size = 11, base_line_size = base_size/22)
+theme_ckb(base_size = 11, base_line_size = base_size/22, colour = "black")
 }
 \arguments{
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
+
+\item{colour}{Colour for non-data aspects of the plot. (Default: "black")}
 }
 \description{
 Based on theme_bw
