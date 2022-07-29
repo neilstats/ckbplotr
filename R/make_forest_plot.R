@@ -68,29 +68,29 @@
 #' @export
 
 make_forest_data <- function(
-  panels,
-  col.key       = "key",
-  row.labels    = NULL,
-  row.labels.levels = c("heading1", "heading2", "heading3"),
-  rows          = NULL,
-  panel.names   = NULL,
-  col.estimate  = "estimate",
-  col.stderr    = "stderr",
-  col.lci       = NULL,
-  col.uci       = NULL,
-  col.left      = NULL,
-  col.right     = NULL,
-  col.keep      = NULL,
-  ci.delim      = ", ",
-  digits        = 2,
-  exponentiate  = TRUE,
-  blankrows     = c(1, 1, 0, 0),
-  scalepoints   = FALSE,
-  minse         = NULL,
-  addtext       = NULL,
-  cols          = panels,
-  headings      = NULL,
-  colnames      = NULL
+    panels,
+    col.key       = "key",
+    row.labels    = NULL,
+    row.labels.levels = c("heading1", "heading2", "heading3"),
+    rows          = NULL,
+    panel.names   = NULL,
+    col.estimate  = "estimate",
+    col.stderr    = "stderr",
+    col.lci       = NULL,
+    col.uci       = NULL,
+    col.left      = NULL,
+    col.right     = NULL,
+    col.keep      = NULL,
+    ci.delim      = ", ",
+    digits        = 2,
+    exponentiate  = TRUE,
+    blankrows     = c(1, 1, 0, 0),
+    scalepoints   = FALSE,
+    minse         = NULL,
+    addtext       = NULL,
+    cols          = panels,
+    headings      = NULL,
+    colnames      = NULL
 ){
 
   # legacy arguments
@@ -126,6 +126,7 @@ make_forest_data <- function(
                                 het_p = character(),
                                 trend_stat = character(),
                                 trend_p = character())
+  extrarowkeys <- c()
   if (!is.null(addtext)) {
     for (i in 1:length(addtext)) {
       addtext[[i]] <- dplyr::bind_rows(addtextcols, addtext[[i]]) %>%
@@ -147,17 +148,17 @@ make_forest_data <- function(
         dplyr::select(key = !!rlang::sym(col.key),
                       .data$addtext) %>%
         dplyr::mutate(key = as.character(.data$key)) %>%
-        dplyr::group_by(key) %>%
+        dplyr::group_by(.data$key) %>%
         dplyr::mutate(addtextrow = 1:dplyr::n() - 1) %>%
         dplyr::ungroup()
     }
+    extrarowkeys <- purrr::reduce(purrr::map(addtext,
+                                             ~ dplyr::count(., .data$key)),
+                                  dplyr::bind_rows) %>%
+      dplyr::group_by(.data$key) %>%
+      dplyr::summarise(n = max(.data$n))
+    extrarowkeys <- rep(extrarowkeys$key, extrarowkeys$n)
   }
-  extrarowkeys <- purrr::reduce(purrr::map(addtext,
-                                           ~ dplyr::count(., key)),
-                                dplyr::bind_rows) %>%
-    dplyr::group_by(key) %>%
-    dplyr::summarise(n = max(n)) %>%
-    {rep(.$key, .$n)}
 
   # create data frame of row numbers and labels
   if (is.null(row.labels)) {
@@ -253,7 +254,7 @@ make_forest_data <- function(
   }
 
   out <- out %>%
-    dplyr::group_by(extrarowkey) %>%
+    dplyr::group_by(.data$extrarowkey) %>%
     dplyr::mutate(addtextrow = 1:dplyr::n() - 1) %>%
     dplyr::ungroup()
 
@@ -493,80 +494,80 @@ make_forest_data <- function(
 
 
 make_forest_plot <- function(
-  panels,
-  row.labels    = NULL,
-  row.labels.levels = c("heading1", "heading2", "heading3"),
-  rows          = NULL,
-  exponentiate  = TRUE,
-  logscale      = exponentiate,
-  panel.names   = NULL,
-  panel.headings = panel.names,
-  col.key       = "key",
-  col.estimate  = "estimate",
-  col.stderr    = "stderr",
-  col.lci       = NULL,
-  col.uci       = NULL,
-  col.left      = NULL,
-  col.right     = NULL,
-  col.right.parse   = FALSE,
-  col.left.heading  = "",
-  col.right.heading = "HR (95% CI)",
-  col.left.pos    = NULL,
-  col.right.pos   = NULL,
-  col.left.hjust    = 1,
-  col.right.hjust   = 0,
-  col.heading.space = 0,
-  estcolumn     = TRUE,
-  col.keep      = NULL,
-  ci.delim      = ", ",
-  digits        = 2,
-  title         = "",
-  xlab          = "HR (95% CI)",
-  xlim          = NULL,
-  xticks        = NULL,
-  nullval       = NULL,
-  blankrows     = c(1, 1, 0, 0),
-  col.diamond   = NULL,
-  diamond       = NULL,
-  col.bold      = NULL,
-  bold.labels   = NULL,
-  scalepoints   = FALSE,
-  minse         = NULL,
-  pointsize     = 3,
-  shape     = NULL,
-  plotcolour = "black",
-  colour    = NULL,
-  cicolour  = colour,
-  fill      = NULL,
-  ciunder   = NULL,
-  addtext       = NULL,
-  left.space    = NULL,
-  right.space   = NULL,
-  mid.space     = unit(5, "mm"),
-  plot.margin   = margin(8, 8, 8, 8, "mm"),
-  panel.width   = NULL,
-  base_size     = 11,
-  base_line_size = base_size/22,
-  stroke        = 0,
-  printplot     = TRUE,
-  showcode      = TRUE,
-  addcode       = NULL,
-  addaes        = NULL,
-  addarg        = NULL,
-  envir         = NULL,
-  cols          = panels,
-  headings      = NULL,
-  colnames      = NULL,
-  colheadings   = colnames,
-  boldheadings  = NULL,
-  heading.space = NULL,
-  panel.space   = NULL,
-  label.space   = NULL,
-  plot.space    = NULL,
-  col.right.space = NULL,
-  col.left.space  = NULL,
-  margin          = NULL,
-  units          = NULL
+    panels,
+    row.labels    = NULL,
+    row.labels.levels = c("heading1", "heading2", "heading3"),
+    rows          = NULL,
+    exponentiate  = TRUE,
+    logscale      = exponentiate,
+    panel.names   = NULL,
+    panel.headings = panel.names,
+    col.key       = "key",
+    col.estimate  = "estimate",
+    col.stderr    = "stderr",
+    col.lci       = NULL,
+    col.uci       = NULL,
+    col.left      = NULL,
+    col.right     = NULL,
+    col.right.parse   = FALSE,
+    col.left.heading  = "",
+    col.right.heading = "HR (95% CI)",
+    col.left.pos    = NULL,
+    col.right.pos   = NULL,
+    col.left.hjust    = 1,
+    col.right.hjust   = 0,
+    col.heading.space = 0,
+    estcolumn     = TRUE,
+    col.keep      = NULL,
+    ci.delim      = ", ",
+    digits        = 2,
+    title         = "",
+    xlab          = "HR (95% CI)",
+    xlim          = NULL,
+    xticks        = NULL,
+    nullval       = NULL,
+    blankrows     = c(1, 1, 0, 0),
+    col.diamond   = NULL,
+    diamond       = NULL,
+    col.bold      = NULL,
+    bold.labels   = NULL,
+    scalepoints   = FALSE,
+    minse         = NULL,
+    pointsize     = 3,
+    shape     = NULL,
+    plotcolour = "black",
+    colour    = NULL,
+    cicolour  = colour,
+    fill      = NULL,
+    ciunder   = NULL,
+    addtext       = NULL,
+    left.space    = NULL,
+    right.space   = NULL,
+    mid.space     = unit(5, "mm"),
+    plot.margin   = margin(8, 8, 8, 8, "mm"),
+    panel.width   = NULL,
+    base_size     = 11,
+    base_line_size = base_size/22,
+    stroke        = 0,
+    printplot     = TRUE,
+    showcode      = TRUE,
+    addcode       = NULL,
+    addaes        = NULL,
+    addarg        = NULL,
+    envir         = NULL,
+    cols          = panels,
+    headings      = NULL,
+    colnames      = NULL,
+    colheadings   = colnames,
+    boldheadings  = NULL,
+    heading.space = NULL,
+    panel.space   = NULL,
+    label.space   = NULL,
+    plot.space    = NULL,
+    col.right.space = NULL,
+    col.left.space  = NULL,
+    margin          = NULL,
+    units          = NULL
 ){
 
   # legacy arguments
