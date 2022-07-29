@@ -120,7 +120,6 @@ make_forest_data <- function(
   if(!is.null(row.labels) & !all(sapply(row.labels[row.labels.levels], is.character))) stop("row.labels.levels columns must be character")
 
   # Make vector of keys after which extra rows are added for addtext
-  extrarowkeys <- c()
   addtextcols <- tibble::tibble(text = character(),
                                 het_dof = character(),
                                 het_stat = character(),
@@ -147,12 +146,18 @@ make_forest_data <- function(
         )) %>%
         dplyr::select(key = !!rlang::sym(col.key),
                       .data$addtext) %>%
-        dplyr::mutate(key = as.character(.data$key))
-
-      extrarowkeys <- c(extrarowkeys, addtext[[i]][["key"]])
+        dplyr::mutate(key = as.character(.data$key)) %>%
+        dplyr::group_by(key) %>%
+        dplyr::mutate(addtextrow = 1:dplyr::n() - 1) %>%
+        dplyr::ungroup()
     }
   }
-  extrarowkeys <- unique(extrarowkeys)
+  extrarowkeys <- purrr::reduce(purrr::map(addtext,
+                                           ~ dplyr::count(., key)),
+                                dplyr::bind_rows) %>%
+    dplyr::group_by(key) %>%
+    dplyr::summarise(n = max(n)) %>%
+    {rep(.$key, .$n)}
 
   # create data frame of row numbers and labels
   if (is.null(row.labels)) {
@@ -247,6 +252,11 @@ make_forest_data <- function(
     }
   }
 
+  out <- out %>%
+    dplyr::group_by(extrarowkey) %>%
+    dplyr::mutate(addtextrow = 1:dplyr::n() - 1) %>%
+    dplyr::ungroup()
+
   # add a blank heading at bottom if needed
   if (utils::tail(out$row.label, 1) != "") {
     out <- out %>%
@@ -255,7 +265,7 @@ make_forest_data <- function(
 
   out <- out %>%
     dplyr::mutate(row = 1:dplyr::n()) %>%
-    dplyr::select(.data$row, .data$row.label, .data$key, .data$extrarowkey)
+    dplyr::select(.data$row, .data$row.label, .data$key, .data$extrarowkey, .data$addtextrow)
 
   # make datatoplot
   datatoplot <- tibble::tibble()
@@ -284,7 +294,10 @@ make_forest_data <- function(
       dplyr::mutate(panel = panel.names[[i]])
 
     if (!is.null(addtext)){
-      out1 <- merge(out1, addtext[[i]], by.x = "extrarowkey", by.y = "key", all.x = TRUE)
+      out1 <- merge(out1, addtext[[i]],
+                    by.x = c("extrarowkey", "addtextrow"),
+                    by.y = c("key", "addtextrow"),
+                    all.x = TRUE)
     } else {
       out1 <- dplyr::mutate(out1, addtext = as.character(NA))
     }
@@ -344,7 +357,7 @@ make_forest_data <- function(
                                 ci.delim,
                                 format(round(uci_transformed, digits), nsmall = digits, trim = T),
                                 ")"))) %>%
-    dplyr::select(-.data$extrarowkey) %>%
+    dplyr::select(-.data$extrarowkey, -.data$addtextrow) %>%
     dplyr::arrange(panel, row)
 
 
