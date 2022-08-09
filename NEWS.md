@@ -1,4 +1,10 @@
+# ckbplotr 0.6.6
+
+* make_forest_plot() addtext argument can now add multiple tests results and/or text under the same row.
+* README updated.
+
 # ckbplotr 0.6.5
+
 * Added arguments to control the colour of non-data components of a plot.
 * Use R markdown to render plot code to display in Viewer pane of RStudio. (Replacing use of highlight package.)
 * Updates to vignettes.

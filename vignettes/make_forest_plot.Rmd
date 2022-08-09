@@ -196,7 +196,7 @@ forestplot1 <- make_forest_plot(panels           = list(resultsA),
 
 
 ## Adding heterogeneity and trend test results and other text
-The `addtext` argument can be used to add results of heterogeneity or trend test, or some other text, in the text column of estimates and CIs.
+The `addtext` argument can be used to add results of heterogeneity or trend tests, or some other text, in the text column of estimates and CIs.
 
 The automatic positioning of columns and spacing of panels does not take into account this additional text, so you may need to use the `right.space` and `col.right.pos` arguments for a satisfactory layout.
 
@@ -241,12 +241,45 @@ forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
                                col.left.heading  = c("No. of\nevents"),
                                col.heading.space = 1.5,
                                addtext           = list(resultsA_extra, resultsB_extra),
-                               right.space = unit(35, "mm"))
+                               right.space       = unit(35, "mm"))
 ```
 
+To add multiple tests results and/or text under the same row, use separate in the `addtext` data frames:
 
+```{r, echo = FALSE}
+resultsA_extra <- data.frame(variable   = c("nmr_s_ldl_p", "nmr_s_ldl_p"),
+                             het_dof    = c("2",           NA),
+                             het_stat   = c("12",          NA),
+                             het_p      = c("=0.22",       NA),
+                             trend_stat = c(NA,            "7"),
+                             trend_p    = c(NA,            "=0.31"),
+                             stringsAsFactors = FALSE)
+```
 
+```{r}
+resultsA_extra
+```
 
+```{r, fig.width = 10}
+forestplot <- make_forest_plot(panels            = list(resultsA),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.headings    = c("Analysis A"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 0, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 3,
+                               col.left          = c("n"),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.heading.space = 1.5,
+                               addtext           = list(resultsA_extra),
+                               right.space       = unit(35, "mm"))
+```
 
 
 

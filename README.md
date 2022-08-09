@@ -55,44 +55,6 @@ install.packages('remotes')
 remotes::install_github('neilstats/ckbplotr')
 ```
 
-If you get an error that reads “Error: Failed to install ‘unknown
-package’ from GitHub: HTTP error 404. No commit found for the ref
-master” then make sure to update to the latest version of the `remotes`
-package, or try `remotes::install_github('neilstats/ckbplotr@main')`.
-
-If you get an error that reads “Error: (converted from warning) package
-‘ggplot2’ was built under R version …” you can avoid this by first
-running `Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")`.
-(This is a [known issue](https://github.com/r-lib/remotes/issues/403)
-with the `remotes` package.)
-
-### Or from source package
-
-`ckbplotr` can also be installed from its source package. The R packages
-`ggplot2`, `magrittr`, `readr`, `tibble`, `dplyr`, `purrr`, `rlang`, and
-`ggtext` must first be installed.
-
-``` r
-# The easiest way is to install the whole tidyverse and ggtext:
-install.packages("tidyverse", "ggtext")
-
-# # Or install just these packages:
-# install.packages(c("ggplot2", "readr", "dplyr", "purrr", "ggtext"))
-```
-
-Then `ckbplotr` can be installed from its source package using the code:
-
-``` r
-install.packages("ckbplotr.tar.gz", repos = NULL, type = "source")
-```
-
-Or, in RStudio, open the “Tools” menu and select “Install Packages…”. In
-the “Install from…” box select “Package Archive File”, and in the
-“Package archive” box browse to the ckbplotr.tar.gz file.
-
-The source package for the latest release version is available
-[here](https://github.com/neilstats/ckbplotr/releases/latest).
-
 ## Get started
 
 Read `vignette("ckbplotr")` to see how to use the `make_shape_plot()`,
