@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.6</span>
       </span>
     </div>
 
@@ -94,145 +94,228 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">make_shape_plot</span><span class="op">(</span>
-  <span class="va">data</span>,
-  col.x <span class="op">=</span> <span class="st">"x"</span>,
-  col.estimate <span class="op">=</span> <span class="st">"estimate"</span>,
-  col.stderr <span class="op">=</span> <span class="st">"stderr"</span>,
-  col.lci <span class="op">=</span> <span class="cn">NULL</span>,
-  col.uci <span class="op">=</span> <span class="cn">NULL</span>,
-  col.n <span class="op">=</span> <span class="cn">NULL</span>,
-  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,
-  logscale <span class="op">=</span> <span class="va">exponentiate</span>,
-  scalepoints <span class="op">=</span> <span class="cn">FALSE</span>,
-  minse <span class="op">=</span> <span class="cn">NA</span>,
-  pointsize <span class="op">=</span> <span class="fl">3</span>,
-  col.group <span class="op">=</span> <span class="cn">NULL</span>,
-  shape <span class="op">=</span> <span class="cn">NULL</span>,
-  plotcolour <span class="op">=</span> <span class="st">"black"</span>,
-  colour <span class="op">=</span> <span class="cn">NULL</span>,
-  cicolour <span class="op">=</span> <span class="va">colour</span>,
-  fill <span class="op">=</span> <span class="cn">NULL</span>,
-  ciunder <span class="op">=</span> <span class="cn">NULL</span>,
-  lines <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">xlims</span>,
-  <span class="va">ylims</span>,
-  gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,
-  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,
-  ratio <span class="op">=</span> <span class="fl">1.5</span>,
-  base_size <span class="op">=</span> <span class="fl">11</span>,
-  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,
-  stroke <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,
-  xbreaks <span class="op">=</span> <span class="cn">NULL</span>,
-  ybreaks <span class="op">=</span> <span class="cn">NULL</span>,
-  xlab <span class="op">=</span> <span class="st">"Risk factor"</span>,
-  ylab <span class="op">=</span> <span class="st">"Estimate (95% CI)"</span>,
-  legend.name <span class="op">=</span> <span class="st">""</span>,
-  legend.position <span class="op">=</span> <span class="st">"top"</span>,
-  title <span class="op">=</span> <span class="st">"Figure"</span>,
-  printplot <span class="op">=</span> <span class="cn">TRUE</span>,
-  showcode <span class="op">=</span> <span class="cn">TRUE</span>,
-  addcode <span class="op">=</span> <span class="cn">NULL</span>,
-  addaes <span class="op">=</span> <span class="cn">NULL</span>,
-  addarg <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_shape_plot</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  col.x <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>  col.estimate <span class="op">=</span> <span class="st">"estimate"</span>,</span>
+<span>  col.stderr <span class="op">=</span> <span class="st">"stderr"</span>,</span>
+<span>  col.lci <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.uci <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.n <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  logscale <span class="op">=</span> <span class="va">exponentiate</span>,</span>
+<span>  scalepoints <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  minse <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  pointsize <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  col.group <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  shape <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  plotcolour <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cicolour <span class="op">=</span> <span class="va">colour</span>,</span>
+<span>  fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ciunder <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lines <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">xlims</span>,</span>
+<span>  <span class="va">ylims</span>,</span>
+<span>  gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
+<span>  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
+<span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
+<span>  stroke <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
+<span>  xbreaks <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ybreaks <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"Risk factor"</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="st">"Estimate (95% CI)"</span>,</span>
+<span>  legend.name <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  legend.position <span class="op">=</span> <span class="st">"top"</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">"Figure"</span>,</span>
+<span>  printplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  showcode <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  addaes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  addarg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>The data frame containing estimates to be plotted.</p></dd>
+
+
 <dt>col.x</dt>
 <dd><p>Name of column that provides the x-axis value (e.g. exposure, risk factor, dependent variable). (Default: "x")</p></dd>
+
+
 <dt>col.estimate</dt>
 <dd><p>Name of column that provides point estimates.
 (Default: "estimate")</p></dd>
+
+
 <dt>col.stderr</dt>
 <dd><p>Name of column that provides standard errors. (Default: "stderr")</p></dd>
+
+
 <dt>col.lci</dt>
 <dd><p>Name of column that provides lower limit of confidence intervals.</p></dd>
+
+
 <dt>col.uci</dt>
 <dd><p>Name of column that provides upper limit of confidence intervals.</p></dd>
+
+
 <dt>col.n</dt>
 <dd><p>Name of column that provides number to be plotted below CIs.</p></dd>
+
+
 <dt>exponentiate</dt>
 <dd><p>Exponentiate estimates (and CIs) before plotting,
 use log scale on the axis. (Default: FALSE)</p></dd>
+
+
 <dt>logscale</dt>
 <dd><p>Use log scale for vertical axis. (Default: exponentiate)</p></dd>
+
+
 <dt>scalepoints</dt>
 <dd><p>Should the points be scaled by inverse of the standard
 error? (Default: FALSE)</p></dd>
+
+
 <dt>minse</dt>
 <dd><p>Minimum standard error to use when scaling point size. (Default will use minimum in the data.)</p></dd>
+
+
 <dt>pointsize</dt>
 <dd><p>The (largest) size of box to use for plotting point
 estimates. (Default: 3)</p></dd>
+
+
 <dt>col.group</dt>
 <dd><p>Name of column that groups the estimates. (Default: NULL)</p></dd>
+
+
 <dt>shape</dt>
 <dd><p>Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)</p></dd>
+
+
 <dt>plotcolour</dt>
 <dd><p>Colour for non-data aspects of the plot. (Default: "black")</p></dd>
+
+
 <dt>colour</dt>
 <dd><p>Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)</p></dd>
+
+
 <dt>cicolour</dt>
 <dd><p>Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour)</p></dd>
+
+
 <dt>fill</dt>
 <dd><p>Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)</p></dd>
+
+
 <dt>ciunder</dt>
 <dd><p>Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)</p></dd>
+
+
 <dt>lines</dt>
 <dd><p>Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)</p></dd>
+
+
 <dt>xlims</dt>
 <dd><p>A numeric vector of length two. The limits of the x-axis.</p></dd>
+
+
 <dt>ylims</dt>
 <dd><p>A numeric vector of length two. The limits of the y-axis.</p></dd>
+
+
 <dt>gap</dt>
 <dd><p>A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))</p></dd>
+
+
 <dt>ext</dt>
 <dd><p>A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))</p></dd>
+
+
 <dt>ratio</dt>
 <dd><p>The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)</p></dd>
+
+
 <dt>base_size</dt>
 <dd><p>base font size, given in pts.</p></dd>
+
+
 <dt>base_line_size</dt>
 <dd><p>base size for line elements</p></dd>
+
+
 <dt>stroke</dt>
 <dd><p>Size of outline of shapes. (Default: base_size/22)</p></dd>
+
+
 <dt>xbreaks</dt>
 <dd><p>Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)</p></dd>
+
+
 <dt>ybreaks</dt>
 <dd><p>Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)</p></dd>
+
+
 <dt>xlab</dt>
 <dd><p>Label for x-axis. (Default: "Risk factor")</p></dd>
+
+
 <dt>ylab</dt>
 <dd><p>Label for y-axis. (Default: "Estimate (95% CI)")</p></dd>
+
+
 <dt>legend.name</dt>
 <dd><p>The name of the colour scale/legend for groups. (Default: "")</p></dd>
+
+
 <dt>legend.position</dt>
 <dd><p>Position of the legend for groups ("none", "left", "right", "bottom", "top", or two-element numeric vector). (Default: "top")</p></dd>
+
+
 <dt>title</dt>
 <dd><p>Plot title. (Default: "Figure")</p></dd>
+
+
 <dt>printplot</dt>
 <dd><p>Print the plot. (Default: TRUE)</p></dd>
+
+
 <dt>showcode</dt>
 <dd><p>Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)</p></dd>
+
+
 <dt>addcode</dt>
 <dd><p>A character vector of code to add to the generated code.
 The first element should be a regular expression.
 The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)</p></dd>
+
+
 <dt>addaes</dt>
 <dd><p>Specify additional aesthetics for some ggplot layers.</p></dd>
+
+
 <dt>addarg</dt>
 <dd><p>Specify additional arguments for some ggplot layers.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>Environment in which to evaluate the plot code. May be useful when calling this function inside another function.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list:</p><dl><dt>plot</dt>
+    
+
+<p>A list:</p><dl><dt>plot</dt>
 <dd><p>the plot</p></dd>
 
   <dt>code</dt>
@@ -253,7 +336,7 @@ The remaining elements are added to the generated code just before the first mat
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

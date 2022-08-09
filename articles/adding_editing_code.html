@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.6</span>
       </span>
     </div>
 
@@ -136,24 +136,24 @@
 </h2>
 <p>The plots returned by <code><a href="../reference/make_shape_plot.html">make_shape_plot()</a></code> and <code><a href="../reference/make_forest_plot.html">make_forest_plot()</a></code> are ggplot objects, so you can use <code>+</code> to add more layers or adjust the theme.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
-                           col.key        <span class="op">=</span> <span class="st">"variable"</span>,
-                           panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                           showcode       <span class="op">=</span> <span class="cn">FALSE</span>,
-                           printplot      <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="va">forest</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span>
-  <span class="fu">annotate</span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"segment"</span>,
-           x <span class="op">=</span> <span class="fl">0.71</span>,
-           y <span class="op">=</span> <span class="fl">1</span>,
-           xend <span class="op">=</span> <span class="fl">1.4</span>,
-           yend <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">annotate</span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"polygon"</span>,
-           x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.85</span>, <span class="fl">1.37</span>, <span class="fl">1.37</span>, <span class="fl">0.85</span><span class="op">)</span>,
-           y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">1.5</span>, <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span>,
-           fill <span class="op">=</span> <span class="cn">NA</span>,
-           colour <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme</span><span class="op">(</span>plot.background <span class="op">=</span> <span class="fu">element_rect</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<span>                           col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>                           panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
+<span>                           showcode       <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                           printplot      <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">forest</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span></span>
+<span>  <span class="fu">annotate</span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"segment"</span>,</span>
+<span>           x <span class="op">=</span> <span class="fl">0.71</span>,</span>
+<span>           y <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>           xend <span class="op">=</span> <span class="fl">1.4</span>,</span>
+<span>           yend <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">annotate</span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"polygon"</span>,</span>
+<span>           x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.85</span>, <span class="fl">1.37</span>, <span class="fl">1.37</span>, <span class="fl">0.85</span><span class="op">)</span>,</span>
+<span>           y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">1.5</span>, <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span>,</span>
+<span>           fill <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>           colour <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme</span><span class="op">(</span>plot.background <span class="op">=</span> <span class="fu">element_rect</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="adding_editing_code_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -166,17 +166,17 @@
 </h3>
 <p>We wish to use <code>geom_segment()</code> to add dashed lines to the plot, and these should be added to the plot before the point estimates:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
-                           col.key        <span class="op">=</span> <span class="st">"variable"</span>,
-                           panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                           exponentiate   <span class="op">=</span> <span class="cn">TRUE</span>,
-                           colour <span class="op">=</span> <span class="st">"grey"</span>,
-                           addcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Plot points at the transformed estimates"</span>,
-                                       <span class="st">"# Plot dashed line"</span>,
-                                       <span class="st">"geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),"</span>,
-                                       <span class="st">"linetype = 'dashed',"</span>,
-                                       <span class="st">"data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +"</span>,
-                                       <span class="st">""</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<span>                           col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>                           panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
+<span>                           exponentiate   <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                           colour <span class="op">=</span> <span class="st">"grey"</span>,</span>
+<span>                           addcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Plot points at the transformed estimates"</span>,</span>
+<span>                                       <span class="st">"# Plot dashed line"</span>,</span>
+<span>                                       <span class="st">"geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),"</span>,</span>
+<span>                                       <span class="st">"linetype = 'dashed',"</span>,</span>
+<span>                                       <span class="st">"data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +"</span>,</span>
+<span>                                       <span class="st">""</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="adding_editing_code_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -258,12 +258,12 @@
 <h3 id="example-1">Example<a class="anchor" aria-label="anchor" href="#example-1"></a>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,
-                           col.key        <span class="op">=</span> <span class="st">"variable"</span>,
-                           panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,
-                           ciunder        <span class="op">=</span> <span class="cn">TRUE</span>,
-                           addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.name <span class="op">=</span> <span class="st">"colour = 'red'"</span><span class="op">)</span>,
-                           addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point <span class="op">=</span> <span class="st">"colour = dplyr::if_else(estimate_transformed &gt; 1.01, 'orange', 'grey')"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<span>                           col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>                           panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
+<span>                           ciunder        <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                           addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.name <span class="op">=</span> <span class="st">"colour = 'red'"</span><span class="op">)</span>,</span>
+<span>                           addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point <span class="op">=</span> <span class="st">"colour = dplyr::if_else(estimate_transformed &gt; 1.01, 'orange', 'grey')"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="adding_editing_code_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -296,7 +296,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

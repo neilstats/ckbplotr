@@ -1,5 +1,5 @@
 pandoc: 2.7.3
-pkgdown: 2.0.3
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   adding_editing_code: adding_editing_code.html
@@ -10,5 +10,5 @@ articles:
   page_layouts: page_layouts.html
   plot_like_ckb: plot_like_ckb.html
   special_characters_formatting: special_characters_formatting.html
-last_built: 2022-06-06T16:46Z
+last_built: 2022-08-09T09:34Z
 

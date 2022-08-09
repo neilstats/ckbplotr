@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.6</span>
       </span>
     </div>
 
@@ -144,61 +144,61 @@
 </h2>
 <p>Using the <a href="https://stat.ethz.ch/R-manual/R-devel/library/grid/html/00Index.html" class="external-link">grid</a> and <a href="https://cran.r-project.org/package=gridExtra" class="external-link">gridExtra</a> packages gives a lot of control but may need more work to create the desired output. Here is an example of placing two plots, with a title and footer, on an A4 page in a PDF document.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Make the plots, with suitable margins</span>
-<span class="va">shapeplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,
-                        col.x        <span class="op">=</span> <span class="st">"rf"</span>,
-                        col.estimate <span class="op">=</span> <span class="st">"est"</span>,
-                        col.stderr   <span class="op">=</span> <span class="st">"se"</span>,
-                        col.n        <span class="op">=</span> <span class="st">"n"</span>,
-                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,
-                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,
-                        scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,
-                        title        <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span>
-
-<span class="va">shapeplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">shapeplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> <span class="fu">theme</span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">resultsA</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"A"</span><span class="op">)</span>
-<span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,
-                               col.key           <span class="op">=</span> <span class="st">"variable"</span>,
-                               row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,
-                               row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,
-                               rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>,
-                                                     <span class="st">"Lipoprotein particle concentration"</span><span class="op">)</span>,
-                               exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,
-                               panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,
-                               xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                               xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,
-                               scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,
-                               pointsize         <span class="op">=</span> <span class="fl">3</span>,
-                               plot.margin       <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">8</span>, <span class="fl">16</span>, <span class="fl">30</span>, <span class="fl">16</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span>
-
-
-<span class="co"># Arrange the plots side-by-side</span>
-<span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">arrangeGrob</a></span><span class="op">(</span><span class="va">shapeplot</span><span class="op">$</span><span class="va">plot</span>, <span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-
-<span class="co"># Create a text graphical object for the title (place it one line away from top left corner)</span>
-<span class="va">title</span> <span class="op">&lt;-</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.text.html" class="external-link">textGrob</a></span><span class="op">(</span><span class="st">"Figure: Example of placing two plots on a page"</span>,
-                        gp <span class="op">=</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/gpar.html" class="external-link">gpar</a></span><span class="op">(</span>cex <span class="op">=</span> <span class="fl">1</span>, fontface <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,
-                        x <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">0</span>, <span class="st">"npc"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"lines"</span><span class="op">)</span>,
-                        y <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"npc"</span><span class="op">)</span> <span class="op">-</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"lines"</span><span class="op">)</span>,
-                        hjust <span class="op">=</span> <span class="fl">0</span>,
-                        vjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="co">## Create a text graphical object for the footer (place it two line away from bottom left corner)</span>
-<span class="va">footer</span> <span class="op">&lt;-</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.text.html" class="external-link">textGrob</a></span><span class="op">(</span><span class="st">"Footer"</span>,
-                         gp <span class="op">=</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/gpar.html" class="external-link">gpar</a></span><span class="op">(</span>cex <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span>, 
-                         just <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
-                         x <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span>,
-                         y <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co">## Arrange the title, plots, and footer vertically</span>
-<span class="va">figure</span> <span class="op">&lt;-</span> <span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">arrangeGrob</a></span><span class="op">(</span><span class="va">title</span>, <span class="va">plots</span>, <span class="va">footer</span>,
-                                 nrow <span class="op">=</span> <span class="fl">3</span>,
-                                 heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">86</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>
-
-<span class="co">## Save the figure to a PDF, using landscape A4 dimensions</span>
-<span class="fu">ggsave</span><span class="op">(</span><span class="st">"example_page_layout.pdf"</span>, plot <span class="op">=</span> <span class="va">figure</span>, width <span class="op">=</span> <span class="fl">11.69</span>, height <span class="op">=</span> <span class="fl">8.27</span>, title <span class="op">=</span> <span class="st">"Figure"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Make the plots, with suitable margins</span></span>
+<span><span class="va">shapeplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_shape_plot.html">make_shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,</span>
+<span>                        col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
+<span>                        col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
+<span>                        col.stderr   <span class="op">=</span> <span class="st">"se"</span>,</span>
+<span>                        col.n        <span class="op">=</span> <span class="st">"n"</span>,</span>
+<span>                        xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>                        ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>                        scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                        title        <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">shapeplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="va">shapeplot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> <span class="fu">theme</span><span class="op">(</span>plot.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">resultsA</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"A"</span><span class="op">)</span></span>
+<span><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_forest_plot.html">make_forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,</span>
+<span>                               col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>                               row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
+<span>                               row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
+<span>                               rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>,</span>
+<span>                                                     <span class="st">"Lipoprotein particle concentration"</span><span class="op">)</span>,</span>
+<span>                               exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                               panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">""</span><span class="op">)</span>,</span>
+<span>                               xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
+<span>                               xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
+<span>                               scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                               pointsize         <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                               plot.margin       <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">8</span>, <span class="fl">16</span>, <span class="fl">30</span>, <span class="fl">16</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Arrange the plots side-by-side</span></span>
+<span><span class="va">plots</span> <span class="op">&lt;-</span> <span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">arrangeGrob</a></span><span class="op">(</span><span class="va">shapeplot</span><span class="op">$</span><span class="va">plot</span>, <span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># Create a text graphical object for the title (place it one line away from top left corner)</span></span>
+<span><span class="va">title</span> <span class="op">&lt;-</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.text.html" class="external-link">textGrob</a></span><span class="op">(</span><span class="st">"Figure: Example of placing two plots on a page"</span>,</span>
+<span>                        gp <span class="op">=</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/gpar.html" class="external-link">gpar</a></span><span class="op">(</span>cex <span class="op">=</span> <span class="fl">1</span>, fontface <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>                        x <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">0</span>, <span class="st">"npc"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"lines"</span><span class="op">)</span>,</span>
+<span>                        y <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"npc"</span><span class="op">)</span> <span class="op">-</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">1</span>, <span class="st">"lines"</span><span class="op">)</span>,</span>
+<span>                        hjust <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                        vjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Create a text graphical object for the footer (place it two line away from bottom left corner)</span></span>
+<span><span class="va">footer</span> <span class="op">&lt;-</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.text.html" class="external-link">textGrob</a></span><span class="op">(</span><span class="st">"Footer"</span>,</span>
+<span>                         gp <span class="op">=</span> <span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/gpar.html" class="external-link">gpar</a></span><span class="op">(</span>cex <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span>, </span>
+<span>                         just <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>                         x <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span>,</span>
+<span>                         y <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">2</span>, <span class="st">"lines"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Arrange the title, plots, and footer vertically</span></span>
+<span><span class="va">figure</span> <span class="op">&lt;-</span> <span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">arrangeGrob</a></span><span class="op">(</span><span class="va">title</span>, <span class="va">plots</span>, <span class="va">footer</span>,</span>
+<span>                                 nrow <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                                 heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">86</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Save the figure to a PDF, using landscape A4 dimensions</span></span>
+<span><span class="fu">ggsave</span><span class="op">(</span><span class="st">"example_page_layout.pdf"</span>, plot <span class="op">=</span> <span class="va">figure</span>, width <span class="op">=</span> <span class="fl">11.69</span>, height <span class="op">=</span> <span class="fl">8.27</span>, title <span class="op">=</span> <span class="st">"Figure"</span><span class="op">)</span></span></code></pre></div>
 </div>
   </div>
 
@@ -219,7 +219,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

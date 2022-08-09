@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ckbplotr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.6</span>
       </span>
     </div>
 
@@ -94,82 +94,82 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">make_forest_plot</span><span class="op">(</span>
-  <span class="va">panels</span>,
-  row.labels <span class="op">=</span> <span class="cn">NULL</span>,
-  row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading1"</span>, <span class="st">"heading2"</span>, <span class="st">"heading3"</span><span class="op">)</span>,
-  rows <span class="op">=</span> <span class="cn">NULL</span>,
-  exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,
-  logscale <span class="op">=</span> <span class="va">exponentiate</span>,
-  panel.names <span class="op">=</span> <span class="cn">NULL</span>,
-  panel.headings <span class="op">=</span> <span class="va">panel.names</span>,
-  col.key <span class="op">=</span> <span class="st">"key"</span>,
-  col.estimate <span class="op">=</span> <span class="st">"estimate"</span>,
-  col.stderr <span class="op">=</span> <span class="st">"stderr"</span>,
-  col.lci <span class="op">=</span> <span class="cn">NULL</span>,
-  col.uci <span class="op">=</span> <span class="cn">NULL</span>,
-  col.left <span class="op">=</span> <span class="cn">NULL</span>,
-  col.right <span class="op">=</span> <span class="cn">NULL</span>,
-  col.right.parse <span class="op">=</span> <span class="cn">FALSE</span>,
-  col.left.heading <span class="op">=</span> <span class="st">""</span>,
-  col.right.heading <span class="op">=</span> <span class="st">"HR (95% CI)"</span>,
-  col.left.pos <span class="op">=</span> <span class="cn">NULL</span>,
-  col.right.pos <span class="op">=</span> <span class="cn">NULL</span>,
-  col.left.hjust <span class="op">=</span> <span class="fl">1</span>,
-  col.right.hjust <span class="op">=</span> <span class="fl">0</span>,
-  col.heading.space <span class="op">=</span> <span class="fl">0</span>,
-  estcolumn <span class="op">=</span> <span class="cn">TRUE</span>,
-  col.keep <span class="op">=</span> <span class="cn">NULL</span>,
-  ci.delim <span class="op">=</span> <span class="st">", "</span>,
-  digits <span class="op">=</span> <span class="fl">2</span>,
-  title <span class="op">=</span> <span class="st">""</span>,
-  xlab <span class="op">=</span> <span class="st">"HR (95% CI)"</span>,
-  xlim <span class="op">=</span> <span class="cn">NULL</span>,
-  xticks <span class="op">=</span> <span class="cn">NULL</span>,
-  nullval <span class="op">=</span> <span class="cn">NULL</span>,
-  blankrows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,
-  col.diamond <span class="op">=</span> <span class="cn">NULL</span>,
-  diamond <span class="op">=</span> <span class="cn">NULL</span>,
-  col.bold <span class="op">=</span> <span class="cn">NULL</span>,
-  bold.labels <span class="op">=</span> <span class="cn">NULL</span>,
-  scalepoints <span class="op">=</span> <span class="cn">FALSE</span>,
-  minse <span class="op">=</span> <span class="cn">NULL</span>,
-  pointsize <span class="op">=</span> <span class="fl">3</span>,
-  shape <span class="op">=</span> <span class="cn">NULL</span>,
-  plotcolour <span class="op">=</span> <span class="st">"black"</span>,
-  colour <span class="op">=</span> <span class="cn">NULL</span>,
-  cicolour <span class="op">=</span> <span class="va">colour</span>,
-  fill <span class="op">=</span> <span class="cn">NULL</span>,
-  ciunder <span class="op">=</span> <span class="cn">NULL</span>,
-  addtext <span class="op">=</span> <span class="cn">NULL</span>,
-  left.space <span class="op">=</span> <span class="cn">NULL</span>,
-  right.space <span class="op">=</span> <span class="cn">NULL</span>,
-  mid.space <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">5</span>, <span class="st">"mm"</span><span class="op">)</span>,
-  plot.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="st">"mm"</span><span class="op">)</span>,
-  panel.width <span class="op">=</span> <span class="cn">NULL</span>,
-  base_size <span class="op">=</span> <span class="fl">11</span>,
-  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,
-  stroke <span class="op">=</span> <span class="fl">0</span>,
-  printplot <span class="op">=</span> <span class="cn">TRUE</span>,
-  showcode <span class="op">=</span> <span class="cn">TRUE</span>,
-  addcode <span class="op">=</span> <span class="cn">NULL</span>,
-  addaes <span class="op">=</span> <span class="cn">NULL</span>,
-  addarg <span class="op">=</span> <span class="cn">NULL</span>,
-  envir <span class="op">=</span> <span class="cn">NULL</span>,
-  cols <span class="op">=</span> <span class="va">panels</span>,
-  headings <span class="op">=</span> <span class="cn">NULL</span>,
-  colnames <span class="op">=</span> <span class="cn">NULL</span>,
-  colheadings <span class="op">=</span> <span class="va">colnames</span>,
-  boldheadings <span class="op">=</span> <span class="cn">NULL</span>,
-  heading.space <span class="op">=</span> <span class="cn">NULL</span>,
-  panel.space <span class="op">=</span> <span class="cn">NULL</span>,
-  label.space <span class="op">=</span> <span class="cn">NULL</span>,
-  plot.space <span class="op">=</span> <span class="cn">NULL</span>,
-  col.right.space <span class="op">=</span> <span class="cn">NULL</span>,
-  col.left.space <span class="op">=</span> <span class="cn">NULL</span>,
-  margin <span class="op">=</span> <span class="cn">NULL</span>,
-  units <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_forest_plot</span><span class="op">(</span></span>
+<span>  <span class="va">panels</span>,</span>
+<span>  row.labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading1"</span>, <span class="st">"heading2"</span>, <span class="st">"heading3"</span><span class="op">)</span>,</span>
+<span>  rows <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  logscale <span class="op">=</span> <span class="va">exponentiate</span>,</span>
+<span>  panel.names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  panel.headings <span class="op">=</span> <span class="va">panel.names</span>,</span>
+<span>  col.key <span class="op">=</span> <span class="st">"key"</span>,</span>
+<span>  col.estimate <span class="op">=</span> <span class="st">"estimate"</span>,</span>
+<span>  col.stderr <span class="op">=</span> <span class="st">"stderr"</span>,</span>
+<span>  col.lci <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.uci <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.left <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.right <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.right.parse <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  col.left.heading <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  col.right.heading <span class="op">=</span> <span class="st">"HR (95% CI)"</span>,</span>
+<span>  col.left.pos <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.right.pos <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.left.hjust <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  col.right.hjust <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  col.heading.space <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  estcolumn <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  col.keep <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci.delim <span class="op">=</span> <span class="st">", "</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="st">"HR (95% CI)"</span>,</span>
+<span>  xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  xticks <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nullval <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  blankrows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  col.diamond <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  diamond <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.bold <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bold.labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scalepoints <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  minse <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pointsize <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  shape <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  plotcolour <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>  colour <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cicolour <span class="op">=</span> <span class="va">colour</span>,</span>
+<span>  fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ciunder <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  addtext <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  left.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  right.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mid.space <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">5</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>  plot.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>  panel.width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
+<span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
+<span>  stroke <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  printplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  showcode <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  addaes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  addarg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  envir <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cols <span class="op">=</span> <span class="va">panels</span>,</span>
+<span>  headings <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colnames <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  colheadings <span class="op">=</span> <span class="va">colnames</span>,</span>
+<span>  boldheadings <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  heading.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  panel.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  plot.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.right.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col.left.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  margin <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  units <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -179,116 +179,208 @@
 estimates, and standard errors or confidence interval limits. If you
 specify a row.labels data frame, then they must also all contain a key column
 with the same name (which can be specified by col.key).</p></dd>
+
+
 <dt>row.labels</dt>
 <dd><p>A data frame that contains the labels to be used for the
 rows of the plot. Use NA if a lower level heading is not required for a given row.</p></dd>
+
+
 <dt>row.labels.levels</dt>
 <dd><p>A character vector up to length 3. The names of columns in row.labels
 to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))</p></dd>
+
+
 <dt>rows</dt>
 <dd><p>A character vector. The top level labels of rows
 to be included in the plot.</p></dd>
+
+
 <dt>exponentiate</dt>
 <dd><p>Exponentiate estimates (and CIs) before plotting. (Default: TRUE)</p></dd>
+
+
 <dt>logscale</dt>
 <dd><p>Use log scale on the axis, and add a line at null effect. (Default: exponentiate)</p></dd>
+
+
 <dt>panel.names</dt>
 <dd><p>A character vector. The names to be used for each forest plot panel.
 If none provided, then they will be numbered 1, 2, 3 ...</p></dd>
+
+
 <dt>panel.headings</dt>
 <dd><p>Titles to be placed above each forest plot. (Default: panel.names)</p></dd>
+
+
 <dt>col.key</dt>
 <dd><p>Name of column that links the results given in each data frame
   provided in panels and the labels given in row.labels.</p>
 <p>If row.labels data frame is not given, then this column will be used as row labels.</p>
 <p>(Default: "key")</p></dd>
+
+
 <dt>col.estimate</dt>
 <dd><p>Name of column that provides point estimates.
 (Default: "estimate")</p></dd>
+
+
 <dt>col.stderr</dt>
 <dd><p>Name of column that provides standard errors. (Default: "stderr")</p></dd>
+
+
 <dt>col.lci</dt>
 <dd><p>Name of column that provides lower limit of confidence intervals.</p></dd>
+
+
 <dt>col.uci</dt>
 <dd><p>Name of column that provides upper limit of confidence intervals.</p></dd>
+
+
 <dt>col.left</dt>
 <dd><p>Names of columns to be printed to the left of the plot.</p></dd>
+
+
 <dt>col.right</dt>
 <dd><p>Names of columns to be printed to the right of the plot.</p></dd>
+
+
 <dt>col.right.parse</dt>
 <dd><p>A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
 Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)</p></dd>
+
+
 <dt>col.left.heading</dt>
 <dd><p>A character vector of titles for col.left columns. (Default: "")</p></dd>
+
+
 <dt>col.right.heading</dt>
 <dd><p>A character vector of titles for the column of estimates
 (if estcolumn = TRUE) and col.right columns. (Default: "HR (95% CI)")</p></dd>
+
+
 <dt>col.left.pos</dt>
 <dd><p>A unit vector to position col.right columns.</p></dd>
+
+
 <dt>col.right.pos</dt>
 <dd><p>A unit vector to position col.right columns.</p></dd>
+
+
 <dt>col.left.hjust</dt>
 <dd><p>A numeric vector. The horizontal justification of
 col.left columns. (Default: 1)</p></dd>
+
+
 <dt>col.right.hjust</dt>
 <dd><p>A numeric vector. The horizontal justification of
 col.right columns. (Default: 0)</p></dd>
+
+
 <dt>col.heading.space</dt>
 <dd><p>Position of the titles given by col.left.heading and
 col.right.heading. Increase to move them up. (Default: 0)</p></dd>
+
+
 <dt>estcolumn</dt>
 <dd><p>Include column of estimates and confidence intervals to the
 right of each plot. (Default: TRUE)</p></dd>
+
+
 <dt>col.keep</dt>
 <dd><p>Names of additional columns to be kept in returned data frame.</p></dd>
+
+
 <dt>ci.delim</dt>
 <dd><p>Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")</p></dd>
+
+
 <dt>digits</dt>
 <dd><p>Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)</p></dd>
+
+
 <dt>title</dt>
 <dd><p>Title to appear at the top of the plot.</p></dd>
+
+
 <dt>xlab</dt>
 <dd><p>Label to appear below the x-axis. (Default: "HR (95% CI)")</p></dd>
+
+
 <dt>xlim</dt>
 <dd><p>A numeric vector. The limits of the x axis.</p></dd>
+
+
 <dt>xticks</dt>
 <dd><p>A numeric vector. The tick points of the x axis.</p></dd>
+
+
 <dt>nullval</dt>
 <dd><p>Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)</p></dd>
+
+
 <dt>blankrows</dt>
 <dd><p>A numeric vector of length 4 specifying the number of blank rows
 after a heading1, at the end of a heading1 'section', after
 a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))</p></dd>
+
+
 <dt>col.diamond</dt>
 <dd><p>Plot estimates and CIs as diamonds. Name of a column of logical values.</p></dd>
+
+
 <dt>diamond</dt>
 <dd><p>Alternative to col.diamond. A character vectors identify the rows
 (using the key values) for which the estimate and CI should be plotted using a diamond.</p></dd>
+
+
 <dt>col.bold</dt>
 <dd><p>Plot text as bold. Name of a column of logical values.</p></dd>
+
+
 <dt>bold.labels</dt>
 <dd><p>A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)</p></dd>
+
+
 <dt>scalepoints</dt>
 <dd><p>Should the points be scaled by inverse of the standard
 error? (Default: FALSE)</p></dd>
+
+
 <dt>minse</dt>
 <dd><p>Minimum standard error to use when scaling point size. (Default will use minimum in the data.)</p></dd>
+
+
 <dt>pointsize</dt>
 <dd><p>The (largest) size of box to use for plotting point
 estimates. (Default: 3)</p></dd>
+
+
 <dt>shape</dt>
 <dd><p>Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)</p></dd>
+
+
 <dt>plotcolour</dt>
 <dd><p>Colour for all parts of the plot. (Default: "black")</p></dd>
+
+
 <dt>colour</dt>
 <dd><p>Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)</p></dd>
+
+
 <dt>cicolour</dt>
 <dd><p>Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)</p></dd>
+
+
 <dt>fill</dt>
 <dd><p>Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)</p></dd>
+
+
 <dt>ciunder</dt>
 <dd><p>Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)</p></dd>
+
+
 <dt>addtext</dt>
 <dd><p>A list of data frames. List must be the same length as panels.
   Data frames should contain a column with the name specified in col.key,
@@ -299,66 +391,123 @@ estimates. (Default: 3)</p></dd>
 <p>The character strings, heterogeneity test, and trend test results will
   be plotted in the column of estimates and CIs, below the row with the key
   given in the col.key column.</p></dd>
+
+
 <dt>left.space</dt>
 <dd><p>Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))</p></dd>
+
+
 <dt>right.space</dt>
 <dd><p>Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))</p></dd>
+
+
 <dt>mid.space</dt>
 <dd><p>Size of additional gap to leave between panels. (Default: unit(5, "mm"))</p></dd>
+
+
 <dt>plot.margin</dt>
 <dd><p>Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))</p></dd>
+
+
 <dt>panel.width</dt>
 <dd><p>Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".</p></dd>
+
+
 <dt>base_size</dt>
 <dd><p>base font size, given in pts.</p></dd>
+
+
 <dt>base_line_size</dt>
 <dd><p>base size for line elements</p></dd>
+
+
 <dt>stroke</dt>
 <dd><p>Size of outline of shapes. (Default: 0)</p></dd>
+
+
 <dt>printplot</dt>
 <dd><p>Print the plot. (Default: TRUE)</p></dd>
+
+
 <dt>showcode</dt>
 <dd><p>Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)</p></dd>
+
+
 <dt>addcode</dt>
 <dd><p>A character vector of code to add to the generated code.
 The first element should be a regular expression.
 The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)</p></dd>
+
+
 <dt>addaes</dt>
 <dd><p>Specify additional aesthetics for some ggplot layers.</p></dd>
+
+
 <dt>addarg</dt>
 <dd><p>Specify additional arguments for some ggplot layers.</p></dd>
+
+
 <dt>envir</dt>
 <dd><p>Environment in which to evaluate the plot code. May be useful when calling this function inside another function.</p></dd>
+
+
 <dt>cols</dt>
 <dd><p>DEPRECATED.</p></dd>
+
+
 <dt>headings</dt>
 <dd><p>DEPRECATED.</p></dd>
+
+
 <dt>colnames</dt>
 <dd><p>DEPRECATED.</p></dd>
+
+
 <dt>colheadings</dt>
 <dd><p>DEPRECATED.</p></dd>
+
+
 <dt>boldheadings</dt>
 <dd><p>DEPRECATED.</p></dd>
+
+
 <dt>heading.space</dt>
 <dd><p>DEPRECATED. Even older method for specifying spacing.</p></dd>
+
+
 <dt>panel.space</dt>
 <dd><p>DEPRECATED. Old method for specifying spacing.</p></dd>
+
+
 <dt>label.space</dt>
 <dd><p>DEPRECATED. Old method for specifying spacing.</p></dd>
+
+
 <dt>plot.space</dt>
 <dd><p>DEPRECATED. Even older method for specifying spacing.</p></dd>
+
+
 <dt>col.right.space</dt>
 <dd><p>DEPRACTED</p></dd>
+
+
 <dt>col.left.space</dt>
 <dd><p>DEPRACTED</p></dd>
+
+
 <dt>margin</dt>
 <dd><p>DEPRECATED. Old method for specifying margins.</p></dd>
+
+
 <dt>units</dt>
 <dd><p>DEPRECATED</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list:</p><dl><dt>plot</dt>
+    
+
+<p>A list:</p><dl><dt>plot</dt>
 <dd><p>the plot</p></dd>
 
   <dt>code</dt>
@@ -384,7 +533,7 @@ In RStudio, the ggplot2 code will be shown in the viewer.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
