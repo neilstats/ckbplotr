@@ -1493,8 +1493,8 @@ make_forest_plot <- function(
     print(plot)
   }
 
-  return(list(plot = plot,
-              code = plotcode))
+  return(invisible(list(plot = plot,
+                        code = plotcode)))
 }
 
 

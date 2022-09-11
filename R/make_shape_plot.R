@@ -451,7 +451,7 @@ make_shape_plot <- function(data,
   }
 
 
-  return(list(plot = plot,
-              code = plotcode) )
+  return(invisible(list(plot = plot,
+                        code = plotcode)))
 }
 
