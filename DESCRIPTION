@@ -27,6 +27,7 @@ Imports:
     grid,
     gridExtra,
     ggtext,
+    gridtext,
     knitr,
     rmarkdown,
 RoxygenNote: 7.1.2
