@@ -1,0 +1,138 @@
+---
+title: "Confidence interval lines in forest plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Confidence interval lines in forest plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  fig.align = "center"
+)
+```
+
+```{r setup, include = FALSE}
+library(ckbplotr)
+```
+
+When making a forest plot, if a confidence interval line is narrower than the point representing the estimate we may wish to plot the line differently. In this package, this is possible by using the `panel.width` argument in the `make_forest_plot()` function, then using the `fix_panel()` function.
+
+The sections below show how to change the colour of confidence lines and/or plot confidence lines before or after points. After using these methods, you should still carefully check the output (i.e. your final output file, not an RStudio preview) to ensure confidence interval lines are not hidden.
+
+## Changing the colour
+To plot narrow confidence widths a different colour, set the `panel.width` argument of `make_forest_plot()` equal to the width each  panel will be in the final drawn output. The `cicolour` argument should also be a character vector - the last element will be used for narrow confidence intervals.
+
+Then use the `fix_panel()` function, where the first argument is the plot just created and the second is the same panel width. This function returns a gtable object, which can be plotted using `grid::grid.draw` (or `plot()`). The panels widths will be fixed.
+
+Notes: This has been designed to work well for shape 15 (the default) and 22. The calculation of sizes (and accounting for the stroke aesthetic) may not be entirely accurate, so check the output and change the `plot.width` argument as needed. Confidence intervals are assumed to be centred on the point estimate.
+
+```{r forest-plot}
+resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
+resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
+
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 8,
+                               col.left          = c("n"),
+                               col.left.heading  = c("No. of\nevents"),
+                               col.heading.space = 0,
+                               
+                               # set panel width + CI colours
+                               panel.width       = 18,
+                               cicolour          = c("black", "white"),
+                               printplot         = FALSE)
+
+plot <- fix_panel(forestplot$plot, width = unit(18, "mm"))
+grid::grid.draw(plot)
+```
+
+The `cicolour` argument can be a vector of all names of colours, or all names of columns (which contain colour names).
+
+
+## Plotting lines under or over points
+As well as changing colour, we may also wish to change if confidence interval lines are plotted under or over the point estimates. This can be done using the `plot.width` argument and using a logical (or character) vector for the `ciunder` argument.
+
+```{r forest-plot-3}
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 8,
+                               col.left          = c("n"),
+                               col.left.heading  = c("No. of\nevents"),
+                               
+                               # set panel width + CI under or over
+                               panel.width       = 18,
+                               shape             = 22,
+                               stroke            = 0.5,
+                               fill              = "white",
+                               ciunder           = c(TRUE, FALSE),
+                               printplot         = FALSE)
+
+plot <- fix_panel(forestplot$plot, width = unit(18, "mm"))
+grid::grid.draw(plot)
+```
+
+## Changing colour and plotting of lines
+
+```{r forest-plot-4}
+resultsA$cicol1 <- "black"
+resultsA$cicol2 <- "white"
+resultsA$shape <- 15
+
+resultsB$cicol1 <- "black"
+resultsB$cicol2 <- "black"
+resultsB$shape <- 22
+
+forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+                               col.key           = "variable",
+                               row.labels        = ckbplotr_row_labels,
+                               row.labels.levels = c("heading", "subheading", "label"),
+                               rows              = c("Lipoprotein particle concentration"),
+                               exponentiate      = TRUE,
+                               panel.names       = c("Analysis A", "Analysis B"),
+                               ci.delim          = " - ",
+                               xlim              = c(0.9, 1.1),
+                               xticks            = c(0.9, 1, 1.1),
+                               blankrows         = c(1, 1, 0, 1),
+                               scalepoints       = TRUE,
+                               pointsize         = 8,
+                               col.left          = c("n"),
+                               col.left.heading  = c("No. of\nevents"),
+                               
+                               # set panel width + CI colours
+                               panel.width       = 18,
+                               shape             = "shape",
+                               stroke            = 0.5,
+                               cicolour          = c("cicol1", "cicol2"),
+                               ciunder           = c(TRUE, FALSE),
+                               fill              = "white",
+                               printplot         = FALSE)
+
+plot <- fix_panel(forestplot$plot, width = unit(18, "mm"))
+grid::grid.draw(plot)
+```

@@ -62,17 +62,17 @@ The argument should be a character vector. The first element defines where the c
 ### Example
 We wish to use `geom_segment()` to add dashed lines to the plot, and these should be added to the plot before the point estimates:
 ```{r}
-forest <- make_forest_plot(panels         = list(resultsA, resultsB),
-                           col.key        = "variable",
-                           panel.headings = c("Analysis A", "Analysis B"),
-                           exponentiate   = TRUE,
-                           colour = "grey",
-                           addcode = c("# Plot points at the transformed estimates",
-                                       "# Plot dashed line",
-                                       "geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),",
-                                       "linetype = 'dashed',",
-                                       "data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +",
-                                       ""))
+make_forest_plot(panels         = list(resultsA, resultsB),
+                 col.key        = "variable",
+                 panel.headings = c("Analysis A", "Analysis B"),
+                 exponentiate   = TRUE,
+                 colour = "grey",
+                 addcode = c("# Plot points at the transformed estimates",
+                             "# Plot dashed line",
+                             "geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),",
+                             "linetype = 'dashed',",
+                             "data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +",
+                             ""))
 ```
 
 
@@ -111,12 +111,12 @@ This can be used to 'overwrite' some of the code that would otherwise be produce
 
 ### Example
 ```{r}
-forest <- make_forest_plot(panels         = list(resultsA, resultsB),
-                           col.key        = "variable",
-                           panel.headings = c("Analysis A", "Analysis B"),
-                           ciunder        = TRUE,
-                           addarg = list(panel.name = "colour = 'red'"),
-                           addaes = list(point = "colour = dplyr::if_else(estimate_transformed > 1.01, 'orange', 'grey')"))
+make_forest_plot(panels         = list(resultsA, resultsB),
+                 col.key        = "variable",
+                 panel.headings = c("Analysis A", "Analysis B"),
+                 ciunder        = TRUE,
+                 addarg = list(panel.name = "colour = 'red'"),
+                 addaes = list(point = "colour = dplyr::if_else(estimate_transformed > 1.01, 'orange', 'grey')"))
 ```
 
 

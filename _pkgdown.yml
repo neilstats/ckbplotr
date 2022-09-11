@@ -14,9 +14,14 @@ articles:
   navbar: ~
   contents:
   - make_forest_plot
+  - forest_confidence_intervals
   - make_shape_plot
   - adding_editing_code
   - special_characters_formatting
+- title: Saving plots
+  navbar: ~
+  contents:
+  - save_figure
 - title: Related packages
   contents:
   - ggplot2
