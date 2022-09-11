@@ -983,6 +983,9 @@ make_forest_plot <- function(
 
 
   # CI colour code - if using panel.width
+  if (missing(panel.width) || !(length(c(cicolour, cicolour.aes)) > 1 | length(ciunder) > 1)){
+    message('Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.')
+  }
   if (is.numeric(panel.width)) {
     cicolours <- c(cicolour, cicolour.aes)
     codetext$cicolourcode <- c(
@@ -993,7 +996,7 @@ make_forest_plot <- function(
                      scale, scale),
              indent(24,
                     sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
-                            (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, c(shape, shape.aes)),
+                            (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + stroke) / panel.width, c(shape, shape.aes)),
                     sprintf('%s,', cicolours[length(cicolours)]),
                     sprintf('%s))', cicolours[1]))),
       ''
@@ -1013,7 +1016,7 @@ make_forest_plot <- function(
                      scale, scale),
              indent(25,
                     sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
-                            (inv_tf(xto) - inv_tf(xfrom)) * pointsize / panel.width, c(shape, shape.aes)),
+                            (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2*stroke) / panel.width, c(shape, shape.aes)),
                     sprintf('%s,', ciunder[length(ciunder)]),
                     sprintf('%s))', ciunder[1]))),
       ''
@@ -1491,7 +1494,7 @@ make_forest_plot <- function(
   }
 
   return(list(plot = plot,
-              code = plotcode) )
+              code = plotcode))
 }
 
 
