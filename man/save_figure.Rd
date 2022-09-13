@@ -11,6 +11,7 @@ save_figure(
   titlepos = grid::unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")),
   titlejust = c(0, 1),
   margin = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
+  size = NULL,
   pagesize = c("A4", "A5"),
   landscape = FALSE,
   pagedim = NULL,
@@ -32,6 +33,11 @@ save_figure(
 \item{margin}{Margin to be placed around the plot.
 Default is 2.27cm top, 1.27cm (1/2 inch) other sides.
 (Default: unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"))}
+
+\item{size}{A unit vector of length two (width, height).
+Size of plot (a width/height larger than page weight/height minus margins will be
+ignored), centred within margins.
+By default, plot will fill the space within margins.}
 
 \item{pagesize}{Page size of PDF output: "A4" or "A5". (Default: "A4")}
 

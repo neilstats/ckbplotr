@@ -9,6 +9,10 @@
 #' @param margin Margin to be placed around the plot.
 #'    Default is 2.27cm top, 1.27cm (1/2 inch) other sides.
 #'    (Default: unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"))
+#' @param size A unit vector of length two (width, height).
+#'    Size of plot (a width/height larger than page weight/height minus margins will be
+#'    ignored), centred within margins.
+#'    By default, plot will fill the space within margins.
 #' @param pagesize Page size of PDF output: "A4" or "A5". (Default: "A4")
 #' @param landscape Landscape page orientation? (Default: False)
 #' @param pagedim Dimensions (width, height) of PDF output. Overrides pagesize and landscape arguments if used.
@@ -23,10 +27,11 @@ save_figure <- function(figure,
                                                  unit(1, "npc") - unit(1.27/2, "cm")),
                         titlejust = c(0, 1),
                         margin    = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
-                        pagesize = c("A4", "A5"),
+                        size      = NULL,
+                        pagesize  = c("A4", "A5"),
                         landscape = FALSE,
-                        pagedim = NULL,
-                        cropped = FALSE){
+                        pagedim   = NULL,
+                        cropped   = FALSE){
 
   ## Set page dimensions
   pagesize <- match.arg(pagesize)
@@ -41,6 +46,21 @@ save_figure <- function(figure,
     pagedim <- rev(pagedim)
   }
 
+
+  ## Increase margins so that figure will fit dimensions given by size argument
+  ## (Do not decrease margins)
+  if (!missing(size)){
+    add_to_width_margins <- pagedim[[1]] - size[[1]] - margin[[2]] - margin[[4]]
+    add_to_width_margins <- grid::unit.pmax(unit(0, "mm"),
+                                            grid::convertUnit(add_to_width_margins, "mm"))
+    margin[[2]] <- margin[[2]] + 0.5 * add_to_width_margins
+    margin[[4]] <- margin[[4]] + 0.5 * add_to_width_margins
+    add_to_height_margins <- pagedim[[2]] - size[[2]] - margin[[1]] - margin[[3]]
+    add_to_height_margins <- grid::unit.pmax(unit(0, "mm"),
+                                             grid::convertUnit(add_to_height_margins, "mm"))
+    margin[[1]] <- margin[[1]] + 0.5 * add_to_height_margins
+    margin[[3]] <- margin[[3]] + 0.5 * add_to_height_margins
+  }
 
 
   ## Arrange figure with page margins
