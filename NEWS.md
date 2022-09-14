@@ -1,3 +1,8 @@
+# ckbplotr 0.6.6.9000
+* Added save_figure() function to help save plots as PDF files.
+* make_shape_plot() is now called shape_plot() and make_forest_plot() is now called forest_plot(). (But the original names still work.)
+* plot_like_ckb() now removes panel background and puts small top margin on plot
+
 # ckbplotr 0.6.6
 
 * make_forest_plot() addtext argument can now add multiple tests results and/or text under the same row.

@@ -30,7 +30,8 @@ Imports:
     gridtext,
     knitr,
     rmarkdown,
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
+Roxygen: list(markdown = TRUE)
 Suggests:
     covr,
     testthat

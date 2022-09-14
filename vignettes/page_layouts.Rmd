@@ -30,7 +30,7 @@ Using the [grid](https://stat.ethz.ch/R-manual/R-devel/library/grid/html/00Index
 library(ckbplotr)
 
 # Make the plots, with suitable margins
-shapeplot <- make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
+shapeplot <- shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
                         col.x        = "rf",
                         col.estimate = "est",
                         col.stderr   = "se",
@@ -42,20 +42,19 @@ shapeplot <- make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female =
                         printplot    = FALSE)
 
 resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
-forestplot <- make_forest_plot(panels            = list(resultsA),
-                               col.key           = "variable",
-                               row.labels        = ckbplotr_row_labels,
-                               row.labels.levels = c("heading", "subheading", "label"),
-                               rows              = c("Triglycerides concentration",
-                                                     "Lipoprotein particle concentration"),
-                               exponentiate      = TRUE,
-                               panel.headings    = c(""),
-                               xlim              = c(0.9, 1.1),
-                               xticks            = c(0.9, 1, 1.1),
-                               scalepoints       = TRUE,
-                               pointsize         = 3,
-                               plot.margin       = margin(8, 16, 30, 16, "mm"),
-                               printplot         = FALSE)
+forestplot <- forest_plot(panels            = list(resultsA),
+                          col.key           = "variable",
+                          row.labels        = ckbplotr_row_labels,
+                          row.labels.levels = c("heading", "subheading", "label"),
+                          rows              = c("Triglycerides concentration",
+                                                "Lipoprotein particle concentration"),
+                          exponentiate      = TRUE,
+                          panel.headings    = c(""),
+                          xlim              = c(0.9, 1.1),
+                          xticks            = c(0.9, 1, 1.1),
+                          scalepoints       = TRUE,
+                          pointsize         = 3,
+                          printplot         = FALSE)
 
 
 # Arrange the plots side-by-side

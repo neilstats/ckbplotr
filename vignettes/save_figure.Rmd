@@ -21,17 +21,17 @@ library(ckbplotr)
 The `save_figure()` function is used to save plots to PDF (and PNG) files.
 
 ```{r save-shape-plot, eval = FALSE}
-my_plot <- make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
-                           col.x        = "rf",
-                           col.estimate = "est",
-                           col.stderr   = "se",
-                           col.n        = "n",
-                           xlims        = c(15, 50),
-                           ylims        = c(0.5, 3),
-                           scalepoints  = TRUE,
-                           title        = NULL,
-                           printplot    = FALSE,
-                           showcode     = FALSE)
+my_plot <- shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
+                      col.x        = "rf",
+                      col.estimate = "est",
+                      col.stderr   = "se",
+                      col.n        = "n",
+                      xlims        = c(15, 50),
+                      ylims        = c(0.5, 3),
+                      scalepoints  = TRUE,
+                      title        = NULL,
+                      printplot    = FALSE,
+                      showcode     = FALSE)
 
 save_figure(my_plot$plot,
             name = "Figure 1",

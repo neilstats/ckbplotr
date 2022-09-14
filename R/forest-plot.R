@@ -1,7 +1,6 @@
 
 #' Prepares data set for a forest plot
 #'
-#' \code{make_forest_data}
 #'
 #' @param panels A list of data frames. These should include columns or point
 #'   estimates, and standard errors or confidence interval limits. If you
@@ -67,7 +66,7 @@
 #'
 #' @export
 
-make_forest_data <- function(
+forest_data <- function(
     panels,
     col.key       = "key",
     row.labels    = NULL,
@@ -370,6 +369,9 @@ make_forest_data <- function(
 }
 
 
+#' @describeIn forest_data Synonym for `forest_data()`
+#' @export
+make_forest_data <- forest_data
 
 
 
@@ -434,11 +436,11 @@ make_forest_data <- function(
 #' col.right columns. (Default: 0)
 #' @param col.left.heading A character vector of titles for col.left columns. (Default: "")
 #' @param col.right.heading A character vector of titles for the column of estimates
-#' (if estcolumn = TRUE) and col.right columns. (Default: "HR (95\% CI)")
+#' (if estcolumn = TRUE) and col.right columns. (Default: "HR (95% CI)")
 #' @param col.heading.space Position of the titles given by col.left.heading and
 #' col.right.heading. Increase to move them up. (Default: 0)
 #' @param title Title to appear at the top of the plot.
-#' @param xlab Label to appear below the x-axis. (Default: "HR (95\% CI)")
+#' @param xlab Label to appear below the x-axis. (Default: "HR (95% CI)")
 #' @param xlim A numeric vector. The limits of the x axis.
 #' @param xticks A numeric vector. The tick points of the x axis.
 #' @param nullval Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)
@@ -493,7 +495,7 @@ make_forest_data <- function(
 
 
 
-make_forest_plot <- function(
+forest_plot <- function(
     panels,
     row.labels    = NULL,
     row.labels.levels = c("heading1", "heading2", "heading3"),
@@ -1497,6 +1499,11 @@ make_forest_plot <- function(
                         code = plotcode)))
 }
 
+
+
+#' @describeIn forest_plot Synonym for `forest_plot()`
+#' @export
+make_forest_plot <- forest_plot
 
 
 

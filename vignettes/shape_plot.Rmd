@@ -29,35 +29,35 @@ library(ckbplotr)
 ## Log scale
 Set the `logscale` argument to true to use a log scale on the vertical axis. If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set `exponentiate` to true. This will plot exp(estimates) and use a log scale for the axis (if `logscale` is not set).
 ```{r log-scale, fig.height = 4, fig.width = 4, out.width = "50%"}
-make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
-                col.x        = "rf",
-                col.estimate = "est",
-                col.stderr   = "se",
-                col.n        = "n",
-                xlims        = c(15, 50),
-                ylims        = c(0.7, 3),
-                ybreaks      = c(0.7, 1, 1.5, 2, 3),
-                scalepoints  = TRUE,
-                title        = NULL,
-                logscale     = TRUE)
+shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
+           col.x        = "rf",
+           col.estimate = "est",
+           col.stderr   = "se",
+           col.n        = "n",
+           xlims        = c(15, 50),
+           ylims        = c(0.7, 3),
+           ybreaks      = c(0.7, 1, 1.5, 2, 3),
+           scalepoints  = TRUE,
+           title        = NULL,
+           logscale     = TRUE)
 ```
 
 
 ## Using groups
 The `col.group` argument can be supplied to plot results for different groups (using shades of grey for the fill colour). (Set `ciunder` to `TRUE` so that the confidence interval lines are hidden behind behind the point estimate squares.) Use the `legend.position` to set the legend position.
 ```{r groups, fig.height = 4, fig.width = 4, out.width = "50%"}
-make_shape_plot(ckbplotr_shape_data,
-                col.x        = "rf",
-                col.estimate = "est",
-                col.stderr   = "se",
-                col.n        = "n",
-                col.group    = "is_female",
-                xlims        = c(15,50),
-                ylims        = c(0.5, 3),
-                scalepoints  = TRUE,
-                title        = NULL,
-                ciunder      = TRUE,
-                legend.position = "bottom")
+shape_plot(ckbplotr_shape_data,
+           col.x        = "rf",
+           col.estimate = "est",
+           col.stderr   = "se",
+           col.n        = "n",
+           col.group    = "is_female",
+           xlims        = c(15,50),
+           ylims        = c(0.5, 3),
+           scalepoints  = TRUE,
+           title        = NULL,
+           ciunder      = TRUE,
+           legend.position = "bottom")
 ```
 
 
@@ -69,19 +69,19 @@ data_to_plot <- ckbplotr_shape_data %>%
                                    levels = c(0, 1), 
                                    labels = c("Men", "Women")))
 
-shape_plot <- make_shape_plot(data_to_plot,
-                              col.x        = "rf",
-                              col.estimate = "est",
-                              col.stderr   = "se",
-                              col.n        = "n",
-                              col.group    = "is_female",
-                              xlims        = c(15,50),
-                              ylims        = c(0.5, 3),
-                              scalepoints  = TRUE,
-                              title        = NULL,
-                              ciunder      = TRUE,
-                              legend.position = "none",
-                              printplot    = FALSE)
+shape_plot <- shape_plot(data_to_plot,
+                         col.x        = "rf",
+                         col.estimate = "est",
+                         col.stderr   = "se",
+                         col.n        = "n",
+                         col.group    = "is_female",
+                         xlims        = c(15,50),
+                         ylims        = c(0.5, 3),
+                         scalepoints  = TRUE,
+                         title        = NULL,
+                         ciunder      = TRUE,
+                         legend.position = "none",
+                         printplot    = FALSE)
 
 shape_plot$plot +
   geom_text(aes(label = is_female),
@@ -93,18 +93,18 @@ shape_plot$plot +
 ## Adding lines
 The `lines` argument will add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.
 ```{r lines, fig.height = 4, fig.width = 4, out.width = "50%"}
-make_shape_plot(ckbplotr_shape_data,
-                col.x        = "rf",
-                col.estimate = "est",
-                col.stderr   = "se",
-                col.n        = "n",
-                col.group    = "is_female",
-                xlims        = c(15,50),
-                ylims        = c(0.5, 3),
-                scalepoints  = TRUE,
-                title        = NULL,
-                ciunder      = TRUE,
-                lines        = TRUE)
+shape_plot(ckbplotr_shape_data,
+           col.x        = "rf",
+           col.estimate = "est",
+           col.stderr   = "se",
+           col.n        = "n",
+           col.group    = "is_female",
+           xlims        = c(15,50),
+           ylims        = c(0.5, 3),
+           scalepoints  = TRUE,
+           title        = NULL,
+           ciunder      = TRUE,
+           lines        = TRUE)
 ```
 
 
@@ -127,20 +127,20 @@ The argument/columns, what they control, and the type:
 ### Using values
 If the argument doesn't match the name of a column in the data, then the value will be used for all points.
 ```{r aesthetics-with-values, fig.height = 4, fig.width = 4, out.width = "50%"}
-make_shape_plot(ckbplotr_shape_data,
-                col.x        = "rf",
-                col.estimate = "est",
-                col.stderr   = "se",
-                col.n        = "n",
-                xlims        = c(15,50),
-                ylims        = c(0.5, 3),
-                scalepoints  = TRUE,
-                title        = NULL,
-                ciunder      = TRUE,
-                shape        = 23,
-                colour       = "black",
-                fill         = "red",
-                cicolour     = "blue")
+shape_plot(ckbplotr_shape_data,
+           col.x        = "rf",
+           col.estimate = "est",
+           col.stderr   = "se",
+           col.n        = "n",
+           xlims        = c(15,50),
+           ylims        = c(0.5, 3),
+           scalepoints  = TRUE,
+           title        = NULL,
+           ciunder      = TRUE,
+           shape        = 23,
+           colour       = "black",
+           fill         = "red",
+           cicolour     = "blue")
 ```
 
 ### Using columns
@@ -149,18 +149,18 @@ If the argument matches a column name, then the values in the column will be use
 ckbplotr_shape_data$fillcol <- "black"
 ckbplotr_shape_data[ckbplotr_shape_data$is_female == 1,]$fillcol <- "orange"
 
-make_shape_plot(ckbplotr_shape_data,
-                col.x        = "rf",
-                col.estimate = "est",
-                col.stderr   = "se",
-                col.n        = "n",
-                xlims        = c(15,50),
-                ylims        = c(0.5, 3),
-                scalepoints  = TRUE,
-                title        = NULL,
-                ciunder      = TRUE,
-                colour       = "fillcol",
-                fill         = "fillcol")
+shape_plot(ckbplotr_shape_data,
+           col.x        = "rf",
+           col.estimate = "est",
+           col.stderr   = "se",
+           col.n        = "n",
+           xlims        = c(15,50),
+           ylims        = c(0.5, 3),
+           scalepoints  = TRUE,
+           title        = NULL,
+           ciunder      = TRUE,
+           colour       = "fillcol",
+           fill         = "fillcol")
 ```
 
 Specify a column for `cicolour` is useful for changing the colour of confidence interval lines that would otherwise be hidden.
@@ -168,17 +168,17 @@ Specify a column for `cicolour` is useful for changing the colour of confidence 
 ckbplotr_shape_data$cicol <- "black"
 ckbplotr_shape_data[2,]$cicol <- "white"
 
-make_shape_plot(ckbplotr_shape_data,
-                col.x        = "rf",
-                col.estimate = "est",
-                col.stderr   = "se",
-                col.n        = "n",
-                xlims        = c(15,50),
-                ylims        = c(0.5, 3),
-                scalepoints  = TRUE,
-                title        = NULL,
-                pointsize    = 7,
-                cicolour     = "cicol")
+shape_plot(ckbplotr_shape_data,
+           col.x        = "rf",
+           col.estimate = "est",
+           col.stderr   = "se",
+           col.n        = "n",
+           xlims        = c(15,50),
+           ylims        = c(0.5, 3),
+           scalepoints  = TRUE,
+           title        = NULL,
+           pointsize    = 7,
+           cicolour     = "cicol")
 ```
 
 Note that the size of boxes depends on `pointsize`, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.
@@ -189,21 +189,21 @@ The risk factor can be a factor. In this case, the x-axis coordinates are 1, 2, 
 ```{r, fig.height = 4, fig.width = 4, out.width = "50%"}
 ckbplotr_shape_data$rf <- c(  "A",   "B",   "C",   "D", "A",   "B",   "C",  "D")
 
-make_shape_plot(ckbplotr_shape_data,
-                col.x        = "rf",
-                col.estimate = "est",
-                col.stderr   = "se",
-                col.n        = "n",
-                col.group    = "is_female",
-                xlims        = c(0.5, 4.5),
-                ylims        = c(0.5, 3),
-                scalepoints  = TRUE,
-                title        = NULL,
-                ciunder      = TRUE,
-                addarg = list(point     = "position = position_dodge(width = 0.5)",
-                              ci        = "position = position_dodge(width = 0.5)",
-                              n         = "position = position_dodge(width = 0.5)",
-                              estimates = "position = position_dodge(width = 0.5)"))
+shape_plot(ckbplotr_shape_data,
+           col.x        = "rf",
+           col.estimate = "est",
+           col.stderr   = "se",
+           col.n        = "n",
+           col.group    = "is_female",
+           xlims        = c(0.5, 4.5),
+           ylims        = c(0.5, 3),
+           scalepoints  = TRUE,
+           title        = NULL,
+           ciunder      = TRUE,
+           addarg = list(point     = "position = position_dodge(width = 0.5)",
+                         ci        = "position = position_dodge(width = 0.5)",
+                         n         = "position = position_dodge(width = 0.5)",
+                         estimates = "position = position_dodge(width = 0.5)"))
 ```
 
 ## Stroke

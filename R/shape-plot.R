@@ -1,6 +1,7 @@
 
 #' Make a shape plot with ggplot2
 #'
+#'
 #' @inheritParams plot_like_ckb
 #'
 #' @param data The data frame containing estimates to be plotted.
@@ -28,7 +29,7 @@
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
 #' @param xlab Label for x-axis. (Default: "Risk factor")
-#' @param ylab Label for y-axis. (Default: "Estimate (95\% CI)")
+#' @param ylab Label for y-axis. (Default: "Estimate (95% CI)")
 #' @param legend.name The name of the colour scale/legend for groups. (Default: "")
 #' @param legend.position Position of the legend for groups ("none", "left", "right", "bottom", "top", or two-element numeric vector). (Default: "top")
 #' @param title Plot title. (Default: "Figure")
@@ -60,47 +61,47 @@
 
 
 
-make_shape_plot <- function(data,
-                            col.x         = "x",
-                            col.estimate  = "estimate",
-                            col.stderr    = "stderr",
-                            col.lci       = NULL,
-                            col.uci       = NULL,
-                            col.n         = NULL,
-                            exponentiate  = FALSE,
-                            logscale      = exponentiate,
-                            scalepoints   = FALSE,
-                            minse         = NA,
-                            pointsize     = 3,
-                            col.group     = NULL,
-                            shape         = NULL,
-                            plotcolour    = "black",
-                            colour        = NULL,
-                            cicolour      = colour,
-                            fill          = NULL,
-                            ciunder       = NULL,
-                            lines         = FALSE,
-                            xlims,
-                            ylims,
-                            gap           = c(0.025, 0.025),
-                            ext           = c(0.025, 0.025),
-                            ratio         = 1.5,
-                            base_size     = 11,
-                            base_line_size = base_size/22,
-                            stroke        = base_size/22,
-                            xbreaks       = NULL,
-                            ybreaks       = NULL,
-                            xlab          = "Risk factor",
-                            ylab          = "Estimate (95% CI)",
-                            legend.name   = "",
-                            legend.position = "top",
-                            title         = "Figure",
-                            printplot     = TRUE,
-                            showcode      = TRUE,
-                            addcode       = NULL,
-                            addaes        = NULL,
-                            addarg        = NULL,
-                            envir         = NULL){
+shape_plot <- function(data,
+                       col.x         = "x",
+                       col.estimate  = "estimate",
+                       col.stderr    = "stderr",
+                       col.lci       = NULL,
+                       col.uci       = NULL,
+                       col.n         = NULL,
+                       exponentiate  = FALSE,
+                       logscale      = exponentiate,
+                       scalepoints   = FALSE,
+                       minse         = NA,
+                       pointsize     = 3,
+                       col.group     = NULL,
+                       shape         = NULL,
+                       plotcolour    = "black",
+                       colour        = NULL,
+                       cicolour      = colour,
+                       fill          = NULL,
+                       ciunder       = NULL,
+                       lines         = FALSE,
+                       xlims,
+                       ylims,
+                       gap           = c(0.025, 0.025),
+                       ext           = c(0.025, 0.025),
+                       ratio         = 1.5,
+                       base_size     = 11,
+                       base_line_size = base_size/22,
+                       stroke        = base_size/22,
+                       xbreaks       = NULL,
+                       ybreaks       = NULL,
+                       xlab          = "Risk factor",
+                       ylab          = "Estimate (95% CI)",
+                       legend.name   = "",
+                       legend.position = "top",
+                       title         = "Figure",
+                       printplot     = TRUE,
+                       showcode      = TRUE,
+                       addcode       = NULL,
+                       addaes        = NULL,
+                       addarg        = NULL,
+                       envir         = NULL){
 
   # Check arguments
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
@@ -194,11 +195,11 @@ make_shape_plot <- function(data,
     group_string <- sprintf(', group = as.factor(%s)', fixsp(col.group))
     scale_fill_string <- c('',
                            make_layer('# Set the scale for fill colours',
-                                    f = "scale_fill_grey",
-                                    arg = c("start = 0",
-                                            "end   = 1",
-                                            sprintf('name  = "%s"', legend.name)),
-                                    br = FALSE))
+                                      f = "scale_fill_grey",
+                                      arg = c("start = 0",
+                                              "end   = 1",
+                                              sprintf('name  = "%s"', legend.name)),
+                                      br = FALSE))
     fill_string.aes <- sprintf('fill = as.factor(%s)', fixsp(col.group))
   } else {
     group_string <- ''
@@ -242,7 +243,7 @@ make_shape_plot <- function(data,
   # Write code for aesthetics scales
   codetext$scales <- c(
     make_layer(
-    '# Set the scale for the size of boxes',
+      '# Set the scale for the size of boxes',
       f = "scale_radius",
       arg = c('guide  = "none"',
               sprintf('limits = c(0, %s)', deparse(1/minse)),
@@ -262,10 +263,10 @@ make_shape_plot <- function(data,
       f = "stat_smooth",
       aes = c(addaes$lines,
               if (!is.null(col.lci)) {
-        sprintf('weight = 1/((%s - %s)^2)', col.estimate, fixsp(col.lci))
-      } else {
-        sprintf('weight = 1/(%s^2)', col.stderr)
-      }),
+                sprintf('weight = 1/((%s - %s)^2)', col.estimate, fixsp(col.lci))
+              } else {
+                sprintf('weight = 1/(%s^2)', col.stderr)
+              }),
       arg = c(addarg$lines,
               'method   = "glm"',
               'formula  = y ~ x',
@@ -455,3 +456,8 @@ make_shape_plot <- function(data,
                         code = plotcode)))
 }
 
+
+
+#' @describeIn shape_plot Synonym for `shape_plot()`
+#' @export
+make_shape_plot <- shape_plot
