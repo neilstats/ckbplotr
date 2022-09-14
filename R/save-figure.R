@@ -1,11 +1,19 @@
 #' Output plots as files
 #'
 #' @param figure Plot (or graphical object).
-#' @param name Name of figure. Used to name the output file(s) and embedded in the PDF document properties Title field.
+#' @param name Name of figure.
+#'    Used to name the output file(s) and embedded in the PDF document properties Title field.
 #' @param title Title to be added to the page. (Default: "")
-#' @param titlepos Position of the title text. Default is 1/4 inch from top left of page.
+#' @param title.pos Position of the title text. Default is 1/4 inch from top left of page.
 #'    (Default: unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")))
-#' @param titlejust Justification of the title text. (Default: c(0, 1))
+#' @param title.just Justification of the title text. (Default: c(0, 1))
+#' @param title.gpar
+#' @param footer Footer to be added to the page. (Default: "")
+#' @param footer.pos Position of the footer text.
+#'    Default is 1/6 inch from bottom and 1/4 inch from left of page.
+#'    (Default: unit.c(unit(1.27/2, "cm"), unit(1.27/3, "cm")))
+#' @param footer.just Justification of the title text. (Default: c(0, 0))
+#' @param footer.gpar
 #' @param margin Margin to be placed around the plot.
 #'    Default is 2.27cm top, 1.27cm (1/2 inch) other sides.
 #'    (Default: unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"))
@@ -22,16 +30,23 @@
 #'
 save_figure <- function(figure,
                         name,
-                        title     = "",
-                        titlepos  = grid::unit.c(unit(1.27/2, "cm"),
-                                                 unit(1, "npc") - unit(1.27/2, "cm")),
-                        titlejust = c(0, 1),
-                        margin    = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
-                        size      = NULL,
-                        pagesize  = c("A4", "A5"),
-                        landscape = FALSE,
-                        pagedim   = NULL,
-                        cropped   = FALSE){
+                        title       = "",
+                        title.pos   = grid::unit.c(unit(1.27/2, "cm"),
+                                                   unit(1, "npc") - unit(1.27/2, "cm")),
+                        title.just  = c(0, 1),
+                        title.gpar  = list(fontsize = 12,
+                                           fontface = "bold"),
+                        footer      = "",
+                        footer.pos  = grid::unit.c(unit(1.27/2, "cm"),
+                                                   unit(1.27/3, "cm")),
+                        footer.just = c(0, 0),
+                        footer.gpar = list(fontsize = 9),
+                        margin      = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
+                        size        = NULL,
+                        pagesize    = c("A4", "A5"),
+                        landscape   = FALSE,
+                        pagedim     = NULL,
+                        cropped     = FALSE){
 
   ## Set page dimensions
   pagesize <- match.arg(pagesize)
@@ -83,18 +98,29 @@ save_figure <- function(figure,
   ## Create title grob
   titleGrob <- gridtext::textbox_grob(
     title,
-    gp = grid::gpar(cex = 1, fontface = "bold"),
-    x = titlepos[1],
-    y = titlepos[2],
-    hjust = titlejust[1],
-    vjust = titlejust[2],
-    maxwidth = pagedim[1] - 2 * titlepos[1])
+    gp = do.call(grid::gpar, title.gpar),
+    x = title.pos[1],
+    y = title.pos[2],
+    hjust = title.just[1],
+    vjust = title.just[2],
+    maxwidth = pagedim[1] - 2 * title.pos[1])
 
-  ## Arrange page with title
+  ## Create footer grob
+  footerGrob <- gridtext::textbox_grob(
+    footer,
+    gp = do.call(grid::gpar, footer.gpar),
+    x = footer.pos[1],
+    y = footer.pos[2],
+    hjust = footer.just[1],
+    vjust = footer.just[2],
+    maxwidth = pagedim[1] - 2 * footer.pos[1])
+
+  ## Arrange page with title and footer
   page <- gridExtra::arrangeGrob(titleGrob,
                                  figure_with_margins,
-                                 nrow = 2,
-                                 heights = c(0, 1))
+                                 footerGrob,
+                                 nrow = 3,
+                                 heights = c(0, 1, 0))
 
 
   ## Save to PDF file

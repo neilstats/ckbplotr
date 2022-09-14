@@ -8,8 +8,13 @@ save_figure(
   figure,
   name,
   title = "",
-  titlepos = grid::unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")),
-  titlejust = c(0, 1),
+  title.pos = grid::unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")),
+  title.just = c(0, 1),
+  title.gpar = list(fontsize = 12, fontface = "bold"),
+  footer = "",
+  footer.pos = grid::unit.c(unit(1.27/2, "cm"), unit(1.27/3, "cm")),
+  footer.just = c(0, 0),
+  footer.gpar = list(fontsize = 9),
   margin = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
   size = NULL,
   pagesize = c("A4", "A5"),
@@ -21,14 +26,23 @@ save_figure(
 \arguments{
 \item{figure}{Plot (or graphical object).}
 
-\item{name}{Name of figure. Used to name the output file(s) and embedded in the PDF document properties Title field.}
+\item{name}{Name of figure.
+Used to name the output file(s) and embedded in the PDF document properties Title field.}
 
 \item{title}{Title to be added to the page. (Default: "")}
 
-\item{titlepos}{Position of the title text. Default is 1/4 inch from top left of page.
+\item{title.pos}{Position of the title text. Default is 1/4 inch from top left of page.
 (Default: unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")))}
 
-\item{titlejust}{Justification of the title text. (Default: c(0, 1))}
+\item{title.just}{Justification of the title text. (Default: c(0, 1))}
+
+\item{footer}{Footer to be added to the page. (Default: "")}
+
+\item{footer.pos}{Position of the footer text.
+Default is 1/6 inch from bottom and 1/4 inch from left of page.
+(Default: unit.c(unit(1.27/2, "cm"), unit(1.27/3, "cm")))}
+
+\item{footer.just}{Justification of the title text. (Default: c(0, 0))}
 
 \item{margin}{Margin to be placed around the plot.
 Default is 2.27cm top, 1.27cm (1/2 inch) other sides.
