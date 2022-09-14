@@ -36,13 +36,17 @@ Used to name the output file(s) and embedded in the PDF document properties Titl
 
 \item{title.just}{Justification of the title text. (Default: c(0, 1))}
 
+\item{title.gpar}{Graphical parameters for title. (Default: list(fontsize = 12, fontface = "bold"))}
+
 \item{footer}{Footer to be added to the page. (Default: "")}
 
 \item{footer.pos}{Position of the footer text.
 Default is 1/6 inch from bottom and 1/4 inch from left of page.
 (Default: unit.c(unit(1.27/2, "cm"), unit(1.27/3, "cm")))}
 
-\item{footer.just}{Justification of the title text. (Default: c(0, 0))}
+\item{footer.just}{Justification of the footer text. (Default: c(0, 0))}
+
+\item{footer.gpar}{Graphical parameters for footer. (Default: list(fontsize = 9))}
 
 \item{margin}{Margin to be placed around the plot.
 Default is 2.27cm top, 1.27cm (1/2 inch) other sides.

@@ -7,13 +7,13 @@
 #' @param title.pos Position of the title text. Default is 1/4 inch from top left of page.
 #'    (Default: unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")))
 #' @param title.just Justification of the title text. (Default: c(0, 1))
-#' @param title.gpar
+#' @param title.gpar Graphical parameters for title. (Default: list(fontsize = 12, fontface = "bold"))
 #' @param footer Footer to be added to the page. (Default: "")
 #' @param footer.pos Position of the footer text.
 #'    Default is 1/6 inch from bottom and 1/4 inch from left of page.
 #'    (Default: unit.c(unit(1.27/2, "cm"), unit(1.27/3, "cm")))
-#' @param footer.just Justification of the title text. (Default: c(0, 0))
-#' @param footer.gpar
+#' @param footer.just Justification of the footer text. (Default: c(0, 0))
+#' @param footer.gpar Graphical parameters for footer. (Default: list(fontsize = 9))
 #' @param margin Margin to be placed around the plot.
 #'    Default is 2.27cm top, 1.27cm (1/2 inch) other sides.
 #'    (Default: unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"))
