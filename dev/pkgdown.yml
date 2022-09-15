@@ -1,0 +1,19 @@
+pandoc: 2.14.2
+pkgdown: 2.0.6
+pkgdown_sha: ~
+articles:
+  adding_editing_code: adding_editing_code.html
+  ckbplotr: ckbplotr.html
+  forest_confidence_intervals: forest_confidence_intervals.html
+  forest_plot: forest_plot.html
+  ggplot2: ggplot2.html
+  page_layouts: page_layouts.html
+  plot_like_ckb: plot_like_ckb.html
+  save_figure: save_figure.html
+  shape_plot: shape_plot.html
+  special_characters_formatting: special_characters_formatting.html
+last_built: 2022-09-15T17:36Z
+urls:
+  reference: https://neilstats.github.io/ckbplotr/reference
+  article: https://neilstats.github.io/ckbplotr/articles
+
