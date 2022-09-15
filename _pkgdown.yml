@@ -1,8 +1,11 @@
 destination: docs
 
+development:
+  mode: auto
+
 template:
-  params:
-    bootswatch: cosmo
+  bootstrap: 5
+  bootswatch: flatly
 
 articles:
 - title: Introduction
@@ -31,3 +34,5 @@ news:
   releases:
   - text: "Latest"
     href: https://github.com/neilstats/ckbplotr/releases/latest
+
+url: https://neilstats.github.io/ckbplotr/

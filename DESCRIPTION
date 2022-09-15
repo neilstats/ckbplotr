@@ -36,6 +36,6 @@ Suggests:
     covr,
     testthat
 VignetteBuilder: knitr
-URL: https://github.com/neilstats/ckbplotr
+URL: https://neilstats.github.io/ckbplotr/
 BugReports: https://github.com/neilstats/ckbplotr/issues
 License: GPL (>= 3)
