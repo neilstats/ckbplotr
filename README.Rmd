@@ -29,54 +29,54 @@ library(gridExtra)
 `ckbplotr` provides functions to help create and style plots in R. It is being
 developed by, and primarily for, [China Kadoorie Biobank](http://www.ckbiobank.org) 
 researchers.
- 
+
 *This package is under development. If you find an error or bug or have a suggestion for improvement please create an issue on GitHub or contact the author at [neil.wright@ndph.ox.ac.uk](mailto:neil.wright@ndph.ox.ac.uk) or [\@NeilStats](https://twitter.com/NeilStats).*
 
 It can be used to: create plots of estimates and CIs against risk factor levels...
-```{r make_shape_plot-example, echo = FALSE, out.width = "50%"}
+```{r example-shape-plot, echo = FALSE, out.width = "50%"}
 results <- ckbplotr_shape_data %>% 
   dplyr::filter(is_female == 0)
 
-plot <- make_shape_plot(results,
-                        col.x        = "rf",
-                        col.estimate = "est",
-                        col.stderr   = "se",
-                        col.n        = "n",
-                        xlims        = c(15,50),
-                        ylims        = c(0.5, 2.5),
-                        scalepoints  = TRUE,
-                        title        = NULL,
-                        ciunder      = TRUE,
-                        printplot     = FALSE,
-                        envir        = environment())
+plot <- shape_plot(results,
+                   col.x        = "rf",
+                   col.estimate = "est",
+                   col.stderr   = "se",
+                   col.n        = "n",
+                   xlims        = c(15,50),
+                   ylims        = c(0.5, 2.5),
+                   scalepoints  = TRUE,
+                   title        = NULL,
+                   ciunder      = TRUE,
+                   printplot     = FALSE,
+                   envir        = environment())
 
 plot$plot + theme(plot.margin = margin(8, 8, 8, 8, "mm"))
 ```
 
 
 ...create forest plots...
-```{r example-forest-plot, echo = FALSE, warning = FALSE, fig.width = 8, fig.height = 6, out.width = "90%"}
+```{r example-forest-plot, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8, fig.height = 6, out.width = "90%"}
 resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
 resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
 
-forestplot <- make_forest_plot(row.labels        = ckbplotr_row_labels,
-                               row.labels.levels = c("heading", "subheading", "label"),
-                               rows              = c("Lipoprotein particle concentration",
-                                                     "Triglycerides concentration"),
-                               panels            = list(resultsA, resultsB),
-                               exponentiate      = TRUE,
-                               panel.names       = c("Analysis A", "Analysis B"),
-                               col.key           = "variable",
-                               ci.delim          = " - ",
-                               xlim              = c(0.9, 1.1),
-                               xticks            = c(0.9, 1, 1.1),
-                               blankrows         = c(1, 1, 0, 1),
-                               scalepoints       = TRUE,
-                               pointsize         = 3,
-                               col.left          = c("n"),
-                               col.left.heading  = c("No. of\nevents"),
-                               col.heading.space = 1.5,
-                               envir             = environment())
+forestplot <- forest_plot(row.labels        = ckbplotr_row_labels,
+                          row.labels.levels = c("heading", "subheading", "label"),
+                          rows              = c("Lipoprotein particle concentration",
+                                                "Triglycerides concentration"),
+                          panels            = list(resultsA, resultsB),
+                          exponentiate      = TRUE,
+                          panel.names       = c("Analysis A", "Analysis B"),
+                          col.key           = "variable",
+                          ci.delim          = " - ",
+                          xlim              = c(0.9, 1.1),
+                          xticks            = c(0.9, 1, 1.1),
+                          blankrows         = c(1, 1, 0, 1),
+                          scalepoints       = TRUE,
+                          pointsize         = 3,
+                          col.left          = c("n"),
+                          col.left.heading  = c("No. of\nevents"),
+                          col.heading.space = 1.5,
+                          envir             = environment())
 ```
 
 ...and convert other ggplots to CKB style.
@@ -108,9 +108,9 @@ remotes::install_github('neilstats/ckbplotr')
 
 ## Get started
 
-Read `vignette("ckbplotr")` to see how to use the `make_shape_plot()`, `make_forest_plot()`, and `plot_like_ckb()` functions.
+Read `vignette("ckbplotr")` to see how to use the `shape_plot()`, `forest_plot()`, and `plot_like_ckb()` functions.
 
 
 ## ggplot2 code
 
-The `make_shape_plot()` and `make_forest_plot()` functions return both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane.
+The `shape_plot()` and `forest_plot()` functions return both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane.

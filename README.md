@@ -23,7 +23,7 @@ the author at <neil.wright@ndph.ox.ac.uk> or
 
 It can be used to: create plots of estimates and CIs against risk factor
 levels…
-<img src="man/figures/README-make_shape_plot-example-1.png" width="50%" style="display: block; margin: auto;" />
+<img src="man/figures/README-example-shape-plot-1.png" width="50%" style="display: block; margin: auto;" />
 
 …create forest plots…
 <img src="man/figures/README-example-forest-plot-1.png" width="90%" style="display: block; margin: auto;" />
@@ -47,8 +47,8 @@ This will also install dependencies from the CRAN repository.
 
 ### From github
 
-The latest version of `ckbplotr` can be installed from github using the
-`remotes` package.
+The latest version of `ckbplotr` can also be installed from github using
+the `remotes` package.
 
 ``` r
 install.packages('remotes')
@@ -57,14 +57,11 @@ remotes::install_github('neilstats/ckbplotr')
 
 ## Get started
 
-Read `vignette("ckbplotr")` to see how to use the `make_shape_plot()`,
-`make_forest_plot()`, and `plot_like_ckb()` functions.
+Read `vignette("ckbplotr")` to see how to use the `shape_plot()`,
+`forest_plot()`, and `plot_like_ckb()` functions.
 
 ## ggplot2 code
 
-The `make_shape_plot()` and `make_forest_plot()` functions return both a
-plot and the ggplot2 code used to create the plot. In RStudio the
-ggplot2 code used to create the plot will be shown in the Viewer pane
-(with syntax highlighting if the
-[highlights](https://cran.r-project.org/package=highlight) package is
-installed).
+The `shape_plot()` and `forest_plot()` functions return both a plot and
+the ggplot2 code used to create the plot. In RStudio the ggplot2 code
+used to create the plot will be shown in the Viewer pane.

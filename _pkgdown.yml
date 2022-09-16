@@ -5,7 +5,6 @@ development:
 
 template:
   bootstrap: 5
-  bootswatch: flatly
 
 articles:
 - title: Introduction
