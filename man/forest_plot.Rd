@@ -53,6 +53,7 @@ forest_plot(
   fill = NULL,
   ciunder = NULL,
   addtext = NULL,
+  bottom.space = 0.7,
   left.space = NULL,
   right.space = NULL,
   mid.space = unit(5, "mm"),
@@ -130,6 +131,7 @@ make_forest_plot(
   fill = NULL,
   ciunder = NULL,
   addtext = NULL,
+  bottom.space = 0.7,
   left.space = NULL,
   right.space = NULL,
   mid.space = unit(5, "mm"),
@@ -289,6 +291,8 @@ and one or more of:
 The character strings, heterogeneity test, and trend test results will
 be plotted in the column of estimates and CIs, below the row with the key
 given in the col.key column.}
+
+\item{bottom.space}{Size of space between bottom row and axis. (Default: 0.7)}
 
 \item{left.space}{Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))}
 

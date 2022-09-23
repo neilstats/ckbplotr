@@ -257,10 +257,9 @@ forest_data <- function(
     dplyr::mutate(addtextrow = 1:dplyr::n() - 1) %>%
     dplyr::ungroup()
 
-  # add a blank heading at bottom if needed
-  if (utils::tail(out$row.label, 1) != "") {
-    out <- out %>%
-      tibble::add_row(row.label = "")
+  # remove any blank rows  bottom if needed
+  while (utils::tail(out$row.label, 1) == "" & is.na(utils::tail(out$extrarowkey, 1))) {
+    out <- dplyr::slice(out, 1:(dplyr::n() - 1))
   }
 
   out <- out %>%
@@ -457,6 +456,7 @@ make_forest_data <- forest_data
 #'                (using the key values) for which the estimate and CI should be plotted using a diamond.
 #' @param col.bold Plot text as bold. Name of a column of logical values.
 #' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
+#' @param bottom.space Size of space between bottom row and axis. (Default: 0.7)
 #' @param left.space Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))
 #' @param right.space Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))
 #' @param mid.space Size of additional gap to leave between panels. (Default: unit(5, "mm"))
@@ -543,6 +543,7 @@ forest_plot <- function(
     fill      = NULL,
     ciunder   = NULL,
     addtext       = NULL,
+    bottom.space  = 0.7,
     left.space    = NULL,
     right.space   = NULL,
     mid.space     = unit(5, "mm"),
@@ -829,7 +830,8 @@ forest_plot <- function(
       f = "scale_y_continuous",
       arg = c('breaks = -1:-max(datatoplot$row)',
               'labels = rowlabels',
-              'limits = c(-max(datatoplot$row), NA),',
+              sprintf('limits = c(-max(datatoplot$row) - %s, NA),',
+                      deparse(bottom.space)),
               'expand = c(0,0)')
     )
   )

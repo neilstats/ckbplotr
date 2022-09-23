@@ -7,7 +7,7 @@
 fix_panel(plot, width = NULL, height = NULL)
 }
 \arguments{
-\item{plot}{A plot (created by make_forest_plot()).}
+\item{plot}{A plot (created by forest_plot()).}
 
 \item{width}{Width of panels. (e.g unit(50, "mm"))}
 
