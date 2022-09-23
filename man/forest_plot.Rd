@@ -206,7 +206,7 @@ If row.labels data frame is not given, then this column will be used as row labe
 \item{col.right}{Names of columns to be printed to the right of the plot.}
 
 \item{col.right.parse}{A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
-Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)}
+Should the contents of the columns be parsed into expressions. (Default: FALSE)}
 
 \item{col.left.heading}{A character vector of titles for col.left columns. (Default: "")}
 
@@ -294,9 +294,9 @@ given in the col.key column.}
 
 \item{bottom.space}{Size of space between bottom row and axis. (Default: 0.7)}
 
-\item{left.space}{Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))}
+\item{left.space}{Size of gap to leave to the left of panels.}
 
-\item{right.space}{Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))}
+\item{right.space}{Size of gap to leave to the right of panels.}
 
 \item{mid.space}{Size of additional gap to leave between panels. (Default: unit(5, "mm"))}
 

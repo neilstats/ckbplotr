@@ -426,7 +426,7 @@ make_forest_data <- forest_data
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
 #' @param col.right.parse A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
-#' Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)
+#' Should the contents of the columns be parsed into expressions. (Default: FALSE)
 #' @param col.left.pos A unit vector to position col.right columns.
 #' @param col.right.pos A unit vector to position col.right columns.
 #' @param col.left.hjust A numeric vector. The horizontal justification of
@@ -457,8 +457,8 @@ make_forest_data <- forest_data
 #' @param col.bold Plot text as bold. Name of a column of logical values.
 #' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
 #' @param bottom.space Size of space between bottom row and axis. (Default: 0.7)
-#' @param left.space Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))
-#' @param right.space Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))
+#' @param left.space Size of gap to leave to the left of panels.
+#' @param right.space Size of gap to leave to the right of panels.
 #' @param mid.space Size of additional gap to leave between panels. (Default: unit(5, "mm"))
 #' @param plot.margin Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
 
