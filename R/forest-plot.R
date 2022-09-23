@@ -420,7 +420,7 @@ make_forest_data <- forest_data
 #'
 #'
 #'
-#' @inheritParams make_forest_data
+#' @inheritParams forest_data
 #' @inheritParams theme_ckb
 #' @param logscale Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
 #' @param panel.headings Titles to be placed above each forest plot. (Default: panel.names)
@@ -836,12 +836,12 @@ forest_plot <- function(
 
 
   codetext$prep.data <- make_layer(
-    name = '# Prepare data to be plotted using ckbplotr::make_forest_data()',
+    name = '# Prepare data to be plotted using ckbplotr::forest_data()',
     plus = FALSE,
-    f = 'datatoplot <- ckbplotr::make_forest_data',
+    f = 'datatoplot <- ckbplotr::forest_data',
     arg = c(
       if (!identical(row.labels,
-                     eval(formals(ckbplotr::make_forest_data)[["row.labels"]]))){
+                     eval(formals(ckbplotr::forest_data)[["row.labels"]]))){
         sprintf('row.labels = %s',
                 if (!missing(headings)) {
                   paste(deparse(substitute(headings)), collapse = '')
@@ -875,7 +875,7 @@ forest_plot <- function(
       argset(scalepoints),
       argset(minse),
       if (!identical(addtext,
-                     eval(formals(ckbplotr::make_forest_data)[["addtext"]]))){
+                     eval(formals(ckbplotr::forest_data)[["addtext"]]))){
         sprintf('addtext = %s',
                 paste(deparse(substitute(addtext)), collapse = ''))
       }))
@@ -1517,7 +1517,7 @@ make_forest_plot <- forest_plot
 #'
 #' \code{fix_panel} fixes the panel width and height of a forest plot
 #'
-#' @param plot A plot (created by make_forest_plot()).
+#' @param plot A plot (created by forest_plot()).
 #' @param width Width of panels. (e.g unit(50, "mm"))
 #' @param height Height of panels. (e.g unit(150, "mm"))
 #'
