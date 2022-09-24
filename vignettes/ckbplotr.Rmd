@@ -41,14 +41,15 @@ shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
            col.n        = "n",
            xlims        = c(15, 50),
            ylims        = c(0.5, 3),
-           scalepoints  = TRUE,
-           title        = NULL)
+           scalepoints  = TRUE)
 ```
 
 For more details on customising these forest plots, see ["More with shape plots"](shape_plot.html).
 
 ## Forest plots
 `forest_plot()` creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
+
+*Narrow confidence interval lines may become hidden in forest plots. Please check your final output carefully and see ["Confidence interval lines in forest plots"](forest_confidence_intervals.html) for more methods for handle this.*
 
 ### Prepare data
 First of all, do your analyses and put the results into data frames (one data frame for each forest plot panel). Here we take subsets of the example data provided in the package.

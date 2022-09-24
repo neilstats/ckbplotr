@@ -1,9 +1,11 @@
 # ckbplotr 0.6.6.9000
+
 * Added save_figure() function to help save plots as PDF files.
 * make_shape_plot() is now called shape_plot() and make_forest_plot() is now called forest_plot(). (But the original names still work.)
 * In forest_plot(), fill and cicolour (when using panel.width) can now be lists. 
 * plot_like_ckb() now removes panel background and puts small top margin on plot.
-* Added gridtext version requirement (>=0.1.5) so that text formatting works for R versions >= R 4.2.0 .
+* Added gridtext version requirement (>=0.1.5) so that text formatting works for R versions >= 4.2.0 .
+* Internal changes made to improve structure.
 * Other minor fixes and updates.
 
 # ckbplotr 0.6.6

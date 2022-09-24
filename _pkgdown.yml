@@ -5,6 +5,8 @@ development:
 
 template:
   bootstrap: 5
+  bslib:
+    link-decoration: "none"
 
 articles:
 - title: Introduction
@@ -12,12 +14,14 @@ articles:
   contents:
   - ckbplotr
   - plot_like_ckb
-- title: Plot customisation
+- title: Shape plots and forest plots
   navbar: ~
   contents:
+  - shape_plot
   - forest_plot
   - forest_confidence_intervals
-  - shape_plot
+- title: Further plot customisation
+  contents:
   - adding_editing_code
   - special_characters_formatting
 - title: Saving plots

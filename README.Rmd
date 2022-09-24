@@ -45,7 +45,6 @@ plot <- shape_plot(results,
                    xlims        = c(15,50),
                    ylims        = c(0.5, 2.5),
                    scalepoints  = TRUE,
-                   title        = NULL,
                    ciunder      = TRUE,
                    printplot     = FALSE,
                    envir        = environment())

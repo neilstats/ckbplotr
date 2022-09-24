@@ -38,26 +38,26 @@ resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
 
 forestplot <- forest_plot(
   panels            = list(resultsA, resultsB),
-                               col.key           = "variable",
-                               row.labels        = ckbplotr_row_labels,
-                               row.labels.levels = c("heading", "subheading", "label"),
-                               rows              = c("Lipoprotein particle concentration"),
-                               exponentiate      = TRUE,
-                               panel.names       = c("Analysis A", "Analysis B"),
-                               ci.delim          = " - ",
-                               xlim              = c(0.9, 1.1),
-                               xticks            = c(0.9, 1, 1.1),
-                               blankrows         = c(1, 1, 0, 1),
-                               scalepoints       = TRUE,
-                               pointsize         = 8,
-                               col.left          = c("n"),
-                               col.left.heading  = c("No. of\nevents"),
-                               col.heading.space = 0,
-                               
-                               # set panel width + CI colours
-                               panel.width       = 18,
-                               cicolour          = c("black", "white"),
-                               printplot         = FALSE)
+  col.key           = "variable",
+  row.labels        = ckbplotr_row_labels,
+  row.labels.levels = c("heading", "subheading", "label"),
+  rows              = c("Lipoprotein particle concentration"),
+  exponentiate      = TRUE,
+  panel.names       = c("Analysis A", "Analysis B"),
+  ci.delim          = " - ",
+  xlim              = c(0.9, 1.1),
+  xticks            = c(0.9, 1, 1.1),
+  blankrows         = c(1, 1, 0, 1),
+  scalepoints       = TRUE,
+  pointsize         = 8,
+  col.left          = c("n"),
+  col.left.heading  = c("No. of\nevents"),
+  col.heading.space = 0,
+  
+  # set panel width + CI colours
+  panel.width       = 18,
+  cicolour          = c("black", "white"),
+  printplot         = FALSE)
 
 plot <- fix_panel(forestplot$plot, width = unit(18, "mm"))
 grid::grid.draw(plot)
@@ -72,28 +72,28 @@ As well as changing colour, we may also wish to change if confidence interval li
 ```{r forest-plot-3}
 forestplot <- forest_plot(
   panels            = list(resultsA, resultsB),
-                               col.key           = "variable",
-                               row.labels        = ckbplotr_row_labels,
-                               row.labels.levels = c("heading", "subheading", "label"),
-                               rows              = c("Lipoprotein particle concentration"),
-                               exponentiate      = TRUE,
-                               panel.names       = c("Analysis A", "Analysis B"),
-                               ci.delim          = " - ",
-                               xlim              = c(0.9, 1.1),
-                               xticks            = c(0.9, 1, 1.1),
-                               blankrows         = c(1, 1, 0, 1),
-                               scalepoints       = TRUE,
-                               pointsize         = 8,
-                               col.left          = c("n"),
-                               col.left.heading  = c("No. of\nevents"),
-                               
-                               # set panel width + CI under or over
-                               panel.width       = 18,
-                               shape             = 22,
-                               stroke            = 0.5,
-                               fill              = "white",
-                               ciunder           = c(TRUE, FALSE),
-                               printplot         = FALSE)
+  col.key           = "variable",
+  row.labels        = ckbplotr_row_labels,
+  row.labels.levels = c("heading", "subheading", "label"),
+  rows              = c("Lipoprotein particle concentration"),
+  exponentiate      = TRUE,
+  panel.names       = c("Analysis A", "Analysis B"),
+  ci.delim          = " - ",
+  xlim              = c(0.9, 1.1),
+  xticks            = c(0.9, 1, 1.1),
+  blankrows         = c(1, 1, 0, 1),
+  scalepoints       = TRUE,
+  pointsize         = 8,
+  col.left          = c("n"),
+  col.left.heading  = c("No. of\nevents"),
+  
+  # set panel width + CI under or over
+  panel.width       = 18,
+  shape             = 22,
+  stroke            = 0.5,
+  fill              = "white",
+  ciunder           = c(TRUE, FALSE),
+  printplot         = FALSE)
 
 plot <- fix_panel(forestplot$plot, width = unit(18, "mm"))
 grid::grid.draw(plot)

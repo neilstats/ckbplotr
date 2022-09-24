@@ -1,12 +1,12 @@
 ---
-title: "More with forest plots"
+title: "Forest plots"
 output:
   rmarkdown::html_vignette:
     fig_width: 7
     fig_height: 7
     toc: TRUE
 vignette: >
-  %\VignetteIndexEntry{More with forest plots}
+  %\VignetteIndexEntry{Forest plots}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
