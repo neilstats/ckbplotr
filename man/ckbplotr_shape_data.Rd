@@ -3,7 +3,7 @@
 \docType{data}
 \name{ckbplotr_shape_data}
 \alias{ckbplotr_shape_data}
-\title{Synthetic data for demoing make_shape_plot}
+\title{Synthetic data for demoing shape_plot}
 \format{
 An object of class \code{data.frame} with 8 rows and 5 columns.
 }
@@ -11,6 +11,6 @@ An object of class \code{data.frame} with 8 rows and 5 columns.
 ckbplotr_shape_data
 }
 \description{
-Synthetic data for demoing make_shape_plot
+Synthetic data for demoing shape_plot
 }
 \keyword{datasets}

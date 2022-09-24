@@ -21,12 +21,12 @@ knitr::opts_chunk$set(
 library(ckbplotr)
 ```
 
-When making a forest plot, if a confidence interval line is narrower than the point representing the estimate we may wish to plot the line differently. In this package, this is possible by using the `panel.width` argument in the `make_forest_plot()` function, then using the `fix_panel()` function.
+When making a forest plot, if a confidence interval line is narrower than the point representing the estimate we may wish to plot the line differently. In this package, this is possible by using the `panel.width` argument in the `forest_plot()` function, then using the `fix_panel()` function.
 
 The sections below show how to change the colour of confidence lines and/or plot confidence lines before or after points. After using these methods, you should still carefully check the output (i.e. your final output file, not an RStudio preview) to ensure confidence interval lines are not hidden.
 
 ## Changing the colour
-To plot narrow confidence widths a different colour, set the `panel.width` argument of `make_forest_plot()` equal to the width each  panel will be in the final drawn output. The `cicolour` argument should also be a character vector - the last element will be used for narrow confidence intervals.
+To plot narrow confidence widths a different colour, set the `panel.width` argument of `forest_plot()` equal to the width each  panel will be in the final drawn output. The `cicolour` argument should also be a character vector - the last element will be used for narrow confidence intervals.
 
 Then use the `fix_panel()` function, where the first argument is the plot just created and the second is the same panel width. This function returns a gtable object, which can be plotted using `grid::grid.draw` (or `plot()`). The panels widths will be fixed.
 
@@ -36,7 +36,8 @@ Notes: This has been designed to work well for shape 15 (the default) and 22. Th
 resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
 resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
 
-forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+forestplot <- forest_plot(
+  panels            = list(resultsA, resultsB),
                                col.key           = "variable",
                                row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
@@ -69,7 +70,8 @@ The `cicolour` argument can be a vector of all names of colours, or all names of
 As well as changing colour, we may also wish to change if confidence interval lines are plotted under or over the point estimates. This can be done using the `panel.width` argument and using a logical (or character) vector for the `ciunder` argument.
 
 ```{r forest-plot-3}
-forestplot <- make_forest_plot(panels            = list(resultsA, resultsB),
+forestplot <- forest_plot(
+  panels            = list(resultsA, resultsB),
                                col.key           = "variable",
                                row.labels        = ckbplotr_row_labels,
                                row.labels.levels = c("heading", "subheading", "label"),
@@ -105,7 +107,7 @@ resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
 resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
 
 
-forestplot <- make_forest_plot(
+forestplot <- forest_plot(
   panels            = list(resultsA, resultsB),
   col.key           = "variable",
   row.labels        = ckbplotr_row_labels,
