@@ -6,7 +6,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
@@ -122,6 +122,7 @@
 <span>  fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ciunder <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addtext <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bottom.space <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  left.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  right.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mid.space <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">5</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
@@ -199,6 +200,7 @@
 <span>  fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ciunder <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addtext <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bottom.space <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>  left.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  right.space <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  mid.space <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">5</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
@@ -304,7 +306,7 @@ provided in panels and the labels given in row.labels.</p>
 
 <dt>col.right.parse</dt>
 <dd><p>A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
-Should the contents of the columns be parsed into expressions. (Default: All FALSE, except estcolumn.)</p></dd>
+Should the contents of the columns be parsed into expressions. (Default: FALSE)</p></dd>
 
 
 <dt>col.left.heading</dt>
@@ -449,12 +451,16 @@ be plotted in the column of estimates and CIs, below the row with the key
 given in the col.key column.</p></dd>
 
 
+<dt>bottom.space</dt>
+<dd><p>Size of space between bottom row and axis. (Default: 0.7)</p></dd>
+
+
 <dt>left.space</dt>
-<dd><p>Size of gap to leave to the left of panels. (Default: 1 + 2*length(col.left))</p></dd>
+<dd><p>Size of gap to leave to the left of panels.</p></dd>
 
 
 <dt>right.space</dt>
-<dd><p>Size of gap to leave to the right of panels. (Default: 5 + 2*length(col.right))</p></dd>
+<dd><p>Size of gap to leave to the right of panels.</p></dd>
 
 
 <dt>mid.space</dt>

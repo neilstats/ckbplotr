@@ -34,7 +34,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">ckbplotr</a>
 
@@ -103,7 +103,7 @@
 <!-- badges: start -->
 <p><code>ckbplotr</code> provides functions to help create and style plots in R. It is being developed by, and primarily for, <a href="http://www.ckbiobank.org" class="external-link">China Kadoorie Biobank</a> researchers.</p>
 <p><em>This package is under development. If you find an error or bug or have a suggestion for improvement please create an issue on GitHub or contact the author at <a href="mailto:neil.wright@ndph.ox.ac.uk" class="email">neil.wright@ndph.ox.ac.uk</a> or <a href="https://twitter.com/NeilStats" class="external-link">@NeilStats</a>.</em></p>
-<p>It can be used to: create plots of estimates and CIs against risk factor levels… <img src="reference/figures/README-make_shape_plot-example-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p>It can be used to: create plots of estimates and CIs against risk factor levels… <img src="reference/figures/README-example-shape-plot-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>…create forest plots… <img src="reference/figures/README-example-forest-plot-1.png" width="90%" style="display: block; margin: auto;"></p>
 <p>…and convert other ggplots to CKB style. <img src="reference/figures/README-a-plot-1.png" width="80%" style="display: block; margin: auto;"></p>
 <div class="section level2">
@@ -121,7 +121,7 @@
 <div class="section level3">
 <h3 id="from-github">From github<a class="anchor" aria-label="anchor" href="#from-github"></a>
 </h3>
-<p>The latest version of <code>ckbplotr</code> can be installed from github using the <code>remotes</code> package.</p>
+<p>The latest version of <code>ckbplotr</code> can also be installed from github using the <code>remotes</code> package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'remotes'</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'neilstats/ckbplotr'</span><span class="op">)</span></span></code></pre></div>
@@ -130,12 +130,12 @@
 <div class="section level2">
 <h2 id="get-started">Get started<a class="anchor" aria-label="anchor" href="#get-started"></a>
 </h2>
-<p>Read <code><a href="articles/ckbplotr.html">vignette("ckbplotr")</a></code> to see how to use the <code><a href="reference/shape_plot.html">make_shape_plot()</a></code>, <code><a href="reference/forest_plot.html">make_forest_plot()</a></code>, and <code><a href="reference/plot_like_ckb.html">plot_like_ckb()</a></code> functions.</p>
+<p>Read <code><a href="articles/ckbplotr.html">vignette("ckbplotr")</a></code> to see how to use the <code><a href="reference/shape_plot.html">shape_plot()</a></code>, <code><a href="reference/forest_plot.html">forest_plot()</a></code>, and <code><a href="reference/plot_like_ckb.html">plot_like_ckb()</a></code> functions.</p>
 </div>
 <div class="section level2">
 <h2 id="ggplot2-code">ggplot2 code<a class="anchor" aria-label="anchor" href="#ggplot2-code"></a>
 </h2>
-<p>The <code><a href="reference/shape_plot.html">make_shape_plot()</a></code> and <code><a href="reference/forest_plot.html">make_forest_plot()</a></code> functions return both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the <a href="https://cran.r-project.org/package=highlight" class="external-link">highlights</a> package is installed).</p>
+<p>The <code><a href="reference/shape_plot.html">shape_plot()</a></code> and <code><a href="reference/forest_plot.html">forest_plot()</a></code> functions return both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
