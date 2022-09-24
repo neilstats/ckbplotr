@@ -40,7 +40,7 @@ shape_plot(
   ylab = "Estimate (95\% CI)",
   legend.name = "",
   legend.position = "top",
-  title = "Figure",
+  title = NULL,
   printplot = TRUE,
   showcode = TRUE,
   addcode = NULL,
@@ -84,7 +84,7 @@ make_shape_plot(
   ylab = "Estimate (95\% CI)",
   legend.name = "",
   legend.position = "top",
-  title = "Figure",
+  title = NULL,
   printplot = TRUE,
   showcode = TRUE,
   addcode = NULL,
@@ -166,7 +166,7 @@ estimates. (Default: 3)}
 
 \item{legend.position}{Position of the legend for groups ("none", "left", "right", "bottom", "top", or two-element numeric vector). (Default: "top")}
 
-\item{title}{Plot title. (Default: "Figure")}
+\item{title}{Plot title. (Default: NULL)}
 
 \item{printplot}{Print the plot. (Default: TRUE)}
 

@@ -32,7 +32,7 @@
 #' @param ylab Label for y-axis. (Default: "Estimate (95% CI)")
 #' @param legend.name The name of the colour scale/legend for groups. (Default: "")
 #' @param legend.position Position of the legend for groups ("none", "left", "right", "bottom", "top", or two-element numeric vector). (Default: "top")
-#' @param title Plot title. (Default: "Figure")
+#' @param title Plot title. (Default: NULL)
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
 #' @param xbreaks Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)
@@ -95,7 +95,7 @@ shape_plot <- function(data,
                        ylab          = "Estimate (95% CI)",
                        legend.name   = "",
                        legend.position = "top",
-                       title         = "Figure",
+                       title         = NULL,
                        printplot     = TRUE,
                        showcode      = TRUE,
                        addcode       = NULL,
@@ -103,24 +103,19 @@ shape_plot <- function(data,
                        addarg        = NULL,
                        envir         = NULL){
 
-  # Check arguments
+  # Check arguments ----
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if (!is.null(col.group) && !is.null(fill)) stop("col.group and fill both control fill, so do not specify both")
 
-  # Put column names in `` if required
-  col.x        <- fixsp(col.x)
+
+  # Put column names in `` if required ----
   col.estimate <- fixsp(col.estimate)
   col.stderr   <- fixsp(col.stderr)
 
-  # Turn plot_like_ckb argument expression into strings
-  xlims <- deparse(xlims)
-  ylims <- deparse(ylims)
-  gap   <- deparse(gap)
-  ext   <- deparse(ext)
-  ratio <- deparse(ratio)
 
-  # aesthetics: default value, match column name, or use argument itself
+  # Aesthetics ----
+  ## default value, match column name, or use argument itself
   shape.aes <- NULL
   if (is.null(shape)) {
     shape <- 22
@@ -162,11 +157,12 @@ shape_plot <- function(data,
     fill <- fixq(fill)
   }
 
-  # Check for log scale and exponentiate estimates
+
+  # Log scale and exponentiate estimates ----
   if (logscale == TRUE){
-    scale    <- "log"
+    scale <- "log"
   } else {
-    scale    <- "identity"
+    scale <- "identity"
   }
   if (exponentiate == TRUE) {
     est_string <- paste0('exp(', col.estimate, ')')
@@ -188,7 +184,8 @@ shape_plot <- function(data,
     }
   }
 
-  # Check for using groups
+
+  # Using groups ----
   fill_string <- NULL
   fill_string.aes <- NULL
   if (!is.null(col.group)) {
@@ -209,235 +206,123 @@ shape_plot <- function(data,
   }
 
 
-  # codetext - list of character vectors for writing plot code
-  codetext <- list()
-
-
-  # Write code to initiate the ggplot
-  codetext$start.ggplot <- c(
-    '# Create the ggplot',
-    sprintf('plot <- ggplot(data = %s,', deparse(substitute(data))),
-    indent(15,
-           sprintf('aes(x = %s, y = %s%s)) +', col.x, est_string, group_string)),
-    ''
-  )
-
-
-  # Write code for axes
-  y_breaks_string <- ''
-  if (!is.null(ybreaks)){
-    y_breaks_string <- sprintf(', breaks = %s', deparse(ybreaks))
-  }
-
-  codetext$axes <- c(
-    if (!is.null(xbreaks)){
-      c('# Set the x-axis scale',
-        sprintf('scale_x_continuous(breaks = %s) +', deparse(xbreaks)),
-        '')
-    },
-    '# Set the y-axis scale',
-    sprintf('scale_y_continuous(trans = "%s"%s) +', scale, y_breaks_string),
-    '')
-
-
-  # Write code for aesthetics scales
-  codetext$scales <- c(
-    make_layer(
-      '# Set the scale for the size of boxes',
-      f = "scale_radius",
-      arg = c('guide  = "none"',
-              sprintf('limits = c(0, %s)', deparse(1/minse)),
-              sprintf('range  = c(0, %s)', pointsize))
-    ),
-    '# Use identity for aesthetic scales',
-    'scale_shape_identity() +',
-    'scale_colour_identity() +',
-    scale_fill_string,
-    '')
-
-
-  # Write code for plotting lines
-  if(lines) {
-    codetext$lines <- make_layer(
-      '# Plot lines (linear fit through estimates, weighted by inverse variance)',
-      f = "stat_smooth",
-      aes = c(addaes$lines,
-              if (!is.null(col.lci)) {
-                sprintf('weight = 1/((%s - %s)^2)', col.estimate, fixsp(col.lci))
-              } else {
-                sprintf('weight = 1/(%s^2)', col.stderr)
-              }),
-      arg = c(addarg$lines,
-              'method   = "glm"',
-              'formula  = y ~ x',
-              'se       = FALSE',
-              sprintf('colour = %s', plotcolour),
-              'linetype = "dashed"',
-              'size     = 0.25')
-    )
-  }
-
-
-  # Write code for plotting point estimates using geom_point
-  codetext$estimates.points <- make_layer(
-    '# Plot the point estimates',
-    f = "geom_point",
-    aes = c(
-      addaes$point,
-      if (scalepoints) {
-        if (!is.null(col.lci)) {
-          sprintf('size = 1.96/(%s - %s)', col.estimate, fixsp(col.lci))
-        } else {
-          sprintf('size = 1/%s', col.stderr)
-        }
-      } else {
-        'size = 1'
-      },
-      sprintf('shape = %s', shape.aes),
-      sprintf('%s', fill_string.aes),
-      sprintf('colour = %s', colour.aes)),
-    arg = c(addarg$point,
-            sprintf('shape = %s', shape),
-            sprintf('colour = %s', colour),
-            sprintf('%s', fill_string),
-            sprintf('stroke = %s', stroke))
-  )
-
-
-  # Write code for plotting estimates text
-  codetext$estimates.text <- make_layer(
-    '# Plot point estimates text',
-    f = "geom_text",
-    aes = c(addaes$estimates,
-            sprintf('y = %s', uci_string),
-            sprintf('label = format(round(%s, 2), nsmall = 2)', est_string)),
-    arg = c(addarg$estimates,
-            'vjust = -0.8',
-            sprintf('size  = %s', base_size/(11/3)),
-            sprintf('colour = %s', plotcolour))
-  )
-
-
-  # Write code for plotting col.n under CIs
-  if (!is.null(col.n)){
-    codetext$n.events.text <- make_layer(
-      '# Plot n events text',
-      f = "geom_text",
-      aes = c(addaes$n,
-              sprintf('y = %s', lci_string),
-              sprintf('label = %s', col.n)),
-      arg = c(addarg$n,
-              'vjust = 1.8',
-              sprintf('size  = %s', base_size/(11/3)),
-              sprintf('colour = %s', plotcolour))
-    )
-  }
-
-
-  # Write code for plotting CIs
-  codetext$cis.before <- make_layer(
-    '# Plot the CIs',
-    f = "geom_linerange",
-    aes = c(addaes$ci,
-            sprintf('ymin = %s', lci_string),
-            sprintf('ymax = %s', uci_string),
-            sprintf('colour = %s', cicolour.aes)),
-    arg = c(addarg$ci,
-            sprintf('colour = %s', cicolour),
-            sprintf('lwd = %s', base_line_size))
-  )
-
+  # Order for plotting CIs and points ----
+  ci_order <- c("all", "null")
   if (isFALSE(ciunder) || is.null(ciunder)){
-    codetext$cis.after <- codetext$cis.before
-    codetext$cis.before <- NULL
-  } else if (is.character(ciunder)){
-    codetext$cis.before <- make_layer(
-      '# Plot the CIs - before plotting points',
-      f = "geom_linerange",
-      aes = c(addaes$ci,
-              sprintf('ymin = %s', lci_string),
-              sprintf('ymax = %s', uci_string),
-              sprintf('colour = %s', cicolour.aes)),
-      arg = c(addarg$ci,
-              sprintf('colour = %s', cicolour),
-              sprintf('lwd = %s', base_line_size),
-              sprintf('data = ~ dplyr::filter(.x, %s),', fixsp(ciunder)))
-    )
-    codetext$cis.after <- make_layer(
-      '# Plot the CIs - after plotting points',
-      f = "geom_linerange",
-      aes = c(addaes$ci,
-              sprintf('ymin = %s', lci_string),
-              sprintf('ymax = %s', uci_string),
-              sprintf('colour = %s', cicolour.aes)),
-      arg = c(addarg$ci,
-              sprintf('colour = %s', cicolour),
-              sprintf('lwd = %s', base_line_size),
-              sprintf('data = ~ dplyr::filter(.x, !%s),', fixsp(ciunder)))
-    )
+    ci_order <- c("null", "all")
+  }
+  if (is.character(ciunder)){
+    ci_order <- c("before", "after")
   }
 
 
-  # Write code for titles
-  codetext$titles <- c(
-    '# Add titles',
-    sprintf('xlab("%s") +', xlab),
-    if (!is.null(title) && !title %in% c("", NA)){
-      c(sprintf('ylab("%s") +', ylab),
-        sprintf('ggtitle("%s")', title))
-    } else {
-      sprintf('ylab("%s")', ylab)
-    },
-    ''
-  )
-
-  # Write code to use plot_like_ckb function
-  codetext$plot.like.ckb <- make_layer(
-    '# Plot like a CKB plot',
-    f = "ckbplotr::plot_like_ckb",
-    arg = c('plot           = plot',
-            sprintf('xlims          = %s', xlims),
-            sprintf('ylims          = %s', ylims),
-            sprintf('gap            = %s', gap),
-            sprintf('ext            = %s', ext),
-            sprintf('ratio          = %s', ratio),
-            sprintf('base_size      = %s', base_size),
-            sprintf('base_line_size = %s', base_line_size),
-            sprintf('colour         = %s', plotcolour)),
-    plus = TRUE
-  )
-
-  # Write code for theme
-  codetext$theme <- make_layer(
-    '# Add theme',
-    f = "theme",
-    arg = c(sprintf('legend.position = %s', deparse(legend.position))),
-    plus = FALSE
-  )
-
-  # Create the plot code
+  # Create the plot code ----
   plotcode <- c(
     'library(ggplot2)',
     '',
-    codetext$start.ggplot,
+
+    # start ggplot
+    shape.start.ggplot(deparse(substitute(data)),
+                       fixsp(col.x),
+                       est_string,
+                       group_string),
+
     indent(2,
-           codetext$lines,
-           codetext$cis.before,
-           codetext$estimates.points,
-           codetext$estimates.text,
-           codetext$n.events.text,
-           codetext$cis.after,
-           codetext$scales,
-           codetext$axes,
-           codetext$titles),
-    codetext$plot.like.ckb,
-    indent(2, codetext$theme)
+
+           ## add lines
+           if(lines){
+             shape.lines(addaes,
+                         col.lci,
+                         col.estimate,
+                         col.stderr,
+                         addarg,
+                         plotcolour)
+           },
+
+           # CI lines plotted before points
+           shape.cis(addaes,
+                     lci_string,
+                     uci_string,
+                     cicolour.aes,
+                     addarg,
+                     ciunder,
+                     cicolour,
+                     base_line_size,
+                     type = ci_order[[1]]),
+
+           # points for estimates
+           shape.estimates.points(addaes,
+                                  scalepoints,
+                                  col.lci,
+                                  col.estimate,
+                                  col.stderr,
+                                  shape.aes,
+                                  fill_string.aes,
+                                  colour.aes,
+                                  addarg,
+                                  shape,
+                                  colour,
+                                  fill_string,
+                                  stroke),
+
+           # text above points
+           shape.estimates.text(addaes,
+                                uci_string,
+                                est_string,
+                                addarg,
+                                base_size,
+                                plotcolour),
+
+           # number below points
+           if (!is.null(col.n)){
+             shape.n.events.text(addaes,
+                                 lci_string,
+                                 col.n,
+                                 addarg,
+                                 base_size,
+                                 plotcolour)
+           },
+
+           # CI lines plotted after points
+           shape.cis(addaes,
+                     lci_string,
+                     uci_string,
+                     cicolour.aes,
+                     addarg,
+                     ciunder,
+                     cicolour,
+                     base_line_size,
+                     type = ci_order[[2]]),
+
+           # scales
+           shape.scales(deparse(1/minse), pointsize, scale_fill_string),
+
+           # axes
+           shape.axes(deparse(xbreaks), scale, deparse(ybreaks)),
+
+           # titles
+           shape.titles(xlab, title, ylab)),
+
+    # plot_like_ckb()
+    shape.plot.like.ckb(deparse(xlims),
+                        deparse(ylims),
+                        deparse(gap),
+                        deparse(ext),
+                        deparse(ratio),
+                        base_size,
+                        base_line_size,
+                        plotcolour),
+
+    # theme
+    indent(2, shape.theme(deparse(legend.position)))
   )
 
 
   # add additional code
   if (!is.null(addcode)){
-    plotcode <- append(plotcode, addcode[2:length(addcode)], grep(addcode[1], trimws(plotcode))[1]-1)
+    plotcode <- append(plotcode,
+                       addcode[2:length(addcode)],
+                       grep(addcode[1], trimws(plotcode))[1]-1)
   }
 
 
