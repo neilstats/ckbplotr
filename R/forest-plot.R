@@ -612,6 +612,10 @@ forest_plot <- function(
   if (purrr::is_list(col.right.heading)){ col.right.heading <- purrr::transpose(col.right.heading)}
   if (purrr::is_list(col.left.heading)){ col.left.heading <- purrr::transpose(col.left.heading)}
 
+  # check if cicolour is a list (or longer than 1) but not using panel.width
+  if ((is.list(cicolour) | length(cicolour) > 1) & missing(panel.width)){
+    stop("cicolour should be a list (or longer than 1) only when using panel.width")
+  }
 
   # Check for log scale
   if (logscale == TRUE) {
@@ -628,7 +632,7 @@ forest_plot <- function(
 
   # Identify columns to keep in data frame
   col.keep <- c(col.keep, col.diamond, col.bold)
-  for (x in c(shape, cicolour, colour, fill, ciunder)){
+  for (x in c(shape, unlist(cicolour), colour, unlist(fill), ciunder)){
     if (x %in% names(panels[[1]])){ col.keep <- append(col.keep, x) }
   }
 
@@ -651,8 +655,9 @@ forest_plot <- function(
   cicolour.aes <- NULL
   if (is.null(cicolour)) {
     cicolour <- plotcolour
-  }
-  else if (all(cicolour %in% names(panels[[1]]))){
+  } else if(is.list(cicolour)){
+    cicolour <- lapply(cicolour, fixq)
+  } else if (all(cicolour %in% names(panels[[1]]))){
     cicolour.aes <- fixsp(cicolour)
     cicolour <- NULL
   } else {
@@ -672,6 +677,8 @@ forest_plot <- function(
   fill.aes <- NULL
   if (is.null(fill)) {
     fill <- plotcolour
+  } else if(is.list(fill)){
+    fill <- lapply(fill, fixq)
   } else if (fill %in% names(panels[[1]])){
     fill.aes <- fixsp(fill)
     fill <- NULL
@@ -917,6 +924,90 @@ forest_plot <- function(
     '')
 
 
+
+
+  # CI colour code - if using panel.width
+  if (missing(panel.width) || !(length(c(cicolour, cicolour.aes)) > 1 | length(ciunder) > 1)){
+    message('Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.')
+  }
+  if (is.numeric(panel.width)) {
+    ## cicolour
+    cicolours <- c(cicolour, cicolour.aes)
+    codetext$cicolourcode <- c(
+      '# Create column for CI colour',
+      'datatoplot <- datatoplot %>%',
+      indent(2,
+             sprintf('dplyr::mutate(narrowci =  (%s(uci_transformed) - %s(lci_transformed)) <= ',
+                     scale, scale),
+             indent(26,
+                    sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
+                            (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width, c(shape, shape.aes))),
+             'dplyr::mutate(cicolour = dplyr::case_when('))
+
+    if(is.list(cicolours)){
+      for (i in 1:length(cicolours)){
+        codetext$cicolourcode <- c(codetext$cicolourcode,
+                                   indent(27,
+                                          sprintf('panel == %s & narrowci ~ %s,',
+                                                  fixq(panel.names[[i]]),
+                                                  cicolours[[i]][length(cicolours[[i]])]),
+                                          sprintf('panel == %s & !narrowci ~ %s,',
+                                                  fixq(panel.names[[i]]),
+                                                  cicolours[[i]][1])))
+      }
+      codetext$cicolourcode <- c(codetext$cicolourcode,
+                                 indent(27, 'TRUE ~ "black"))'),
+                                 '')
+    } else {
+      codetext$cicolourcode <- c(codetext$cicolourcode,
+                                 indent(27, sprintf('narrowci ~ %s,', cicolours[length(cicolours)]),
+                                        sprintf('TRUE     ~ %s))', cicolours[1])),
+                                 '')
+    }
+    cicolour.aes <- "cicolour"
+    cicolour <- NULL
+  }
+
+  # fill may be a list
+  if (is.list(fill)){
+    fills <- fill
+    codetext$fillcode <- c(
+      '# Create column for fill colour',
+      'datatoplot <- datatoplot %>%',
+      indent(2,'dplyr::mutate(fill = dplyr::case_when('))
+    for (i in 1:length(fills)){
+      codetext$fillcode <- c(codetext$fillcode,
+                             indent(25,
+                                    sprintf('panel == %s ~ %s,',
+                                            fixq(panel.names[[i]]),
+                                            fills[[i]][length(fills[[i]])]),
+                                    sprintf('panel == %s ~ %s,',
+                                            fixq(panel.names[[i]]),
+                                            fills[[i]][1])))
+    }
+    codetext$fillcode <- c(codetext$fillcode,
+                           indent(25, 'TRUE ~ "black"))'),
+                           '')
+    fill.aes <- "fill"
+    fill <- NULL
+  }
+
+
+  # CI under code - if using panel.width
+  if (is.numeric(panel.width) && length(ciunder) > 1) {
+    codetext$ciundercode <- c(
+      '# Create column for CI under',
+      'datatoplot <- datatoplot %>%',
+      indent(2,
+             sprintf('dplyr::mutate(ciunder =  dplyr::if_else(narrowci, %s, %s))',
+                     ciunder[length(ciunder)],
+                     ciunder[1])),
+      ''
+    )
+    ciunder <- "ciunder"
+  }
+
+
   # Write code for plotting diamonds
   codetext$diamondscode <- NULL
   codetext$plotdiamondscode <- NULL
@@ -972,6 +1063,27 @@ forest_plot <- function(
       )
     }
 
+    if(is.numeric(panel.width) && is.list(cicolours)){
+      codetext$diamondscode <- c(
+        codetext$diamondscode,
+        '## Add colour',
+        'diamonds <- diamonds %>%',
+        indent(2,
+               'dplyr::mutate(cicolour = dplyr::case_when(')
+        )
+
+      for (i in 1:length(cicolours)){
+        codetext$diamondscode <- c(codetext$diamondscode,
+                                   indent(27,
+                                          sprintf('panel == %s ~ %s,',
+                                                  fixq(panel.names[[i]]),
+                                                  cicolours[[i]][1])))
+      }
+      codetext$diamondscode <- c(codetext$diamondscode,
+                                 indent(27, 'TRUE ~ "black"))'),
+                                 '')
+    }
+
     codetext$plotdiamondscode <- make_layer(
       '# Add diamonds',
       f = 'geom_polygon',
@@ -983,49 +1095,6 @@ forest_plot <- function(
               sprintf('fill = %s', fill),
               sprintf('size = %s', stroke))
     )
-  }
-
-
-  # CI colour code - if using panel.width
-  if (missing(panel.width) || !(length(c(cicolour, cicolour.aes)) > 1 | length(ciunder) > 1)){
-    message('Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.')
-  }
-  if (is.numeric(panel.width)) {
-    cicolours <- c(cicolour, cicolour.aes)
-    codetext$cicolourcode <- c(
-      '# Create column for CI colour',
-      'datatoplot <- datatoplot %>%',
-      indent(2,
-             sprintf('dplyr::mutate(cicolour =  dplyr::if_else((%s(uci_transformed) - %s(lci_transformed)) <= ',
-                     scale, scale),
-             indent(24,
-                    sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
-                            (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + stroke) / panel.width, c(shape, shape.aes)),
-                    sprintf('%s,', cicolours[length(cicolours)]),
-                    sprintf('%s))', cicolours[1]))),
-      ''
-    )
-    cicolour.aes <- "cicolour"
-    cicolour <- NULL
-  }
-
-
-  # CI under code - if using panel.width
-  if (is.numeric(panel.width) && length(ciunder) > 1) {
-    codetext$ciundercode <- c(
-      '# Create column for CI under',
-      'datatoplot <- datatoplot %>%',
-      indent(2,
-             sprintf('dplyr::mutate(ciunder =  dplyr::if_else((%s(uci_transformed) - %s(lci_transformed)) <= ',
-                     scale, scale),
-             indent(25,
-                    sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553),',
-                            (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2*stroke) / panel.width, c(shape, shape.aes)),
-                    sprintf('%s,', ciunder[length(ciunder)]),
-                    sprintf('%s))', ciunder[1]))),
-      ''
-    )
-    ciunder <- "ciunder"
   }
 
 
@@ -1459,6 +1528,7 @@ forest_plot <- function(
     codetext$prep.data,
     codetext$row.labels.vec,
     codetext$check.cis,
+    codetext$fillcode,
     codetext$diamondscode,
     codetext$cicolourcode,
     codetext$ciundercode,
