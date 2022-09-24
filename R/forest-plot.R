@@ -1083,8 +1083,8 @@ forest_plot <- function(
                         title,
                         left.space,
                         right.space,
-                        mid.space,
-                        plot.margin)
+                        substitute(mid.space),
+                        substitute(plot.margin))
     )
   )
 

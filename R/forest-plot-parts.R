@@ -14,7 +14,7 @@ forest.axes <- function(scale, xticks, bottom.space) {
       f = "scale_y_continuous",
       arg = c('breaks = -1:-max(datatoplot$row)',
               'labels = rowlabels',
-              sprintf('limits = c(-max(datatoplot$row) - %s, NA),',
+              sprintf('limits = c(-max(datatoplot$row) - %s, NA)',
                       deparse(bottom.space)),
               'expand = c(0,0)')
     )
@@ -615,7 +615,7 @@ forest.theme <- function(base_size, plotcolour, base_line_size, title, left.spac
             sprintf('panel.spacing    = unit(%s, "%s") + %s + unit(%s, "%s")',
                     as.numeric(right.space),
                     makeunit(right.space),
-                    paste(deparse(substitute(mid.space)), collapse = ''),
+                    paste(deparse(mid.space), collapse = ''),
                     as.numeric(left.space),
                     makeunit(left.space)),
             'strip.background = element_blank()',
@@ -624,7 +624,7 @@ forest.theme <- function(base_size, plotcolour, base_line_size, title, left.spac
             'legend.position  = "none"',
             'plot.background  = element_blank()',
             sprintf('plot.margin      = %s + unit(c(0, %s, 0, 0), "%s")',
-                    paste(deparse(substitute(plot.margin)), collapse = ''),
+                    paste(deparse(plot.margin), collapse = ''),
                     as.numeric(right.space),
                     makeunit(right.space))),
     plus = FALSE,
