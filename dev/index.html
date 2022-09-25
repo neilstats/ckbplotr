@@ -57,11 +57,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
-    <a class="dropdown-item" href="articles/forest_plot.html">More with forest plots</a>
+    <a class="dropdown-item" href="articles/shape_plot.html">Shape plots</a>
+    <a class="dropdown-item" href="articles/forest_plot.html">Forest plots</a>
+    <a class="dropdown-item" href="articles/shape_confidence_intervals.html">Confidence interval lines in shape plots</a>
     <a class="dropdown-item" href="articles/forest_confidence_intervals.html">Confidence interval lines in forest plots</a>
-    <a class="dropdown-item" href="articles/shape_plot.html">More with shape plots</a>
-    <a class="dropdown-item" href="articles/adding_editing_code.html">Changing generated code</a>
-    <a class="dropdown-item" href="articles/special_characters_formatting.html">Using special characters and formatting</a>
     <a class="dropdown-item" href="articles/save_figure.html">Save figures to files</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="articles/index.html">More articles...</a>
@@ -103,7 +102,9 @@
 <!-- badges: start -->
 <p><code>ckbplotr</code> provides functions to help create and style plots in R. It is being developed by, and primarily for, <a href="http://www.ckbiobank.org" class="external-link">China Kadoorie Biobank</a> researchers.</p>
 <p><em>This package is under development. If you find an error or bug or have a suggestion for improvement please create an issue on GitHub or contact the author at <a href="mailto:neil.wright@ndph.ox.ac.uk" class="email">neil.wright@ndph.ox.ac.uk</a> or <a href="https://twitter.com/NeilStats" class="external-link">@NeilStats</a>.</em></p>
-<p>It can be used to: create plots of estimates and CIs against risk factor levels… <img src="reference/figures/README-example-shape-plot-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p>It can be used to: create plots of estimates and CIs against risk factor levels…</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<p><img src="reference/figures/README-example-shape-plot-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>…create forest plots… <img src="reference/figures/README-example-forest-plot-1.png" width="90%" style="display: block; margin: auto;"></p>
 <p>…and convert other ggplots to CKB style. <img src="reference/figures/README-a-plot-1.png" width="80%" style="display: block; margin: auto;"></p>
 <div class="section level2">
@@ -113,7 +114,7 @@
 <h3 id="from-r-universe">From R-universe<a class="anchor" aria-label="anchor" href="#from-r-universe"></a>
 </h3>
 <p>The latest version of <code>ckbplotr</code> can be installed from the neilstats R-universe using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code>.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'ckbplotr'</span>,</span>
 <span>                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'https://neilstats.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This will also install dependencies from the CRAN repository.</p>
@@ -122,7 +123,7 @@
 <h3 id="from-github">From github<a class="anchor" aria-label="anchor" href="#from-github"></a>
 </h3>
 <p>The latest version of <code>ckbplotr</code> can also be installed from github using the <code>remotes</code> package.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'remotes'</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'neilstats/ckbplotr'</span><span class="op">)</span></span></code></pre></div>
 </div>

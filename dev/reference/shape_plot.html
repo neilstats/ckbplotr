@@ -28,11 +28,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
-    <a class="dropdown-item" href="../articles/forest_plot.html">More with forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_plot.html">Shape plots</a>
+    <a class="dropdown-item" href="../articles/forest_plot.html">Forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_confidence_intervals.html">Confidence interval lines in shape plots</a>
     <a class="dropdown-item" href="../articles/forest_confidence_intervals.html">Confidence interval lines in forest plots</a>
-    <a class="dropdown-item" href="../articles/shape_plot.html">More with shape plots</a>
-    <a class="dropdown-item" href="../articles/adding_editing_code.html">Changing generated code</a>
-    <a class="dropdown-item" href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     <a class="dropdown-item" href="../articles/save_figure.html">Save figures to files</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
@@ -97,6 +96,7 @@
 <span>  lines <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">xlims</span>,</span>
 <span>  <span class="va">ylims</span>,</span>
+<span>  panel.height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
@@ -109,7 +109,7 @@
 <span>  ylab <span class="op">=</span> <span class="st">"Estimate (95% CI)"</span>,</span>
 <span>  legend.name <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  legend.position <span class="op">=</span> <span class="st">"top"</span>,</span>
-<span>  title <span class="op">=</span> <span class="st">"Figure"</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  printplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  showcode <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -141,6 +141,7 @@
 <span>  lines <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">xlims</span>,</span>
 <span>  <span class="va">ylims</span>,</span>
+<span>  panel.height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
@@ -153,7 +154,7 @@
 <span>  ylab <span class="op">=</span> <span class="st">"Estimate (95% CI)"</span>,</span>
 <span>  legend.name <span class="op">=</span> <span class="st">""</span>,</span>
 <span>  legend.position <span class="op">=</span> <span class="st">"top"</span>,</span>
-<span>  title <span class="op">=</span> <span class="st">"Figure"</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  printplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  showcode <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -257,6 +258,10 @@ estimates. (Default: 3)</p></dd>
 <dd><p>A numeric vector of length two. The limits of the y-axis.</p></dd>
 
 
+<dt>panel.height</dt>
+<dd><p>Panel height to assume and apply different formatting to short CIs. Unit is "mm".</p></dd>
+
+
 <dt>gap</dt>
 <dd><p>A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))</p></dd>
 
@@ -306,7 +311,7 @@ estimates. (Default: 3)</p></dd>
 
 
 <dt>title</dt>
-<dd><p>Plot title. (Default: "Figure")</p></dd>
+<dd><p>Plot title. (Default: NULL)</p></dd>
 
 
 <dt>printplot</dt>

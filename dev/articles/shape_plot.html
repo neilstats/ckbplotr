@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="ckbplotr">
-<title>More with shape plots • ckbplotr</title>
+<title>Shape plots • ckbplotr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="More with shape plots">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Shape plots">
 <meta property="og:description" content="ckbplotr">
 <meta property="og:image" content="https://neilstats.github.io/ckbplotr/logo.png">
 <meta name="robots" content="noindex">
@@ -53,11 +53,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
-    <a class="dropdown-item" href="../articles/forest_plot.html">More with forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_plot.html">Shape plots</a>
+    <a class="dropdown-item" href="../articles/forest_plot.html">Forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_confidence_intervals.html">Confidence interval lines in shape plots</a>
     <a class="dropdown-item" href="../articles/forest_confidence_intervals.html">Confidence interval lines in forest plots</a>
-    <a class="dropdown-item" href="../articles/shape_plot.html">More with shape plots</a>
-    <a class="dropdown-item" href="../articles/adding_editing_code.html">Changing generated code</a>
-    <a class="dropdown-item" href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     <a class="dropdown-item" href="../articles/save_figure.html">Save figures to files</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
@@ -96,7 +95,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>More with shape plots</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Shape plots</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/HEAD/vignettes/shape_plot.Rmd" class="external-link"><code>vignettes/shape_plot.Rmd</code></a></small>
@@ -120,15 +119,21 @@
 <span>           ybreaks      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>           logscale     <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>           logscale     <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/log-scale-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="using-groups">Using groups<a class="anchor" aria-label="anchor" href="#using-groups"></a>
 </h2>
-<p>The <code>col.group</code> argument can be supplied to plot results for different groups (using shades of grey for the fill colour). (Set <code>ciunder</code> to <code>TRUE</code> so that the confidence interval lines are hidden behind behind the point estimate squares.) Use the <code>legend.position</code> to set the legend position.</p>
+<p>The <code>col.group</code> argument can be supplied to plot results for different groups (using shades of grey for the fill colour). Use the <code>legend.position</code> to set the legend position.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,</span>
+<code class="sourceCode R"><span><span class="va">data_to_plot</span> <span class="op">&lt;-</span> <span class="va">ckbplotr_shape_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>is_female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">is_female</span>,</span>
+<span>                                   levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, </span>
+<span>                                   labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Men"</span>, <span class="st">"Women"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">data_to_plot</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
 <span>           col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
 <span>           col.stderr   <span class="op">=</span> <span class="st">"se"</span>,</span>
@@ -139,19 +144,15 @@
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
+<span>           legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/groups-1.png" width="50%" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="labelling-groups">Labelling groups<a class="anchor" aria-label="anchor" href="#labelling-groups"></a>
 </h3>
 <p>To label points directly, you could add a <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text()</a></code> to the plot:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_to_plot</span> <span class="op">&lt;-</span> <span class="va">ckbplotr_shape_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>is_female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">is_female</span>,</span>
-<span>                                   levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, </span>
-<span>                                   labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Men"</span>, <span class="st">"Women"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">shape_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">data_to_plot</span>,</span>
+<code class="sourceCode R"><span><span class="va">shape_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">data_to_plot</span>,</span>
 <span>                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
 <span>                         col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
 <span>                         col.stderr   <span class="op">=</span> <span class="st">"se"</span>,</span>
@@ -164,6 +165,7 @@
 <span>                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                         legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                         printplot    <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span>
 <span></span>
 <span><span class="va">shape_plot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">is_female</span><span class="op">)</span>,</span>
@@ -178,7 +180,7 @@
 </h2>
 <p>The <code>lines</code> argument will add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">data_to_plot</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
 <span>           col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
 <span>           col.stderr   <span class="op">=</span> <span class="st">"se"</span>,</span>
@@ -189,7 +191,8 @@
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           lines        <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>           lines        <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/lines-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -245,12 +248,12 @@
 <span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,</span>
 <span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           shape        <span class="op">=</span> <span class="fl">23</span>,</span>
 <span>           colour       <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>           fill         <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>           cicolour     <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code></pre></div>
+<span>           cicolour     <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/aesthetics-with-values-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
@@ -269,36 +272,18 @@
 <span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,</span>
 <span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           colour       <span class="op">=</span> <span class="st">"fillcol"</span>,</span>
-<span>           fill         <span class="op">=</span> <span class="st">"fillcol"</span><span class="op">)</span></span></code></pre></div>
+<span>           fill         <span class="op">=</span> <span class="st">"fillcol"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/aesthetics-with-columns-1.png" width="50%" style="display: block; margin: auto;"></p>
-<p>Specify a column for <code>cicolour</code> is useful for changing the colour of confidence interval lines that would otherwise be hidden.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">cicol</span> <span class="op">&lt;-</span> <span class="st">"black"</span></span>
-<span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="fl">2</span>,<span class="op">]</span><span class="op">$</span><span class="va">cicol</span> <span class="op">&lt;-</span> <span class="st">"white"</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,</span>
-<span>           col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
-<span>           col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
-<span>           col.stderr   <span class="op">=</span> <span class="st">"se"</span>,</span>
-<span>           col.n        <span class="op">=</span> <span class="st">"n"</span>,</span>
-<span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>,<span class="fl">50</span><span class="op">)</span>,</span>
-<span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>           pointsize    <span class="op">=</span> <span class="fl">7</span>,</span>
-<span>           cicolour     <span class="op">=</span> <span class="st">"cicol"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plot_files/figure-html/small-ci-1.png" width="50%" style="display: block; margin: auto;"></p>
-<p>Note that the size of boxes depends on <code>pointsize</code>, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="categorical-risk-factor">Categorical risk factor<a class="anchor" aria-label="anchor" href="#categorical-risk-factor"></a>
 </h2>
 <p>The risk factor can be a factor. In this case, the x-axis coordinates are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of categories plus 0.5. You may need to add position arguments so that points, intervals and text do not overlap:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>  <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,   <span class="st">"D"</span>, <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,  <span class="st">"D"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,</span>
@@ -306,16 +291,15 @@
 <span>           col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
 <span>           col.stderr   <span class="op">=</span> <span class="st">"se"</span>,</span>
 <span>           col.n        <span class="op">=</span> <span class="st">"n"</span>,</span>
-<span>           col.group    <span class="op">=</span> <span class="st">"is_female"</span>,</span>
 <span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4.5</span><span class="op">)</span>,</span>
 <span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point     <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
 <span>                         ci        <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
 <span>                         n         <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
-<span>                         estimates <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>                         estimates <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/unnamed-chunk-2-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">

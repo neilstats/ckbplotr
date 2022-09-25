@@ -28,11 +28,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
-    <a class="dropdown-item" href="../articles/forest_plot.html">More with forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_plot.html">Shape plots</a>
+    <a class="dropdown-item" href="../articles/forest_plot.html">Forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_confidence_intervals.html">Confidence interval lines in shape plots</a>
     <a class="dropdown-item" href="../articles/forest_confidence_intervals.html">Confidence interval lines in forest plots</a>
-    <a class="dropdown-item" href="../articles/shape_plot.html">More with shape plots</a>
-    <a class="dropdown-item" href="../articles/adding_editing_code.html">Changing generated code</a>
-    <a class="dropdown-item" href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     <a class="dropdown-item" href="../articles/save_figure.html">Save figures to files</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
@@ -79,7 +78,7 @@
 <span>  xlims <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ylims <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
-<span>  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
+<span>  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
@@ -106,7 +105,7 @@
 
 
 <dt>ext</dt>
-<dd><p>A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))</p></dd>
+<dd><p>A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0, 0))</p></dd>
 
 
 <dt>ratio</dt>

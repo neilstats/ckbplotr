@@ -10,9 +10,10 @@ articles:
   page_layouts: page_layouts.html
   plot_like_ckb: plot_like_ckb.html
   save_figure: save_figure.html
+  shape_confidence_intervals: shape_confidence_intervals.html
   shape_plot: shape_plot.html
   special_characters_formatting: special_characters_formatting.html
-last_built: 2022-09-24T16:32Z
+last_built: 2022-09-25T14:36Z
 urls:
   reference: https://neilstats.github.io/ckbplotr/reference
   article: https://neilstats.github.io/ckbplotr/articles

@@ -53,11 +53,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
-    <a class="dropdown-item" href="../articles/forest_plot.html">More with forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_plot.html">Shape plots</a>
+    <a class="dropdown-item" href="../articles/forest_plot.html">Forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_confidence_intervals.html">Confidence interval lines in shape plots</a>
     <a class="dropdown-item" href="../articles/forest_confidence_intervals.html">Confidence interval lines in forest plots</a>
-    <a class="dropdown-item" href="../articles/shape_plot.html">More with shape plots</a>
-    <a class="dropdown-item" href="../articles/adding_editing_code.html">Changing generated code</a>
-    <a class="dropdown-item" href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     <a class="dropdown-item" href="../articles/save_figure.html">Save figures to files</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
@@ -137,8 +136,8 @@
 <span>           col.n        <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           title        <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+<span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/simple-example-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>For more details on customising these forest plots, see <a href="shape_plot.html">“More with shape plots”</a>.</p>
 </div>
@@ -147,6 +146,7 @@
 <h2 id="forest-plots">Forest plots<a class="anchor" aria-label="anchor" href="#forest-plots"></a>
 </h2>
 <p><code><a href="../reference/forest_plot.html">forest_plot()</a></code> creates a forest plot using the <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the <a href="https://cran.r-project.org/package=highlight" class="external-link">highlights</a> package is installed).</p>
+<p><em>Narrow confidence interval lines may become hidden in forest plots. Please check your final output carefully and see <a href="forest_confidence_intervals.html">“Confidence interval lines in forest plots”</a> for more methods for handle this.</em></p>
 <div class="section level3">
 <h3 id="prepare-data">Prepare data<a class="anchor" aria-label="anchor" href="#prepare-data"></a>
 </h3>

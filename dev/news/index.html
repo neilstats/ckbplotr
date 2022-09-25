@@ -28,11 +28,10 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
-    <a class="dropdown-item" href="../articles/forest_plot.html">More with forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_plot.html">Shape plots</a>
+    <a class="dropdown-item" href="../articles/forest_plot.html">Forest plots</a>
+    <a class="dropdown-item" href="../articles/shape_confidence_intervals.html">Confidence interval lines in shape plots</a>
     <a class="dropdown-item" href="../articles/forest_confidence_intervals.html">Confidence interval lines in forest plots</a>
-    <a class="dropdown-item" href="../articles/shape_plot.html">More with shape plots</a>
-    <a class="dropdown-item" href="../articles/adding_editing_code.html">Changing generated code</a>
-    <a class="dropdown-item" href="../articles/special_characters_formatting.html">Using special characters and formatting</a>
     <a class="dropdown-item" href="../articles/save_figure.html">Save figures to files</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="../articles/index.html">More articles...</a>
@@ -71,8 +70,12 @@
 <h2 class="pkg-version" data-toc-text="0.6.6.9000" id="ckbplotr-0669000">ckbplotr 0.6.6.9000<a class="anchor" aria-label="anchor" href="#ckbplotr-0669000"></a></h2>
 <ul><li>Added save_figure() function to help save plots as PDF files.</li>
 <li>make_shape_plot() is now called shape_plot() and make_forest_plot() is now called forest_plot(). (But the original names still work.)</li>
+<li>In forest_plot(), fill and cicolour (when using panel.width) can now be lists.</li>
+<li>In shape_plot(), confidence intervals shorter than plotted points can be a different colour (and plotted before/after the points) by using the panel.height argument.</li>
 <li>plot_like_ckb() now removes panel background and puts small top margin on plot.</li>
-<li>Added gridtext version requirement (&gt;=0.1.5) so that text formatting works for R versions &gt;= R 4.2.0 .</li>
+<li>Added gridtext version requirement (&gt;=0.1.5) so that text formatting works for R versions &gt;= 4.2.0 .</li>
+<li>Internal changes made to improve structure.</li>
+<li>Other minor fixes and updates.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.6" id="ckbplotr-066">ckbplotr 0.6.6<a class="anchor" aria-label="anchor" href="#ckbplotr-066"></a></h2>
