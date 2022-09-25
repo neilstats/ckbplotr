@@ -43,7 +43,7 @@ theme_ckb <- function(base_size = 11,
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
-#' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
+#' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0, 0))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
 #' @param colour Colour for non-data aspects of the plot. (Default: "black")
 #'
@@ -57,7 +57,7 @@ plot_like_ckb <- function(
   xlims=NULL,
   ylims=NULL,
   gap=c(0.025,0.025),
-  ext=c(0.025,0.025),
+  ext=c(0,0),
   ratio=1.5,
   base_size = 11,
   base_line_size = base_size/22,
