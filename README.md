@@ -23,9 +23,6 @@ the author at <neil.wright@ndph.ox.ac.uk> or
 
 It can be used to: create plots of estimates and CIs against risk factor
 levels…
-
-    #> Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.
-
 <img src="man/figures/README-example-shape-plot-1.png" width="50%" style="display: block; margin: auto;" />
 
 …create forest plots…
