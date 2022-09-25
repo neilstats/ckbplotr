@@ -13,7 +13,7 @@ forest_plot(
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
-  panel.headings = panel.names,
+  panel.headings = NULL,
   col.key = "key",
   col.estimate = "estimate",
   col.stderr = "stderr",
@@ -91,7 +91,7 @@ make_forest_plot(
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
-  panel.headings = panel.names,
+  panel.headings = NULL,
   col.key = "key",
   col.estimate = "estimate",
   col.stderr = "stderr",
@@ -183,7 +183,7 @@ to be included in the plot.}
 \item{panel.names}{A character vector. The names to be used for each forest plot panel.
 If none provided, then they will be numbered 1, 2, 3 ...}
 
-\item{panel.headings}{Titles to be placed above each forest plot. (Default: panel.names)}
+\item{panel.headings}{Titles to be placed above each forest plot.}
 
 \item{col.key}{Name of column that links the results given in each data frame
 provided in panels and the labels given in row.labels.
