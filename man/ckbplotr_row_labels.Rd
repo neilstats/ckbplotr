@@ -3,7 +3,7 @@
 \docType{data}
 \name{ckbplotr_row_labels}
 \alias{ckbplotr_row_labels}
-\title{Row labels data for demoing make_shape_plot}
+\title{Row labels data for demoing shape_plot}
 \format{
 An object of class \code{data.frame} with 21 rows and 4 columns.
 }
@@ -11,6 +11,6 @@ An object of class \code{data.frame} with 21 rows and 4 columns.
 ckbplotr_row_labels
 }
 \description{
-Row labels data for demoing make_shape_plot
+Row labels data for demoing shape_plot
 }
 \keyword{datasets}

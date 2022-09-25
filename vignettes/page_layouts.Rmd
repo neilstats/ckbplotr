@@ -25,10 +25,12 @@ The package does not currently include any functions for composing multiple plot
 
 
 ## Example
-Using the [grid](https://stat.ethz.ch/R-manual/R-devel/library/grid/html/00Index.html) and [gridExtra](https://cran.r-project.org/package=gridExtra) packages gives a lot of control but may need more work to create the desired output. Here is an example of placing two plots, with a title and footer, on an A4 page in a PDF document.
-```{r, eval = F}
+Using the [grid](https://stat.ethz.ch/R-manual/R-devel/library/grid/html/00Index.html) and [gridExtra](https://cran.r-project.org/package=gridExtra) packages gives a lot of control but may need more work to create the desired output. Here is an example of placing two plots side-by-side.
+```{r}
+library(ckbplotr)
+
 # Make the plots, with suitable margins
-shapeplot <- make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
+shapeplot <- shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
                         col.x        = "rf",
                         col.estimate = "est",
                         col.stderr   = "se",
@@ -36,51 +38,28 @@ shapeplot <- make_shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female =
                         xlims        = c(15, 50),
                         ylims        = c(0.5, 3),
                         scalepoints  = TRUE,
-                        title        = NULL)
-
-shapeplot$plot <- shapeplot$plot + theme(plot.margin = margin(30, 30, 30, 30, "mm"))
+                        title        = NULL,
+                        printplot    = FALSE)
 
 resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
-forestplot <- make_forest_plot(panels            = list(resultsA),
-                               col.key           = "variable",
-                               row.labels        = ckbplotr_row_labels,
-                               row.labels.levels = c("heading", "subheading", "label"),
-                               rows              = c("Triglycerides concentration",
-                                                     "Lipoprotein particle concentration"),
-                               exponentiate      = TRUE,
-                               panel.headings    = c(""),
-                               xlim              = c(0.9, 1.1),
-                               xticks            = c(0.9, 1, 1.1),
-                               scalepoints       = TRUE,
-                               pointsize         = 3,
-                               plot.margin       = margin(8, 16, 30, 16, "mm"))
+forestplot <- forest_plot(panels            = list(resultsA),
+                          col.key           = "variable",
+                          row.labels        = ckbplotr_row_labels,
+                          row.labels.levels = c("heading", "subheading", "label"),
+                          rows              = c("Triglycerides concentration",
+                                                "Lipoprotein particle concentration"),
+                          exponentiate      = TRUE,
+                          panel.headings    = c(""),
+                          xlim              = c(0.9, 1.1),
+                          xticks            = c(0.9, 1, 1.1),
+                          scalepoints       = TRUE,
+                          pointsize         = 3,
+                          printplot         = FALSE)
 
 
 # Arrange the plots side-by-side
 plots <- gridExtra::arrangeGrob(shapeplot$plot, forestplot$plot, nrow = 1)
 
-
-# Create a text graphical object for the title (place it one line away from top left corner)
-title <- grid::textGrob("Figure: Example of placing two plots on a page",
-                        gp = grid::gpar(cex = 1, fontface = "bold"),
-                        x = unit(0, "npc") + unit(1, "lines"),
-                        y = unit(1, "npc") - unit(1, "lines"),
-                        hjust = 0,
-                        vjust = 1)
-
-## Create a text graphical object for the footer (place it two line away from bottom left corner)
-footer <- grid::textGrob("Footer",
-                         gp = grid::gpar(cex = 0.7), 
-                         just = c(0, 0),
-                         x = unit(2, "lines"),
-                         y = unit(2, "lines"))
-
-## Arrange the title, plots, and footer vertically
-figure <- gridExtra::arrangeGrob(title, plots, footer,
-                                 nrow = 3,
-                                 heights = c(10, 86, 4))
-
-## Save the figure to a PDF, using landscape A4 dimensions
-ggsave("example_page_layout.pdf", plot = figure, width = 11.69, height = 8.27, title = "Figure")
+grid::grid.draw(plots)
 ```
 

@@ -3,7 +3,7 @@
 \docType{data}
 \name{ckbplotr_forest_data}
 \alias{ckbplotr_forest_data}
-\title{Synthetic data for demoing make_forest_plot}
+\title{Synthetic data for demoing forest_plot}
 \format{
 An object of class \code{data.frame} with 42 rows and 12 columns.
 }
@@ -11,6 +11,6 @@ An object of class \code{data.frame} with 42 rows and 12 columns.
 ckbplotr_forest_data
 }
 \description{
-Synthetic data for demoing make_forest_plot
+Synthetic data for demoing forest_plot
 }
 \keyword{datasets}

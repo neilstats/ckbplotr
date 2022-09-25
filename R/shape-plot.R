@@ -1,0 +1,417 @@
+
+#' Make a shape plot with ggplot2
+#'
+#'
+#' @inheritParams plot_like_ckb
+#'
+#' @param data The data frame containing estimates to be plotted.
+#' @param col.x Name of column that provides the x-axis value (e.g. exposure, risk factor, dependent variable). (Default: "x")
+#' @param col.estimate Name of column that provides point estimates.
+#'   (Default: "estimate")
+#' @param col.stderr Name of column that provides standard errors. (Default: "stderr")
+#' @param col.lci Name of column that provides lower limit of confidence intervals.
+#' @param col.uci Name of column that provides upper limit of confidence intervals.
+#' @param col.n Name of column that provides number to be plotted below CIs.
+#' @param col.group Name of column that groups the estimates. (Default: NULL)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param plotcolour Colour for non-data aspects of the plot. (Default: "black")
+#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
+#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
+#' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
+#' @param lines Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)
+#' @param exponentiate Exponentiate estimates (and CIs) before plotting,
+#'   use log scale on the axis. (Default: FALSE)
+#' @param logscale Use log scale for vertical axis. (Default: exponentiate)
+#' @param scalepoints Should the points be scaled by inverse of the standard
+#'   error? (Default: FALSE)
+#' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
+#' @param pointsize The (largest) size of box to use for plotting point
+#'                  estimates. (Default: 3)
+#' @param xlab Label for x-axis. (Default: "Risk factor")
+#' @param ylab Label for y-axis. (Default: "Estimate (95% CI)")
+#' @param legend.name The name of the colour scale/legend for groups. (Default: "")
+#' @param legend.position Position of the legend for groups ("none", "left", "right", "bottom", "top", or two-element numeric vector). (Default: "top")
+#' @param title Plot title. (Default: NULL)
+#' @param xlims A numeric vector of length two. The limits of the x-axis.
+#' @param ylims A numeric vector of length two. The limits of the y-axis.
+#' @param panel.height Panel height to assume and apply different formatting to short CIs. Unit is "mm".
+#' @param xbreaks Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)
+#' @param ybreaks Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)
+#' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
+#' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
+#' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
+#' @param stroke Size of outline of shapes. (Default: base_size/22)
+#' @param printplot Print the plot. (Default: TRUE)
+#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
+#' @param addcode A character vector of code to add to the generated code.
+#'                The first element should be a regular expression.
+#'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
+#' @param addaes Specify additional aesthetics for some ggplot layers.
+#' @param addarg Specify additional arguments for some ggplot layers.
+#' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
+#'
+#' @return A list:
+#' \describe{
+#'   \item{plot}{the plot}
+#'   \item{code}{ggplot2 code to generate the plot}
+#'}
+#'
+#' @import ggplot2
+#' @export
+
+
+
+shape_plot <- function(data,
+                       col.x         = "x",
+                       col.estimate  = "estimate",
+                       col.stderr    = "stderr",
+                       col.lci       = NULL,
+                       col.uci       = NULL,
+                       col.n         = NULL,
+                       exponentiate  = FALSE,
+                       logscale      = exponentiate,
+                       scalepoints   = FALSE,
+                       minse         = NA,
+                       pointsize     = 3,
+                       col.group     = NULL,
+                       shape         = NULL,
+                       plotcolour    = "black",
+                       colour        = NULL,
+                       cicolour      = colour,
+                       fill          = NULL,
+                       ciunder       = NULL,
+                       lines         = FALSE,
+                       xlims,
+                       ylims,
+                       panel.height  = NULL,
+                       gap           = c(0.025, 0.025),
+                       ext           = c(0.025, 0.025),
+                       ratio         = 1.5,
+                       base_size     = 11,
+                       base_line_size = base_size/22,
+                       stroke        = base_size/22,
+                       xbreaks       = NULL,
+                       ybreaks       = NULL,
+                       xlab          = "Risk factor",
+                       ylab          = "Estimate (95% CI)",
+                       legend.name   = "",
+                       legend.position = "top",
+                       title         = NULL,
+                       printplot     = TRUE,
+                       showcode      = TRUE,
+                       addcode       = NULL,
+                       addaes        = NULL,
+                       addarg        = NULL,
+                       envir         = NULL){
+
+  # Check arguments ----
+  if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
+  if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
+  if (!is.null(col.group) && !is.null(fill)) stop("col.group and fill both control fill, so do not specify both")
+  if (missing(xlims)) stop("xlims must be specified")
+  if (missing(ylims)) stop("ylims must be specified")
+
+  ## check if confidence intervals may be hidden
+  if (missing(panel.height)){
+    message('Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.')
+  }
+
+  if(!missing(panel.height) && !missing(col.group) && !missing(cicolour)){
+    warning("cicolour is ignored if using panel.height and col.group")
+  }
+
+  # Put column names in `` if required ----
+  col.estimate <- fixsp(col.estimate)
+  col.stderr   <- fixsp(col.stderr)
+
+
+  # Aesthetics ----
+  ## default value, match column name, or use argument itself
+  shape.aes <- NULL
+  if (is.null(shape)) {
+    shape <- 22
+  } else if (shape %in% names(data)){
+    shape.aes <- fixsp(shape)
+    shape <- NULL
+  }
+
+  plotcolour <- fixq(plotcolour)
+
+  cicolour.aes <- NULL
+  if (is.null(cicolour)) {
+    cicolour <- plotcolour
+  }
+  else if (all(cicolour %in% names(data))){
+    cicolour.aes <- fixsp(cicolour)
+    cicolour <- NULL
+  } else {
+    cicolour <- fixq(cicolour)
+  }
+
+  colour.aes <- NULL
+  if (is.null(colour)) {
+    colour <- plotcolour
+  } else if (colour %in% names(data)){
+    colour.aes <- fixsp(colour)
+    colour <- NULL
+  } else {
+    colour <- fixq(colour)
+  }
+
+  fill.aes <- NULL
+  if (is.null(fill)) {
+    fill <- plotcolour
+  } else if (fill %in% names(data)){
+    fill.aes <- fixsp(fill)
+    fill <- NULL
+  } else {
+    fill <- fixq(fill)
+  }
+
+
+  # String for point size aesthetic
+  if (scalepoints) {
+    if (!is.null(col.lci)) {
+      size <- sprintf('1.96/(%s - %s)', col.estimate, fixsp(col.lci))
+    } else {
+      size <- sprintf('1/%s', col.stderr)
+    }
+  } else {
+    size <- '1'
+  }
+
+
+  # Log scale and exponentiate estimates ----
+  if (logscale == TRUE){
+    scale <- "log"
+  } else {
+    scale <- "identity"
+  }
+  if (exponentiate == TRUE) {
+    est_string <- paste0('exp(', col.estimate, ')')
+    if (!is.null(col.lci)) {
+      lci_string <- paste0('exp(', fixsp(col.lci), ')')
+      uci_string <- paste0('exp(', fixsp(col.uci), ')')
+    } else {
+      lci_string <- paste0('exp(', col.estimate,'-1.96*', col.stderr,')')
+      uci_string <- paste0('exp(', col.estimate,'+1.96*', col.stderr,')')
+    }
+  } else {
+    est_string <- col.estimate
+    if (!is.null(col.lci)) {
+      lci_string <- fixsp(col.lci)
+      uci_string <- fixsp(col.uci)
+    } else {
+      lci_string <- paste0(col.estimate,'-1.96*', col.stderr)
+      uci_string <- paste0(col.estimate,'+1.96*', col.stderr)
+    }
+  }
+
+
+  # Aesthetic adjustments when using panel.height ----
+  if (is.numeric(panel.height)) {
+    cicolours <- c(cicolour, cicolour.aes)
+    cicolour.aes <- "cicolour"
+    cicolour <- NULL
+  }
+
+  if (is.numeric(panel.height)) {
+    if (!missing(ciunder)) warning("ciunder ignored when using panel.height")
+    ciunder <- "ciunder"
+  }
+
+  if (is.list(fill)){
+    fill_orig <- fill
+    fill.aes <- "fill"
+    fill <- NULL
+  }
+
+
+  # Using groups ----
+  fill_string <- NULL
+  fill_string.aes <- NULL
+  if (!is.null(col.group)) {
+
+    if(!is.factor(data[[col.group]])) stop("col.group must be factor")
+    group_string <- sprintf(', group = %s', fixsp(col.group))
+    scale_fill_string <- c('',
+                           make_layer('# Set the scale for fill colours',
+                                      f = "scale_fill_grey",
+                                      arg = c("start = 0",
+                                              "end   = 1",
+                                              sprintf('name  = "%s"', legend.name)),
+                                      br = FALSE))
+    fill_string.aes <- sprintf('fill = %s', fixsp(col.group))
+  } else {
+    group_string <- ''
+    scale_fill_string <- 'scale_fill_identity() +'
+    fill_string <- sprintf('fill = %s', fill)
+    fill_string.aes <-  sprintf('fill = %s', fill.aes)
+  }
+
+
+  # Order for plotting CIs and points ----
+  ci_order <- c("all", "null")
+  if (isFALSE(ciunder) || is.null(ciunder)){
+    ci_order <- c("null", "all")
+  }
+  if (is.character(ciunder)){
+    ci_order <- c("before", "after")
+  }
+
+
+  # Create the plot code ----
+  plotcode <- c(
+    'library(ggplot2)',
+    '',
+
+    # start with data
+    paste0('datatoplot <- ', deparse(substitute(data))),
+    '',
+
+    # code for CI colours if using panel.height
+    shape.cicolourcode(scale,
+                       ylims,
+                       lci_string,
+                       uci_string,
+                       pointsize,
+                       size,
+                       stroke,
+                       panel.height,
+                       ratio,
+                       gap,
+                       ext,
+                       shape,
+                       shape.aes,
+                       cicolours,
+                       col.group),
+
+    ## code for CI under - if using panel.width
+    shape.ciundercode(panel.height),
+
+    ## start ggplot
+    shape.start.ggplot(fixsp(col.x),
+                       est_string,
+                       group_string),
+
+    indent(2,
+
+           ## add lines
+           if(lines){
+             shape.lines(addaes,
+                         col.lci,
+                         col.estimate,
+                         col.stderr,
+                         addarg,
+                         plotcolour)
+           },
+
+           # CI lines plotted before points
+           shape.cis(addaes,
+                     lci_string,
+                     uci_string,
+                     cicolour.aes,
+                     addarg,
+                     ciunder,
+                     cicolour,
+                     base_line_size,
+                     type = ci_order[[1]]),
+
+           # points for estimates
+           shape.estimates.points(addaes,
+                                  scalepoints,
+                                  size,
+                                  col.lci,
+                                  col.estimate,
+                                  col.stderr,
+                                  shape.aes,
+                                  fill_string.aes,
+                                  colour.aes,
+                                  addarg,
+                                  shape,
+                                  colour,
+                                  fill_string,
+                                  stroke),
+
+           # text above points
+           shape.estimates.text(addaes,
+                                uci_string,
+                                est_string,
+                                addarg,
+                                base_size,
+                                plotcolour),
+
+           # number below points
+           if (!is.null(col.n)){
+             shape.n.events.text(addaes,
+                                 lci_string,
+                                 col.n,
+                                 addarg,
+                                 base_size,
+                                 plotcolour)
+           },
+
+           # CI lines plotted after points
+           shape.cis(addaes,
+                     lci_string,
+                     uci_string,
+                     cicolour.aes,
+                     addarg,
+                     ciunder,
+                     cicolour,
+                     base_line_size,
+                     type = ci_order[[2]]),
+
+           # scales
+           shape.scales(deparse(1/minse), pointsize, scale_fill_string),
+
+           # axes
+           shape.axes(deparse(xbreaks), scale, deparse(ybreaks)),
+
+           # titles
+           shape.titles(xlab, title, ylab)),
+
+    # plot_like_ckb()
+    shape.plot.like.ckb(deparse(xlims),
+                        deparse(ylims),
+                        deparse(gap),
+                        deparse(ext),
+                        deparse(ratio),
+                        base_size,
+                        base_line_size,
+                        plotcolour),
+
+    # theme
+    indent(2, shape.theme(deparse(legend.position)))
+  )
+
+
+  # add additional code
+  if (!is.null(addcode)){
+    plotcode <- append(plotcode,
+                       addcode[2:length(addcode)],
+                       grep(addcode[1], trimws(plotcode))[1]-1)
+  }
+
+
+  # Show code in RStudio viewer.
+  if (showcode){ displaycode(plotcode) }
+
+
+  # Create the plot
+  plot <- eval(parse(text = plotcode), envir = envir)
+  if (printplot){
+    print(plot)
+  }
+
+
+  return(invisible(list(plot = plot,
+                        code = plotcode)))
+}
+
+
+
+#' @describeIn shape_plot Synonym for `shape_plot()`
+#' @export
+make_shape_plot <- shape_plot

@@ -1,8 +1,12 @@
 destination: docs
 
+development:
+  mode: auto
+
 template:
-  params:
-    bootswatch: cosmo
+  bootstrap: 5
+  bslib:
+    link-decoration: "none"
 
 articles:
 - title: Introduction
@@ -10,13 +14,21 @@ articles:
   contents:
   - ckbplotr
   - plot_like_ckb
-- title: Plot customisation
+- title: Shape plots and forest plots
   navbar: ~
   contents:
-  - make_forest_plot
-  - make_shape_plot
+  - shape_plot
+  - forest_plot
+  - shape_confidence_intervals
+  - forest_confidence_intervals
+- title: Further plot customisation
+  contents:
   - adding_editing_code
   - special_characters_formatting
+- title: Saving plots
+  navbar: ~
+  contents:
+  - save_figure
 - title: Related packages
   contents:
   - ggplot2
@@ -26,3 +38,5 @@ news:
   releases:
   - text: "Latest"
     href: https://github.com/neilstats/ckbplotr/releases/latest
+
+url: https://neilstats.github.io/ckbplotr/

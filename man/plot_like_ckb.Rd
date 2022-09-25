@@ -9,7 +9,7 @@ plot_like_ckb(
   xlims = NULL,
   ylims = NULL,
   gap = c(0.025, 0.025),
-  ext = c(0.025, 0.025),
+  ext = c(0, 0),
   ratio = 1.5,
   base_size = 11,
   base_line_size = base_size/22,
@@ -25,7 +25,7 @@ plot_like_ckb(
 
 \item{gap}{A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))}
 
-\item{ext}{A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))}
+\item{ext}{A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0, 0))}
 
 \item{ratio}{The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)}
 
