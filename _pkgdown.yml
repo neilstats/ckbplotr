@@ -19,6 +19,7 @@ articles:
   contents:
   - shape_plot
   - forest_plot
+  - shape_confidence_intervals
   - forest_confidence_intervals
 - title: Further plot customisation
   contents:

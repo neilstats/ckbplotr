@@ -44,7 +44,7 @@ shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
 
 
 ## Using groups
-The `col.group` argument can be supplied to plot results for different groups (using shades of grey for the fill colour). (Set `ciunder` to `TRUE` so that the confidence interval lines are hidden behind behind the point estimate squares.) Use the `legend.position` to set the legend position.
+The `col.group` argument can be supplied to plot results for different groups (using shades of grey for the fill colour). Use the `legend.position` to set the legend position.
 ```{r groups, fig.height = 4, fig.width = 4, out.width = "50%"}
 data_to_plot <- ckbplotr_shape_data %>%
   dplyr::mutate(is_female = factor(is_female,
@@ -161,25 +161,6 @@ shape_plot(ckbplotr_shape_data,
            fill         = "fillcol")
 ```
 
-Specify a column for `cicolour` is useful for changing the colour of confidence interval lines that would otherwise be hidden.
-```{r small-ci, fig.height = 4, fig.width = 4, out.width = "50%"}
-ckbplotr_shape_data$cicol <- "black"
-ckbplotr_shape_data[2,]$cicol <- "white"
-
-shape_plot(ckbplotr_shape_data,
-           col.x        = "rf",
-           col.estimate = "est",
-           col.stderr   = "se",
-           col.n        = "n",
-           xlims        = c(15,50),
-           ylims        = c(0.5, 3),
-           scalepoints  = TRUE,
-           pointsize    = 7,
-           cicolour     = "cicol")
-```
-
-Note that the size of boxes depends on `pointsize`, but the true length of confidence interval lines depends on the size at which the plot is displayed or saved. So, first save your plot as an image then go back to change the colour of confidence interval lines as needed.
-
 
 ## Categorical risk factor
 The risk factor can be a factor. In this case, the x-axis coordinates are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of categories plus 0.5. You may need to add position arguments so that points, intervals and text do not overlap:
@@ -191,7 +172,6 @@ shape_plot(ckbplotr_shape_data,
            col.estimate = "est",
            col.stderr   = "se",
            col.n        = "n",
-           col.group    = "is_female",
            xlims        = c(0.5, 4.5),
            ylims        = c(0.5, 3),
            scalepoints  = TRUE,
