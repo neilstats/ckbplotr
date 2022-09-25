@@ -35,6 +35,7 @@
 #' @param title Plot title. (Default: NULL)
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
+#' @param panel.height Panel height to assume and apply different formatting to short CIs. Unit is "mm".
 #' @param xbreaks Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)
 #' @param ybreaks Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
@@ -83,6 +84,7 @@ shape_plot <- function(data,
                        lines         = FALSE,
                        xlims,
                        ylims,
+                       panel.height  = NULL,
                        gap           = c(0.025, 0.025),
                        ext           = c(0.025, 0.025),
                        ratio         = 1.5,
@@ -107,7 +109,17 @@ shape_plot <- function(data,
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if (!is.null(col.group) && !is.null(fill)) stop("col.group and fill both control fill, so do not specify both")
+  if (missing(xlims)) stop("xlims must be specified")
+  if (missing(ylims)) stop("ylims must be specified")
 
+  ## check if confidence intervals may be hidden
+  if (missing(panel.height)){
+    message('Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.')
+  }
+
+  if(!missing(panel.height) && !missing(col.group) && !missing(cicolour)){
+    warning("cicolour is ignored if using panel.height and col.group")
+  }
 
   # Put column names in `` if required ----
   col.estimate <- fixsp(col.estimate)
@@ -130,7 +142,7 @@ shape_plot <- function(data,
   if (is.null(cicolour)) {
     cicolour <- plotcolour
   }
-  else if (cicolour %in% names(data)){
+  else if (all(cicolour %in% names(data))){
     cicolour.aes <- fixsp(cicolour)
     cicolour <- NULL
   } else {
@@ -155,6 +167,18 @@ shape_plot <- function(data,
     fill <- NULL
   } else {
     fill <- fixq(fill)
+  }
+
+
+  # String for point size aesthetic
+  if (scalepoints) {
+    if (!is.null(col.lci)) {
+      size <- sprintf('1.96/(%s - %s)', col.estimate, fixsp(col.lci))
+    } else {
+      size <- sprintf('1/%s', col.stderr)
+    }
+  } else {
+    size <- '1'
   }
 
 
@@ -185,11 +209,32 @@ shape_plot <- function(data,
   }
 
 
+  # Aesthetic adjustments when using panel.height ----
+  if (is.numeric(panel.height)) {
+    cicolours <- c(cicolour, cicolour.aes)
+    cicolour.aes <- "cicolour"
+    cicolour <- NULL
+  }
+
+  if (is.numeric(panel.height)) {
+    if (!missing(ciunder)) warning("ciunder ignored when using panel.height")
+    ciunder <- "ciunder"
+  }
+
+  if (is.list(fill)){
+    fill_orig <- fill
+    fill.aes <- "fill"
+    fill <- NULL
+  }
+
+
   # Using groups ----
   fill_string <- NULL
   fill_string.aes <- NULL
   if (!is.null(col.group)) {
-    group_string <- sprintf(', group = as.factor(%s)', fixsp(col.group))
+
+    if(!is.factor(data[[col.group]])) stop("col.group must be factor")
+    group_string <- sprintf(', group = %s', fixsp(col.group))
     scale_fill_string <- c('',
                            make_layer('# Set the scale for fill colours',
                                       f = "scale_fill_grey",
@@ -197,7 +242,7 @@ shape_plot <- function(data,
                                               "end   = 1",
                                               sprintf('name  = "%s"', legend.name)),
                                       br = FALSE))
-    fill_string.aes <- sprintf('fill = as.factor(%s)', fixsp(col.group))
+    fill_string.aes <- sprintf('fill = %s', fixsp(col.group))
   } else {
     group_string <- ''
     scale_fill_string <- 'scale_fill_identity() +'
@@ -221,9 +266,32 @@ shape_plot <- function(data,
     'library(ggplot2)',
     '',
 
-    # start ggplot
-    shape.start.ggplot(deparse(substitute(data)),
-                       fixsp(col.x),
+    # start with data
+    paste0('datatoplot <- ', deparse(substitute(data))),
+    '',
+
+    # code for CI colours if using panel.height
+    shape.cicolourcode(scale,
+                       ylims,
+                       lci_string,
+                       uci_string,
+                       pointsize,
+                       size,
+                       stroke,
+                       panel.height,
+                       ratio,
+                       gap,
+                       ext,
+                       shape,
+                       shape.aes,
+                       cicolours,
+                       col.group),
+
+    ## code for CI under - if using panel.width
+    shape.ciundercode(panel.height),
+
+    ## start ggplot
+    shape.start.ggplot(fixsp(col.x),
                        est_string,
                        group_string),
 
@@ -253,6 +321,7 @@ shape_plot <- function(data,
            # points for estimates
            shape.estimates.points(addaes,
                                   scalepoints,
+                                  size,
                                   col.lci,
                                   col.estimate,
                                   col.stderr,
