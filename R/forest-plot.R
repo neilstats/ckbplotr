@@ -422,7 +422,7 @@ make_forest_data <- forest_data
 #' @inheritParams forest_data
 #' @inheritParams theme_ckb
 #' @param logscale Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
-#' @param panel.headings Titles to be placed above each forest plot. (Default: panel.names)
+#' @param panel.headings Titles to be placed above each forest plot.
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
 #' @param col.right.parse A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
@@ -503,7 +503,7 @@ forest_plot <- function(
     exponentiate  = TRUE,
     logscale      = exponentiate,
     panel.names   = NULL,
-    panel.headings = panel.names,
+    panel.headings = NULL,
     col.key       = "key",
     col.estimate  = "estimate",
     col.stderr    = "stderr",
