@@ -1,4 +1,4 @@
-# ckbplotr 0.6.6.9000
+# ckbplotr 0.7.0
 
 * Added save_figure() function to help save plots as PDF files.
 * make_shape_plot() is now called shape_plot() and make_forest_plot() is now called forest_plot(). (But the original names still work.)
