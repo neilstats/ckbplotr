@@ -1,3 +1,7 @@
+# ckbplotr 0.7.0.9000
+
+* By default, shape_plot() and forest_plot() now use a new environment, with the same parent as the function call, to evaluate plot code. This should mean the functions work better when called from user-defined functions.
+
 # ckbplotr 0.7.0
 
 * Added save_figure() function to help save plots as PDF files.

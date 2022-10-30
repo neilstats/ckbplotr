@@ -399,6 +399,10 @@ shape_plot <- function(data,
   if (showcode){ displaycode(plotcode) }
 
 
+  # If envir not provided, make new environment
+  # with parent frame same as function call
+  if(missing(envir)){envir <- new.env(parent = parent.frame())}
+
   # Create the plot
   plot <- eval(parse(text = plotcode), envir = envir)
   if (printplot){

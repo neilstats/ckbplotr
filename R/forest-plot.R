@@ -1097,6 +1097,9 @@ forest_plot <- function(
   # Show code in RStudio viewer ----
   if (showcode){ displaycode(plotcode, text_auto_spacing) }
 
+  # If envir not provided, make new environment ----
+  # with parent frame same as function call
+  if(missing(envir)){envir <- new.env(parent = parent.frame())}
 
   # Create plot and print ----
   plot <- eval(parse(text = plotcode), envir = envir)
