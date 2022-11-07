@@ -1,6 +1,7 @@
 # ckbplotr 0.7.0.9000
 
 * By default, shape_plot() and forest_plot() now use a new environment, with the same parent as the function call, to evaluate plot code. This should mean the functions work better when called from user-defined functions.
+* shape_plot() now has a digits argument to specify number of decimal places to estimates text.
 
 # ckbplotr 0.7.0
 

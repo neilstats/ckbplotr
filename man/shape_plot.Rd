@@ -16,6 +16,7 @@ shape_plot(
   exponentiate = FALSE,
   logscale = exponentiate,
   scalepoints = FALSE,
+  digits = 2,
   minse = NA,
   pointsize = 3,
   col.group = NULL,
@@ -61,6 +62,7 @@ make_shape_plot(
   exponentiate = FALSE,
   logscale = exponentiate,
   scalepoints = FALSE,
+  digits = 2,
   minse = NA,
   pointsize = 3,
   col.group = NULL,
@@ -118,6 +120,8 @@ use log scale on the axis. (Default: FALSE)}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
+
+\item{digits}{Number of digits to use in text of estimates.}
 
 \item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 

@@ -25,6 +25,7 @@
 #' @param logscale Use log scale for vertical axis. (Default: exponentiate)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
+#' @param digits Number of digits to use in text of estimates.
 #' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
@@ -72,6 +73,7 @@ shape_plot <- function(data,
                        exponentiate  = FALSE,
                        logscale      = exponentiate,
                        scalepoints   = FALSE,
+                       digits        = 2,
                        minse         = NA,
                        pointsize     = 3,
                        col.group     = NULL,
@@ -340,7 +342,8 @@ shape_plot <- function(data,
                                 est_string,
                                 addarg,
                                 base_size,
-                                plotcolour),
+                                plotcolour,
+                                digits),
 
            # number below points
            if (!is.null(col.n)){
