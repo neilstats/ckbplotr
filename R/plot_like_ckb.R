@@ -46,6 +46,7 @@ theme_ckb <- function(base_size = 11,
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0, 0))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
 #' @param colour Colour for non-data aspects of the plot. (Default: "black")
+#' @param axes Choice of axis lines to add to the plot, one of "both", "x" or "y". (Default: "both")
 #'
 #' @return A ggplot2 plot.
 #'
@@ -61,8 +62,12 @@ plot_like_ckb <- function(
   ratio=1.5,
   base_size = 11,
   base_line_size = base_size/22,
-  colour = "black"
+  colour = "black",
+  axes = "both"
 ){
+
+  # check arguments
+  if (!axes %in% c("both", "x", "y")){stop("axes should be one of 'both', 'x' or 'y'.")}
 
   # get plot axis transformations
   tf_x    <- ggplot_build(plot)$layout$panel_scales_x[[1]]$trans$transform
@@ -103,27 +108,37 @@ plot_like_ckb <- function(
   limits[["y"]] <- invtf_y(tf_y(limits[["yaxis"]]) + c(-1, 1)*addtoy)
   limits[["ratio"]] <- ratio*diff(range(tf_x(limits[["xaxis"]])))/diff(range(tf_y(limits[["yaxis"]])))
 
-  plot +
+  plot <- plot +
     coord_fixed(ratio  = limits[["ratio"]],
                 xlim   = limits[["x"]],
                 ylim   = limits[["y"]],
                 expand = FALSE,
                 clip = "off") +
-    annotate(geom = "segment",
+    theme_ckb(base_size = base_size, base_line_size = base_line_size, colour = colour)
+
+  if (axes %in% c("both", "y")){
+    plot <- plot +
+      annotate(geom = "segment",
              x    = limits[["x"]][[1]],
              xend = limits[["x"]][[1]],
              y    = limits[["yaxis"]][[1]],
              yend = limits[["yaxis"]][[2]],
              lwd  = base_line_size,
              lineend = "round",
-             colour = colour) +
-    annotate(geom = "segment",
+             colour = colour)
+  }
+
+  if (axes %in% c("both", "x")){
+    plot <- plot +
+      annotate(geom = "segment",
              x    = limits[["xaxis"]][[1]],
              xend = limits[["xaxis"]][[2]],
              y    = limits[["y"]][[1]],
              yend = limits[["y"]][[1]],
              lwd  = base_line_size,
              lineend = "round",
-             colour = colour) +
-    theme_ckb(base_size = base_size, base_line_size = base_line_size, colour = colour)
+             colour = colour)
+  }
+
+  return(plot)
 }

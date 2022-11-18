@@ -3,7 +3,7 @@
 * By default, shape_plot() and forest_plot() now use a new environment, with the same parent as the function call, to evaluate plot code. This should mean the functions work better when called from user-defined functions.
 * shape_plot() now has a digits argument to specify number of decimal places to estimates text.
 * shape_plot() default shape is now 16 (square) or 22 (filled square) if col.group is set.
-
+* Added argument axes to plot_like_ckb() to control which axis lines should be added.
 
 # ckbplotr 0.7.0
 

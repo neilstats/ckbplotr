@@ -13,7 +13,8 @@ plot_like_ckb(
   ratio = 1.5,
   base_size = 11,
   base_line_size = base_size/22,
-  colour = "black"
+  colour = "black",
+  axes = "both"
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ plot_like_ckb(
 \item{base_line_size}{base size for line elements}
 
 \item{colour}{Colour for non-data aspects of the plot. (Default: "black")}
+
+\item{axes}{Choice of axis lines to add to the plot, one of "both", "x" or "y". (Default: "both")}
 }
 \value{
 A ggplot2 plot.
