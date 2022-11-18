@@ -13,7 +13,7 @@
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
 #' @param col.n Name of column that provides number to be plotted below CIs.
 #' @param col.group Name of column that groups the estimates. (Default: NULL)
-#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 16 - squares.)
 #' @param plotcolour Colour for non-data aspects of the plot. (Default: "black")
 #' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
 #' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
@@ -132,7 +132,10 @@ shape_plot <- function(data,
   ## default value, match column name, or use argument itself
   shape.aes <- NULL
   if (is.null(shape)) {
-    shape <- 22
+    shape <- 15
+    if (!is.null(col.group)){
+      shape <- 22
+    }
   } else if (shape %in% names(data)){
     shape.aes <- fixsp(shape)
     shape <- NULL

@@ -130,7 +130,7 @@ estimates. (Default: 3)}
 
 \item{col.group}{Name of column that groups the estimates. (Default: NULL)}
 
-\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)}
+\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 16 - squares.)}
 
 \item{plotcolour}{Colour for non-data aspects of the plot. (Default: "black")}
 

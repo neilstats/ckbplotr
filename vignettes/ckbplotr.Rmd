@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 library(ckbplotr)
 ```
 ## Shape plots
-`shape_plot()` creates a plot of estimates and CIs against risk factor levels using the `ggplot2` package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the  Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
+`shape_plot()` creates a plot of estimates and CIs against risk factor levels using the `ggplot2` package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the  Viewer pane.
 
 The function uses `plot_like_ckb()` to modify the theme and control the look of the plot.
 
@@ -44,12 +44,14 @@ shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
            scalepoints  = TRUE)
 ```
 
-For more details on customising these forest plots, see ["More with shape plots"](shape_plot.html).
+For more details on customising these plots, see ["More with shape plots"](shape_plot.html).
+
+*Narrow confidence interval lines may become hidden in plots. Please check your final output carefully and see ["Confidence interval lines in shape plots"](shape_confidence_intervals.html) for methods for handle this.*
 
 ## Forest plots
-`forest_plot()` creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the [highlights](https://cran.r-project.org/package=highlight) package is installed).
+`forest_plot()` creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane.
 
-*Narrow confidence interval lines may become hidden in forest plots. Please check your final output carefully and see ["Confidence interval lines in forest plots"](forest_confidence_intervals.html) for more methods for handle this.*
+*Narrow confidence interval lines may become hidden in forest plots. Please check your final output carefully and see ["Confidence interval lines in forest plots"](forest_confidence_intervals.html) for methods for handle this.*
 
 ### Prepare data
 First of all, do your analyses and put the results into data frames (one data frame for each forest plot panel). Here we take subsets of the example data provided in the package.
@@ -104,7 +106,7 @@ forest_plot(panels            = list(resultsA, resultsB),
 
 In this plot we've also use the `panel.headings`, `xlim`, `xticks`, `scalepoints`, and `pointsize` arguments to customise the plot.
 
-For more details on customising these forest plots, see ["More with forest plots"](forest_plot.html).
+For more details on customising forest plots, see ["More with forest plots"](forest_plot.html).
 
 
 

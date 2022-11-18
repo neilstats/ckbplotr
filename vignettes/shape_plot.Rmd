@@ -90,6 +90,22 @@ shape_plot$plot +
             data = ~ dplyr::group_by(., is_female) %>% dplyr::filter(rf == max(rf)))
 ```
 
+
+## Removing estimates text
+If you do not want to include the text above points in the plot, then the addaes argument can be used to set `label` to `NA`. This will cause a warning from ggplot2 about rows containing missing values.
+```{r remove-estimates-text, fig.height = 4, fig.width = 4, out.width = "50%"}
+shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
+           col.x        = "rf",
+           col.estimate = "est",
+           col.stderr   = "se",
+           xlims        = c(15, 50),
+           ylims        = c(0.7, 3),
+           
+           addaes       = list(estimates = "label = NA"))
+```
+
+See ["Changing generated code"](adding_editing_code.Rmd) for more on the addaes argument.
+
 ## Adding lines
 The `lines` argument will add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.
 ```{r lines, fig.height = 4, fig.width = 4, out.width = "50%"}
