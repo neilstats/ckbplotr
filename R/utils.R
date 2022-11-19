@@ -90,24 +90,30 @@ displaycode <- function(plotcode, note = ""){
   if (!is.null(knitr::opts_knit$get("out.format"))){
     return(NULL)
   }
-  writeLines(
-    c("---",
-      "title: 'Generated R code'",
-      "output:",
-      "  html_document:",
-      "    highlight: kate",
-      "---",
-      "```{css, echo=FALSE}",
-      ".no-border {border: 0px;}",
-      "```",
-      note,
-      "```{r plotcode, class.source='no-border', eval = FALSE}",
-      plotcode,
-      "```"),
-    file.path(tempdir(), "plotcode.Rmd"),
-    sep = "\n")
 
-  rmarkdown::render(file.path(tempdir(), "plotcode.Rmd"),
+  text <- c("---",
+            "title: 'Generated R code'",
+            "output:",
+            "  html_document:",
+            "    highlight: kate",
+            "---",
+            "```{css, echo=FALSE}",
+            ".no-border {border: 0px;}",
+            "```",
+            note,
+            "```{r plotcode, class.source='no-border', eval = FALSE}",
+            plotcode,
+            "```")
+
+  temprmd <- tempfile(fileext = ".Rmd")
+  con <- file(temprmd, open = "w", encoding = "UTF-8")
+  writeLines(
+    text,
+    con = con,
+    sep = "\n")
+  close(con)
+
+  rmarkdown::render(temprmd,
                     output_file = "plotcode.html",
                     quiet = TRUE)
 
