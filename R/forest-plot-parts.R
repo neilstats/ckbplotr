@@ -225,7 +225,7 @@ forest.plotdiamondscode <- function(cicolour.aes, fill.aes, cicolour, fill, stro
     arg = c('data = diamonds',
             sprintf('colour = %s', cicolour[1]),
             sprintf('fill = %s', fill),
-            sprintf('size = %s', stroke))
+            sprintf('linewidth = %s', stroke))
   )
 }
 
@@ -258,7 +258,7 @@ forest.nullline <- function(nullval, base_line_size, plotcolour) {
     arg = c('geom = "segment"',
             'y = -0.7, yend = -Inf',
             sprintf('x = %s, xend = %s', nullval, nullval),
-            sprintf('size = %s', base_line_size),
+            sprintf('linewidth = %s', base_line_size),
             sprintf('colour = %s', plotcolour))
   )
 }
@@ -318,7 +318,7 @@ forest.cis <- function(addaes, cicolour.aes, addarg, ciunder, cicolour, base_lin
                    "after" = sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s)', ciunder)),
             sprintf('colour = %s', cicolour[1]),
             'width = 0',
-            sprintf('size = %s', base_line_size),
+            sprintf('linewidth = %s', base_line_size),
             'na.rm = TRUE')
   )
 }
@@ -358,7 +358,7 @@ forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size
     arg = c(addarg$ci,
             'data = ~ dplyr::filter(.x, cioverright == TRUE)',
             sprintf('colour = %s', cicolour[1]),
-            sprintf('size = %s', base_line_size),
+            sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
             'na.rm = TRUE'),
     br = FALSE
@@ -374,7 +374,7 @@ forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size
     arg = c(addarg$ci,
             'data = ~ dplyr::filter(.x, cioverleft == TRUE)',
             sprintf('colour = %s', cicolour[1]),
-            sprintf('size = %s', base_line_size),
+            sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
             'na.rm = TRUE'))
   )
@@ -587,7 +587,7 @@ forest.theme <- function(base_size, plotcolour, base_line_size, title, left.spac
     '# Control the overall look of the plots',
     f = 'theme',
     arg = c(sprintf('text             = element_text(size = %s, colour = %s)', base_size, plotcolour),
-            sprintf('line             = element_line(size = %s)', base_line_size),
+            sprintf('line             = element_line(linewidth = %s)', base_line_size),
             'panel.background = element_blank()',
             'panel.grid.major = element_blank()',
             'panel.grid.minor = element_blank()',
@@ -596,7 +596,7 @@ forest.theme <- function(base_size, plotcolour, base_line_size, title, left.spac
             } else {
               'plot.title.position = "plot"'
             },
-            sprintf('axis.line.x      = element_line(colour = %s, size = %s, lineend = "round")',
+            sprintf('axis.line.x      = element_line(colour = %s, linewidth = %s, lineend = "round")',
                     plotcolour, base_line_size),
             'axis.title       = element_blank()',
             sprintf('axis.ticks.x     = element_line(colour = %s)', plotcolour),

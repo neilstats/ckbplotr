@@ -12,7 +12,7 @@ Authors@R:
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    ggplot2 (>= 3.3.0),
+    ggplot2 (>= 3.4.0),
     R (>= 2.10)
 Imports: 
     magrittr,

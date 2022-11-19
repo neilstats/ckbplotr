@@ -123,7 +123,7 @@ plot_like_ckb <- function(
              xend = limits[["x"]][[1]],
              y    = limits[["yaxis"]][[1]],
              yend = limits[["yaxis"]][[2]],
-             lwd  = base_line_size,
+             linewidth  = base_line_size,
              lineend = "round",
              colour = colour)
   }
@@ -135,7 +135,7 @@ plot_like_ckb <- function(
              xend = limits[["xaxis"]][[2]],
              y    = limits[["y"]][[1]],
              yend = limits[["y"]][[1]],
-             lwd  = base_line_size,
+             linewidth  = base_line_size,
              lineend = "round",
              colour = colour)
   }

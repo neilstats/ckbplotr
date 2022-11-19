@@ -252,7 +252,7 @@ shape.cis <- function(addaes,
                    "before" = sprintf('data = ~ dplyr::filter(.x, %s)', fixsp(ciunder)),
                    "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', fixsp(ciunder))),
             sprintf('colour = %s', cicolour),
-            sprintf('lwd = %s', base_line_size))
+            sprintf('linewidth = %s', base_line_size))
   )
 }
 
