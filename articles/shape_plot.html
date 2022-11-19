@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,7 +106,11 @@
 <div class="section level2">
 <h2 id="log-scale">Log scale<a class="anchor" aria-label="anchor" href="#log-scale"></a>
 </h2>
-<p>Set the <code>logscale</code> argument to true to use a log scale on the vertical axis. If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set <code>exponentiate</code> to true. This will plot exp(estimates) and use a log scale for the axis (if <code>logscale</code> is not set).</p>
+<p>Set the <code>logscale</code> argument to true to use a log scale on
+the vertical axis. If your estimates and standard errors are on the log
+scale (e.g. log hazard ratios), then set <code>exponentiate</code> to
+true. This will plot exp(estimates) and use a log scale for the axis (if
+<code>logscale</code> is not set).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
@@ -119,13 +123,18 @@
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           logscale     <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Narrow confidence interval lines may become hidden in the forest plot.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please check your final output carefully and see</span></span>
+<span><span class="co">#&gt;   vignette("shape_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This message is displayed once per session.</span></span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/log-scale-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="using-groups">Using groups<a class="anchor" aria-label="anchor" href="#using-groups"></a>
 </h2>
-<p>The <code>col.group</code> argument can be supplied to plot results for different groups (using shades of grey for the fill colour). Use the <code>legend.position</code> to set the legend position.</p>
+<p>The <code>col.group</code> argument can be supplied to plot results
+for different groups (using shades of grey for the fill colour). Use the
+<code>legend.position</code> to set the legend position.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_to_plot</span> <span class="op">&lt;-</span> <span class="va">ckbplotr_shape_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>is_female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">is_female</span>,</span>
@@ -143,13 +152,13 @@
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>           legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/groups-1.png" width="50%" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="labelling-groups">Labelling groups<a class="anchor" aria-label="anchor" href="#labelling-groups"></a>
 </h3>
-<p>To label points directly, you could add a <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text()</a></code> to the plot:</p>
+<p>To label points directly, you could add a <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text()</a></code> to
+the plot:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">shape_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">data_to_plot</span>,</span>
 <span>                         col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
@@ -164,7 +173,6 @@
 <span>                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                         legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                         printplot    <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span>
 <span></span>
 <span><span class="va">shape_plot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">is_female</span><span class="op">)</span>,</span>
@@ -175,10 +183,33 @@
 </div>
 </div>
 <div class="section level2">
+<h2 id="removing-estimates-text">Removing estimates text<a class="anchor" aria-label="anchor" href="#removing-estimates-text"></a>
+</h2>
+<p>If you do not want to include the text above points in the plot, then
+the addaes argument can be used to set <code>label</code> to
+<code>NA</code>. This will cause a warning from ggplot2 about rows
+containing missing values.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,</span>
+<span>           col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
+<span>           col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
+<span>           col.stderr   <span class="op">=</span> <span class="st">"se"</span>,</span>
+<span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,</span>
+<span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>           </span>
+<span>           addaes       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>estimates <span class="op">=</span> <span class="st">"label = NA"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Removed 4 rows containing missing values (`geom_text()`).</span></span></code></pre></div>
+<p><img src="shape_plot_files/figure-html/remove-estimates-text-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p>See <a href="adding_editing_code.Rmd">“Changing generated code”</a>
+for more on the addaes argument.</p>
+</div>
+<div class="section level2">
 <h2 id="adding-lines">Adding lines<a class="anchor" aria-label="anchor" href="#adding-lines"></a>
 </h2>
-<p>The <code>lines</code> argument will add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>The <code>lines</code> argument will add lines (linear fit through
+estimates on plotted scale, weighted by inverse variance) for each
+group.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">data_to_plot</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
 <span>           col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
@@ -191,15 +222,51 @@
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           lines        <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">#&gt; Warning: The following aesthetics were dropped during statistical transformation: <span style="color: #00BB00;">weight</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> This can happen when ggplot fails to infer the correct grouping structure in</span></span>
+<span><span class="co">#&gt;   the data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Did you forget to specify a `group` aesthetic or to convert a numerical</span></span>
+<span><span class="co">#&gt;   variable into a factor?</span></span>
+<span><span class="co">#&gt; The following aesthetics were dropped during statistical transformation: <span style="color: #00BB00;">weight</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> This can happen when ggplot fails to infer the correct grouping structure in</span></span>
+<span><span class="co">#&gt;   the data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Did you forget to specify a `group` aesthetic or to convert a numerical</span></span>
+<span><span class="co">#&gt;   variable into a factor?</span></span>
+<span><span class="co">#&gt; The following aesthetics were dropped during statistical transformation: <span style="color: #00BB00;">weight</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> This can happen when ggplot fails to infer the correct grouping structure in</span></span>
+<span><span class="co">#&gt;   the data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Did you forget to specify a `group` aesthetic or to convert a numerical</span></span>
+<span><span class="co">#&gt;   variable into a factor?</span></span>
+<span><span class="co">#&gt; The following aesthetics were dropped during statistical transformation: <span style="color: #00BB00;">weight</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> This can happen when ggplot fails to infer the correct grouping structure in</span></span>
+<span><span class="co">#&gt;   the data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Did you forget to specify a `group` aesthetic or to convert a numerical</span></span>
+<span><span class="co">#&gt;   variable into a factor?</span></span>
+<span><span class="co">#&gt; The following aesthetics were dropped during statistical transformation: <span style="color: #00BB00;">weight</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> This can happen when ggplot fails to infer the correct grouping structure in</span></span>
+<span><span class="co">#&gt;   the data.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Did you forget to specify a `group` aesthetic or to convert a numerical</span></span>
+<span><span class="co">#&gt;   variable into a factor?</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/lines-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="setting-aesthetics">Setting aesthetics<a class="anchor" aria-label="anchor" href="#setting-aesthetics"></a>
 </h2>
-<p>The shape and fill colour of points, and colour of points and confidence interval lines can be set overall or on a per-point basis. This is done by setting arguments <code>shape</code>, <code>colour</code>, <code>cicolour</code>, <code>fill</code>, and <code>ciunder</code> to appropriate values, or to the name of a column containing values for each point.</p>
+<p>The shape and fill colour of points, and colour of points and
+confidence interval lines can be set overall or on a per-point basis.
+This is done by setting arguments <code>shape</code>,
+<code>colour</code>, <code>cicolour</code>, <code>fill</code>, and
+<code>ciunder</code> to appropriate values, or to the name of a column
+containing values for each point.</p>
 <p>The argument/columns, what they control, and the type:</p>
 <table class="table">
+<colgroup>
+<col width="17%">
+<col width="68%">
+<col width="14%">
+</colgroup>
 <thead><tr class="header">
 <th>argument</th>
 <th>controls</th>
@@ -233,12 +300,17 @@
 </tr>
 </tbody>
 </table>
-<p>(Note that the approach for using columns to specify colours and shapes in this package does not make use of the automatic scales available in ggplot. We recommend you take a look at the ggplot2 documentation for better examples if you want to write ggplot2 code.)</p>
+<p>(Note that the approach for using columns to specify colours and
+shapes in this package does not make use of the automatic scales
+available in ggplot. We recommend you take a look at the ggplot2
+documentation for better examples if you want to write ggplot2
+code.)</p>
 <div class="section level3">
 <h3 id="using-values">Using values<a class="anchor" aria-label="anchor" href="#using-values"></a>
 </h3>
-<p>If the argument doesn’t match the name of a column in the data, then the value will be used for all points.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>If the argument doesn’t match the name of a column in the data, then
+the value will be used for all points.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
 <span>           col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
@@ -251,15 +323,15 @@
 <span>           shape        <span class="op">=</span> <span class="fl">23</span>,</span>
 <span>           colour       <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>           fill         <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>           cicolour     <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>           cicolour     <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/aesthetics-with-values-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="using-columns">Using columns<a class="anchor" aria-label="anchor" href="#using-columns"></a>
 </h3>
-<p>If the argument matches a column name, then the values in the column will be used.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>If the argument matches a column name, then the values in the column
+will be used.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">fillcol</span> <span class="op">&lt;-</span> <span class="st">"black"</span></span>
 <span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">1</span>,<span class="op">]</span><span class="op">$</span><span class="va">fillcol</span> <span class="op">&lt;-</span> <span class="st">"orange"</span></span>
 <span></span>
@@ -273,16 +345,18 @@
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           colour       <span class="op">=</span> <span class="st">"fillcol"</span>,</span>
-<span>           fill         <span class="op">=</span> <span class="st">"fillcol"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>           fill         <span class="op">=</span> <span class="st">"fillcol"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/aesthetics-with-columns-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="categorical-risk-factor">Categorical risk factor<a class="anchor" aria-label="anchor" href="#categorical-risk-factor"></a>
 </h2>
-<p>The risk factor can be a factor. In this case, the x-axis coordinates are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of categories plus 0.5. You may need to add position arguments so that points, intervals and text do not overlap:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>The risk factor can be a factor. In this case, the x-axis coordinates
+are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of
+categories plus 0.5. You may need to add position arguments so that
+points, intervals and text do not overlap:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">rf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>  <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,   <span class="st">"D"</span>, <span class="st">"A"</span>,   <span class="st">"B"</span>,   <span class="st">"C"</span>,  <span class="st">"D"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span>,</span>
@@ -297,14 +371,18 @@
 <span>           addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point     <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
 <span>                         ci        <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
 <span>                         n         <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
-<span>                         estimates <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>                         estimates <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/unnamed-chunk-2-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="stroke">Stroke<a class="anchor" aria-label="anchor" href="#stroke"></a>
 </h2>
-<p>The <code>stroke</code> argument sets the stroke aesthetic for plotted shapes. See <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html" class="external-link uri">https://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a> for more details. The stroke size adds to total size of a shape, so unless <code>stroke = 0</code> the scaling of size by inverse variance will be slightly inaccurate (but there are probably more important things to worry about).</p>
+<p>The <code>stroke</code> argument sets the stroke aesthetic for
+plotted shapes. See <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html" class="external-link uri">https://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a>
+for more details. The stroke size adds to total size of a shape, so
+unless <code>stroke = 0</code> the scaling of size by inverse variance
+will be slightly inaccurate (but there are probably more important
+things to worry about).</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

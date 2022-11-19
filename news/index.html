@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,16 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.6.6.9000" id="ckbplotr-0669000">ckbplotr 0.6.6.9000<a class="anchor" aria-label="anchor" href="#ckbplotr-0669000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.7.1" id="ckbplotr-071">ckbplotr 0.7.1<a class="anchor" aria-label="anchor" href="#ckbplotr-071"></a></h2>
+<ul><li>By default, shape_plot() and forest_plot() now use a new environment, with the same parent as the function call, to evaluate plot code. This should mean the functions work better when called from user-defined functions.</li>
+<li>shape_plot() now has a digits argument to specify number of decimal places to estimates text.</li>
+<li>shape_plot() default shape is now 16 (square) or 22 (filled square) if col.group is set.</li>
+<li>Added argument axes to plot_like_ckb() to control which axis lines should be added.</li>
+<li>Update for ckbplotr2 3.4.0</li>
+<li>Minor fixes and improvements.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.7.0" id="ckbplotr-070">ckbplotr 0.7.0<a class="anchor" aria-label="anchor" href="#ckbplotr-070"></a></h2>
 <ul><li>Added save_figure() function to help save plots as PDF files.</li>
 <li>make_shape_plot() is now called shape_plot() and make_forest_plot() is now called forest_plot(). (But the original names still work.)</li>
 <li>In forest_plot(), fill and cicolour (when using panel.width) can now be lists.</li>
@@ -108,7 +117,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.1" id="ckbplotr-061">ckbplotr 0.6.1<a class="anchor" aria-label="anchor" href="#ckbplotr-061"></a></h2>
-<ul><li>Fixes</li></ul></div>
+<ul><li>Fixes</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.6.0" id="ckbplotr-060">ckbplotr 0.6.0<a class="anchor" aria-label="anchor" href="#ckbplotr-060"></a></h2>
 <ul><li>New spacing and column positioning arguments added to make_forest_plot(). By default, these will be calculated automatically.</li>
@@ -132,7 +142,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="ckbplotr-041">ckbplotr 0.4.1<a class="anchor" aria-label="anchor" href="#ckbplotr-041"></a></h2>
-<ul><li>Fixed make_jasper_forest_plot.</li></ul></div>
+<ul><li>Fixed make_jasper_forest_plot.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="ckbplotr-040">ckbplotr 0.4.0<a class="anchor" aria-label="anchor" href="#ckbplotr-040"></a></h2>
 <ul><li>Name of arguments in make_forest_plot(), make_forest_data(), and make_jasper_forest_plot() have changed. The old names should still work for now and a message is displayed to tell you the new names. Hopefully the new names are more meaningful.</li>
@@ -143,7 +154,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2" id="ckbplotr-032">ckbplotr 0.3.2<a class="anchor" aria-label="anchor" href="#ckbplotr-032"></a></h2>
-<ul><li>Arguments col.right.headings and col.left.headings in make_forest_plot will now accept lists, so that different headings can be used between plots.</li></ul></div>
+<ul><li>Arguments col.right.headings and col.left.headings in make_forest_plot will now accept lists, so that different headings can be used between plots.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.1" id="ckbplotr-031">ckbplotr 0.3.1<a class="anchor" aria-label="anchor" href="#ckbplotr-031"></a></h2>
 <ul><li>New argument stroke in make_shape_plot and make_forest_plot.</li>

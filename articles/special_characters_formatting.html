@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,17 +106,35 @@
 <div class="section level2">
 <h2 id="special-characters">Special characters<a class="anchor" aria-label="anchor" href="#special-characters"></a>
 </h2>
-<p>To use special characters, put the unicode codepoint in your text (e.g. <code>\u2265</code> for a greater-than-or-equal sign, and <code>\u00B2</code> for a superscript 2). In <code><a href="../reference/forest_plot.html">forest_plot()</a></code> row labels you need to use HTML entities (e.g. <code>&amp;#xb2;</code> for a superscript 2). If these does not work, you may need to add the required <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_text()</a></code> layer to your plot manually.</p>
+<p>To use special characters, put the unicode codepoint in your text
+(e.g. <code>\u2265</code> for a greater-than-or-equal sign, and
+<code>\u00B2</code> for a superscript 2). In <code><a href="../reference/forest_plot.html">forest_plot()</a></code>
+row labels you need to use HTML entities (e.g. <code>&amp;#xb2;</code>
+for a superscript 2). If these does not work, you may need to add the
+required <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_text()</a></code> layer to your plot
+manually.</p>
 </div>
 <div class="section level2">
 <h2 id="expressions">Expressions<a class="anchor" aria-label="anchor" href="#expressions"></a>
 </h2>
-<p>The <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_text()</a></code> function has an argument <code>parse</code> which tells ggplot2 to parse text into expressions and display as described in <a href="https://rdrr.io/r/grDevices/plotmath.html" class="external-link">plotmath</a>. In <code><a href="../reference/forest_plot.html">forest_plot()</a></code>, the <code>col.right.parse</code> argument in <code><a href="../reference/forest_plot.html">forest_plot()</a></code> can be used to choose which of the <code>col.right</code> columns should be parsed as expressions. For other plot text (such as <code>col.left</code>) use the <code>addarg</code> argument to parse the text as expressions.</p>
+<p>The <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_text()</a></code> function has an argument
+<code>parse</code> which tells ggplot2 to parse text into expressions
+and display as described in <a href="https://rdrr.io/r/grDevices/plotmath.html" class="external-link">plotmath</a>. In
+<code><a href="../reference/forest_plot.html">forest_plot()</a></code>, the <code>col.right.parse</code> argument in
+<code><a href="../reference/forest_plot.html">forest_plot()</a></code> can be used to choose which of the
+<code>col.right</code> columns should be parsed as expressions. For
+other plot text (such as <code>col.left</code>) use the
+<code>addarg</code> argument to parse the text as expressions.</p>
 </div>
 <div class="section level2">
 <h2 id="ggtext">ggtext<a class="anchor" aria-label="anchor" href="#ggtext"></a>
 </h2>
-<p>The <a href="https://wilkelab.org/ggtext/" class="external-link">ggtext package</a> adds support for some Markdown and HTML when plotting text. Row labels in <code><a href="../reference/forest_plot.html">forest_plot()</a></code> already use <code><a href="https://wilkelab.org/ggtext/reference/element_markdown.html" class="external-link">ggtext::element_markdown()</a></code>. For other parts of plots, you may want add <code><a href="https://wilkelab.org/ggtext/reference/geom_richtext.html" class="external-link">ggtext::geom_richtext()</a></code> layers to include formatted text.</p>
+<p>The <a href="https://wilkelab.org/ggtext/" class="external-link">ggtext package</a> adds
+support for some Markdown and HTML when plotting text. Row labels in
+<code><a href="../reference/forest_plot.html">forest_plot()</a></code> already use
+<code><a href="https://wilkelab.org/ggtext/reference/element_markdown.html" class="external-link">ggtext::element_markdown()</a></code>. For other parts of plots, you
+may want add <code><a href="https://wilkelab.org/ggtext/reference/geom_richtext.html" class="external-link">ggtext::geom_richtext()</a></code> layers to include
+formatted text.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

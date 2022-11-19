@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,6 +84,7 @@
 <span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  logscale <span class="op">=</span> <span class="va">exponentiate</span>,</span>
 <span>  scalepoints <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  minse <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  pointsize <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  col.group <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -129,6 +130,7 @@
 <span>  exponentiate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  logscale <span class="op">=</span> <span class="va">exponentiate</span>,</span>
 <span>  scalepoints <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  minse <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  pointsize <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  col.group <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -209,6 +211,10 @@ use log scale on the axis. (Default: FALSE)</p></dd>
 error? (Default: FALSE)</p></dd>
 
 
+<dt>digits</dt>
+<dd><p>Number of digits to use in text of estimates.</p></dd>
+
+
 <dt>minse</dt>
 <dd><p>Minimum standard error to use when scaling point size. (Default will use minimum in the data.)</p></dd>
 
@@ -223,7 +229,7 @@ estimates. (Default: 3)</p></dd>
 
 
 <dt>shape</dt>
-<dd><p>Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)</p></dd>
+<dd><p>Shape of points. An integer, or name of a column of integers. (Default will use shape 16 - squares.)</p></dd>
 
 
 <dt>plotcolour</dt>

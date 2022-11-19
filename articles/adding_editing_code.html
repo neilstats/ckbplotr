@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,18 +103,26 @@
 
     
     
-<p>The <code><a href="../reference/shape_plot.html">make_shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code> functions generate code to produce plots. Beyond the function arguments, there are some further methods to change the generated code to produce customised plots.</p>
+<p>The <code><a href="../reference/shape_plot.html">shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code>
+functions generate code to produce plots. Beyond the function arguments,
+there are some further methods to change the generated code to produce
+customised plots.</p>
 <div class="section level2">
 <h2 id="adding-layers">Adding layers<a class="anchor" aria-label="anchor" href="#adding-layers"></a>
 </h2>
-<p>The plots returned by <code><a href="../reference/shape_plot.html">make_shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code> are ggplot objects, so you can use <code>+</code> to add more layers or adjust the theme.</p>
+<p>The plots returned by <code><a href="../reference/shape_plot.html">shape_plot()</a></code> and
+<code><a href="../reference/forest_plot.html">forest_plot()</a></code> are ggplot objects, so you can use
+<code>+</code> to add more layers or adjust the theme.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>                      col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>                      panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>                      showcode       <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                      printplot      <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Narrow confidence interval lines may become hidden in the forest plot.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please check your final output carefully and see</span></span>
+<span><span class="co">#&gt;   vignette("forest_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This message is displayed once per session.</span></span></span>
 <span></span>
 <span><span class="va">forest</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span></span>
 <span>  <span class="fu">annotate</span><span class="op">(</span>geom <span class="op">=</span> <span class="st">"segment"</span>,</span>
@@ -131,35 +139,16 @@
 <p><img src="adding_editing_code_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
-<h2 id="adding-code-the-addcode-argument">Adding code (the addcode argument)<a class="anchor" aria-label="anchor" href="#adding-code-the-addcode-argument"></a>
+<h2 id="adding-aesthetics-and-arguments-the-addaes-and-addarg-arguments">Adding aesthetics and arguments (the addaes and addarg
+arguments)<a class="anchor" aria-label="anchor" href="#adding-aesthetics-and-arguments-the-addaes-and-addarg-arguments"></a>
 </h2>
-<p>The addcode argument in <code><a href="../reference/shape_plot.html">make_shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code> can be used to add additional code to the plot code created by the functions.</p>
-<p>The argument should be a character vector. The first element defines where the code is added. It will be matched (as a regular expression) to the first line of the generated code (trimmed of any whitespace). The remaining elements will then be inserted as code just before this line. For example, to insert code before the line “# Plot points at the transformed estimates”, set “# Plot points at the transformed estimates” as the first element.</p>
-<div class="section level3">
-<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
-</h3>
-<p>We wish to use <code>geom_segment()</code> to add dashed lines to the plot, and these should be added to the plot before the point estimates:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
-<span>            col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
-<span>            panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
-<span>            exponentiate   <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            colour <span class="op">=</span> <span class="st">"grey"</span>,</span>
-<span>            addcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Plot points at the transformed estimates"</span>,</span>
-<span>                        <span class="st">"# Plot dashed line"</span>,</span>
-<span>                        <span class="st">"geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),"</span>,</span>
-<span>                        <span class="st">"linetype = 'dashed',"</span>,</span>
-<span>                        <span class="st">"data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +"</span>,</span>
-<span>                        <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
-<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;"></p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="adding-aesthetics-and-arguments-the-addaes-and-addarg-arguments">Adding aesthetics and arguments (the addaes and addarg arguments)<a class="anchor" aria-label="anchor" href="#adding-aesthetics-and-arguments-the-addaes-and-addarg-arguments"></a>
-</h2>
-<p>The addaes and addarg arguments in <code><a href="../reference/shape_plot.html">make_shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code> can be used to add additional aesthetics and arguments code to the ggplot layers created by the functions. These arguments must be named lists of character strings, and the names of elements defines where the aesthetics/arguments code is added.</p>
-<p>In <code><a href="../reference/shape_plot.html">make_shape_plot()</a></code> the following names will add aesthetics and arguments to layers:</p>
+<p>The addaes and addarg arguments in <code><a href="../reference/shape_plot.html">shape_plot()</a></code> and
+<code><a href="../reference/forest_plot.html">forest_plot()</a></code> can be used to add additional aesthetics and
+arguments code to the ggplot layers created by the functions. These
+arguments must be named lists of character strings, and the names of
+elements defines where the aesthetics/arguments code is added.</p>
+<p>In <code><a href="../reference/shape_plot.html">shape_plot()</a></code> the following names will add aesthetics
+and arguments to layers:</p>
 <table class="table">
 <thead><tr class="header">
 <th>name</th>
@@ -188,7 +177,8 @@
 </tr>
 </tbody>
 </table>
-<p>In <code><a href="../reference/forest_plot.html">forest_plot()</a></code> the following names will add aesthetics and arguments to layers:</p>
+<p>In <code><a href="../reference/forest_plot.html">forest_plot()</a></code> the following names will add aesthetics
+and arguments to layers:</p>
 <table class="table">
 <thead><tr class="header">
 <th>name</th>
@@ -221,37 +211,96 @@
 </tr>
 </tbody>
 </table>
-<p>Where duplicate aesthetics/arguments might be defined and created, they are kept with the priority:</p>
+<p>Where duplicate aesthetics/arguments might be defined and created,
+they are kept with the priority:</p>
 <ol style="list-style-type: decimal">
 <li>Aesthetic arguments specified using addaes and addarg</li>
 <li>Aesthetic arguments created by the function</li>
 <li>Other arguments specified using addaes and addarg</li>
 <li>Other arguments created by the function</li>
 </ol>
-<p>This can be used to ‘overwrite’ some of the code that would otherwise be produced by <code><a href="../reference/shape_plot.html">make_shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code>.</p>
+<p>This can be used to ‘overwrite’ some of the code that would otherwise
+be produced by <code><a href="../reference/shape_plot.html">shape_plot()</a></code> and
+<code><a href="../reference/forest_plot.html">forest_plot()</a></code>.</p>
 <div class="section level3">
-<h3 id="example-1">Example<a class="anchor" aria-label="anchor" href="#example-1"></a>
+<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>            ciunder        <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.name <span class="op">=</span> <span class="st">"colour = 'red'"</span><span class="op">)</span>,</span>
-<span>            addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point <span class="op">=</span> <span class="st">"colour = dplyr::if_else(estimate_transformed &gt; 1.01, 'orange', 'grey')"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point <span class="op">=</span> <span class="st">"colour = dplyr::if_else(estimate_transformed &gt; 1.01, 'orange', 'grey')"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="adding-code-the-addcode-argument">Adding code (the addcode argument)<a class="anchor" aria-label="anchor" href="#adding-code-the-addcode-argument"></a>
+</h2>
+<p>The addcode argument in <code><a href="../reference/shape_plot.html">shape_plot()</a></code> and
+<code><a href="../reference/forest_plot.html">forest_plot()</a></code> can be used to add additional code to the
+plot code created by the functions.</p>
+<p>The argument should be a character vector. The first element defines
+where the code is added. It will be matched (as a regular expression) to
+the first line of the generated code (trimmed of any whitespace). The
+remaining elements will then be inserted as code just before this line.
+For example, to insert code before the line “# Plot points at the
+transformed estimates”, set “# Plot points at the transformed estimates”
+as the first element.</p>
+<div class="section level3">
+<h3 id="example-1">Example<a class="anchor" aria-label="anchor" href="#example-1"></a>
+</h3>
+<p>We wish to use <code>geom_segment()</code> to add dashed lines to the
+plot, and these should be added to the plot before the point
+estimates:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<span>            col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>            panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
+<span>            exponentiate   <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>            colour <span class="op">=</span> <span class="st">"grey"</span>,</span>
+<span>            addcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Plot points at the transformed estimates"</span>,</span>
+<span>                        <span class="st">"# Plot dashed line"</span>,</span>
+<span>                        <span class="st">"geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),"</span>,</span>
+<span>                        <span class="st">"linetype = 'dashed',"</span>,</span>
+<span>                        <span class="st">"data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +"</span>,</span>
+<span>                        <span class="st">""</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="adding_editing_code_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level3">
+<h3 id="example-2">Example<a class="anchor" aria-label="anchor" href="#example-2"></a>
+</h3>
+<p>We want to manipulate the plot data before creating the plot:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">change_plot_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">data</span>,</span>
+<span>                auto_estcolumn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\("</span>, <span class="st">"["</span>, <span class="va">auto_estcolumn</span><span class="op">)</span>,</span>
+<span>                auto_estcolumn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\)"</span>, <span class="st">"]"</span>, <span class="va">auto_estcolumn</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<span>            col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>            panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
+<span>            exponentiate   <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>            addcode        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Create the ggplot"</span>,</span>
+<span>                               <span class="st">"datatoplot &lt;- change_plot_data(datatoplot)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="changing-the-code-vector-and-evaluating">Changing the code vector and evaluating<a class="anchor" aria-label="anchor" href="#changing-the-code-vector-and-evaluating"></a>
 </h2>
-<p>The <code><a href="../reference/shape_plot.html">make_shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code> functions return plot code in a character vector. You could change elements of the vector to customise the code, then parse and evaluate it using <code>eval(parse(text = plotcode))</code>.</p>
+<p>The <code><a href="../reference/shape_plot.html">shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code>
+functions return plot code in a character vector. You could change
+elements of the vector to customise the code, then parse and evaluate it
+using <code>eval(parse(text = plotcode))</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="copying-the-plot-code">Copying the plot code<a class="anchor" aria-label="anchor" href="#copying-the-plot-code"></a>
 </h2>
-<p>If you want to make many changes to the plot code, then you can also copy and paste the code from the Viewer pane.</p>
+<p>If you want to make many changes to the plot code, then you can also
+copy and paste the code from the Viewer pane.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
