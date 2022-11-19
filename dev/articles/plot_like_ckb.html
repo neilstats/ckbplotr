@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.6.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +107,8 @@
 <p><code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code> does three things to a ggplot2 plot:</p>
 <ol style="list-style-type: decimal">
 <li>applies a CKB theme (i.e. change the overall appearance)</li>
-<li>extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)</li>
+<li>extends the plotting area and manually adds axis lines (so that you
+can have a custom sized gap between the plotting area and the axes)</li>
 <li>applies a fixed aspect ratio</li>
 </ol>
 <div class="section level2">
@@ -122,7 +123,8 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ckb.html">theme_ckb</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.line <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/theme-1.png" width="384" style="display: block; margin: auto;"></p>
-<p>Or apply the <code>plot_like_ckb</code> function to add separated axis lines and fix the aspect ratio.</p>
+<p>Or apply the <code>plot_like_ckb</code> function to add separated
+axis lines and fix the aspect ratio.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-0-1.png" width="384" style="display: block; margin: auto;"></p>
@@ -133,7 +135,8 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-1-1.png" width="384" style="display: block; margin: auto;"></p>
-<p>If you do not want a gap between the axes, set <code>gap = c(0, 0)</code>.</p>
+<p>If you do not want a gap between the axes, set
+<code>gap = c(0, 0)</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-2-1.png" width="384" style="display: block; margin: auto;"></p>
@@ -149,11 +152,15 @@
 <div class="section level3">
 <h3 id="modifying-the-appearance-of-the-plot">Modifying the appearance of the plot<a class="anchor" aria-label="anchor" href="#modifying-the-appearance-of-the-plot"></a>
 </h3>
-<p>The <code>colour</code> arguments of <code><a href="../reference/theme_ckb.html">theme_ckb()</a></code> and <code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code> can be used to change the colour of the non-data components of the plot.</p>
+<p>The <code>colour</code> arguments of <code><a href="../reference/theme_ckb.html">theme_ckb()</a></code> and
+<code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code> can be used to change the colour of the
+non-data components of the plot.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/colour-1.png" width="384" style="display: block; margin: auto;"></p>
-<p>If you wish to override some aspect of the theme applied by <code>plot_like_ckb</code>, then this can be done by adding a theme after the function.</p>
+<p>If you wish to override some aspect of the theme applied by
+<code>plot_like_ckb</code>, then this can be done by adding a theme
+after the function.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"red"</span>, face <span class="op">=</span> <span class="st">"plain"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -162,8 +169,13 @@
 <div class="section level3">
 <h3 id="warning-about-axis-limits">Warning about axis limits<a class="anchor" aria-label="anchor" href="#warning-about-axis-limits"></a>
 </h3>
-<p>If any data points you are plotting fall outside the axes, then they will still be drawn and may show up in places such as the axes, the legend, the plot title, or the plot margins. There is also no warning if data points fall outside the whole plot area.</p>
-<p>So it is best to check that your <code>xlim</code> and <code>ylim</code> values are suitable for your data before using the function.</p>
+<p>If any data points you are plotting fall outside the axes, then they
+will still be drawn and may show up in places such as the axes, the
+legend, the plot title, or the plot margins. There is also no warning if
+data points fall outside the whole plot area.</p>
+<p>So it is best to check that your <code>xlim</code> and
+<code>ylim</code> values are suitable for your data before using the
+function.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The xlim and ylim ranges are too narrow</span></span>
 <span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.6.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,14 +104,34 @@
 
     
     
-<p>When making a shape plot, if a confidence interval line is smaller than the point representing the estimate we may wish to plot the line differently. In this package, this is possible by using the <code>panel.height</code> argument in the <code><a href="../reference/shape_plot.html">shape_plot()</a></code> function, then using the <code><a href="../reference/fix_panel.html">fix_panel()</a></code> function.</p>
-<p>The sections below show how to change the colour of confidence lines and/or plot confidence lines before or after points. After using these methods, you should still carefully check the output (i.e. your final output file, not an RStudio preview) to ensure confidence interval lines are not hidden.</p>
+<p>When making a shape plot, if a confidence interval line is smaller
+than the point representing the estimate we may wish to plot the line
+differently. In this package, this is possible by using the
+<code>panel.height</code> argument in the <code><a href="../reference/shape_plot.html">shape_plot()</a></code>
+function, then using the <code><a href="../reference/fix_panel.html">fix_panel()</a></code> function.</p>
+<p>The sections below show how to change the colour of confidence lines
+and/or plot confidence lines before or after points. After using these
+methods, you should still carefully check the output (i.e. your final
+output file, not an RStudio preview) to ensure confidence interval lines
+are not hidden.</p>
 <div class="section level2">
 <h2 id="changing-the-colour">Changing the colour<a class="anchor" aria-label="anchor" href="#changing-the-colour"></a>
 </h2>
-<p>To plot short confidence widths a different colour, set the <code>panel.height</code> argument of <code><a href="../reference/shape_plot.html">shape_plot()</a></code> equal to the height each panel will be in the final drawn output. The <code>cicolour</code> argument should also be a character vector - the last element will be used for short confidence intervals.</p>
-<p>Then use the <code><a href="../reference/fix_panel.html">fix_panel()</a></code> function, where the first argument is the plot just created and the second is the same panel height. This function returns a gtable object, which can be plotted using <code><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid::grid.draw</a></code> (or <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>). The panel height will be fixed.</p>
-<p>Notes: This has been designed to work well for shape 15 (the default) and 22. The calculation of sizes (and accounting for the stroke aesthetic) may not be entirely accurate, so check the output and change the <code>panel.height</code> argument as needed. Confidence intervals are assumed to be centred on the point estimate.</p>
+<p>To plot short confidence widths a different colour, set the
+<code>panel.height</code> argument of <code><a href="../reference/shape_plot.html">shape_plot()</a></code> equal to
+the height each panel will be in the final drawn output. The
+<code>cicolour</code> argument should also be a character vector - the
+last element will be used for short confidence intervals.</p>
+<p>Then use the <code><a href="../reference/fix_panel.html">fix_panel()</a></code> function, where the first
+argument is the plot just created and the second is the same panel
+height. This function returns a gtable object, which can be plotted
+using <code><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid::grid.draw</a></code> (or <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>). The panel
+height will be fixed.</p>
+<p>Notes: This has been designed to work well for shape 15 (the default)
+and 22. The calculation of sizes (and accounting for the stroke
+aesthetic) may not be entirely accurate, so check the output and change
+the <code>panel.height</code> argument as needed. Confidence intervals
+are assumed to be centred on the point estimate.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">shapeplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,</span>
 <span>                        col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
@@ -127,11 +147,15 @@
 <span>                        printplot    <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>                        panel.height <span class="op">=</span> <span class="fl">90</span>,</span>
 <span>                        cicolour     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
 <span></span>
 <span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="fu"><a href="../reference/fix_panel.html">fix_panel</a></span><span class="op">(</span><span class="va">shapeplot</span><span class="op">$</span><span class="va">plot</span>,</span>
 <span>                          height <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">90</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_confidence_intervals_files/figure-html/shape-plot-1.png" width="672" style="display: block; margin: auto;"></p>
-<p>You may want to adjust the position of the text plotted above and below points, using <code>addaes</code> or <code>addarg</code> to change <code>vjust</code> values:</p>
+<p>You may want to adjust the position of the text plotted above and
+below points, using <code>addaes</code> or <code>addarg</code> to change
+<code>vjust</code> values:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">shapeplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,</span>
 <span>                        col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
@@ -157,7 +181,8 @@
 <div class="section level2">
 <h2 id="using-groups">Using groups<a class="anchor" aria-label="anchor" href="#using-groups"></a>
 </h2>
-<p>You can use <code>panel.height</code> with <code>col.groups</code> (but then <code>cicolour</code> cannot be used ).</p>
+<p>You can use <code>panel.height</code> with <code>col.groups</code>
+(but then <code>cicolour</code> cannot be used ).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_to_plot</span> <span class="op">&lt;-</span> <span class="va">ckbplotr_shape_data</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>is_female <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">is_female</span>,</span>

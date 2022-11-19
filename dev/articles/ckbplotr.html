@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.6.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,8 +107,13 @@
 <div class="section level2">
 <h2 id="shape-plots">Shape plots<a class="anchor" aria-label="anchor" href="#shape-plots"></a>
 </h2>
-<p><code><a href="../reference/shape_plot.html">shape_plot()</a></code> creates a plot of estimates and CIs against risk factor levels using the <code>ggplot2</code> package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the <a href="https://cran.r-project.org/package=highlight" class="external-link">highlights</a> package is installed).</p>
-<p>The function uses <code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code> to modify the theme and control the look of the plot.</p>
+<p><code><a href="../reference/shape_plot.html">shape_plot()</a></code> creates a plot of estimates and CIs against
+risk factor levels using the <code>ggplot2</code> package. The function
+returns both a plot and the ggplot2 code used to create the plot. In
+RStudio the ggplot2 code used to create the plot will be shown in the
+Viewer pane.</p>
+<p>The function uses <code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code> to modify the theme
+and control the look of the plot.</p>
 <div class="section level3">
 <h3 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
 </h3>
@@ -127,7 +132,9 @@
 <div class="section level3">
 <h3 id="simple-example">Simple example<a class="anchor" aria-label="anchor" href="#simple-example"></a>
 </h3>
-<p>Given a data frame of estimates and standard errors (to be plotted on the y axis), and risk factor levels (to be plotted on the x axis), a plot can be created.</p>
+<p>Given a data frame of estimates and standard errors (to be plotted on
+the y axis), and risk factor levels (to be plotted on the x axis), a
+plot can be created.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">ckbplotr_shape_data</span><span class="op">[</span><span class="va">ckbplotr_shape_data</span><span class="op">$</span><span class="va">is_female</span> <span class="op">==</span> <span class="fl">0</span>,<span class="op">]</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"rf"</span>,</span>
@@ -137,20 +144,32 @@
 <span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/simple-example-1.png" width="50%" style="display: block; margin: auto;"></p>
-<p>For more details on customising these forest plots, see <a href="shape_plot.html">“More with shape plots”</a>.</p>
+<p>For more details on customising these plots, see <a href="shape_plot.html">“More with shape plots”</a>.</p>
+<p><em>Narrow confidence interval lines may become hidden in plots.
+Please check your final output carefully and see <a href="shape_confidence_intervals.html">“Confidence interval lines in
+shape plots”</a> for methods for handle this.</em></p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="forest-plots">Forest plots<a class="anchor" aria-label="anchor" href="#forest-plots"></a>
 </h2>
-<p><code><a href="../reference/forest_plot.html">forest_plot()</a></code> creates a forest plot using the <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the code used to create the plot will be shown in the Viewer pane (with syntax highlighting if the <a href="https://cran.r-project.org/package=highlight" class="external-link">highlights</a> package is installed).</p>
-<p><em>Narrow confidence interval lines may become hidden in forest plots. Please check your final output carefully and see <a href="forest_confidence_intervals.html">“Confidence interval lines in forest plots”</a> for more methods for handle this.</em></p>
+<p><code><a href="../reference/forest_plot.html">forest_plot()</a></code> creates a forest plot using the <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> graphics package. The
+function returns both a plot and the ggplot2 code used to create the
+plot. In RStudio the code used to create the plot will be shown in the
+Viewer pane.</p>
+<p><em>Narrow confidence interval lines may become hidden in forest
+plots. Please check your final output carefully and see <a href="forest_confidence_intervals.html">“Confidence interval lines in
+forest plots”</a> for methods for handle this.</em></p>
 <div class="section level3">
 <h3 id="prepare-data">Prepare data<a class="anchor" aria-label="anchor" href="#prepare-data"></a>
 </h3>
-<p>First of all, do your analyses and put the results into data frames (one data frame for each forest plot panel). Here we take subsets of the example data provided in the package.</p>
+<p>First of all, do your analyses and put the results into data frames
+(one data frame for each forest plot panel). Here we take subsets of the
+example data provided in the package.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsA</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"A"</span><span class="op">)</span></span>
 <span><span class="va">resultsB</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"B"</span><span class="op">)</span></span>
@@ -167,24 +186,36 @@
 <div class="section level3">
 <h3 id="simple-forest-plot">Simple forest plot<a class="anchor" aria-label="anchor" href="#simple-forest-plot"></a>
 </h3>
-<p>The <code>panels</code> argument is a list of data frames with results to be plotted, the <code>col.key</code> argument is the name of the column that defines which results should be plotted on the same row, and the <code>exponentiate</code> argument is a logical value telling the function we are providing estimates on the log scale.</p>
-<p>By default, the function assumes that estimates and standard errors are in columns named “estimate” and “stderr”, but this can also be set by the <code>col.estimate</code> and <code>col.stderr</code> arguments.</p>
+<p>The <code>panels</code> argument is a list of data frames with
+results to be plotted, the <code>col.key</code> argument is the name of
+the column that defines which results should be plotted on the same row,
+and the <code>exponentiate</code> argument is a logical value telling
+the function we are providing estimates on the log scale.</p>
+<p>By default, the function assumes that estimates and standard errors
+are in columns named “estimate” and “stderr”, but this can also be set
+by the <code>col.estimate</code> and <code>col.stderr</code>
+arguments.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key      <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `linewidth` argument instead.</span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/simple-forest-plot-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="using-row-labels">Using row labels<a class="anchor" aria-label="anchor" href="#using-row-labels"></a>
 </h3>
-<p>To use row labels, first create a data frame of labels. The data set must contain:</p>
+<p>To use row labels, first create a data frame of labels. The data set
+must contain:</p>
 <ul>
-<li>a column used to match labels to the correct results, specified in the argument <code>col.key</code>.</li>
+<li>a column used to match labels to the correct results, specified in
+the argument <code>col.key</code>.</li>
 <li>up to three columns with headings/subheadings/labels for rows.</li>
 </ul>
-<p>If a particular level of label is not required it can be set to missing.</p>
+<p>If a particular level of label is not required it can be set to
+missing.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ckbplotr_row_labels</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                              heading subheading  label     variable</span></span>
@@ -194,8 +225,14 @@
 <span><span class="co">#&gt; 4 Lipoprotein particle concentration        IDL   &lt;NA&gt;    nmr_idl_p</span></span>
 <span><span class="co">#&gt; 5 Lipoprotein particle concentration        LDL  Large  nmr_l_ldl_p</span></span>
 <span><span class="co">#&gt; 6 Lipoprotein particle concentration        LDL Medium  nmr_m_ldl_p</span></span></code></pre></div>
-<p>In <code><a href="../reference/forest_plot.html">forest_plot()</a></code> specify the <code>row.labels</code> argument as the data frame of labels you’ve created. Use the <code>row.labels.levels</code> argument to choose which columns are used as headings/subheadings/labels.</p>
-<p>Use the <code>rows</code> argument to choose the results to be plotted. The first level (heading) labels will be included in the plot from top to bottom. Other labels will be in the order that they are in the <code>row.labels</code> data frame.</p>
+<p>In <code><a href="../reference/forest_plot.html">forest_plot()</a></code> specify the <code>row.labels</code>
+argument as the data frame of labels you’ve created. Use the
+<code>row.labels.levels</code> argument to choose which columns are used
+as headings/subheadings/labels.</p>
+<p>Use the <code>rows</code> argument to choose the results to be
+plotted. The first level (heading) labels will be included in the plot
+from top to bottom. Other labels will be in the order that they are in
+the <code>row.labels</code> data frame.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
@@ -211,14 +248,17 @@
 <span>            pointsize         <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/using-row-labels-1.png" width="672" style="display: block; margin: auto;"></p>
-<p>In this plot we’ve also use the <code>panel.headings</code>, <code>xlim</code>, <code>xticks</code>, <code>scalepoints</code>, and <code>pointsize</code> arguments to customise the plot.</p>
-<p>For more details on customising these forest plots, see <a href="forest_plot.html">“More with forest plots”</a>.</p>
+<p>In this plot we’ve also use the <code>panel.headings</code>,
+<code>xlim</code>, <code>xticks</code>, <code>scalepoints</code>, and
+<code>pointsize</code> arguments to customise the plot.</p>
+<p>For more details on customising forest plots, see <a href="forest_plot.html">“More with forest plots”</a>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="other-plots">Other plots<a class="anchor" aria-label="anchor" href="#other-plots"></a>
 </h2>
-<p>Supply an existing <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> plot as the <code>plot</code> argument to <code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code>:</p>
+<p>Supply an existing <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> plot as the
+<code>plot</code> argument to <code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>,</span>
 <span>               <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -230,12 +270,16 @@
 <span></span>
 <span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">plot</span>, <span class="va">ckbplot</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/a-plot-1.png" width="80%" style="display: block; margin: auto;"></p>
-<p>See <a href="plot_like_ckb.html">“Make any ggplot like a CKB plot”</a> for more details.</p>
+<p>See <a href="plot_like_ckb.html">“Make any ggplot like a CKB
+plot”</a> for more details.</p>
 </div>
 <div class="section level2">
 <h2 id="confidence-intervals">Confidence intervals<a class="anchor" aria-label="anchor" href="#confidence-intervals"></a>
 </h2>
-<p>When standard errors are supplied to the <code><a href="../reference/shape_plot.html">shape_plot()</a></code> and <code><a href="../reference/forest_plot.html">forest_plot()</a></code> functions, confidence intervals are calculated as 95% confidence intervals using the Normal approximation method (with critical value 1.96).</p>
+<p>When standard errors are supplied to the <code><a href="../reference/shape_plot.html">shape_plot()</a></code>
+and <code><a href="../reference/forest_plot.html">forest_plot()</a></code> functions, confidence intervals are
+calculated as 95% confidence intervals using the Normal approximation
+method (with critical value 1.96).</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
