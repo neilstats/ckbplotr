@@ -123,6 +123,22 @@ forest_plot(panels         = list(resultsA, resultsB),
 ```
 
 
+### Example
+We want to manipulate the plot data before creating the plot:
+```{r}
+change_plot_data <- function(data){
+  dplyr::mutate(data,
+                auto_estcolumn = gsub("\\(", "[", auto_estcolumn),
+                auto_estcolumn = gsub("\\)", "]", auto_estcolumn))
+}
+
+forest_plot(panels         = list(resultsA, resultsB),
+            col.key        = "variable",
+            panel.headings = c("Analysis A", "Analysis B"),
+            exponentiate   = TRUE,
+            addcode        = c("# Create the ggplot",
+                               "datatoplot <- change_plot_data(datatoplot)"))
+```
 
 
 ## Changing the code vector and evaluating
