@@ -116,7 +116,11 @@ shape_plot <- function(data,
 
   ## check if confidence intervals may be hidden
   if (missing(panel.height)){
-    message('Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.')
+    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
+                    'i' = 'Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.'),
+                  use_cli_format = TRUE,
+                  .frequency = "once",
+                  .frequency_id = "shape_narrow_cis")
   }
 
   if(!missing(panel.height) && !missing(col.group) && !missing(cicolour)){
