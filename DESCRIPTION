@@ -3,7 +3,7 @@ Title: Create CKB Plots
 Description: ckbplotr provides functions to help create and style plots in R.
     It is being developed by, and primarily for, China Kadoorie Biobank 
     researchers.
-Version: 0.7.0
+Version: 0.7.1
 Authors@R: 
     person(given = "Neil",
            family = "Wright",
@@ -12,7 +12,7 @@ Authors@R:
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    ggplot2 (>= 3.3.0),
+    ggplot2 (>= 3.4.0),
     R (>= 2.10)
 Imports: 
     magrittr,

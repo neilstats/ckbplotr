@@ -613,7 +613,11 @@ forest_plot <- function(
 
   ## check if confidence intervals may be hidden
   if (missing(panel.width) || !(length(cicolour) > 1 | length(ciunder) > 1)){
-    message('Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.')
+    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
+                    'i' = 'Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.'),
+                  use_cli_format = TRUE,
+                  .frequency = "once",
+                  .frequency_id = "forest_narrow_cis")
   }
 
   # Check for log scale ----
@@ -1097,6 +1101,9 @@ forest_plot <- function(
   # Show code in RStudio viewer ----
   if (showcode){ displaycode(plotcode, text_auto_spacing) }
 
+  # If envir not provided, make new environment ----
+  # with parent frame same as function call
+  if(missing(envir)){envir <- new.env(parent = parent.frame())}
 
   # Create plot and print ----
   plot <- eval(parse(text = plotcode), envir = envir)

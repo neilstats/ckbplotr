@@ -27,10 +27,10 @@ resultsA <- resultsA[1:10,]
 resultsB <- resultsB[1:10,]
 ```
 
-The `make_shape_plot()` and `forest_plot()` functions generate code to produce plots. Beyond the function arguments, there are some further methods to change the generated code to produce customised plots.
+The `shape_plot()` and `forest_plot()` functions generate code to produce plots. Beyond the function arguments, there are some further methods to change the generated code to produce customised plots.
 
 ## Adding layers
-The plots returned by `make_shape_plot()` and `forest_plot()` are ggplot objects, so you can use `+` to add more layers or adjust the theme.
+The plots returned by `shape_plot()` and `forest_plot()` are ggplot objects, so you can use `+` to add more layers or adjust the theme.
 
 ```{r}
 forest <- forest_plot(panels         = list(resultsA, resultsB),
@@ -54,32 +54,10 @@ forest$plot +
 ```
 
 
-## Adding code (the addcode argument)
-The addcode argument in `make_shape_plot()` and `forest_plot()` can be used to add additional code to the plot code created by the functions.
-
-The argument should be a character vector. The first element defines where the code is added. It will be matched (as a regular expression) to the first line of the generated code (trimmed of any whitespace). The remaining elements will then be inserted as code just before this line. For example, to insert code before the line "# Plot points at the transformed estimates", set "# Plot points at the transformed estimates" as the first element.
-
-### Example
-We wish to use `geom_segment()` to add dashed lines to the plot, and these should be added to the plot before the point estimates:
-```{r}
-forest_plot(panels         = list(resultsA, resultsB),
-            col.key        = "variable",
-            panel.headings = c("Analysis A", "Analysis B"),
-            exponentiate   = TRUE,
-            colour = "grey",
-            addcode = c("# Plot points at the transformed estimates",
-                        "# Plot dashed line",
-                        "geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),",
-                        "linetype = 'dashed',",
-                        "data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +",
-                        ""))
-```
-
-
 ## Adding aesthetics and arguments (the addaes and addarg arguments)
-The addaes and addarg arguments in `make_shape_plot()` and `forest_plot()` can be used to add additional aesthetics and arguments code to the ggplot layers created by the functions. These arguments must be named lists of character strings, and the names of elements defines where the aesthetics/arguments code is added.
+The addaes and addarg arguments in `shape_plot()` and `forest_plot()` can be used to add additional aesthetics and arguments code to the ggplot layers created by the functions. These arguments must be named lists of character strings, and the names of elements defines where the aesthetics/arguments code is added.
 
-In `make_shape_plot()`  the following names will add aesthetics and arguments to layers:
+In `shape_plot()`  the following names will add aesthetics and arguments to layers:
 
 | name      | layer that plots                      |
 |-----------|---------------------------------------|
@@ -107,7 +85,7 @@ Where duplicate aesthetics/arguments might be defined and created, they are kept
 3. Other arguments specified using addaes and addarg
 4. Other arguments created by the function
 
-This can be used to 'overwrite' some of the code that would otherwise be produced by `make_shape_plot()` and `forest_plot()`.
+This can be used to 'overwrite' some of the code that would otherwise be produced by `shape_plot()` and `forest_plot()`.
 
 ### Example
 ```{r}
@@ -120,8 +98,51 @@ forest_plot(panels         = list(resultsA, resultsB),
 ```
 
 
+
+
+
+## Adding code (the addcode argument)
+The addcode argument in `shape_plot()` and `forest_plot()` can be used to add additional code to the plot code created by the functions.
+
+The argument should be a character vector. The first element defines where the code is added. It will be matched (as a regular expression) to the first line of the generated code (trimmed of any whitespace). The remaining elements will then be inserted as code just before this line. For example, to insert code before the line "# Plot points at the transformed estimates", set "# Plot points at the transformed estimates" as the first element.
+
+### Example
+We wish to use `geom_segment()` to add dashed lines to the plot, and these should be added to the plot before the point estimates:
+```{r}
+forest_plot(panels         = list(resultsA, resultsB),
+            col.key        = "variable",
+            panel.headings = c("Analysis A", "Analysis B"),
+            exponentiate   = TRUE,
+            colour = "grey",
+            addcode = c("# Plot points at the transformed estimates",
+                        "# Plot dashed line",
+                        "geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),",
+                        "linetype = 'dashed',",
+                        "data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +",
+                        ""))
+```
+
+
+### Example
+We want to manipulate the plot data before creating the plot:
+```{r}
+change_plot_data <- function(data){
+  dplyr::mutate(data,
+                auto_estcolumn = gsub("\\(", "[", auto_estcolumn),
+                auto_estcolumn = gsub("\\)", "]", auto_estcolumn))
+}
+
+forest_plot(panels         = list(resultsA, resultsB),
+            col.key        = "variable",
+            panel.headings = c("Analysis A", "Analysis B"),
+            exponentiate   = TRUE,
+            addcode        = c("# Create the ggplot",
+                               "datatoplot <- change_plot_data(datatoplot)"))
+```
+
+
 ## Changing the code vector and evaluating
-The `make_shape_plot()` and `forest_plot()` functions return plot code in a character vector. You could change elements of the vector to customise the code, then parse and evaluate it using `eval(parse(text = plotcode))`.
+The `shape_plot()` and `forest_plot()` functions return plot code in a character vector. You could change elements of the vector to customise the code, then parse and evaluate it using `eval(parse(text = plotcode))`.
 
 
 ## Copying the plot code

@@ -186,13 +186,17 @@ shape.estimates.text <- function(addaes,
                                  est_string,
                                  addarg,
                                  base_size,
-                                 plotcolour) {
+                                 plotcolour,
+                                 digits) {
   make_layer(
     '# Plot point estimates text',
     f = "geom_text",
     aes = c(addaes$estimates,
             sprintf('y = %s', uci_string),
-            sprintf('label = format(round(%s, 2), nsmall = 2)', est_string)),
+            sprintf('label = format(round(%s, %s), nsmall = %s)',
+                    est_string,
+                    digits,
+                    digits)),
     arg = c(addarg$estimates,
             'vjust = -0.8',
             sprintf('size  = %s', base_size/(11/3)),
@@ -248,7 +252,7 @@ shape.cis <- function(addaes,
                    "before" = sprintf('data = ~ dplyr::filter(.x, %s)', fixsp(ciunder)),
                    "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', fixsp(ciunder))),
             sprintf('colour = %s', cicolour),
-            sprintf('lwd = %s', base_line_size))
+            sprintf('linewidth = %s', base_line_size))
   )
 }
 

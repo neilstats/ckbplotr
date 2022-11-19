@@ -16,6 +16,7 @@ shape_plot(
   exponentiate = FALSE,
   logscale = exponentiate,
   scalepoints = FALSE,
+  digits = 2,
   minse = NA,
   pointsize = 3,
   col.group = NULL,
@@ -61,6 +62,7 @@ make_shape_plot(
   exponentiate = FALSE,
   logscale = exponentiate,
   scalepoints = FALSE,
+  digits = 2,
   minse = NA,
   pointsize = 3,
   col.group = NULL,
@@ -119,6 +121,8 @@ use log scale on the axis. (Default: FALSE)}
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
 
+\item{digits}{Number of digits to use in text of estimates.}
+
 \item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 
 \item{pointsize}{The (largest) size of box to use for plotting point
@@ -126,7 +130,7 @@ estimates. (Default: 3)}
 
 \item{col.group}{Name of column that groups the estimates. (Default: NULL)}
 
-\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)}
+\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 16 - squares.)}
 
 \item{plotcolour}{Colour for non-data aspects of the plot. (Default: "black")}
 

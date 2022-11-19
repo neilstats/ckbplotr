@@ -13,7 +13,7 @@
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
 #' @param col.n Name of column that provides number to be plotted below CIs.
 #' @param col.group Name of column that groups the estimates. (Default: NULL)
-#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 16 - squares.)
 #' @param plotcolour Colour for non-data aspects of the plot. (Default: "black")
 #' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
 #' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
@@ -25,6 +25,7 @@
 #' @param logscale Use log scale for vertical axis. (Default: exponentiate)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
+#' @param digits Number of digits to use in text of estimates.
 #' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
@@ -72,6 +73,7 @@ shape_plot <- function(data,
                        exponentiate  = FALSE,
                        logscale      = exponentiate,
                        scalepoints   = FALSE,
+                       digits        = 2,
                        minse         = NA,
                        pointsize     = 3,
                        col.group     = NULL,
@@ -114,7 +116,11 @@ shape_plot <- function(data,
 
   ## check if confidence intervals may be hidden
   if (missing(panel.height)){
-    message('Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.')
+    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
+                    'i' = 'Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.'),
+                  use_cli_format = TRUE,
+                  .frequency = "once",
+                  .frequency_id = "shape_narrow_cis")
   }
 
   if(!missing(panel.height) && !missing(col.group) && !missing(cicolour)){
@@ -130,7 +136,10 @@ shape_plot <- function(data,
   ## default value, match column name, or use argument itself
   shape.aes <- NULL
   if (is.null(shape)) {
-    shape <- 22
+    shape <- 15
+    if (!is.null(col.group)){
+      shape <- 22
+    }
   } else if (shape %in% names(data)){
     shape.aes <- fixsp(shape)
     shape <- NULL
@@ -340,7 +349,8 @@ shape_plot <- function(data,
                                 est_string,
                                 addarg,
                                 base_size,
-                                plotcolour),
+                                plotcolour,
+                                digits),
 
            # number below points
            if (!is.null(col.n)){
@@ -398,6 +408,10 @@ shape_plot <- function(data,
   # Show code in RStudio viewer.
   if (showcode){ displaycode(plotcode) }
 
+
+  # If envir not provided, make new environment
+  # with parent frame same as function call
+  if(missing(envir)){envir <- new.env(parent = parent.frame())}
 
   # Create the plot
   plot <- eval(parse(text = plotcode), envir = envir)
