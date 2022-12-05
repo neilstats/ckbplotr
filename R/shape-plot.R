@@ -116,7 +116,7 @@ shape_plot <- function(data,
 
   ## check if confidence intervals may be hidden
   if (missing(panel.height)){
-    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
+    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the shape plot.',
                     'i' = 'Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.'),
                   use_cli_format = TRUE,
                   .frequency = "once",
