@@ -14,11 +14,11 @@
 
 fix_panel <- function(plot, width = NULL, height = NULL){
 
-  # check arguments
-  if (!missing(width) & !missing(height)){stop("Only specificy one of width and height. (Aspect ratio is maintained.)")}
-
   # generate grob from ggplot2 plot
   gtable <- ggplot2::ggplotGrob(plot)
+
+  # check arguments
+  if (!missing(width) & !missing(height) & gtable$respect){stop("Can only specificy one of width and height to maintain aspect ratio.)")}
 
   ## calculate ratio from numeric part of panel height / width
   ## assumes they are the same unit (probably "null" because created by ggplot)
