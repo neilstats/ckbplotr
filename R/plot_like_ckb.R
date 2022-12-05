@@ -67,7 +67,7 @@ plot_like_ckb <- function(
 ){
 
   # check arguments
-  if (!axes %in% c("both", "x", "y")){stop("axes should be one of 'both', 'x' or 'y'.")}
+  if (!axes %in% c("both", "x", "y", "none")){stop("axes should be one of 'both', 'x', 'y' or 'none'.")}
 
   # get plot axis transformations
   tf_x    <- ggplot_build(plot)$layout$panel_scales_x[[1]]$trans$transform
