@@ -18,8 +18,9 @@ Biobank](http://www.ckbiobank.org) researchers.
 
 *This package is under development. If you find an error or bug or have
 a suggestion for improvement please create an issue on GitHub or contact
-the author at <neil.wright@ndph.ox.ac.uk> or
-[@NeilStats](https://twitter.com/NeilStats).*
+the author at <neil.wright@ndph.ox.ac.uk>,
+[@NeilStats](https://twitter.com/NeilStats), or
+[@NeilStats@fediscience.org](https://fediscience.org/@neilstats).*
 
 It can be used to: create plots of estimates and CIs against risk factor
 levels…
