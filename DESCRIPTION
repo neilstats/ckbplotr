@@ -33,6 +33,7 @@ Imports:
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 Suggests:
+    patchwork,
     covr,
     testthat
 VignetteBuilder: knitr

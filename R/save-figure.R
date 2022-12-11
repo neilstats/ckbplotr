@@ -48,6 +48,11 @@ save_figure <- function(figure,
                         pagedim     = NULL,
                         cropped     = FALSE){
 
+  ## Check it figure is a patchwork object, and convert to gtable
+  if (inherits(figure, "patchwork")){
+    figure <- patchwork::patchworkGrob(figure)
+  }
+
   ## Set page dimensions
   pagesize <- match.arg(pagesize)
   if (missing(pagedim)){
