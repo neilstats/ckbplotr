@@ -62,8 +62,9 @@ forest_plot(
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
-  printplot = TRUE,
-  showcode = TRUE,
+  quiet = FALSE,
+  printplot = !quiet,
+  showcode = !quiet,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -140,8 +141,9 @@ make_forest_plot(
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
-  printplot = TRUE,
-  showcode = TRUE,
+  quiet = FALSE,
+  printplot = !quiet,
+  showcode = !quiet,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -310,9 +312,11 @@ given in the col.key column.}
 
 \item{stroke}{Size of outline of shapes. (Default: 0)}
 
-\item{printplot}{Print the plot. (Default: TRUE)}
+\item{quiet}{Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)}
 
-\item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
+\item{printplot}{Print the plot. (Default: !quiet)}
+
+\item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)}
 
 \item{addcode}{A character vector of code to add to the generated code.
 The first element should be a regular expression.

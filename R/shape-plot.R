@@ -43,8 +43,9 @@
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
 #' @param stroke Size of outline of shapes. (Default: base_size/22)
-#' @param printplot Print the plot. (Default: TRUE)
-#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
+#' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
+#' @param printplot Print the plot. (Default: !quiet)
+#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
 #' @param addcode A character vector of code to add to the generated code.
 #'                The first element should be a regular expression.
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
@@ -100,8 +101,9 @@ shape_plot <- function(data,
                        legend.name   = "",
                        legend.position = "top",
                        title         = NULL,
-                       printplot     = TRUE,
-                       showcode      = TRUE,
+                       quiet         = FALSE,
+                       printplot     = !quiet,
+                       showcode      = !quiet,
                        addcode       = NULL,
                        addaes        = NULL,
                        addarg        = NULL,

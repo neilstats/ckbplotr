@@ -464,8 +464,9 @@ make_forest_data <- forest_data
 
 #' @param panel.width Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".
 #' @param stroke Size of outline of shapes. (Default: 0)
-#' @param printplot Print the plot. (Default: TRUE)
-#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
+#' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
+#' @param printplot Print the plot. (Default: !quiet)
+#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
 #' @param addcode A character vector of code to add to the generated code.
 #'                The first element should be a regular expression.
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
@@ -552,8 +553,9 @@ forest_plot <- function(
     base_size     = 11,
     base_line_size = base_size/22,
     stroke        = 0,
-    printplot     = TRUE,
-    showcode      = TRUE,
+    quiet         = FALSE,
+    printplot     = !quiet,
+    showcode      = !quiet,
     addcode       = NULL,
     addaes        = NULL,
     addarg        = NULL,
