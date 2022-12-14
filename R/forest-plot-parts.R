@@ -63,7 +63,8 @@ forest.check.cis <- function(xto, xfrom) {
 #' @noRd
 forest.cicolourcode <- function(scale, inv_tf, xto, xfrom, pointsize, stroke, panel.width, shape, shape.aes, cicolours, panel.names) {
 
-  if(!is.numeric(panel.width)){return(NULL)}
+  if(!inherits(panel.width, "unit")){return(NULL)}
+  panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
 
   x <- c(
     '# Create column for CI colour',
@@ -73,7 +74,7 @@ forest.cicolourcode <- function(scale, inv_tf, xto, xfrom, pointsize, stroke, pa
                    scale, scale),
            indent(26,
                   sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
-                          (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width, c(shape, shape.aes))),
+                          (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm, c(shape, shape.aes))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(is.list(cicolours)){
@@ -190,7 +191,7 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
     )
   }
 
-  if(is.numeric(panel.width) && is.list(cicolours)){
+  if(inherits(panel.width, "mm") && is.list(cicolours)){
     x <- c(
       x,
       '## Add colour',
@@ -578,6 +579,23 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
     }
   )
 }
+
+
+#' code to set panel width
+#' @noRd
+forest.panel.width <- function(panel.width) {
+  if(!inherits(panel.width, "unit")){return(NULL)}
+
+  make_layer(
+    '# Fix panel width',
+    f = 'ggh4x::force_panelsizes',
+    arg = sprintf('cols = unit(%s, "%s")',
+                  as.numeric(panel.width),
+                  makeunit(panel.width)),
+    plus = TRUE
+  )
+}
+
 
 
 #' code for the theme

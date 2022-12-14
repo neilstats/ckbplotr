@@ -152,6 +152,8 @@ printunit <- function(x){
 #' @keywords internal
 #' @noRd
 makeunit <- function(x){
+
+  if(is.null(x)){return(NULL)}
   ## handle different unit object types (for grid>=4.0)
   if (compareVersion(as.character(packageVersion("grid")), "4.0") >= 0){
     grid::unitType(x)

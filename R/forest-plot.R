@@ -462,7 +462,7 @@ make_forest_data <- forest_data
 #' @param mid.space Size of additional gap to leave between panels. (Default: unit(5, "mm"))
 #' @param plot.margin Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
 
-#' @param panel.width Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".
+#' @param panel.width Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.
 #' @param stroke Size of outline of shapes. (Default: 0)
 #' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
 #' @param printplot Print the plot. (Default: !quiet)
@@ -838,13 +838,16 @@ forest_plot <- function(
 
 
   # Aesthetic adjustments when using panel.width ----
-  if (is.numeric(panel.width)) {
+  if (!missing(panel.width)) {
+    if (!inherits(panel.width, "unit")){
+      panel.width <- grid::unit(panel.width, "mm")
+    }
     cicolours <- c(cicolour, cicolour.aes)
     cicolour.aes <- "cicolour"
     cicolour <- NULL
   }
 
-  if (is.numeric(panel.width) && length(ciunder) > 1) {
+  if (!missing(panel.width) && length(ciunder) > 1) {
     ciunder_orig <- ciunder
     ciunder <- "ciunder"
   }
@@ -1078,6 +1081,9 @@ forest_plot <- function(
 
            # code for the axes
            forest.axes(scale, xticks, bottom.space),
+
+           # code for panel width
+           forest.panel.width(panel.width),
 
            # code for the plot title
            if (title != ""){forest.title(title)},

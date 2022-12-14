@@ -60,11 +60,17 @@ If you do not want a gap between the axes, set `gap = c(0, 0)`.
 plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), gap = c(0, 0))
 ```
 
-### Aspect ratio
+### Aspect ratio and panel sizes
 Change the aspect ratio of the plot.
 ```{r aspect-ratio, fig.width = 6}
 plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), ratio = 0.3)
 ```
+
+Set the width of the plot (`width` controls the length of the x axis).
+```{r width, fig.width = 6}
+plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50), ratio = 1.5, width = unit(4, "cm"))
+```
+
 
 
 ### Modifying the appearance of the plot

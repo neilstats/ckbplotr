@@ -1,3 +1,9 @@
+# ckbplotr 0.7.1.9000
+
+* In shape_plot() and forest_plot() the height and panel.width arguments, respectively, will set the size of the plotting panels (so fix_panel() no longer needs to used).
+* Arguments height and width have been added to plot_like_ckb().
+* The above two points were achieved using the ggh4x package which is now a dependency.
+
 # ckbplotr 0.7.1
 
 * By default, shape_plot() and forest_plot() now use a new environment, with the same parent as the function call, to evaluate plot code. This should mean the functions work better when called from user-defined functions.

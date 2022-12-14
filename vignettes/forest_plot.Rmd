@@ -301,7 +301,7 @@ forest_plot(panels            = list(resultsA),
 
 `forest_plot()` uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales (or limits or ticks) applied, so it's not directly possible to have different limits and ticks on each forest plot.
 
-However, one approach to work around this is to use `forest_plot()` for each plot you need, remove the labels from all but the first, then arrange them side-by-side. The `gridExtra` package can be used for this last step.
+However, one approach to work around this is to use `forest_plot()` for each plot you need, setting the same `panel.width` for all, remove the labels from all but the first, then arrange them side-by-side. The `gridExtra` package can be used for this last step.
 
 Step 1: Use `forest_plot()` for each plot.
 ```{r}
@@ -322,6 +322,7 @@ forestplot1 <- forest_plot(panels            = list(resultsA),
                            col.left          = c("n"),
                            col.left.heading  = c("No. of\nevents"),
                            col.heading.space = 1.5,
+                           panel.width       = unit(20, "mm"),
                            printplot         = FALSE)
 
 forestplot2 <- forest_plot(panels            = list(resultsB),
@@ -341,6 +342,7 @@ forestplot2 <- forest_plot(panels            = list(resultsB),
                            col.left          = c("n"),
                            col.left.heading  = c("No. of\nevents"),
                            col.heading.space = 1.5,
+                           panel.width       = unit(20, "mm"),
                            printplot         = FALSE)
 ```
 
@@ -352,10 +354,9 @@ p2 <- forestplot2$plot +
   theme(axis.text.y = element_blank())
 ```
 
-Step 3: Arrange the plots using `gridExtra` (there may be other packages that also work), using `fix_panel()` to set the same width for both panels. (Adjust the `widths` argument until you get a suitable layout.)
+Step 3: Arrange the plots using `gridExtra` (there may be other packages that also work). (Adjust the `widths` argument until you get a suitable layout.)
 ```{r}
-gridExtra::grid.arrange(fix_panel(p1, width = unit(20, "mm")),
-                        fix_panel(p2, width = unit(20, "mm")),
+gridExtra::grid.arrange(p1, p2,
                         nrow = 1,
                         widths = c(1, 0.5))
 ```

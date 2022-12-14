@@ -30,6 +30,7 @@ Imports:
     gridtext  (>= 0.1.5),
     knitr,
     rmarkdown,
+    ggh4x
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 Suggests:

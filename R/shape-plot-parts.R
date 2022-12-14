@@ -1,4 +1,4 @@
-#' code for CI colours if using panel.height
+#' code for CI colours if using height
 #' @noRd
 shape.cicolourcode <- function(scale,
                                ylims,
@@ -7,7 +7,7 @@ shape.cicolourcode <- function(scale,
                                pointsize,
                                size,
                                stroke,
-                               panel.height,
+                               height,
                                ratio,
                                gap,
                                ext,
@@ -16,7 +16,9 @@ shape.cicolourcode <- function(scale,
                                cicolours,
                                col.group) {
 
-  if(!is.numeric(panel.height)){return(NULL)}
+  if(!inherits(height, "unit")){return(NULL)}
+
+  height.mm <- as.numeric(grid::convertUnit(height, "mm"))
 
   ymin <- ylims[[1]]
   ymax <- ylims[[2]]
@@ -36,7 +38,7 @@ shape.cicolourcode <- function(scale,
            indent(26,
                   sprintf('(%s)/max(%s) * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
                           size, size,
-                          (ymax - ymin) * (pointsize + 2 * stroke) / (panel.height - (gap[[2]] + ext[[2]]) * panel.height/ratio),
+                          (ymax - ymin) * (pointsize + 2 * stroke) / height.mm,
                           c(shape, shape.aes))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
@@ -58,11 +60,11 @@ shape.cicolourcode <- function(scale,
 }
 
 
-#' code for CI under if using panel.height
+#' code for CI under if using height
 #' @noRd
-shape.ciundercode <- function(panel.height) {
+shape.ciundercode <- function(height) {
 
-  if(!is.numeric(panel.height)){return(NULL)}
+  if(!inherits(height, "unit")){return(NULL)}
 
   c('# Create column for CI under',
     'datatoplot <- datatoplot %>%',
@@ -281,6 +283,7 @@ shape.plot.like.ckb <- function(xlims,
                                 gap,
                                 ext,
                                 ratio,
+                                height,
                                 base_size,
                                 base_line_size,
                                 plotcolour) {
@@ -293,6 +296,9 @@ shape.plot.like.ckb <- function(xlims,
             sprintf('gap            = %s', gap),
             sprintf('ext            = %s', ext),
             sprintf('ratio          = %s', ratio),
+            sprintf('height         = unit(%s, "%s")',
+                    as.numeric(height),
+                    makeunit(height)),
             sprintf('base_size      = %s', base_size),
             sprintf('base_line_size = %s', base_line_size),
             sprintf('colour         = %s', plotcolour)),
@@ -310,3 +316,4 @@ shape.theme <- function(legend.position) {
     plus = FALSE
   )
 }
+

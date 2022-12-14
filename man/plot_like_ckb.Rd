@@ -11,6 +11,8 @@ plot_like_ckb(
   gap = c(0.025, 0.025),
   ext = c(0, 0),
   ratio = 1.5,
+  width = NULL,
+  height = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   colour = "black",
@@ -28,7 +30,11 @@ plot_like_ckb(
 
 \item{ext}{A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0, 0))}
 
-\item{ratio}{The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)}
+\item{ratio}{The ratio (y-axis:x-axis) to use for the plot. Ignored if both width and height are set. (Default: 1.5)}
+
+\item{width}{A \code{grid::unit} object to set the width of the plot (not including the gap or extension).}
+
+\item{height}{A \code{grid::unit} object to set the height of the plot (not including the gap or extension).}
 
 \item{base_size}{base font size, given in pts.}
 

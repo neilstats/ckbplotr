@@ -29,7 +29,7 @@ shape_plot(
   lines = FALSE,
   xlims,
   ylims,
-  panel.height = NULL,
+  height = NULL,
   gap = c(0.025, 0.025),
   ext = c(0.025, 0.025),
   ratio = 1.5,
@@ -76,7 +76,7 @@ make_shape_plot(
   lines = FALSE,
   xlims,
   ylims,
-  panel.height = NULL,
+  height = NULL,
   gap = c(0.025, 0.025),
   ext = c(0.025, 0.025),
   ratio = 1.5,
@@ -150,7 +150,7 @@ estimates. (Default: 3)}
 
 \item{ylims}{A numeric vector of length two. The limits of the y-axis.}
 
-\item{panel.height}{Panel height to assume and apply different formatting to short CIs. Unit is "mm".}
+\item{height}{Panel height to use and apply different formatting to short CIs. A grid::unit() object, or if numeric is assumed to be in mm.}
 
 \item{gap}{A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))}
 

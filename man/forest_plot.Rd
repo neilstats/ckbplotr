@@ -304,7 +304,7 @@ given in the col.key column.}
 
 \item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))}
 
-\item{panel.width}{Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".}
+\item{panel.width}{Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.}
 
 \item{base_size}{base font size, given in pts.}
 

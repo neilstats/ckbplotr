@@ -36,7 +36,7 @@
 #' @param title Plot title. (Default: NULL)
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
-#' @param panel.height Panel height to assume and apply different formatting to short CIs. Unit is "mm".
+#' @param height Panel height to use and apply different formatting to short CIs. A grid::unit() object, or if numeric is assumed to be in mm.
 #' @param xbreaks Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)
 #' @param ybreaks Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
@@ -87,7 +87,7 @@ shape_plot <- function(data,
                        lines         = FALSE,
                        xlims,
                        ylims,
-                       panel.height  = NULL,
+                       height  = NULL,
                        gap           = c(0.025, 0.025),
                        ext           = c(0.025, 0.025),
                        ratio         = 1.5,
@@ -117,7 +117,7 @@ shape_plot <- function(data,
   if (missing(ylims)) stop("ylims must be specified")
 
   ## check if confidence intervals may be hidden
-  if (missing(panel.height)){
+  if (missing(height)){
     rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the shape plot.',
                     'i' = 'Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.'),
                   use_cli_format = TRUE,
@@ -125,8 +125,8 @@ shape_plot <- function(data,
                   .frequency_id = "shape_narrow_cis")
   }
 
-  if(!missing(panel.height) && !missing(col.group) && !missing(cicolour)){
-    warning("cicolour is ignored if using panel.height and col.group")
+  if(!missing(height) && !missing(col.group) && !missing(cicolour)){
+    warning("cicolour is ignored if using height and col.group")
   }
 
   # Put column names in `` if required ----
@@ -220,15 +220,18 @@ shape_plot <- function(data,
   }
 
 
-  # Aesthetic adjustments when using panel.height ----
-  if (is.numeric(panel.height)) {
+  # Aesthetic adjustments when using height ----
+  if (!missing(height)) {
+    if (!inherits(height, "unit")){
+      height <- grid::unit(height, "mm")
+    }
     cicolours <- c(cicolour, cicolour.aes)
     cicolour.aes <- "cicolour"
     cicolour <- NULL
   }
 
-  if (is.numeric(panel.height)) {
-    if (!missing(ciunder)) warning("ciunder ignored when using panel.height")
+  if (!missing(height)) {
+    if (!missing(ciunder)) warning("ciunder ignored when using height")
     ciunder <- "ciunder"
   }
 
@@ -281,7 +284,7 @@ shape_plot <- function(data,
     paste0('datatoplot <- ', deparse(substitute(data))),
     '',
 
-    # code for CI colours if using panel.height
+    # code for CI colours if using height
     shape.cicolourcode(scale,
                        ylims,
                        lci_string,
@@ -289,7 +292,7 @@ shape_plot <- function(data,
                        pointsize,
                        size,
                        stroke,
-                       panel.height,
+                       height,
                        ratio,
                        gap,
                        ext,
@@ -298,8 +301,8 @@ shape_plot <- function(data,
                        cicolours,
                        col.group),
 
-    ## code for CI under - if using panel.width
-    shape.ciundercode(panel.height),
+    ## code for CI under - if using height
+    shape.ciundercode(height),
 
     ## start ggplot
     shape.start.ggplot(fixsp(col.x),
@@ -390,6 +393,7 @@ shape_plot <- function(data,
                         deparse(gap),
                         deparse(ext),
                         deparse(ratio),
+                        height,
                         base_size,
                         base_line_size,
                         plotcolour),
