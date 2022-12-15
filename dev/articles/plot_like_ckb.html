@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,12 +142,17 @@ axis lines and fix the aspect ratio.</p>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-2-1.png" width="384" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
-<h3 id="aspect-ratio">Aspect ratio<a class="anchor" aria-label="anchor" href="#aspect-ratio"></a>
+<h3 id="aspect-ratio-and-panel-sizes">Aspect ratio and panel sizes<a class="anchor" aria-label="anchor" href="#aspect-ratio-and-panel-sizes"></a>
 </h3>
 <p>Change the aspect ratio of the plot.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, ratio <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/aspect-ratio-1.png" width="576" style="display: block; margin: auto;"></p>
+<p>Set the width of the plot (<code>width</code> controls the length of
+the x axis).</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, ratio <span class="op">=</span> <span class="fl">1.5</span>, width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">4</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="plot_like_ckb_files/figure-html/width-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="modifying-the-appearance-of-the-plot">Modifying the appearance of the plot<a class="anchor" aria-label="anchor" href="#modifying-the-appearance-of-the-plot"></a>
@@ -155,13 +160,13 @@ axis lines and fix the aspect ratio.</p>
 <p>The <code>colour</code> arguments of <code><a href="../reference/theme_ckb.html">theme_ckb()</a></code> and
 <code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code> can be used to change the colour of the
 non-data components of the plot.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/colour-1.png" width="384" style="display: block; margin: auto;"></p>
 <p>If you wish to override some aspect of the theme applied by
 <code>plot_like_ckb</code>, then this can be done by adding a theme
 after the function.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"red"</span>, face <span class="op">=</span> <span class="st">"plain"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-3-1.png" width="384" style="display: block; margin: auto;"></p>
@@ -176,7 +181,7 @@ data points fall outside the whole plot area.</p>
 <p>So it is best to check that your <code>xlim</code> and
 <code>ylim</code> values are suitable for your data before using the
 function.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The xlim and ylim ranges are too narrow</span></span>
 <span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-4-1.png" width="384" style="display: block; margin: auto;"></p>
@@ -185,7 +190,7 @@ function.</p>
 <div class="section level2">
 <h2 id="bar-chart-example">Bar chart example<a class="anchor" aria-label="anchor" href="#bar-chart-example"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">barplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span><span class="va">barplot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">7.5</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span><span class="op">)</span>, gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.005</span><span class="op">)</span>, ratio <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>

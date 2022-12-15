@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@
 than the point representing the estimate we may wish to plot the line
 differently. In this package, this is possible by using the
 <code>panel.width</code> argument in the <code><a href="../reference/forest_plot.html">forest_plot()</a></code>
-function, then using the <code><a href="../reference/fix_panel.html">fix_panel()</a></code> function.</p>
+function.</p>
 <p>The sections below show how to change the colour of confidence lines
 and/or plot confidence lines before or after points. After using these
 methods, you should still carefully check the output (i.e. your final
@@ -118,15 +118,10 @@ are not hidden.</p>
 <h2 id="changing-the-colour">Changing the colour<a class="anchor" aria-label="anchor" href="#changing-the-colour"></a>
 </h2>
 <p>To plot narrow confidence widths a different colour, set the
-<code>panel.width</code> argument of <code><a href="../reference/forest_plot.html">forest_plot()</a></code> equal to
-the width each panel will be in the final drawn output. The
-<code>cicolour</code> argument should also be a character vector - the
-last element will be used for narrow confidence intervals.</p>
-<p>Then use the <code><a href="../reference/fix_panel.html">fix_panel()</a></code> function, where the first
-argument is the plot just created and the second is the same panel
-width. This function returns a gtable object, which can be plotted using
-<code><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid::grid.draw</a></code> (or <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>). The panels widths
-will be fixed.</p>
+<code>panel.width</code> argument of <code><a href="../reference/forest_plot.html">forest_plot()</a></code> (this
+will also fix the width of each panel). The <code>cicolour</code>
+argument should also be a character vector - the last element will be
+used for narrow confidence intervals.</p>
 <p>Notes: This has been designed to work well for shape 15 (the default)
 and 22. The calculation of sizes (and accounting for the stroke
 aesthetic) may not be entirely accurate, so check the output and change
@@ -136,7 +131,7 @@ assumed to be centred on the point estimate.</p>
 <code class="sourceCode R"><span><span class="va">resultsA</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"A"</span><span class="op">)</span></span>
 <span><span class="va">resultsB</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"B"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span></span>
 <span>  panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>  col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>  row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
@@ -155,16 +150,8 @@ assumed to be centred on the point estimate.</p>
 <span>  col.heading.space <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  </span>
 <span>  <span class="co"># set panel width + CI colours</span></span>
-<span>  panel.width       <span class="op">=</span> <span class="fl">18</span>,</span>
-<span>  cicolour          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span>,</span>
-<span>  printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
-<span><span class="co">#&gt; Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `linewidth` argument instead.</span></span>
-<span></span>
-<span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fix_panel.html">fix_panel</a></span><span class="op">(</span><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span>, width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">18</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span></code></pre></div>
+<span>  panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">18</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>  cicolour          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_confidence_intervals_files/figure-html/forest-plot-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>The <code>cicolour</code> argument can be a vector of all names of
 colours, or all names of columns (which contain colour names).</p>
@@ -177,7 +164,7 @@ interval lines are plotted under or over the point estimates. This can
 be done using the <code>panel.width</code> argument and using a logical
 (or character) vector for the <code>ciunder</code> argument.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span></span>
 <span>  panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>  col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>  row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
@@ -195,15 +182,11 @@ be done using the <code>panel.width</code> argument and using a logical
 <span>  col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>  </span>
 <span>  <span class="co"># set panel width + CI under or over</span></span>
-<span>  panel.width       <span class="op">=</span> <span class="fl">18</span>,</span>
+<span>  panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">18</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>  shape             <span class="op">=</span> <span class="fl">22</span>,</span>
 <span>  stroke            <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  fill              <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>  ciunder           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fix_panel.html">fix_panel</a></span><span class="op">(</span><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span>, width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">18</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span></code></pre></div>
+<span>  ciunder           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_confidence_intervals_files/figure-html/forest-plot-3-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -216,8 +199,7 @@ colour names.</p>
 <code class="sourceCode R"><span><span class="va">resultsA</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"A"</span><span class="op">)</span></span>
 <span><span class="va">resultsB</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"B"</span><span class="op">)</span></span>
 <span></span>
-<span></span>
-<span><span class="va">forestplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span></span>
 <span>  panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>  col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>  row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
@@ -235,16 +217,12 @@ colour names.</p>
 <span>  col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>  </span>
 <span>  <span class="co"># set panel width + CI and fill colours</span></span>
-<span>  panel.width       <span class="op">=</span> <span class="fl">18</span>,</span>
+<span>  panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">18</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>  stroke            <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>  shape             <span class="op">=</span> <span class="fl">22</span>,</span>
 <span>  fill              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span>,</span>
 <span>  cicolour          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  ciunder           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fix_panel.html">fix_panel</a></span><span class="op">(</span><span class="va">forestplot</span><span class="op">$</span><span class="va">plot</span>, width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">18</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="va">plot</span><span class="op">)</span></span></code></pre></div>
+<span>  ciunder           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_confidence_intervals_files/figure-html/forest-plot-4-1.png" width="672" style="display: block; margin: auto;"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,6 +80,8 @@
 <span>  gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
 <span>  colour <span class="op">=</span> <span class="st">"black"</span>,</span>
@@ -110,7 +112,15 @@
 
 
 <dt>ratio</dt>
-<dd><p>The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)</p></dd>
+<dd><p>The ratio (y-axis:x-axis) to use for the plot. Ignored if both width and height are set. (Default: 1.5)</p></dd>
+
+
+<dt>width</dt>
+<dd><p>A <code><a href="https://rdrr.io/r/grid/unit.html" class="external-link">grid::unit</a></code> object to set the width of the plot (not including the gap or extension).</p></dd>
+
+
+<dt>height</dt>
+<dd><p>A <code><a href="https://rdrr.io/r/grid/unit.html" class="external-link">grid::unit</a></code> object to set the height of the plot (not including the gap or extension).</p></dd>
 
 
 <dt>base_size</dt>

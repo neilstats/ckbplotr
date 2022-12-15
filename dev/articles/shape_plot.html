@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -124,9 +124,10 @@ true. This will plot exp(estimates) and use a log scale for the axis (if
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           logscale     <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span>
-<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Narrow confidence interval lines may become hidden in the shape plot.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please check your final output carefully and see</span></span>
+<span><span class="co">#&gt;   vignette("shape_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This message is displayed once per session.</span></span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/log-scale-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -152,8 +153,7 @@ for different groups (using shades of grey for the fill colour). Use the
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>           legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/groups-1.png" width="50%" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="labelling-groups">Labelling groups<a class="anchor" aria-label="anchor" href="#labelling-groups"></a>
@@ -174,7 +174,6 @@ the plot:</p>
 <span>                         ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                         legend.position <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>                         printplot    <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span>
 <span></span>
 <span><span class="va">shape_plot</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">is_female</span><span class="op">)</span>,</span>
@@ -200,7 +199,6 @@ containing missing values.</p>
 <span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>           </span>
 <span>           addaes       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>estimates <span class="op">=</span> <span class="st">"label = NA"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span>
 <span><span class="co">#&gt; Warning: Removed 4 rows containing missing values (`geom_text()`).</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/remove-estimates-text-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>See <a href="adding_editing_code.Rmd">“Changing generated code”</a>
@@ -225,7 +223,8 @@ group.</p>
 <span>           title        <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           lines        <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
 <span><span class="co">#&gt; Warning: The following aesthetics were dropped during statistical transformation: <span style="color: #00BB00;">weight</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> This can happen when ggplot fails to infer the correct grouping structure in</span></span>
 <span><span class="co">#&gt;   the data.</span></span>
@@ -325,8 +324,7 @@ the value will be used for all points.</p>
 <span>           shape        <span class="op">=</span> <span class="fl">23</span>,</span>
 <span>           colour       <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>           fill         <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span>           cicolour     <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>           cicolour     <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/aesthetics-with-values-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
@@ -348,8 +346,7 @@ will be used.</p>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           colour       <span class="op">=</span> <span class="st">"fillcol"</span>,</span>
-<span>           fill         <span class="op">=</span> <span class="st">"fillcol"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>           fill         <span class="op">=</span> <span class="st">"fillcol"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/aesthetics-with-columns-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -375,8 +372,7 @@ points, intervals and text do not overlap:</p>
 <span>           addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point     <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
 <span>                         ci        <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
 <span>                         n         <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span>,</span>
-<span>                         estimates <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>                         estimates <span class="op">=</span> <span class="st">"position = position_dodge(width = 0.5)"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shape_plot_files/figure-html/unnamed-chunk-2-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">

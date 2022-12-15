@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,9 +144,10 @@ plot can be created.</p>
 <span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the plot. Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.</span></span>
-<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Narrow confidence interval lines may become hidden in the shape plot.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please check your final output carefully and see</span></span>
+<span><span class="co">#&gt;   vignette("shape_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This message is displayed once per session.</span></span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/simple-example-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>For more details on customising these plots, see <a href="shape_plot.html">“More with shape plots”</a>.</p>
 <p><em>Narrow confidence interval lines may become hidden in plots.
@@ -199,9 +200,10 @@ arguments.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key      <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span>
-<span><span class="co">#&gt; Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `linewidth` argument instead.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Narrow confidence interval lines may become hidden in the forest plot.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please check your final output carefully and see</span></span>
+<span><span class="co">#&gt;   vignette("forest_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This message is displayed once per session.</span></span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/simple-forest-plot-1.png" width="90%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
@@ -245,8 +247,7 @@ the <code>row.labels</code> data frame.</p>
 <span>            xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            pointsize         <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            pointsize         <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/using-row-labels-1.png" width="672" style="display: block; margin: auto;"></p>
 <p>In this plot we’ve also use the <code>panel.headings</code>,
 <code>xlim</code>, <code>xticks</code>, <code>scalepoints</code>, and

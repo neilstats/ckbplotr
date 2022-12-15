@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,8 +130,9 @@
 <span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
 <span>  stroke <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  printplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  showcode <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  printplot <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
+<span>  showcode <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
 <span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addaes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addarg <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -208,8 +209,9 @@
 <span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
 <span>  stroke <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  printplot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  showcode <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  printplot <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
+<span>  showcode <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
 <span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addaes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addarg <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -471,7 +473,7 @@ given in the col.key column.</p></dd>
 
 
 <dt>panel.width</dt>
-<dd><p>Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".</p></dd>
+<dd><p>Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.</p></dd>
 
 
 <dt>base_size</dt>
@@ -486,12 +488,16 @@ given in the col.key column.</p></dd>
 <dd><p>Size of outline of shapes. (Default: 0)</p></dd>
 
 
+<dt>quiet</dt>
+<dd><p>Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)</p></dd>
+
+
 <dt>printplot</dt>
-<dd><p>Print the plot. (Default: TRUE)</p></dd>
+<dd><p>Print the plot. (Default: !quiet)</p></dd>
 
 
 <dt>showcode</dt>
-<dd><p>Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)</p></dd>
+<dd><p>Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)</p></dd>
 
 
 <dt>addcode</dt>

@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,11 +132,10 @@ customise the column headings.</p>
 <span>            col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
 <span>            col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>            col.heading.space <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span>
-<span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
-<span><span class="co">#&gt; Warning: The `size` argument of `element_line()` is deprecated as of ggplot2 3.4.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `linewidth` argument instead.</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Narrow confidence interval lines may become hidden in the forest plot.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please check your final output carefully and see</span></span>
+<span><span class="co">#&gt;   vignette("forest_confidence_intervals") for more details.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This message is displayed once per session.</span></span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/adding-columns-of-text-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>Multiple columns can be added by specifying vectors for
 <code>col.left</code>, <code>col.right</code>,
@@ -160,8 +159,7 @@ customise the column headings.</p>
 <span>            col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Some other\nnumbers"</span>, <span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>            col.right         <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>            col.right.heading <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HR"</span>, <span class="st">"N"</span><span class="op">)</span>,</span>
-<span>            col.heading.space <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            col.heading.space <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/adding-columns-of-text-2-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>The <code>col.left.hjust</code> and <code>col.right.hjust</code>
 arguments set the horizontal justification of the columns (0 = left, 0.5
@@ -211,8 +209,7 @@ customising the colour(s) of point and confidence interval lines.</p>
 <span>            blankrows         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>            scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            pointsize         <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>            plotcolour        <span class="op">=</span> <span class="st">"navyblue"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            plotcolour        <span class="op">=</span> <span class="st">"navyblue"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/plot-colour-1.png" width="960" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -290,8 +287,7 @@ values or column names.</p>
 <span>            shape            <span class="op">=</span> <span class="fl">16</span>,</span>
 <span>            colour           <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>            cicolour         <span class="op">=</span> <span class="st">"black"</span>,</span>
-<span>            ciunder          <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            ciunder          <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
@@ -320,8 +316,7 @@ values or column names.</p>
 <span>            colour           <span class="op">=</span> <span class="st">"colour"</span>,</span>
 <span>            col.bold         <span class="op">=</span> <span class="st">"bold"</span>,</span>
 <span>            col.diamond      <span class="op">=</span> <span class="st">"diamond"</span>,</span>
-<span>            ciunder          <span class="op">=</span> <span class="st">"ciunder"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            ciunder          <span class="op">=</span> <span class="st">"ciunder"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>If a parameter is not set, then default values are used for these
 aesthetics. If a parameter is set, then every data frame provided in
@@ -348,8 +343,7 @@ a list is supplied, only the first element will be used.)</p>
 <span>            pointsize        <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>            col.left         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
 <span>            col.left.heading <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
-<span>            diamond          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nmr_l_ldl_tg"</span>, <span class="st">"nmr_m_ldl_tg"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            diamond          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nmr_l_ldl_tg"</span>, <span class="st">"nmr_m_ldl_tg"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/unnamed-chunk-4-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 </div>
@@ -391,8 +385,7 @@ satisfactory layout.</p>
 <span>            col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>            col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>            addtext           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA_extra</span>, <span class="va">resultsB_extra</span><span class="op">)</span>,</span>
-<span>            right.space       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">35</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            right.space       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">35</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>To add multiple tests results and/or text under the same row, use
 separate in the <code>addtext</code> data frames:</p>
@@ -419,8 +412,7 @@ separate in the <code>addtext</code> data frames:</p>
 <span>            col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>            col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>            addtext           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA_extra</span><span class="op">)</span>,</span>
-<span>            right.space       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">35</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>            right.space       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">35</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/unnamed-chunk-10-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
@@ -431,9 +423,10 @@ side-by-side. Facets cannot easily have different scales (or limits or
 ticks) applied, so it’s not directly possible to have different limits
 and ticks on each forest plot.</p>
 <p>However, one approach to work around this is to use
-<code><a href="../reference/forest_plot.html">forest_plot()</a></code> for each plot you need, remove the labels
-from all but the first, then arrange them side-by-side. The
-<code>gridExtra</code> package can be used for this last step.</p>
+<code><a href="../reference/forest_plot.html">forest_plot()</a></code> for each plot you need, setting the same
+<code>panel.width</code> for all, remove the labels from all but the
+first, then arrange them side-by-side. The <code>gridExtra</code>
+package can be used for this last step.</p>
 <p>Step 1: Use <code><a href="../reference/forest_plot.html">forest_plot()</a></code> for each plot.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,</span>
@@ -453,8 +446,8 @@ from all but the first, then arrange them side-by-side. The
 <span>                           col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
 <span>                           col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>                           col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>                           panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">20</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>                           printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span>
 <span></span>
 <span><span class="va">forestplot2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>                           col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
@@ -473,8 +466,8 @@ from all but the first, then arrange them side-by-side. The
 <span>                           col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
 <span>                           col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>                           col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>                           printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Narrow confidence interval lines may become hidden in the forest plot. Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.</span></span></code></pre></div>
+<span>                           panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">20</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                           printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Step 2: Remove the axis text for all but the first plot.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">forestplot1</span><span class="op">$</span><span class="va">plot</span></span>
@@ -482,12 +475,10 @@ from all but the first, then arrange them side-by-side. The
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">forestplot2</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> </span>
 <span>  <span class="fu">theme</span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Step 3: Arrange the plots using <code>gridExtra</code> (there may be
-other packages that also work), using <code><a href="../reference/fix_panel.html">fix_panel()</a></code> to set
-the same width for both panels. (Adjust the <code>widths</code> argument
+other packages that also work). (Adjust the <code>widths</code> argument
 until you get a suitable layout.)</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="fu"><a href="../reference/fix_panel.html">fix_panel</a></span><span class="op">(</span><span class="va">p1</span>, width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">20</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                        <span class="fu"><a href="../reference/fix_panel.html">fix_panel</a></span><span class="op">(</span><span class="va">p2</span>, width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">20</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>,</span>
 <span>                        nrow <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                        widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plot_files/figure-html/unnamed-chunk-13-1.png" width="960" style="display: block; margin: auto;"></p>
