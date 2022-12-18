@@ -614,7 +614,7 @@ forest_plot <- function(
   }
 
   ## check if confidence intervals may be hidden
-  if (missing(panel.width) || !(length(cicolour) > 1 | length(ciunder) > 1)){
+  if (missing(panel.width)){
     rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
                     'i' = 'Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.'),
                   use_cli_format = TRUE,
@@ -672,7 +672,10 @@ forest_plot <- function(
 
   cicolour.aes <- NULL
   if (is.null(cicolour)) {
-    cicolour <- plotcolour
+    cicolour <- c(plotcolour, fixq("white"))
+    if (length(fill) > 0 && fill == "white") {
+      cicolour <- c(plotcolour, plotcolour)
+    }
   } else if(is.list(cicolour)){
     cicolour <- lapply(cicolour, fixq)
   } else if (all(cicolour %in% names(panels[[1]]))){
@@ -845,6 +848,10 @@ forest_plot <- function(
     cicolours <- c(cicolour, cicolour.aes)
     cicolour.aes <- "cicolour"
     cicolour <- NULL
+
+    if (missing(ciunder)) {
+      ciunder <- c(TRUE, FALSE)
+    }
   }
 
   if (!missing(panel.width) && length(ciunder) > 1) {

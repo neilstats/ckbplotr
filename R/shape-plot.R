@@ -151,7 +151,10 @@ shape_plot <- function(data,
 
   cicolour.aes <- NULL
   if (is.null(cicolour)) {
-    cicolour <- plotcolour
+    cicolour <- c(plotcolour, fixq("white"))
+    if (length(fill) > 0 && fill == "white") {
+      cicolour <- c(plotcolour, plotcolour)
+    }
   }
   else if (all(cicolour %in% names(data))){
     cicolour.aes <- fixsp(cicolour)

@@ -26,7 +26,7 @@ When making a shape plot, if a confidence interval line is smaller than the poin
 The sections below show how to change the colour of confidence lines and/or plot confidence lines before or after points. After using these methods, you should still carefully check the output (i.e. your final output file, not an RStudio preview) to ensure confidence interval lines are not hidden.
 
 ## Changing the colour
-To plot short confidence widths a different colour, set the `height` argument of `shape_plot()` (this will also fix the height of the plot). The `cicolour` argument should also be a character vector - the last element will be used for short confidence intervals.
+To plot short confidence widths a different colour, set the `height` argument of `shape_plot()` (this will also fix the height of the plot).
 
 Notes: This has been designed to work well for shape 15 (the default) and 22. The calculation of sizes (and accounting for the stroke aesthetic) may not be entirely accurate, so check the output and change the `height` argument as needed. Confidence intervals are assumed to be centred on the point estimate.
 
@@ -42,9 +42,11 @@ shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
            scalepoints  = TRUE,
            pointsize    = 9,
            logscale     = TRUE,
-           height       = unit(90, "mm"),
-           cicolour     = c("black", "white"))
+           height       = unit(90, "mm"))
 ```
+
+The `cicolour` argument can be a character vector - the last element will be used for short confidence intervals.
+
 
 You may want to adjust the position of the text plotted above and below points, using `addaes` or `addarg` to change `vjust` values:
 
@@ -61,7 +63,6 @@ shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
            pointsize    = 15,
            logscale     = TRUE,
            height       = 90,
-           cicolour     = c("black", "white"),
            addaes       = list(estimates = "vjust = - 0.8 - as.numeric(narrowci) * 0.04 / se",
                                n         = "vjust = 1.8 + as.numeric(narrowci) * 0.04 / se"))
 ```
