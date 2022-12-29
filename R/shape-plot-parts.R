@@ -12,7 +12,6 @@ shape.cicolourcode <- function(scale,
                                gap,
                                ext,
                                shape,
-                               shape.aes,
                                cicolours,
                                col.group) {
 
@@ -39,7 +38,7 @@ shape.cicolourcode <- function(scale,
                   sprintf('(%s)/max(%s) * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
                           size, size,
                           (ymax - ymin) * (pointsize + 2 * stroke) / height.mm,
-                          c(shape, shape.aes))),
+                          c(shape$arg, shape$aes))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(!is.null(col.group)){
@@ -156,13 +155,10 @@ shape.estimates.points <- function(addaes,
                                    col.lci,
                                    col.estimate,
                                    col.stderr,
-                                   shape.aes,
-                                   fill_string.aes,
-                                   colour.aes,
-                                   addarg,
                                    shape,
-                                   colour,
                                    fill_string,
+                                   colour,
+                                   addarg,
                                    stroke) {
   make_layer(
     '# Plot the point estimates',
@@ -170,13 +166,13 @@ shape.estimates.points <- function(addaes,
     aes = c(
       addaes$point,
       sprintf('size = %s', size),
-      sprintf('shape = %s', shape.aes),
-      sprintf('%s', fill_string.aes),
-      sprintf('colour = %s', colour.aes)),
+      sprintf('shape = %s', shape$aes),
+      sprintf('%s', fill_string$aes),
+      sprintf('colour = %s', colour$aes)),
     arg = c(addarg$point,
-            sprintf('shape = %s', shape),
-            sprintf('colour = %s', colour),
-            sprintf('%s', fill_string),
+            sprintf('shape = %s', shape$arg),
+            sprintf('colour = %s', colour$arg),
+            sprintf('%s', fill_string$arg),
             sprintf('stroke = %s', stroke))
   )
 }
@@ -234,10 +230,9 @@ shape.n.events.text <- function(addaes,
 shape.cis <- function(addaes,
                       lci_string,
                       uci_string,
-                      cicolour.aes,
+                      cicolour,
                       addarg,
                       ciunder,
-                      cicolour,
                       base_line_size,
                       type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
@@ -247,13 +242,13 @@ shape.cis <- function(addaes,
     aes = c(addaes$ci,
             sprintf('ymin = %s', lci_string),
             sprintf('ymax = %s', uci_string),
-            sprintf('colour = %s', cicolour.aes)),
+            sprintf('colour = %s', cicolour$aes)),
     arg = c(addarg$ci,
             switch(type,
                    "all" = '',
                    "before" = sprintf('data = ~ dplyr::filter(.x, %s)', fixsp(ciunder)),
                    "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', fixsp(ciunder))),
-            sprintf('colour = %s', cicolour),
+            sprintf('colour = %s', cicolour$arg),
             sprintf('linewidth = %s', base_line_size))
   )
 }

@@ -20,11 +20,11 @@ shape_plot(
   minse = NA,
   pointsize = 3,
   col.group = NULL,
-  shape = NULL,
+  shape = 15,
   plotcolour = "black",
-  colour = NULL,
+  colour = plotcolour,
   cicolour = colour,
-  fill = NULL,
+  fill = colour,
   ciunder = NULL,
   lines = FALSE,
   xlims,
@@ -67,11 +67,11 @@ make_shape_plot(
   minse = NA,
   pointsize = 3,
   col.group = NULL,
-  shape = NULL,
+  shape = 15,
   plotcolour = "black",
-  colour = NULL,
+  colour = plotcolour,
   cicolour = colour,
-  fill = NULL,
+  fill = colour,
   ciunder = NULL,
   lines = FALSE,
   xlims,
@@ -132,7 +132,7 @@ estimates. (Default: 3)}
 
 \item{col.group}{Name of column that groups the estimates. (Default: NULL)}
 
-\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 16 - squares.)}
+\item{shape}{Shape of points. An integer, or name of a column of integers. (Default: 15)}
 
 \item{plotcolour}{Colour for non-data aspects of the plot. (Default: "black")}
 

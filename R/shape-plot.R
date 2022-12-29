@@ -13,7 +13,7 @@
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
 #' @param col.n Name of column that provides number to be plotted below CIs.
 #' @param col.group Name of column that groups the estimates. (Default: NULL)
-#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 16 - squares.)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default: 15)
 #' @param plotcolour Colour for non-data aspects of the plot. (Default: "black")
 #' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
 #' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
@@ -78,11 +78,11 @@ shape_plot <- function(data,
                        minse         = NA,
                        pointsize     = 3,
                        col.group     = NULL,
-                       shape         = NULL,
+                       shape         = 15,
                        plotcolour    = "black",
-                       colour        = NULL,
+                       colour        = plotcolour,
                        cicolour      = colour,
-                       fill          = NULL,
+                       fill          = colour,
                        ciunder       = NULL,
                        lines         = FALSE,
                        xlims,
@@ -112,7 +112,7 @@ shape_plot <- function(data,
   # Check arguments ----
   if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
-  if (!is.null(col.group) && !is.null(fill)) stop("col.group and fill both control fill, so do not specify both")
+  if (!is.null(col.group) && !missing(fill)) stop("col.group and fill both control fill, so do not specify both")
   if (missing(xlims)) stop("xlims must be specified")
   if (missing(ylims)) stop("ylims must be specified")
 
@@ -135,52 +135,52 @@ shape_plot <- function(data,
 
 
   # Aesthetics ----
-  ## default value, match column name, or use argument itself
-  shape.aes <- NULL
-  if (is.null(shape)) {
-    shape <- 15
-    if (!is.null(col.group)){
-      shape <- 22
-    }
-  } else if (shape %in% names(data)){
-    shape.aes <- fixsp(shape)
-    shape <- NULL
+  ##  match column name, or use argument itself
+
+  ### evaluation colour, cicolour, fill so that when plotcolour
+  ### is changed, it does not affect these defaults
+  force(colour)
+  force(cicolour)
+  force(fill)
+
+  ### shape
+  if (missing(shape) && !is.null(col.group)){
+    shape <- 22
+  }
+  if (!missing(shape) && shape %in% names(data)){
+    shape <- list(aes = fixsp(shape))
+  } else {
+    shape <- list(arg = shape)
   }
 
+  ### plotcolour
   plotcolour <- fixq(plotcolour)
 
-  cicolour.aes <- NULL
-  if (is.null(cicolour)) {
-    cicolour <- c(plotcolour, fixq("white"))
-    if (length(fill) > 0 && fill == "white") {
-      cicolour <- c(plotcolour, plotcolour)
+  ### cicolour
+  if (all(cicolour %in% names(data))){
+    cicolour <- list(aes = fixsp(cicolour))
+  } else {
+    if (missing(cicolour)) {
+      cicolour <- c(cicolour, "white")
+      if (fill == "white") {
+        cicolour <- c(cicolour[[1]], cicolour[[1]])
+      }
     }
-  }
-  else if (all(cicolour %in% names(data))){
-    cicolour.aes <- fixsp(cicolour)
-    cicolour <- NULL
-  } else {
-    cicolour <- fixq(cicolour)
+    cicolour <- list(arg = fixq(cicolour))
   }
 
-  colour.aes <- NULL
-  if (is.null(colour)) {
-    colour <- plotcolour
-  } else if (colour %in% names(data)){
-    colour.aes <- fixsp(colour)
-    colour <- NULL
+  ### colour
+  if (!missing(colour) && colour %in% names(data)){
+    colour <- list(aes = fixsp(colour))
   } else {
-    colour <- fixq(colour)
+    colour <- list(arg = fixq(colour))
   }
 
-  fill.aes <- NULL
-  if (is.null(fill)) {
-    fill <- plotcolour
-  } else if (fill %in% names(data)){
-    fill.aes <- fixsp(fill)
-    fill <- NULL
+  ### fill
+  if (fill %in% names(data)){
+    fill <- list(aes = fixsp(fill))
   } else {
-    fill <- fixq(fill)
+    fill <- list(arg = fixq(fill))
   }
 
 
@@ -228,9 +228,8 @@ shape_plot <- function(data,
     if (!inherits(height, "unit")){
       height <- grid::unit(height, "mm")
     }
-    cicolours <- c(cicolour, cicolour.aes)
-    cicolour.aes <- "cicolour"
-    cicolour <- NULL
+    cicolours <- c(cicolour$arg, cicolour$aes)
+    cicolour <- list(aes = "cicolour")
   }
 
   if (!missing(height)) {
@@ -238,16 +237,8 @@ shape_plot <- function(data,
     ciunder <- "ciunder"
   }
 
-  if (is.list(fill)){
-    fill_orig <- fill
-    fill.aes <- "fill"
-    fill <- NULL
-  }
-
 
   # Using groups ----
-  fill_string <- NULL
-  fill_string.aes <- NULL
   if (!is.null(col.group)) {
 
     if(!is.factor(data[[col.group]])) stop("col.group must be factor")
@@ -259,12 +250,12 @@ shape_plot <- function(data,
                                               "end   = 1",
                                               sprintf('name  = "%s"', legend.name)),
                                       br = FALSE))
-    fill_string.aes <- sprintf('fill = %s', fixsp(col.group))
+    fill_string <- list(aes = sprintf('fill = %s', fixsp(col.group)))
   } else {
     group_string <- ''
     scale_fill_string <- 'scale_fill_identity() +'
-    fill_string <- sprintf('fill = %s', fill)
-    fill_string.aes <-  sprintf('fill = %s', fill.aes)
+    fill_string <- list(arg = sprintf('fill = %s', fill$arg),
+                        aes = sprintf('fill = %s', fill$aes))
   }
 
 
@@ -300,7 +291,6 @@ shape_plot <- function(data,
                        gap,
                        ext,
                        shape,
-                       shape.aes,
                        cicolours,
                        col.group),
 
@@ -328,10 +318,9 @@ shape_plot <- function(data,
            shape.cis(addaes,
                      lci_string,
                      uci_string,
-                     cicolour.aes,
+                     cicolour,
                      addarg,
                      ciunder,
-                     cicolour,
                      base_line_size,
                      type = ci_order[[1]]),
 
@@ -342,13 +331,10 @@ shape_plot <- function(data,
                                   col.lci,
                                   col.estimate,
                                   col.stderr,
-                                  shape.aes,
-                                  fill_string.aes,
-                                  colour.aes,
-                                  addarg,
                                   shape,
-                                  colour,
                                   fill_string,
+                                  colour,
+                                  addarg,
                                   stroke),
 
            # text above points
@@ -374,10 +360,9 @@ shape_plot <- function(data,
            shape.cis(addaes,
                      lci_string,
                      uci_string,
-                     cicolour.aes,
+                     cicolour,
                      addarg,
                      ciunder,
-                     cicolour,
                      base_line_size,
                      type = ci_order[[2]]),
 
