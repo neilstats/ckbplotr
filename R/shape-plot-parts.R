@@ -142,7 +142,7 @@ shape.lines <- function(addaes,
                      'se       = FALSE',
                      sprintf('colour = %s', plotcolour),
                      'linetype = "dashed"',
-                     'size     = 0.25')
+                     'linewidth = 0.25')
   )
 }
 
