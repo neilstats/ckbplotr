@@ -166,6 +166,7 @@ forest_plot(panels           = list(resultsA),
             pointsize        = 3,
             shape            = "shape",
             colour           = "colour",
+            fill             = "fill",
             col.bold         = "bold",
             col.diamond      = "diamond",
             ciunder          = "ciunder")

@@ -445,11 +445,11 @@ make_forest_data <- forest_data
 #' @param nullval Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
-#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default: 15 (square))
 #' @param plotcolour Colour for all parts of the plot. (Default: "black")
 #' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
-#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
-#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use colour.)
+#' @param fill Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
 #' @param diamond Alternative to col.diamond. A character vectors identify the rows
@@ -537,11 +537,11 @@ forest_plot <- function(
     scalepoints   = FALSE,
     minse         = NULL,
     pointsize     = 3,
-    shape     = NULL,
+    shape     = 15,
     plotcolour = "black",
-    colour    = NULL,
+    colour    = plotcolour,
     cicolour  = colour,
-    fill      = NULL,
+    fill      = colour,
     ciunder   = NULL,
     addtext       = NULL,
     bottom.space  = 0.7,
@@ -658,56 +658,56 @@ forest_plot <- function(
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
 
+
+
   # Handling aesthetics ----
-  ## default value, match column name, or use argument itself
-  shape.aes <- NULL
-  if (is.null(shape)) {
-    shape <- 15
-  } else if (shape %in% names(panels[[1]])){
-    shape.aes <- fixsp(shape)
-    shape <- NULL
+  ## match column name, or use argument itself
+
+  ### shape
+  if (!missing(shape) && shape %in% names(panels[[1]])){
+    shape <- list(aes = fixsp(shape))
+  } else {
+    shape <- list(arg = shape)
   }
 
+  ### plotcolour
   plotcolour <- fixq(plotcolour)
 
-  cicolour.aes <- NULL
-  if (is.null(cicolour)) {
-    cicolour <- c(plotcolour, fixq("white"))
-    if (length(fill) > 0 && fill == "white") {
-      cicolour <- c(plotcolour, plotcolour)
-    }
-  } else if(is.list(cicolour)){
-    cicolour <- lapply(cicolour, fixq)
+  ### cicolour
+  if(is.list(cicolour)){
+    cicolour <- list(arg = lapply(cicolour, fixq))
   } else if (all(cicolour %in% names(panels[[1]]))){
-    cicolour.aes <- fixsp(cicolour)
-    cicolour <- NULL
+    cicolour <- list(aes = fixsp(cicolour))
   } else {
-    cicolour <- fixq(cicolour)
+    if (missing(cicolour)) {
+      cicolour <- c(cicolour, "white")
+      if (fill == "white") {
+        cicolour <- c(cicolour[[1]], cicolour[[1]])
+      }
+    }
+    cicolour <- list(arg = fixq(cicolour))
   }
 
-  colour.aes <- NULL
-  if (is.null(colour)) {
-    colour <- plotcolour
-  } else if (all(colour %in% names(panels[[1]]))){
-    colour.aes <- fixsp(colour)
-    colour <- NULL
+  ### colour
+  if (!missing(colour) && all(colour %in% names(panels[[1]]))){
+    colour <- list(aes = fixsp(colour))
   } else {
-    colour <- fixq(colour)
+    colour <- list(arg = fixq(colour))
   }
 
-  fill.aes <- NULL
-  if (is.null(fill)) {
-    fill <- plotcolour
-  } else if(is.list(fill)){
-    fill <- lapply(fill, fixq)
+  ### fill
+  if (is.list(fill)){
+    fill <- list(arg = lapply(fill, fixq))
   } else if (fill %in% names(panels[[1]])){
-    fill.aes <- fixsp(fill)
-    fill <- NULL
+    fill <- list(aes = fixsp(fill))
   } else {
-    fill <- fixq(fill)
+    fill <- list(arg = fixq(fill))
   }
 
+  ### col.bold
   if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- fixsp(col.bold)}
+
+
 
 
   # Spacing ----
@@ -845,9 +845,8 @@ forest_plot <- function(
     if (!inherits(panel.width, "unit")){
       panel.width <- grid::unit(panel.width, "mm")
     }
-    cicolours <- c(cicolour, cicolour.aes)
-    cicolour.aes <- "cicolour"
-    cicolour <- NULL
+    cicolours <- c(cicolour$arg, cicolour$aes)
+    cicolour <- list(aes = "cicolour")
 
     if (missing(ciunder)) {
       ciunder <- c(TRUE, FALSE)
@@ -859,10 +858,9 @@ forest_plot <- function(
     ciunder <- "ciunder"
   }
 
-  if (is.list(fill)){
-    fill_orig <- fill
-    fill.aes <- "fill"
-    fill <- NULL
+  if (is.list(fill$arg)){
+    fill_orig <- fill$arg
+    fill <- list(aes = "fill")
   }
 
 
@@ -954,7 +952,6 @@ forest_plot <- function(
                         stroke,
                         panel.width,
                         shape,
-                        shape.aes,
                         cicolours,
                         panel.names),
 
@@ -976,43 +973,38 @@ forest_plot <- function(
 
            # code for CI lines plotted before points
            forest.cis(addaes,
-                      cicolour.aes,
+                      cicolour,
                       addarg,
                       ciunder,
-                      cicolour,
                       base_line_size,
                       type = ci_order[[1]]),
 
            # code to plot points
            forest.plot.points(addaes,
-                              shape.aes,
-                              colour.aes,
-                              fill.aes,
-                              addarg,
-                              xfrom,
-                              xto,
                               shape,
                               colour,
                               fill,
+                              addarg,
+                              xfrom,
+                              xto,
                               stroke,
                               pointsize),
 
            # code for CI lines plotted after points
            # code for CI lines plotted before points
            forest.cis(addaes,
-                      cicolour.aes,
+                      cicolour,
                       addarg,
                       ciunder,
-                      cicolour,
                       base_line_size,
                       type = ci_order[[2]]),
 
            # code to add arrows to CIs
-           forest.arrows(addaes, cicolour.aes, addarg, cicolour, base_line_size),
+           forest.arrows(addaes, cicolour, addarg, base_line_size),
 
            # code for plotting diamonds
            if(!is.null(col.diamond) || !is.null(diamond)){
-             forest.plotdiamondscode(cicolour.aes, fill.aes, cicolour, fill, stroke)
+             forest.plotdiamondscode(cicolour, fill, stroke)
            },
 
            # code for scales and coordinates

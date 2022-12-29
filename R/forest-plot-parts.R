@@ -61,7 +61,16 @@ forest.check.cis <- function(xto, xfrom) {
 
 #' code for CI colours if using panel.width
 #' @noRd
-forest.cicolourcode <- function(scale, inv_tf, xto, xfrom, pointsize, stroke, panel.width, shape, shape.aes, cicolours, panel.names) {
+forest.cicolourcode <- function(scale,
+                                inv_tf,
+                                xto,
+                                xfrom,
+                                pointsize,
+                                stroke,
+                                panel.width,
+                                shape,
+                                cicolours,
+                                panel.names) {
 
   if(!inherits(panel.width, "unit")){return(NULL)}
   panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
@@ -74,7 +83,7 @@ forest.cicolourcode <- function(scale, inv_tf, xto, xfrom, pointsize, stroke, pa
                    scale, scale),
            indent(26,
                   sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
-                          (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm, c(shape, shape.aes))),
+                          (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm, c(shape$arg, shape$aes))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(is.list(cicolours)){
@@ -216,16 +225,16 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
 
 #' code for plotting diamonds
 #' @noRd
-forest.plotdiamondscode <- function(cicolour.aes, fill.aes, cicolour, fill, stroke) {
+forest.plotdiamondscode <- function(cicolour, fill, stroke) {
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
     aes = c('x = x, y = y, group = row',
-            sprintf('colour = %s', cicolour.aes[1]),
-            sprintf('fill = %s', fill.aes)),
+            sprintf('colour = %s', cicolour$aes[1]),
+            sprintf('fill = %s', fill$aes)),
     arg = c('data = diamonds',
-            sprintf('colour = %s', cicolour[1]),
-            sprintf('fill = %s', fill),
+            sprintf('colour = %s', cicolour$arg[1]),
+            sprintf('fill = %s', fill$arg),
             sprintf('linewidth = %s', stroke))
   )
 }
@@ -267,7 +276,15 @@ forest.nullline <- function(nullval, base_line_size, plotcolour) {
 
 #' code to plot points
 #' @noRd
-forest.plot.points <- function(addaes, shape.aes, colour.aes, fill.aes, addarg, xfrom, xto, shape, colour, fill, stroke, pointsize) {
+forest.plot.points <- function(addaes,
+                               shape,
+                               colour,
+                               fill,
+                               addarg,
+                               xfrom,
+                               xto,
+                               stroke,
+                               pointsize) {
   c(
     make_layer(
       c('# Plot points at the transformed estimates',
@@ -275,15 +292,15 @@ forest.plot.points <- function(addaes, shape.aes, colour.aes, fill.aes, addarg, 
       f = 'geom_point',
       aes = c(addaes$point,
               'size = size',
-              sprintf('shape = %s', shape.aes),
-              sprintf('colour = %s', colour.aes),
-              sprintf('fill = %s', fill.aes)),
+              sprintf('shape = %s', shape$aes),
+              sprintf('colour = %s', colour$aes),
+              sprintf('fill = %s', fill$aes)),
       arg = c(addarg$point,
               sprintf('data = ~ dplyr::filter(.x, estimate_transformed > %s, estimate_transformed < %s)',
                       xfrom, xto),
-              sprintf('shape = %s', shape),
-              sprintf('colour = %s', colour),
-              sprintf('fill = %s', fill),
+              sprintf('shape = %s', shape$arg),
+              sprintf('colour = %s', colour$arg),
+              sprintf('fill = %s', fill$arg),
               sprintf('stroke = %s', stroke),
               'na.rm = TRUE')
     ),
@@ -299,7 +316,7 @@ forest.plot.points <- function(addaes, shape.aes, colour.aes, fill.aes, addarg, 
 
 #' code for plotting confidence interval lines
 #' @noRd
-forest.cis <- function(addaes, cicolour.aes, addarg, ciunder, cicolour, base_line_size,
+forest.cis <- function(addaes, cicolour, addarg, ciunder, base_line_size,
                        type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
   make_layer(
@@ -311,13 +328,13 @@ forest.cis <- function(addaes, cicolour.aes, addarg, ciunder, cicolour, base_lin
     aes = c(addaes$ci,
             'xmin = lci_transformed',
             'xmax = uci_transformed',
-            sprintf('colour = %s', cicolour.aes[1])),
+            sprintf('colour = %s', cicolour$aes[1])),
     arg = c(addarg$ci,
             switch(type,
                    "all" = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed))',
                    "before" = sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s)', ciunder),
                    "after" = sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s)', ciunder)),
-            sprintf('colour = %s', cicolour[1]),
+            sprintf('colour = %s', cicolour$arg[1]),
             'width = 0',
             sprintf('linewidth = %s', base_line_size),
             'na.rm = TRUE')
@@ -346,7 +363,7 @@ forest.scales.coords <- function(xfrom, xto) {
 
 #' code to add arrows to CIs
 #' @noRd
-forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size) {
+forest.arrows <- function(addaes, cicolour, addarg, base_line_size) {
   c(make_layer(
     '# Add tiny segments with arrows when the CIs go outside axis limits',
     f = 'geom_segment',
@@ -355,10 +372,10 @@ forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size
             'yend = -row',
             'x = uci_transformed-0.000001',
             'xend = uci_transformed',
-            sprintf('colour = %s', cicolour.aes[1])),
+            sprintf('colour = %s', cicolour$aes[1])),
     arg = c(addarg$ci,
             'data = ~ dplyr::filter(.x, cioverright == TRUE)',
-            sprintf('colour = %s', cicolour[1]),
+            sprintf('colour = %s', cicolour$arg[1]),
             sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
             'na.rm = TRUE'),
@@ -371,10 +388,10 @@ forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size
             'yend = -row',
             'x = lci_transformed+0.000001',
             'xend = lci_transformed',
-            sprintf('colour = %s', cicolour.aes[1])),
+            sprintf('colour = %s', cicolour$aes[1])),
     arg = c(addarg$ci,
             'data = ~ dplyr::filter(.x, cioverleft == TRUE)',
-            sprintf('colour = %s', cicolour[1]),
+            sprintf('colour = %s', cicolour$arg[1]),
             sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
             'na.rm = TRUE'))
