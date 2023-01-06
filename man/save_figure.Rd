@@ -7,20 +7,11 @@
 save_figure(
   figure,
   name,
-  title = "",
-  title.pos = grid::unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")),
-  title.just = c(0, 1),
-  title.gpar = list(fontsize = 12, fontface = "bold"),
-  footer = "",
-  footer.pos = grid::unit.c(unit(1.27/2, "cm"), unit(1.27/3, "cm")),
-  footer.just = c(0, 0),
-  footer.gpar = list(fontsize = 9),
-  margin = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
-  size = NULL,
-  pagesize = c("A4", "A5"),
-  landscape = FALSE,
-  pagedim = NULL,
-  cropped = FALSE
+  cropped = FALSE,
+  ext = c("pdf", "png"),
+  args = NULL,
+  args_cropped = NULL,
+  ...
 )
 }
 \arguments{
@@ -29,42 +20,22 @@ save_figure(
 \item{name}{Name of figure.
 Used to name the output file(s) and embedded in the PDF document properties Title field.}
 
-\item{title}{Title to be added to the page. (Default: "")}
+\item{cropped}{Create a second output of the figure without margins or title. (Default: False)}
 
-\item{title.pos}{Position of the title text. Default is 1/4 inch from top left of page.
-(Default: unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")))}
+\item{ext}{Extensions to be added to file names for the main figure and cropped figure. (Default: c("pdf", "png"))}
 
-\item{title.just}{Justification of the title text. (Default: c(0, 1))}
+\item{args}{List of arguments passed to \code{ggplot2::ggsave()} for the main figure.}
 
-\item{title.gpar}{Graphical parameters for title. (Default: list(fontsize = 12, fontface = "bold"))}
+\item{args_cropped}{List of arguments passed to \code{ggplot2::ggsave()} for the cropped figure.}
 
-\item{footer}{Footer to be added to the page. (Default: "")}
-
-\item{footer.pos}{Position of the footer text.
-Default is 1/6 inch from bottom and 1/4 inch from left of page.
-(Default: unit.c(unit(1.27/2, "cm"), unit(1.27/3, "cm")))}
-
-\item{footer.just}{Justification of the footer text. (Default: c(0, 0))}
-
-\item{footer.gpar}{Graphical parameters for footer. (Default: list(fontsize = 9))}
-
-\item{margin}{Margin to be placed around the plot.
-Default is 2.27cm top, 1.27cm (1/2 inch) other sides.
-(Default: unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"))}
-
-\item{size}{A unit vector of length two (width, height).
-Size of plot (a width/height larger than page weight/height minus margins will be
-ignored), centred within margins.
-By default, plot will fill the space within margins.}
-
-\item{pagesize}{Page size of PDF output: "A4" or "A5". (Default: "A4")}
-
-\item{landscape}{Landscape page orientation? (Default: False)}
-
-\item{pagedim}{Dimensions (width, height) of PDF output. Overrides pagesize and landscape arguments if used.}
-
-\item{cropped}{Create a PNG output of the figure without margins or title. (Default: False)}
+\item{...}{Other arguments passed to \link{prepare_figure}.}
 }
 \description{
 Output plots as files
 }
+\section{Using cairo_pdf}{
+Note that if you use a PDF device that does not have a \code{title}
+argument (such as cairo_pdf), then the \code{title} argument should be set to
+NULL, e.g. \code{args = list(device = cairo_pdf, title = NULL)}
+}
+

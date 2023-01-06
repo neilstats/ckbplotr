@@ -3,6 +3,8 @@
 * In shape_plot() and forest_plot() the height and panel.width arguments, respectively, will set the size of the plotting panels (so fix_panel() no longer needs to used).
 * Arguments height and width have been added to plot_like_ckb().
 * The above two points were achieved using the ggh4x package which is now a dependency.
+* Improvements to save_figure().
+* Minor internal improvements.
 
 # ckbplotr 0.7.1
 
