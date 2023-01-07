@@ -665,19 +665,16 @@ forest_plot <- function(
 
   ### shape
   if (!missing(shape) && shape %in% names(panels[[1]])){
-    shape <- list(aes = fixsp(shape))
+    shape <- list(aes = shape)
   } else {
     shape <- list(arg = shape)
   }
 
-  ### plotcolour
-  plotcolour <- fixq(plotcolour)
-
   ### cicolour
   if(is.list(cicolour)){
-    cicolour <- list(arg = lapply(cicolour, fixq))
+    cicolour <- list(arg = cicolour)
   } else if (all(cicolour %in% names(panels[[1]]))){
-    cicolour <- list(aes = fixsp(cicolour))
+    cicolour <- list(aes = cicolour)
   } else {
     if (missing(cicolour)) {
       cicolour <- c(cicolour, "white")
@@ -685,7 +682,7 @@ forest_plot <- function(
         cicolour <- c(cicolour[[1]], cicolour[[1]])
       }
     }
-    cicolour <- list(arg = fixq(cicolour))
+    cicolour <- list(arg = cicolour)
   }
 
   ### colour
@@ -696,9 +693,7 @@ forest_plot <- function(
   }
 
   ### fill
-  if (is.list(fill)){
-    fill <- list(arg = lapply(fill, fixq))
-  } else if (fill %in% names(panels[[1]])){
+  if (!is.list(fill) && fill %in% names(panels[[1]])){
     fill <- list(aes = fixsp(fill))
   } else {
     fill <- list(arg = fixq(fill))
@@ -845,7 +840,7 @@ forest_plot <- function(
     if (!inherits(panel.width, "unit")){
       panel.width <- grid::unit(panel.width, "mm")
     }
-    cicolours <- c(cicolour$arg, cicolour$aes)
+    cicolours <- c(fixq(cicolour$arg), fixsp(cicolour$aes))
     cicolour <- list(aes = "cicolour")
 
     if (missing(ciunder)) {

@@ -129,36 +129,23 @@ shape_plot <- function(data,
     warning("cicolour is ignored if using height and col.group")
   }
 
-  # Put column names in `` if required ----
-  col.estimate <- fixsp(col.estimate)
-  col.stderr   <- fixsp(col.stderr)
-
 
   # Aesthetics ----
   ##  match column name, or use argument itself
-
-  ### evaluation colour, cicolour, fill so that when plotcolour
-  ### is changed, it does not affect these defaults
-  force(colour)
-  force(cicolour)
-  force(fill)
 
   ### shape
   if (missing(shape) && !is.null(col.group)){
     shape <- 22
   }
   if (!missing(shape) && shape %in% names(data)){
-    shape <- list(aes = fixsp(shape))
+    shape <- list(aes = shape)
   } else {
     shape <- list(arg = shape)
   }
 
-  ### plotcolour
-  plotcolour <- fixq(plotcolour)
-
   ### cicolour
   if (all(cicolour %in% names(data))){
-    cicolour <- list(aes = fixsp(cicolour))
+    cicolour <- list(aes = cicolour)
   } else {
     if (missing(cicolour)) {
       cicolour <- c(cicolour, "white")
@@ -166,30 +153,30 @@ shape_plot <- function(data,
         cicolour <- c(cicolour[[1]], cicolour[[1]])
       }
     }
-    cicolour <- list(arg = fixq(cicolour))
+    cicolour <- list(arg = cicolour)
   }
 
   ### colour
   if (!missing(colour) && colour %in% names(data)){
-    colour <- list(aes = fixsp(colour))
+    colour <- list(aes = colour)
   } else {
-    colour <- list(arg = fixq(colour))
+    colour <- list(arg = colour)
   }
 
   ### fill
   if (fill %in% names(data)){
-    fill <- list(aes = fixsp(fill))
+    fill <- list(aes = fill)
   } else {
-    fill <- list(arg = fixq(fill))
+    fill <- list(arg = fill)
   }
 
 
   # String for point size aesthetic
   if (scalepoints) {
     if (!is.null(col.lci)) {
-      size <- sprintf('1.96/(%s - %s)', col.estimate, fixsp(col.lci))
+      size <- sprintf('1.96/(%s - %s)', fixsp(col.estimate), fixsp(col.lci))
     } else {
-      size <- sprintf('1/%s', col.stderr)
+      size <- sprintf('1/%s', fixsp(col.stderr))
     }
   } else {
     size <- '1'
@@ -203,22 +190,34 @@ shape_plot <- function(data,
     scale <- "identity"
   }
   if (exponentiate == TRUE) {
-    est_string <- paste0('exp(', col.estimate, ')')
+    est_string <- paste0('exp(', fixsp(col.estimate), ')')
     if (!is.null(col.lci)) {
       lci_string <- paste0('exp(', fixsp(col.lci), ')')
       uci_string <- paste0('exp(', fixsp(col.uci), ')')
     } else {
-      lci_string <- paste0('exp(', col.estimate,'-1.96*', col.stderr,')')
-      uci_string <- paste0('exp(', col.estimate,'+1.96*', col.stderr,')')
+      lci_string <- paste0('exp(',
+                           fixsp(col.estimate),
+                           '-1.96*',
+                           fixsp(col.stderr),
+                           ')')
+      uci_string <- paste0('exp(',
+                           fixsp(col.estimate),
+                           '+1.96*',
+                           fixsp(col.stderr),
+                           ')')
     }
   } else {
-    est_string <- col.estimate
+    est_string <- fixsp(col.estimate)
     if (!is.null(col.lci)) {
       lci_string <- fixsp(col.lci)
       uci_string <- fixsp(col.uci)
     } else {
-      lci_string <- paste0(col.estimate,'-1.96*', col.stderr)
-      uci_string <- paste0(col.estimate,'+1.96*', col.stderr)
+      lci_string <- paste0(fixsp(col.estimate),
+                           '-1.96*',
+                           fixsp(col.stderr))
+      uci_string <- paste0(fixsp(col.estimate),
+                           '+1.96*',
+                           fixsp(col.stderr))
     }
   }
 
@@ -228,7 +227,7 @@ shape_plot <- function(data,
     if (!inherits(height, "unit")){
       height <- grid::unit(height, "mm")
     }
-    cicolours <- c(cicolour$arg, cicolour$aes)
+    cicolours <- c(fixq(cicolour$arg), fixsp(cicolour$aes))
     cicolour <- list(aes = "cicolour")
   }
 
@@ -254,8 +253,8 @@ shape_plot <- function(data,
   } else {
     group_string <- ''
     scale_fill_string <- 'scale_fill_identity() +'
-    fill_string <- list(arg = sprintf('fill = %s', fill$arg),
-                        aes = sprintf('fill = %s', fill$aes))
+    fill_string <- list(aes = sprintf('fill = %s', fixsp(fill$aes)),
+                        arg = sprintf('fill = %s', fixq(fill$arg)))
   }
 
 
@@ -326,11 +325,7 @@ shape_plot <- function(data,
 
            # points for estimates
            shape.estimates.points(addaes,
-                                  scalepoints,
                                   size,
-                                  col.lci,
-                                  col.estimate,
-                                  col.stderr,
                                   shape,
                                   fill_string,
                                   colour,
@@ -387,7 +382,7 @@ shape_plot <- function(data,
                         plotcolour),
 
     # theme
-    indent(2, shape.theme(deparse(legend.position)))
+    indent(2, shape.theme(legend.position))
   )
 
 

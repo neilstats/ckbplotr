@@ -38,7 +38,7 @@ shape.cicolourcode <- function(scale,
                   sprintf('(%s)/max(%s) * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
                           size, size,
                           (ymax - ymin) * (pointsize + 2 * stroke) / height.mm,
-                          c(shape$arg, shape$aes))),
+                          c(shape$arg, fixsp(shape$aes)))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(!is.null(col.group)){
@@ -132,15 +132,17 @@ shape.lines <- function(addaes,
              f = "stat_smooth",
              aes = c(addaes$lines,
                      if (!is.null(col.lci)) {
-                       sprintf('weight = 1/((%s - %s)^2)', col.estimate, fixsp(col.lci))
+                       sprintf('weight = 1/((%s - %s)^2)',
+                               fixsp(col.estimate),
+                               fixsp(col.lci))
                      } else {
-                       sprintf('weight = 1/(%s^2)', col.stderr)
+                       sprintf('weight = 1/(%s^2)', fixsp(col.stderr))
                      }),
              arg = c(addarg$lines,
                      'method   = "glm"',
                      'formula  = y ~ x',
                      'se       = FALSE',
-                     sprintf('colour = %s', plotcolour),
+                     sprintf('colour = %s', fixq(plotcolour)),
                      'linetype = "dashed"',
                      'linewidth = 0.25')
   )
@@ -150,11 +152,7 @@ shape.lines <- function(addaes,
 #' code for points at estimates
 #' @noRd
 shape.estimates.points <- function(addaes,
-                                   scalepoints,
                                    size,
-                                   col.lci,
-                                   col.estimate,
-                                   col.stderr,
                                    shape,
                                    fill_string,
                                    colour,
@@ -166,12 +164,12 @@ shape.estimates.points <- function(addaes,
     aes = c(
       addaes$point,
       sprintf('size = %s', size),
-      sprintf('shape = %s', shape$aes),
+      sprintf('shape = %s', fixsp(shape$aes)),
       sprintf('%s', fill_string$aes),
-      sprintf('colour = %s', colour$aes)),
+      sprintf('colour = %s', fixsp(colour$aes))),
     arg = c(addarg$point,
             sprintf('shape = %s', shape$arg),
-            sprintf('colour = %s', colour$arg),
+            sprintf('colour = %s', fixq(colour$arg)),
             sprintf('%s', fill_string$arg),
             sprintf('stroke = %s', stroke))
   )
@@ -198,7 +196,7 @@ shape.estimates.text <- function(addaes,
     arg = c(addarg$estimates,
             'vjust = -0.8',
             sprintf('size  = %s', base_size/(11/3)),
-            sprintf('colour = %s', plotcolour))
+            sprintf('colour = %s', fixq(plotcolour)))
   )
 }
 
@@ -219,7 +217,7 @@ shape.n.events.text <- function(addaes,
     arg = c(addarg$n,
             'vjust = 1.8',
             sprintf('size  = %s', base_size/(11/3)),
-            sprintf('colour = %s', plotcolour))
+            sprintf('colour = %s', fixq(plotcolour)))
   )
 }
 
@@ -242,13 +240,13 @@ shape.cis <- function(addaes,
     aes = c(addaes$ci,
             sprintf('ymin = %s', lci_string),
             sprintf('ymax = %s', uci_string),
-            sprintf('colour = %s', cicolour$aes)),
+            sprintf('colour = %s', fixsp(cicolour$aes))),
     arg = c(addarg$ci,
             switch(type,
-                   "all" = '',
+                   "all" = NULL,
                    "before" = sprintf('data = ~ dplyr::filter(.x, %s)', fixsp(ciunder)),
                    "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', fixsp(ciunder))),
-            sprintf('colour = %s', cicolour$arg),
+            sprintf('colour = %s', fixq(cicolour$arg)),
             sprintf('linewidth = %s', base_line_size))
   )
 }
@@ -296,7 +294,7 @@ shape.plot.like.ckb <- function(xlims,
                     makeunit(height)),
             sprintf('base_size      = %s', base_size),
             sprintf('base_line_size = %s', base_line_size),
-            sprintf('colour         = %s', plotcolour)),
+            sprintf('colour         = %s', fixq(plotcolour))),
     plus = TRUE
   )
 }
@@ -307,7 +305,7 @@ shape.theme <- function(legend.position) {
   make_layer(
     '# Add theme',
     f = "theme",
-    arg = c(sprintf('legend.position = %s', legend.position)),
+    arg = c(sprintf('legend.position = %s', deparse(legend.position))),
     plus = FALSE
   )
 }
