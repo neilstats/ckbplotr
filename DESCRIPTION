@@ -35,8 +35,9 @@ Roxygen: list(markdown = TRUE)
 Suggests:
     patchwork,
     covr,
-    testthat
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://neilstats.github.io/ckbplotr/
 BugReports: https://github.com/neilstats/ckbplotr/issues
 License: GPL (>= 3)
+Config/testthat/edition: 3
