@@ -54,7 +54,8 @@ forestplot <- forest_plot(panels            = list(resultsA),
                           xticks            = c(0.9, 1, 1.1),
                           scalepoints       = TRUE,
                           pointsize         = 3,
-                          printplot         = FALSE)
+                          printplot         = FALSE,
+                          estcolumn         = FALSE)
 
 
 # Arrange the plots side-by-side

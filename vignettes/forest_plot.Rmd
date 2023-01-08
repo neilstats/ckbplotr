@@ -169,7 +169,8 @@ forest_plot(panels           = list(resultsA),
             fill             = "fill",
             col.bold         = "bold",
             col.diamond      = "diamond",
-            ciunder          = "ciunder")
+            ciunder          = "ciunder",
+            stroke           = 0.1)
 ```
 
 If a parameter is not set, then default values are used for these aesthetics. If a parameter is set, then every data frame provided in `cols` must contain a column with that name.
