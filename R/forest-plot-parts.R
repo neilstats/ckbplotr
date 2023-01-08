@@ -61,9 +61,19 @@ forest.check.cis <- function(xto, xfrom) {
 
 #' code for CI colours if using panel.width
 #' @noRd
-forest.cicolourcode <- function(scale, inv_tf, xto, xfrom, pointsize, stroke, panel.width, shape, shape.aes, cicolours, panel.names) {
+forest.cicolourcode <- function(scale,
+                                inv_tf,
+                                xto,
+                                xfrom,
+                                pointsize,
+                                stroke,
+                                panel.width,
+                                shape,
+                                cicolours,
+                                panel.names) {
 
-  if(!is.numeric(panel.width)){return(NULL)}
+  if(!inherits(panel.width, "unit")){return(NULL)}
+  panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
 
   x <- c(
     '# Create column for CI colour',
@@ -73,7 +83,7 @@ forest.cicolourcode <- function(scale, inv_tf, xto, xfrom, pointsize, stroke, pa
                    scale, scale),
            indent(26,
                   sprintf('size * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
-                          (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width, c(shape, shape.aes))),
+                          (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm, c(shape$arg, column_name(shape$aes)))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(is.list(cicolours)){
@@ -81,10 +91,10 @@ forest.cicolourcode <- function(scale, inv_tf, xto, xfrom, pointsize, stroke, pa
       x<- c(x,
             indent(27,
                    sprintf('panel == %s & narrowci ~ %s,',
-                           fixq(panel.names[[i]]),
+                           quote_string(panel.names[[i]]),
                            cicolours[[i]][length(cicolours[[i]])]),
                    sprintf('panel == %s & !narrowci ~ %s,',
-                           fixq(panel.names[[i]]),
+                           quote_string(panel.names[[i]]),
                            cicolours[[i]][1])))
     }
     x <- c(x,
@@ -110,11 +120,8 @@ forest.fillcode <- function(fills, panel.names) {
     x <- c(x,
            indent(25,
                   sprintf('panel == %s ~ %s,',
-                          fixq(panel.names[[i]]),
-                          fills[[i]][length(fills[[i]])]),
-                  sprintf('panel == %s ~ %s,',
-                          fixq(panel.names[[i]]),
-                          fills[[i]][1])))
+                          quote_string(panel.names[[i]]),
+                          quote_string(fills[[i]][1]))))
   }
   x<- c(x,
         indent(25, 'TRUE ~ "black"))'),
@@ -169,7 +176,7 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
       '# Create data frame for diamonds to be plotted',
       'diamonds <- datatoplot %>%',
       indent(2,
-             sprintf('dplyr::filter(%s == TRUE) %%>%%', fixsp(col.diamond)),
+             sprintf('dplyr::filter(%s == TRUE) %%>%%', column_name(col.diamond)),
              'dplyr::mutate(x1 = lci_transformed,',
              indent(14,
                     'x2 = estimate_transformed,',
@@ -190,7 +197,7 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
     )
   }
 
-  if(is.numeric(panel.width) && is.list(cicolours)){
+  if(inherits(panel.width, "mm") && is.list(cicolours)){
     x <- c(
       x,
       '## Add colour',
@@ -203,7 +210,7 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
       x <- c(x,
              indent(27,
                     sprintf('panel == %s ~ %s,',
-                            fixq(panel.names[[i]]),
+                            quote_string(panel.names[[i]]),
                             cicolours[[i]][1])))
     }
     x <- c(x,
@@ -215,16 +222,16 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
 
 #' code for plotting diamonds
 #' @noRd
-forest.plotdiamondscode <- function(cicolour.aes, fill.aes, cicolour, fill, stroke) {
+forest.plotdiamondscode <- function(cicolour, fill, stroke) {
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
     aes = c('x = x, y = y, group = row',
-            sprintf('colour = %s', cicolour.aes[1]),
-            sprintf('fill = %s', fill.aes)),
+            sprintf('colour = %s', column_name(cicolour$aes[1])),
+            sprintf('fill = %s', column_name(fill$aes))),
     arg = c('data = diamonds',
-            sprintf('colour = %s', cicolour[1]),
-            sprintf('fill = %s', fill),
+            sprintf('colour = %s', quote_string(cicolour$arg[1])),
+            sprintf('fill = %s', quote_string(fill$arg)),
             sprintf('linewidth = %s', stroke))
   )
 }
@@ -259,14 +266,22 @@ forest.nullline <- function(nullval, base_line_size, plotcolour) {
             'y = -0.7, yend = -Inf',
             sprintf('x = %s, xend = %s', nullval, nullval),
             sprintf('linewidth = %s', base_line_size),
-            sprintf('colour = %s', plotcolour))
+            sprintf('colour = %s', quote_string(plotcolour)))
   )
 }
 
 
 #' code to plot points
 #' @noRd
-forest.plot.points <- function(addaes, shape.aes, colour.aes, fill.aes, addarg, xfrom, xto, shape, colour, fill, stroke, pointsize) {
+forest.plot.points <- function(addaes,
+                               shape,
+                               colour,
+                               fill,
+                               addarg,
+                               xfrom,
+                               xto,
+                               stroke,
+                               pointsize) {
   c(
     make_layer(
       c('# Plot points at the transformed estimates',
@@ -274,15 +289,15 @@ forest.plot.points <- function(addaes, shape.aes, colour.aes, fill.aes, addarg, 
       f = 'geom_point',
       aes = c(addaes$point,
               'size = size',
-              sprintf('shape = %s', shape.aes),
-              sprintf('colour = %s', colour.aes),
-              sprintf('fill = %s', fill.aes)),
+              sprintf('shape = %s', column_name(shape$aes)),
+              sprintf('colour = %s', column_name(colour$aes)),
+              sprintf('fill = %s', column_name(fill$aes))),
       arg = c(addarg$point,
               sprintf('data = ~ dplyr::filter(.x, estimate_transformed > %s, estimate_transformed < %s)',
                       xfrom, xto),
-              sprintf('shape = %s', shape),
-              sprintf('colour = %s', colour),
-              sprintf('fill = %s', fill),
+              sprintf('shape = %s', shape$arg),
+              sprintf('colour = %s', quote_string(colour$arg)),
+              sprintf('fill = %s', quote_string(fill$arg)),
               sprintf('stroke = %s', stroke),
               'na.rm = TRUE')
     ),
@@ -298,7 +313,7 @@ forest.plot.points <- function(addaes, shape.aes, colour.aes, fill.aes, addarg, 
 
 #' code for plotting confidence interval lines
 #' @noRd
-forest.cis <- function(addaes, cicolour.aes, addarg, ciunder, cicolour, base_line_size,
+forest.cis <- function(addaes, cicolour, addarg, ciunder, base_line_size,
                        type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
   make_layer(
@@ -310,13 +325,13 @@ forest.cis <- function(addaes, cicolour.aes, addarg, ciunder, cicolour, base_lin
     aes = c(addaes$ci,
             'xmin = lci_transformed',
             'xmax = uci_transformed',
-            sprintf('colour = %s', cicolour.aes[1])),
+            sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
             switch(type,
                    "all" = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed))',
                    "before" = sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & %s)', ciunder),
                    "after" = sprintf('data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !%s)', ciunder)),
-            sprintf('colour = %s', cicolour[1]),
+            sprintf('colour = %s', quote_string(cicolour$arg[1])),
             'width = 0',
             sprintf('linewidth = %s', base_line_size),
             'na.rm = TRUE')
@@ -345,7 +360,7 @@ forest.scales.coords <- function(xfrom, xto) {
 
 #' code to add arrows to CIs
 #' @noRd
-forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size) {
+forest.arrows <- function(addaes, cicolour, addarg, base_line_size) {
   c(make_layer(
     '# Add tiny segments with arrows when the CIs go outside axis limits',
     f = 'geom_segment',
@@ -354,10 +369,10 @@ forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size
             'yend = -row',
             'x = uci_transformed-0.000001',
             'xend = uci_transformed',
-            sprintf('colour = %s', cicolour.aes[1])),
+            sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
             'data = ~ dplyr::filter(.x, cioverright == TRUE)',
-            sprintf('colour = %s', cicolour[1]),
+            sprintf('colour = %s', quote_string(cicolour$arg[1])),
             sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
             'na.rm = TRUE'),
@@ -370,10 +385,10 @@ forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size
             'yend = -row',
             'x = lci_transformed+0.000001',
             'xend = lci_transformed',
-            sprintf('colour = %s', cicolour.aes[1])),
+            sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
             'data = ~ dplyr::filter(.x, cioverleft == TRUE)',
-            sprintf('colour = %s', cicolour[1]),
+            sprintf('colour = %s', quote_string(cicolour$arg[1])),
             sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
             'na.rm = TRUE'))
@@ -382,14 +397,30 @@ forest.arrows <- function(addaes, cicolour.aes, addarg, cicolour, base_line_size
 
 #' code for columns to right of panel
 #' @noRd
-forest.col.right.line <- function(col.right.all, col.right.pos, col.right.heading, col.right.hjust, col.bold, col.right.parse, col.right.space, addaes, addarg, xto, xfrom, base_size, plotcolour, col.heading.space, panel.names, tf, inv_tf) {
+forest.col.right.line <- function(col.right.all,
+                                  col.right.pos,
+                                  col.right.heading,
+                                  col.right.hjust,
+                                  col.bold,
+                                  col.right.parse,
+                                  col.right.space,
+                                  addaes,
+                                  addarg,
+                                  xto,
+                                  xfrom,
+                                  base_size,
+                                  plotcolour,
+                                  col.heading.space,
+                                  panel.names,
+                                  tf,
+                                  inv_tf) {
   x <- unlist(purrr::pmap(
     list(col.right.all,
          as.numeric(col.right.pos),
          rep(makeunit(col.right.pos), length=length(col.right.pos)),
          col.right.heading,
          col.right.hjust,
-         col.bold,
+         if (is.null(col.bold)) FALSE else col.bold,
          col.right.parse,
          col.right.space,
          if(is.null(addaes$col.right)){""} else{addaes$col.right},
@@ -404,19 +435,19 @@ forest.col.right.line <- function(col.right.all, col.right.pos, col.right.headin
                 if(is.character(..6)){
                   if(..7){
                     sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(", %s,")"), %s)',
-                            ..6, ..6, fixsp(..1), fixsp(..1))
+                            column_name(..6), column_name(..6), column_name(..1), column_name(..1))
                   } else {
-                    c(sprintf('label = %s', fixsp(..1)),
+                    c(sprintf('label = %s', column_name(..1)),
                       sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..6, ..6))
                   }
                 } else {
-                  sprintf('label = %s', fixsp(..1))
+                  sprintf('label = %s', column_name(..1))
                 }),
         arg = c(..10[..10!=""],
                 sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                 sprintf('hjust = %s', ..5),
                 sprintf('size  = %s', base_size/(11/3)),
-                sprintf('colour  = %s', plotcolour),
+                sprintf('colour  = %s', quote_string(plotcolour)),
                 'na.rm = TRUE',
                 sprintf('parse = %s', ..7)),
         br = FALSE
@@ -429,7 +460,7 @@ forest.col.right.line <- function(col.right.all, col.right.pos, col.right.headin
         arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                 sprintf('hjust    = %s', ..5),
                 sprintf('size     = %s', base_size/(11/3)),
-                sprintf('colour  = %s', plotcolour),
+                sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
                 indent(36,
@@ -455,7 +486,7 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
          rep(makeunit(col.left.pos), length=length(col.left.pos)),
          col.left.heading,
          col.left.hjust,
-         col.bold,
+         if (is.null(col.bold)) FALSE else col.bold,
          col.left.space,
          if(is.null(addaes$col.left)){""} else{addaes$col.left},
          if(is.null(addarg$col.left)){""} else{addarg$col.left}),
@@ -466,9 +497,9 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
         aes = c(..8[..8!=""],
                 'y = -row',
                 sprintf('x = %s', round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * ..7), 6)),
-                sprintf('label = %s', fixsp(..1)),
+                sprintf('label = %s', column_name(..1)),
                 if(is.character(..6)){
-                  sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")', ..6, ..6)
+                  sprintf('fontface = dplyr::if_else(%s & !is.na(%s), "bold", "plain")', column_name(..6), column_name(..6))
                 } else {
                   'fontface = "plain"'
                 }),
@@ -476,7 +507,7 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
                 sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                 sprintf('hjust = %s', ..5),
                 sprintf('size  = %s', base_size/(11/3)),
-                sprintf('colour  = %s', plotcolour),
+                sprintf('colour  = %s', quote_string(plotcolour)),
                 'na.rm = TRUE'),
         br = FALSE
       ),
@@ -488,7 +519,7 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
         arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                 sprintf('hjust    = %s', ..5),
                 sprintf('size     = %s', base_size/(11/3)),
-                sprintf('colour  = %s', plotcolour),
+                sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
                 indent(36,
@@ -506,7 +537,17 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
 
 #' code for addtext
 #' @noRd
-forest.addtext <- function(xto, xfrom, col.right.space, col.bold, col.right.parse, col.right.pos, col.right.hjust, base_size, plotcolour, tf, inv_tf) {
+forest.addtext <- function(xto,
+                           xfrom,
+                           col.right.space,
+                           col.bold,
+                           col.right.parse,
+                           col.right.pos,
+                           col.right.hjust,
+                           base_size,
+                           plotcolour,
+                           tf,
+                           inv_tf) {
   make_layer(
     '## addtext',
     f = 'ckbplotr::geom_text_move',
@@ -517,11 +558,11 @@ forest.addtext <- function(xto, xfrom, col.right.space, col.bold, col.right.pars
             if(is.character(col.bold[[1]])){
               if(col.right.parse[[1]]){
                 sprintf('label = dplyr::if_else(%s & !is.na(%s), paste0("bold(addtext)"), addtext)',
-                        col.bold[[1]], col.bold[[1]])
+                        column_name(col.bold[[1]]), column_name(col.bold[[1]]))
               } else {
                 c('label = addtext',
                   sprintf('fontface = dplyr::if_else(%s & !is.na(%s),"bold", "plain")',
-                          col.bold[[1]], col.bold[[1]]))
+                          column_name(col.bold[[1]]), column_name(col.bold[[1]])))
               }
             } else {
               'label = addtext'
@@ -531,7 +572,7 @@ forest.addtext <- function(xto, xfrom, col.right.space, col.bold, col.right.pars
                     makeunit(col.right.pos[[1]])),
             sprintf('hjust = %s', col.right.hjust[[1]]),
             sprintf('size  = %s', base_size/(11/3)),
-            sprintf('colour  = %s', plotcolour),
+            sprintf('colour  = %s', quote_string(plotcolour)),
             'na.rm = TRUE',
             'parse = TRUE')
   )
@@ -550,7 +591,7 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
       arg = c(addarg$xlab,
               'hjust = 0.5',
               sprintf('size  = %s', base_size/(11/3)),
-              sprintf('colour  = %s', plotcolour),
+              sprintf('colour  = %s', quote_string(plotcolour)),
               'vjust = 4.4',
               'fontface = "bold"',
               sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -568,7 +609,7 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
                 'hjust = 0.5',
                 'nudge_y = 2',
                 sprintf('size  = %s', base_size/(11/3)),
-                sprintf('colour  = %s', plotcolour),
+                sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
                 indent(36, sprintf('levels = %s', paste(deparse(panel.names), collapse = ''))),
@@ -580,13 +621,30 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
 }
 
 
+#' code to set panel width
+#' @noRd
+forest.panel.width <- function(panel.width) {
+  if(!inherits(panel.width, "unit")){return(NULL)}
+
+  make_layer(
+    '# Fix panel width',
+    f = 'ggh4x::force_panelsizes',
+    arg = sprintf('cols = unit(%s, "%s")',
+                  as.numeric(panel.width),
+                  makeunit(panel.width)),
+    plus = TRUE
+  )
+}
+
+
+
 #' code for the theme
 #' @noRd
 forest.theme <- function(base_size, plotcolour, base_line_size, title, left.space, right.space, mid.space, plot.margin) {
   make_layer(
     '# Control the overall look of the plots',
     f = 'theme',
-    arg = c(sprintf('text             = element_text(size = %s, colour = %s)', base_size, plotcolour),
+    arg = c(sprintf('text             = element_text(size = %s, colour = %s)', base_size, quote_string(plotcolour)),
             sprintf('line             = element_line(linewidth = %s)', base_line_size),
             'panel.background = element_blank()',
             'panel.grid.major = element_blank()',
@@ -597,10 +655,10 @@ forest.theme <- function(base_size, plotcolour, base_line_size, title, left.spac
               'plot.title.position = "plot"'
             },
             sprintf('axis.line.x      = element_line(colour = %s, linewidth = %s, lineend = "round")',
-                    plotcolour, base_line_size),
+                    quote_string(plotcolour), base_line_size),
             'axis.title       = element_blank()',
-            sprintf('axis.ticks.x     = element_line(colour = %s)', plotcolour),
-            sprintf('axis.text.x      = element_text(colour = %s,', plotcolour),
+            sprintf('axis.ticks.x     = element_line(colour = %s)', quote_string(plotcolour)),
+            sprintf('axis.text.x      = element_text(colour = %s,', quote_string(plotcolour)),
             indent(32,
                    sprintf('margin = margin(t = %s)',base_size/(11/4.4)),
                    'vjust  = 1)'),
@@ -608,7 +666,7 @@ forest.theme <- function(base_size, plotcolour, base_line_size, title, left.spac
             'axis.line.y      = element_blank()',
             'axis.text.y      = ggtext::element_markdown(hjust  = 0',
             indent(44,
-                   sprintf('colour = %s', plotcolour),
+                   sprintf('colour = %s', quote_string(plotcolour)),
                    sprintf('margin = margin(r = %s, unit = "%s"))',
                            as.numeric(left.space), makeunit(left.space))),
             'panel.border     = element_blank()',

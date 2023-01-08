@@ -18,7 +18,8 @@ indent <- function(n, ...){
 #' @noRd
 #'
 
-fixsp <- function(x){
+column_name <- function(x){
+  if(is.null(x)){ return(NULL) }
   for (i in 1:length(x)){
     if (grepl("[[:blank:]]|[[:punct:]]", x[[i]])){
       x[[i]] <- paste0("`", x[[i]], "`")
@@ -33,8 +34,8 @@ fixsp <- function(x){
 #' @keywords internal
 #' @noRd
 #'
-
-fixq <- function(x){
+quote_string <- function(x){
+  if(is.list(x)){return(lapply(x, quote_string))}
   paste0('\"', x, '\"')
 }
 
@@ -152,6 +153,8 @@ printunit <- function(x){
 #' @keywords internal
 #' @noRd
 makeunit <- function(x){
+
+  if(is.null(x)){return(NULL)}
   ## handle different unit object types (for grid>=4.0)
   if (compareVersion(as.character(packageVersion("grid")), "4.0") >= 0){
     grid::unitType(x)

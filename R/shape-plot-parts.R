@@ -1,4 +1,4 @@
-#' code for CI colours if using panel.height
+#' code for CI colours if using height
 #' @noRd
 shape.cicolourcode <- function(scale,
                                ylims,
@@ -7,16 +7,17 @@ shape.cicolourcode <- function(scale,
                                pointsize,
                                size,
                                stroke,
-                               panel.height,
+                               height,
                                ratio,
                                gap,
                                ext,
                                shape,
-                               shape.aes,
                                cicolours,
                                col.group) {
 
-  if(!is.numeric(panel.height)){return(NULL)}
+  if(!inherits(height, "unit")){return(NULL)}
+
+  height.mm <- as.numeric(grid::convertUnit(height, "mm"))
 
   ymin <- ylims[[1]]
   ymax <- ylims[[2]]
@@ -36,8 +37,8 @@ shape.cicolourcode <- function(scale,
            indent(26,
                   sprintf('(%s)/max(%s) * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
                           size, size,
-                          (ymax - ymin) * (pointsize + 2 * stroke) / (panel.height - (gap[[2]] + ext[[2]]) * panel.height/ratio),
-                          c(shape, shape.aes))),
+                          (ymax - ymin) * (pointsize + 2 * stroke) / height.mm,
+                          c(shape$arg, column_name(shape$aes)))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(!is.null(col.group)){
@@ -58,11 +59,11 @@ shape.cicolourcode <- function(scale,
 }
 
 
-#' code for CI under if using panel.height
+#' code for CI under if using height
 #' @noRd
-shape.ciundercode <- function(panel.height) {
+shape.ciundercode <- function(height) {
 
-  if(!is.numeric(panel.height)){return(NULL)}
+  if(!inherits(height, "unit")){return(NULL)}
 
   c('# Create column for CI under',
     'datatoplot <- datatoplot %>%',
@@ -131,17 +132,19 @@ shape.lines <- function(addaes,
              f = "stat_smooth",
              aes = c(addaes$lines,
                      if (!is.null(col.lci)) {
-                       sprintf('weight = 1/((%s - %s)^2)', col.estimate, fixsp(col.lci))
+                       sprintf('weight = 1/((%s - %s)^2)',
+                               column_name(col.estimate),
+                               column_name(col.lci))
                      } else {
-                       sprintf('weight = 1/(%s^2)', col.stderr)
+                       sprintf('weight = 1/(%s^2)', column_name(col.stderr))
                      }),
              arg = c(addarg$lines,
                      'method   = "glm"',
                      'formula  = y ~ x',
                      'se       = FALSE',
-                     sprintf('colour = %s', plotcolour),
+                     sprintf('colour = %s', quote_string(plotcolour)),
                      'linetype = "dashed"',
-                     'size     = 0.25')
+                     'linewidth = 0.25')
   )
 }
 
@@ -149,18 +152,11 @@ shape.lines <- function(addaes,
 #' code for points at estimates
 #' @noRd
 shape.estimates.points <- function(addaes,
-                                   scalepoints,
                                    size,
-                                   col.lci,
-                                   col.estimate,
-                                   col.stderr,
-                                   shape.aes,
-                                   fill_string.aes,
-                                   colour.aes,
-                                   addarg,
                                    shape,
-                                   colour,
                                    fill_string,
+                                   colour,
+                                   addarg,
                                    stroke) {
   make_layer(
     '# Plot the point estimates',
@@ -168,13 +164,13 @@ shape.estimates.points <- function(addaes,
     aes = c(
       addaes$point,
       sprintf('size = %s', size),
-      sprintf('shape = %s', shape.aes),
-      sprintf('%s', fill_string.aes),
-      sprintf('colour = %s', colour.aes)),
+      sprintf('shape = %s', column_name(shape$aes)),
+      sprintf('%s', fill_string$aes),
+      sprintf('colour = %s', column_name(colour$aes))),
     arg = c(addarg$point,
-            sprintf('shape = %s', shape),
-            sprintf('colour = %s', colour),
-            sprintf('%s', fill_string),
+            sprintf('shape = %s', shape$arg),
+            sprintf('colour = %s', quote_string(colour$arg)),
+            sprintf('%s', fill_string$arg),
             sprintf('stroke = %s', stroke))
   )
 }
@@ -200,7 +196,7 @@ shape.estimates.text <- function(addaes,
     arg = c(addarg$estimates,
             'vjust = -0.8',
             sprintf('size  = %s', base_size/(11/3)),
-            sprintf('colour = %s', plotcolour))
+            sprintf('colour = %s', quote_string(plotcolour)))
   )
 }
 
@@ -221,7 +217,7 @@ shape.n.events.text <- function(addaes,
     arg = c(addarg$n,
             'vjust = 1.8',
             sprintf('size  = %s', base_size/(11/3)),
-            sprintf('colour = %s', plotcolour))
+            sprintf('colour = %s', quote_string(plotcolour)))
   )
 }
 
@@ -232,10 +228,9 @@ shape.n.events.text <- function(addaes,
 shape.cis <- function(addaes,
                       lci_string,
                       uci_string,
-                      cicolour.aes,
+                      cicolour,
                       addarg,
                       ciunder,
-                      cicolour,
                       base_line_size,
                       type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
@@ -245,13 +240,13 @@ shape.cis <- function(addaes,
     aes = c(addaes$ci,
             sprintf('ymin = %s', lci_string),
             sprintf('ymax = %s', uci_string),
-            sprintf('colour = %s', cicolour.aes)),
+            sprintf('colour = %s', column_name(cicolour$aes))),
     arg = c(addarg$ci,
             switch(type,
-                   "all" = '',
-                   "before" = sprintf('data = ~ dplyr::filter(.x, %s)', fixsp(ciunder)),
-                   "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', fixsp(ciunder))),
-            sprintf('colour = %s', cicolour),
+                   "all" = NULL,
+                   "before" = sprintf('data = ~ dplyr::filter(.x, %s)', column_name(ciunder)),
+                   "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', column_name(ciunder))),
+            sprintf('colour = %s', quote_string(cicolour$arg)),
             sprintf('linewidth = %s', base_line_size))
   )
 }
@@ -281,6 +276,7 @@ shape.plot.like.ckb <- function(xlims,
                                 gap,
                                 ext,
                                 ratio,
+                                height,
                                 base_size,
                                 base_line_size,
                                 plotcolour) {
@@ -293,9 +289,12 @@ shape.plot.like.ckb <- function(xlims,
             sprintf('gap            = %s', gap),
             sprintf('ext            = %s', ext),
             sprintf('ratio          = %s', ratio),
+            sprintf('height         = unit(%s, "%s")',
+                    as.numeric(height),
+                    makeunit(height)),
             sprintf('base_size      = %s', base_size),
             sprintf('base_line_size = %s', base_line_size),
-            sprintf('colour         = %s', plotcolour)),
+            sprintf('colour         = %s', quote_string(plotcolour))),
     plus = TRUE
   )
 }
@@ -306,7 +305,8 @@ shape.theme <- function(legend.position) {
   make_layer(
     '# Add theme',
     f = "theme",
-    arg = c(sprintf('legend.position = %s', legend.position)),
+    arg = c(sprintf('legend.position = %s', deparse(legend.position))),
     plus = FALSE
   )
 }
+

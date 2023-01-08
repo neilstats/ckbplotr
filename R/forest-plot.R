@@ -445,11 +445,11 @@ make_forest_data <- forest_data
 #' @param nullval Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)
 #' @param pointsize The (largest) size of box to use for plotting point
 #'                  estimates. (Default: 3)
-#' @param shape Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)
+#' @param shape Shape of points. An integer, or name of a column of integers. (Default: 15 (square))
 #' @param plotcolour Colour for all parts of the plot. (Default: "black")
 #' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
-#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
-#' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
+#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use colour.)
+#' @param fill Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
 #' @param diamond Alternative to col.diamond. A character vectors identify the rows
@@ -462,10 +462,11 @@ make_forest_data <- forest_data
 #' @param mid.space Size of additional gap to leave between panels. (Default: unit(5, "mm"))
 #' @param plot.margin Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
 
-#' @param panel.width Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".
+#' @param panel.width Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.
 #' @param stroke Size of outline of shapes. (Default: 0)
-#' @param printplot Print the plot. (Default: TRUE)
-#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)
+#' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
+#' @param printplot Print the plot. (Default: !quiet)
+#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
 #' @param addcode A character vector of code to add to the generated code.
 #'                The first element should be a regular expression.
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
@@ -536,11 +537,11 @@ forest_plot <- function(
     scalepoints   = FALSE,
     minse         = NULL,
     pointsize     = 3,
-    shape     = NULL,
+    shape     = 15,
     plotcolour = "black",
-    colour    = NULL,
+    colour    = plotcolour,
     cicolour  = colour,
-    fill      = NULL,
+    fill      = colour,
     ciunder   = NULL,
     addtext       = NULL,
     bottom.space  = 0.7,
@@ -552,8 +553,9 @@ forest_plot <- function(
     base_size     = 11,
     base_line_size = base_size/22,
     stroke        = 0,
-    printplot     = TRUE,
-    showcode      = TRUE,
+    quiet         = FALSE,
+    printplot     = !quiet,
+    showcode      = !quiet,
     addcode       = NULL,
     addaes        = NULL,
     addarg        = NULL,
@@ -612,7 +614,7 @@ forest_plot <- function(
   }
 
   ## check if confidence intervals may be hidden
-  if (missing(panel.width) || !(length(cicolour) > 1 | length(ciunder) > 1)){
+  if (missing(panel.width)){
     rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
                     'i' = 'Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.'),
                   use_cli_format = TRUE,
@@ -656,53 +658,48 @@ forest_plot <- function(
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
 
+
+
   # Handling aesthetics ----
-  ## default value, match column name, or use argument itself
-  shape.aes <- NULL
-  if (is.null(shape)) {
-    shape <- 15
-  } else if (shape %in% names(panels[[1]])){
-    shape.aes <- fixsp(shape)
-    shape <- NULL
+  ## match column name, or use argument itself
+
+  ### shape
+  if (!missing(shape) && shape %in% names(panels[[1]])){
+    shape <- list(aes = shape)
+  } else {
+    shape <- list(arg = shape)
   }
 
-  plotcolour <- fixq(plotcolour)
-
-  cicolour.aes <- NULL
-  if (is.null(cicolour)) {
-    cicolour <- plotcolour
-  } else if(is.list(cicolour)){
-    cicolour <- lapply(cicolour, fixq)
+  ### cicolour
+  if(is.list(cicolour)){
+    cicolour <- list(arg = cicolour)
   } else if (all(cicolour %in% names(panels[[1]]))){
-    cicolour.aes <- fixsp(cicolour)
-    cicolour <- NULL
+    cicolour <- list(aes = cicolour)
   } else {
-    cicolour <- fixq(cicolour)
+    if (missing(cicolour)) {
+      cicolour <- c(cicolour, "white")
+      if (fill == "white") {
+        cicolour <- c(cicolour[[1]], cicolour[[1]])
+      }
+    }
+    cicolour <- list(arg = cicolour)
   }
 
-  colour.aes <- NULL
-  if (is.null(colour)) {
-    colour <- plotcolour
-  } else if (all(colour %in% names(panels[[1]]))){
-    colour.aes <- fixsp(colour)
-    colour <- NULL
+  ### colour
+  if (!missing(colour) && all(colour %in% names(panels[[1]]))){
+    colour <- list(aes = colour)
   } else {
-    colour <- fixq(colour)
+    colour <- list(arg = colour)
   }
 
-  fill.aes <- NULL
-  if (is.null(fill)) {
-    fill <- plotcolour
-  } else if(is.list(fill)){
-    fill <- lapply(fill, fixq)
-  } else if (fill %in% names(panels[[1]])){
-    fill.aes <- fixsp(fill)
-    fill <- NULL
+  ### fill
+  if (!is.list(fill) && fill %in% names(panels[[1]])){
+    fill <- list(aes = fill)
   } else {
-    fill <- fixq(fill)
+    fill <- list(arg = fill)
   }
 
-  if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- fixsp(col.bold)}
+
 
 
   # Spacing ----
@@ -836,21 +833,26 @@ forest_plot <- function(
 
 
   # Aesthetic adjustments when using panel.width ----
-  if (is.numeric(panel.width)) {
-    cicolours <- c(cicolour, cicolour.aes)
-    cicolour.aes <- "cicolour"
-    cicolour <- NULL
+  if (!missing(panel.width)) {
+    if (!inherits(panel.width, "unit")){
+      panel.width <- grid::unit(panel.width, "mm")
+    }
+    cicolours <- c(quote_string(cicolour$arg), column_name(cicolour$aes))
+    cicolour <- list(aes = "cicolour")
+
+    if (missing(ciunder)) {
+      ciunder <- c(TRUE, FALSE)
+    }
   }
 
-  if (is.numeric(panel.width) && length(ciunder) > 1) {
+  if (!missing(panel.width) && length(ciunder) > 1) {
     ciunder_orig <- ciunder
     ciunder <- "ciunder"
   }
 
-  if (is.list(fill)){
-    fill_orig <- fill
-    fill.aes <- "fill"
-    fill <- NULL
+  if (is.list(fill$arg)){
+    fill_orig <- fill$arg
+    fill <- list(aes = "fill")
   }
 
 
@@ -942,7 +944,6 @@ forest_plot <- function(
                         stroke,
                         panel.width,
                         shape,
-                        shape.aes,
                         cicolours,
                         panel.names),
 
@@ -964,43 +965,38 @@ forest_plot <- function(
 
            # code for CI lines plotted before points
            forest.cis(addaes,
-                      cicolour.aes,
+                      cicolour,
                       addarg,
                       ciunder,
-                      cicolour,
                       base_line_size,
                       type = ci_order[[1]]),
 
            # code to plot points
            forest.plot.points(addaes,
-                              shape.aes,
-                              colour.aes,
-                              fill.aes,
-                              addarg,
-                              xfrom,
-                              xto,
                               shape,
                               colour,
                               fill,
+                              addarg,
+                              xfrom,
+                              xto,
                               stroke,
                               pointsize),
 
            # code for CI lines plotted after points
            # code for CI lines plotted before points
            forest.cis(addaes,
-                      cicolour.aes,
+                      cicolour,
                       addarg,
                       ciunder,
-                      cicolour,
                       base_line_size,
                       type = ci_order[[2]]),
 
            # code to add arrows to CIs
-           forest.arrows(addaes, cicolour.aes, addarg, cicolour, base_line_size),
+           forest.arrows(addaes, cicolour, addarg, base_line_size),
 
            # code for plotting diamonds
            if(!is.null(col.diamond) || !is.null(diamond)){
-             forest.plotdiamondscode(cicolour.aes, fill.aes, cicolour, fill, stroke)
+             forest.plotdiamondscode(cicolour, fill, stroke)
            },
 
            # code for scales and coordinates
@@ -1076,6 +1072,9 @@ forest_plot <- function(
 
            # code for the axes
            forest.axes(scale, xticks, bottom.space),
+
+           # code for panel width
+           forest.panel.width(panel.width),
 
            # code for the plot title
            if (title != ""){forest.title(title)},

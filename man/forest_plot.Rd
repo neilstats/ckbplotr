@@ -46,11 +46,11 @@ forest_plot(
   scalepoints = FALSE,
   minse = NULL,
   pointsize = 3,
-  shape = NULL,
+  shape = 15,
   plotcolour = "black",
-  colour = NULL,
+  colour = plotcolour,
   cicolour = colour,
-  fill = NULL,
+  fill = colour,
   ciunder = NULL,
   addtext = NULL,
   bottom.space = 0.7,
@@ -62,8 +62,9 @@ forest_plot(
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
-  printplot = TRUE,
-  showcode = TRUE,
+  quiet = FALSE,
+  printplot = !quiet,
+  showcode = !quiet,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -124,11 +125,11 @@ make_forest_plot(
   scalepoints = FALSE,
   minse = NULL,
   pointsize = 3,
-  shape = NULL,
+  shape = 15,
   plotcolour = "black",
-  colour = NULL,
+  colour = plotcolour,
   cicolour = colour,
-  fill = NULL,
+  fill = colour,
   ciunder = NULL,
   addtext = NULL,
   bottom.space = 0.7,
@@ -140,8 +141,9 @@ make_forest_plot(
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
-  printplot = TRUE,
-  showcode = TRUE,
+  quiet = FALSE,
+  printplot = !quiet,
+  showcode = !quiet,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -267,15 +269,15 @@ error? (Default: FALSE)}
 \item{pointsize}{The (largest) size of box to use for plotting point
 estimates. (Default: 3)}
 
-\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 22 - squares with fill.)}
+\item{shape}{Shape of points. An integer, or name of a column of integers. (Default: 15 (square))}
 
 \item{plotcolour}{Colour for all parts of the plot. (Default: "black")}
 
 \item{colour}{Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)}
 
-\item{cicolour}{Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)}
+\item{cicolour}{Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use colour.)}
 
-\item{fill}{Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)}
+\item{fill}{Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)}
 
 \item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 
@@ -302,7 +304,7 @@ given in the col.key column.}
 
 \item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))}
 
-\item{panel.width}{Panel width to assume and apply different formatting to narrow CIs. Unit is "mm".}
+\item{panel.width}{Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.}
 
 \item{base_size}{base font size, given in pts.}
 
@@ -310,9 +312,11 @@ given in the col.key column.}
 
 \item{stroke}{Size of outline of shapes. (Default: 0)}
 
-\item{printplot}{Print the plot. (Default: TRUE)}
+\item{quiet}{Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)}
 
-\item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
+\item{printplot}{Print the plot. (Default: !quiet)}
+
+\item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)}
 
 \item{addcode}{A character vector of code to add to the generated code.
 The first element should be a regular expression.

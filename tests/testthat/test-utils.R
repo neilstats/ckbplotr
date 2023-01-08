@@ -1,3 +1,23 @@
+test_that("indent", {
+  expect_null(indent(1))
+  expect_equal(indent(2, "test text"),
+               "  test text")
+})
+
+test_that("column_name", {
+  expect_equal(column_name("x y"), "`x y`")
+  expect_equal(column_name("x-y"), "`x-y`")
+  expect_equal(column_name("xy"), "xy")
+})
+
+test_that("quote_string", {
+  expect_equal(quote_string("x"), "\"x\"")
+})
+
+test_that("argset", {
+  expect_equal(argset("x"), "\"x\" = \"x\"")
+})
+
 test_that("ggplot layers are built correctly", {
   expect_equal(make_layer(name = "# add a layer",
                           f = "some_geom",
@@ -15,3 +35,18 @@ test_that("ds handles unicode correctly", {
   expect_equal(ds("a \u2265 b"),
                "\"a \\u2265 b\"")
 })
+
+test_that("printunit", {
+  expect_equal(printunit(unit(1, "cm")),
+               "unit(1, \"cm\")")
+})
+
+test_that("makeunit", {
+  expect_equal(makeunit(unit(1, "cm")),
+               "cm")
+  expect_equal(makeunit(unit(1, "in")),
+               "inches")
+  expect_equal(makeunit(unit(1, "null")),
+               "null")
+})
+

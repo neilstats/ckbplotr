@@ -20,16 +20,16 @@ shape_plot(
   minse = NA,
   pointsize = 3,
   col.group = NULL,
-  shape = NULL,
+  shape = 15,
   plotcolour = "black",
-  colour = NULL,
+  colour = plotcolour,
   cicolour = colour,
-  fill = NULL,
+  fill = colour,
   ciunder = NULL,
   lines = FALSE,
   xlims,
   ylims,
-  panel.height = NULL,
+  height = NULL,
   gap = c(0.025, 0.025),
   ext = c(0.025, 0.025),
   ratio = 1.5,
@@ -43,8 +43,9 @@ shape_plot(
   legend.name = "",
   legend.position = "top",
   title = NULL,
-  printplot = TRUE,
-  showcode = TRUE,
+  quiet = FALSE,
+  printplot = !quiet,
+  showcode = !quiet,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -66,16 +67,16 @@ make_shape_plot(
   minse = NA,
   pointsize = 3,
   col.group = NULL,
-  shape = NULL,
+  shape = 15,
   plotcolour = "black",
-  colour = NULL,
+  colour = plotcolour,
   cicolour = colour,
-  fill = NULL,
+  fill = colour,
   ciunder = NULL,
   lines = FALSE,
   xlims,
   ylims,
-  panel.height = NULL,
+  height = NULL,
   gap = c(0.025, 0.025),
   ext = c(0.025, 0.025),
   ratio = 1.5,
@@ -89,8 +90,9 @@ make_shape_plot(
   legend.name = "",
   legend.position = "top",
   title = NULL,
-  printplot = TRUE,
-  showcode = TRUE,
+  quiet = FALSE,
+  printplot = !quiet,
+  showcode = !quiet,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -130,7 +132,7 @@ estimates. (Default: 3)}
 
 \item{col.group}{Name of column that groups the estimates. (Default: NULL)}
 
-\item{shape}{Shape of points. An integer, or name of a column of integers. (Default will use shape 16 - squares.)}
+\item{shape}{Shape of points. An integer, or name of a column of integers. (Default: 15)}
 
 \item{plotcolour}{Colour for non-data aspects of the plot. (Default: "black")}
 
@@ -148,7 +150,7 @@ estimates. (Default: 3)}
 
 \item{ylims}{A numeric vector of length two. The limits of the y-axis.}
 
-\item{panel.height}{Panel height to assume and apply different formatting to short CIs. Unit is "mm".}
+\item{height}{Panel height to use and apply different formatting to short CIs. A grid::unit() object, or if numeric is assumed to be in mm.}
 
 \item{gap}{A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))}
 
@@ -176,9 +178,11 @@ estimates. (Default: 3)}
 
 \item{title}{Plot title. (Default: NULL)}
 
-\item{printplot}{Print the plot. (Default: TRUE)}
+\item{quiet}{Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)}
 
-\item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: TRUE)}
+\item{printplot}{Print the plot. (Default: !quiet)}
+
+\item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)}
 
 \item{addcode}{A character vector of code to add to the generated code.
 The first element should be a regular expression.

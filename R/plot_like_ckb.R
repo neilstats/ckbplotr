@@ -44,7 +44,9 @@ theme_ckb <- function(base_size = 11,
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0, 0))
-#' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
+#' @param ratio The ratio (y-axis:x-axis) to use for the plot. Ignored if both width and height are set. (Default: 1.5)
+#' @param width A `grid::unit` object to set the width of the plot (not including the gap or extension).
+#' @param height A `grid::unit` object to set the height of the plot (not including the gap or extension).
 #' @param colour Colour for non-data aspects of the plot. (Default: "black")
 #' @param axes Choice of axis lines to add to the plot, one of "both", "x" or "y". (Default: "both")
 #'
@@ -60,6 +62,8 @@ plot_like_ckb <- function(
   gap=c(0.025,0.025),
   ext=c(0,0),
   ratio=1.5,
+  width = NULL,
+  height = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   colour = "black",
@@ -67,7 +71,23 @@ plot_like_ckb <- function(
 ){
 
   # check arguments
-  if (!axes %in% c("both", "x", "y")){stop("axes should be one of 'both', 'x' or 'y'.")}
+  if (!axes %in% c("both", "x", "y", "none")){stop("axes should be one of 'both', 'x', 'y' or 'none'.")}
+
+  # panel sizes
+  if (missing(width) & missing(height)){
+    full_width <- 1
+    full_height <- (ratio + gap[[2]] + ext[[2]]) / (1 + gap[[1]] + ext[[1]])
+  } else if (!missing(width) & missing(height)){
+    full_width <- width * (1 + gap[[1]] + ext[[1]])
+    full_height <-  width * (ratio + gap[[2]] + ext[[2]])
+  } else if (missing(width) & !missing(height)){
+    full_width <- height / ratio * (1 + gap[[1]] + ext[[1]])
+    full_height <- height / ratio * (ratio + gap[[2]] + ext[[2]])
+  } else if (!missing(width) & !missing(height)){
+    full_width <- width * (1 + gap[[1]] + ext[[1]])
+    full_height <- height + width * (gap[[2]] + ext[[2]])
+    ratio <- as.numeric(grid::convertUnit(height, "mm")) / as.numeric(grid::convertUnit(width, "mm"))
+  }
 
   # get plot axis transformations
   tf_x    <- ggplot_build(plot)$layout$panel_scales_x[[1]]$trans$transform
@@ -106,16 +126,19 @@ plot_like_ckb <- function(
               (1/ratio)*ext[[2]]*diff(range(tf_y(limits[["yaxis"]]))))
   limits[["x"]] <- invtf_x(tf_x(limits[["xaxis"]]) + c(-1, 1)*addtox)
   limits[["y"]] <- invtf_y(tf_y(limits[["yaxis"]]) + c(-1, 1)*addtoy)
-  limits[["ratio"]] <- ratio*diff(range(tf_x(limits[["xaxis"]])))/diff(range(tf_y(limits[["yaxis"]])))
 
+  # update plot
   plot <- plot +
-    coord_fixed(ratio  = limits[["ratio"]],
-                xlim   = limits[["x"]],
+    coord_fixed(xlim   = limits[["x"]],
                 ylim   = limits[["y"]],
                 expand = FALSE,
                 clip = "off") +
+    ggh4x::force_panelsizes(rows = full_height,
+                            cols = full_width,
+                            respect = TRUE) +
     theme_ckb(base_size = base_size, base_line_size = base_line_size, colour = colour)
 
+  # add axis lines to plot
   if (axes %in% c("both", "y")){
     plot <- plot +
       annotate(geom = "segment",

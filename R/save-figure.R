@@ -1,8 +1,6 @@
-#' Output plots as files
+#' Prepare figure for saving
 #'
 #' @param figure Plot (or graphical object).
-#' @param name Name of figure.
-#'    Used to name the output file(s) and embedded in the PDF document properties Title field.
 #' @param title Title to be added to the page. (Default: "")
 #' @param title.pos Position of the title text. Default is 1/4 inch from top left of page.
 #'    (Default: unit.c(unit(1.27/2, "cm"), unit(1, "npc") - unit(1.27/2, "cm")))
@@ -24,29 +22,32 @@
 #' @param pagesize Page size of PDF output: "A4" or "A5". (Default: "A4")
 #' @param landscape Landscape page orientation? (Default: False)
 #' @param pagedim Dimensions (width, height) of PDF output. Overrides pagesize and landscape arguments if used.
-#' @param cropped Create a PNG output of the figure without margins or title. (Default: False)
 #'
 #' @export
 #'
-save_figure <- function(figure,
-                        name,
-                        title       = "",
-                        title.pos   = grid::unit.c(unit(1.27/2, "cm"),
-                                                   unit(1, "npc") - unit(1.27/2, "cm")),
-                        title.just  = c(0, 1),
-                        title.gpar  = list(fontsize = 12,
-                                           fontface = "bold"),
-                        footer      = "",
-                        footer.pos  = grid::unit.c(unit(1.27/2, "cm"),
-                                                   unit(1.27/3, "cm")),
-                        footer.just = c(0, 0),
-                        footer.gpar = list(fontsize = 9),
-                        margin      = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
-                        size        = NULL,
-                        pagesize    = c("A4", "A5"),
-                        landscape   = FALSE,
-                        pagedim     = NULL,
-                        cropped     = FALSE){
+
+prepare_figure <- function(figure,
+                           title       = "",
+                           title.pos   = grid::unit.c(unit(1.27/2, "cm"),
+                                                      unit(1, "npc") - unit(1.27/2, "cm")),
+                           title.just  = c(0, 1),
+                           title.gpar  = list(fontsize = 12,
+                                              fontface = "bold"),
+                           footer      = "",
+                           footer.pos  = grid::unit.c(unit(1.27/2, "cm"),
+                                                      unit(1.27/3, "cm")),
+                           footer.just = c(0, 0),
+                           footer.gpar = list(fontsize = 9),
+                           margin      = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
+                           size        = NULL,
+                           pagesize    = c("A4", "A5"),
+                           landscape   = FALSE,
+                           pagedim     = NULL){
+
+  ## Check it figure is a patchwork object, and convert to gtable
+  if (inherits(figure, "patchwork")){
+    figure <- patchwork::patchworkGrob(figure)
+  }
 
   ## Set page dimensions
   pagesize <- match.arg(pagesize)
@@ -122,24 +123,77 @@ save_figure <- function(figure,
                                  nrow = 3,
                                  heights = c(0, 1, 0))
 
+  ## Dimensions
+  attr(page, "width")  <- grid::convertUnit(pagedim[[1]], "mm")
+  attr(page, "height") <- grid::convertUnit(pagedim[[2]], "mm")
 
-  ## Save to PDF file
-  ggsave(paste0(name, ".pdf"),
-         plot   = page,
-         width  = grid::convertUnit(pagedim[[1]], "mm"),
-         height = grid::convertUnit(pagedim[[2]], "mm"),
-         units = "mm",
-         title  = name)
+  attr(figure, "width")  <- grid::convertUnit(pagedim[[1]] - margin[[4]] - margin[[2]], "mm")
+  attr(figure, "height") <-  grid::convertUnit(pagedim[[2]] - margin[[1]] - margin[[3]], "mm")
+
+  return(list(page = page,
+              figure = figure))
+}
+
+
+
+
+#' Output plots as files
+#'
+#' @inheritParams prepare_figure
+#' @param name Name of figure.
+#'    Used to name the output file(s) and embedded in the PDF document properties Title field.
+#' @param cropped Create a second output of the figure without margins or title. (Default: False)
+#' @param ext Extensions to be added to file names for the main figure and cropped figure. (Default: c("pdf", "png"))
+#' @param args List of arguments passed to `ggplot2::ggsave()` for the main figure.
+#' @param args_cropped List of arguments passed to `ggplot2::ggsave()` for the cropped figure.
+#' @param ... Other arguments passed to \link{prepare_figure}.
+#'
+#' @details
+#'
+#' # Using cairo_pdf
+#' Note that if you use a PDF device that does not have a `title`
+#' argument (such as cairo_pdf), then the `title` argument should be set to
+#' NULL, e.g. `args = list(device = cairo_pdf, title = NULL)`
+#'
+#' @export
+#'
+save_figure <- function(figure,
+                        name,
+                        cropped = FALSE,
+                        ext = c("pdf", "png"),
+                        args = NULL,
+                        args_cropped = NULL,
+                        ...){
+
+  # Prepare figure
+  figure <- prepare_figure(figure, ...)
+
+  # Save to PDF file
+  figargs <- list(filename = paste0(name, ".", ext[[1]]),
+                  plot     = figure$page,
+                  width    = attr(figure$page, "width"),
+                  height   = attr(figure$page, "height"),
+                  units    = "mm",
+                  bg       = "transparent")
+  if (ext[[1]] == "pdf"){figargs$title = name}
+  if(!is.null(args)){figargs <- utils::modifyList(figargs, args)}
+  do.call("ggsave", figargs)
 
   ## Save cropped figure to PNG file
   if (cropped){
-    ggsave(paste0(name, ".png"),
-           plot   = figure,
-           width  = grid::convertUnit(pagedim[[1]] - margin[[4]] - margin[[2]], "mm"),
-           height = grid::convertUnit(pagedim[[2]] - margin[[1]] - margin[[3]], "mm"),
-           units = "mm",
-           bg = "transparent")
+    figargs <- list(paste0(name, "_cropped.", ext[[2]]),
+                    plot   = figure$figure,
+                    width  = attr(figure$figure, "width"),
+                    height = attr(figure$figure, "width"),
+                    units = "mm",
+                    bg = "transparent")
+    if (ext[[2]] == "pdf"){figargs$title = name}
+    if(!is.null(args_cropped)){figargs <- utils::modifyList(figargs, args_cropped)}
+    do.call("ggsave", figargs)
   }
 
   invisible(name)
 }
+
+
+
