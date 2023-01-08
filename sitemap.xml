@@ -52,6 +52,9 @@
     <loc>https://neilstats.github.io/ckbplotr/news/index.html</loc>
   </url>
   <url>
+    <loc>https://neilstats.github.io/ckbplotr/reference/ckbplotr-package.html</loc>
+  </url>
+  <url>
     <loc>https://neilstats.github.io/ckbplotr/reference/ckbplotr_forest_data.html</loc>
   </url>
   <url>
@@ -80,6 +83,9 @@
   </url>
   <url>
     <loc>https://neilstats.github.io/ckbplotr/reference/plot_like_ckb.html</loc>
+  </url>
+  <url>
+    <loc>https://neilstats.github.io/ckbplotr/reference/prepare_figure.html</loc>
   </url>
   <url>
     <loc>https://neilstats.github.io/ckbplotr/reference/save_figure.html</loc>
