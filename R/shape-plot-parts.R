@@ -38,7 +38,7 @@ shape.cicolourcode <- function(scale,
                   sprintf('(%s)/max(%s) * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
                           size, size,
                           (ymax - ymin) * (pointsize + 2 * stroke) / height.mm,
-                          c(shape$arg, fixsp(shape$aes)))),
+                          c(shape$arg, column_name(shape$aes)))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(!is.null(col.group)){
@@ -133,16 +133,16 @@ shape.lines <- function(addaes,
              aes = c(addaes$lines,
                      if (!is.null(col.lci)) {
                        sprintf('weight = 1/((%s - %s)^2)',
-                               fixsp(col.estimate),
-                               fixsp(col.lci))
+                               column_name(col.estimate),
+                               column_name(col.lci))
                      } else {
-                       sprintf('weight = 1/(%s^2)', fixsp(col.stderr))
+                       sprintf('weight = 1/(%s^2)', column_name(col.stderr))
                      }),
              arg = c(addarg$lines,
                      'method   = "glm"',
                      'formula  = y ~ x',
                      'se       = FALSE',
-                     sprintf('colour = %s', fixq(plotcolour)),
+                     sprintf('colour = %s', quote_string(plotcolour)),
                      'linetype = "dashed"',
                      'linewidth = 0.25')
   )
@@ -164,12 +164,12 @@ shape.estimates.points <- function(addaes,
     aes = c(
       addaes$point,
       sprintf('size = %s', size),
-      sprintf('shape = %s', fixsp(shape$aes)),
+      sprintf('shape = %s', column_name(shape$aes)),
       sprintf('%s', fill_string$aes),
-      sprintf('colour = %s', fixsp(colour$aes))),
+      sprintf('colour = %s', column_name(colour$aes))),
     arg = c(addarg$point,
             sprintf('shape = %s', shape$arg),
-            sprintf('colour = %s', fixq(colour$arg)),
+            sprintf('colour = %s', quote_string(colour$arg)),
             sprintf('%s', fill_string$arg),
             sprintf('stroke = %s', stroke))
   )
@@ -196,7 +196,7 @@ shape.estimates.text <- function(addaes,
     arg = c(addarg$estimates,
             'vjust = -0.8',
             sprintf('size  = %s', base_size/(11/3)),
-            sprintf('colour = %s', fixq(plotcolour)))
+            sprintf('colour = %s', quote_string(plotcolour)))
   )
 }
 
@@ -217,7 +217,7 @@ shape.n.events.text <- function(addaes,
     arg = c(addarg$n,
             'vjust = 1.8',
             sprintf('size  = %s', base_size/(11/3)),
-            sprintf('colour = %s', fixq(plotcolour)))
+            sprintf('colour = %s', quote_string(plotcolour)))
   )
 }
 
@@ -240,13 +240,13 @@ shape.cis <- function(addaes,
     aes = c(addaes$ci,
             sprintf('ymin = %s', lci_string),
             sprintf('ymax = %s', uci_string),
-            sprintf('colour = %s', fixsp(cicolour$aes))),
+            sprintf('colour = %s', column_name(cicolour$aes))),
     arg = c(addarg$ci,
             switch(type,
                    "all" = NULL,
-                   "before" = sprintf('data = ~ dplyr::filter(.x, %s)', fixsp(ciunder)),
-                   "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', fixsp(ciunder))),
-            sprintf('colour = %s', fixq(cicolour$arg)),
+                   "before" = sprintf('data = ~ dplyr::filter(.x, %s)', column_name(ciunder)),
+                   "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', column_name(ciunder))),
+            sprintf('colour = %s', quote_string(cicolour$arg)),
             sprintf('linewidth = %s', base_line_size))
   )
 }
@@ -294,7 +294,7 @@ shape.plot.like.ckb <- function(xlims,
                     makeunit(height)),
             sprintf('base_size      = %s', base_size),
             sprintf('base_line_size = %s', base_line_size),
-            sprintf('colour         = %s', fixq(plotcolour))),
+            sprintf('colour         = %s', quote_string(plotcolour))),
     plus = TRUE
   )
 }

@@ -687,20 +687,17 @@ forest_plot <- function(
 
   ### colour
   if (!missing(colour) && all(colour %in% names(panels[[1]]))){
-    colour <- list(aes = fixsp(colour))
+    colour <- list(aes = colour)
   } else {
-    colour <- list(arg = fixq(colour))
+    colour <- list(arg = colour)
   }
 
   ### fill
   if (!is.list(fill) && fill %in% names(panels[[1]])){
-    fill <- list(aes = fixsp(fill))
+    fill <- list(aes = fill)
   } else {
-    fill <- list(arg = fixq(fill))
+    fill <- list(arg = fill)
   }
-
-  ### col.bold
-  if (is.null(col.bold)) { col.bold <- FALSE } else {col.bold <- fixsp(col.bold)}
 
 
 
@@ -840,7 +837,7 @@ forest_plot <- function(
     if (!inherits(panel.width, "unit")){
       panel.width <- grid::unit(panel.width, "mm")
     }
-    cicolours <- c(fixq(cicolour$arg), fixsp(cicolour$aes))
+    cicolours <- c(quote_string(cicolour$arg), column_name(cicolour$aes))
     cicolour <- list(aes = "cicolour")
 
     if (missing(ciunder)) {

@@ -174,9 +174,9 @@ shape_plot <- function(data,
   # String for point size aesthetic
   if (scalepoints) {
     if (!is.null(col.lci)) {
-      size <- sprintf('1.96/(%s - %s)', fixsp(col.estimate), fixsp(col.lci))
+      size <- sprintf('1.96/(%s - %s)', column_name(col.estimate), column_name(col.lci))
     } else {
-      size <- sprintf('1/%s', fixsp(col.stderr))
+      size <- sprintf('1/%s', column_name(col.stderr))
     }
   } else {
     size <- '1'
@@ -190,34 +190,34 @@ shape_plot <- function(data,
     scale <- "identity"
   }
   if (exponentiate == TRUE) {
-    est_string <- paste0('exp(', fixsp(col.estimate), ')')
+    est_string <- paste0('exp(', column_name(col.estimate), ')')
     if (!is.null(col.lci)) {
-      lci_string <- paste0('exp(', fixsp(col.lci), ')')
-      uci_string <- paste0('exp(', fixsp(col.uci), ')')
+      lci_string <- paste0('exp(', column_name(col.lci), ')')
+      uci_string <- paste0('exp(', column_name(col.uci), ')')
     } else {
       lci_string <- paste0('exp(',
-                           fixsp(col.estimate),
+                           column_name(col.estimate),
                            '-1.96*',
-                           fixsp(col.stderr),
+                           column_name(col.stderr),
                            ')')
       uci_string <- paste0('exp(',
-                           fixsp(col.estimate),
+                           column_name(col.estimate),
                            '+1.96*',
-                           fixsp(col.stderr),
+                           column_name(col.stderr),
                            ')')
     }
   } else {
-    est_string <- fixsp(col.estimate)
+    est_string <- column_name(col.estimate)
     if (!is.null(col.lci)) {
-      lci_string <- fixsp(col.lci)
-      uci_string <- fixsp(col.uci)
+      lci_string <- column_name(col.lci)
+      uci_string <- column_name(col.uci)
     } else {
-      lci_string <- paste0(fixsp(col.estimate),
+      lci_string <- paste0(column_name(col.estimate),
                            '-1.96*',
-                           fixsp(col.stderr))
-      uci_string <- paste0(fixsp(col.estimate),
+                           column_name(col.stderr))
+      uci_string <- paste0(column_name(col.estimate),
                            '+1.96*',
-                           fixsp(col.stderr))
+                           column_name(col.stderr))
     }
   }
 
@@ -227,7 +227,7 @@ shape_plot <- function(data,
     if (!inherits(height, "unit")){
       height <- grid::unit(height, "mm")
     }
-    cicolours <- c(fixq(cicolour$arg), fixsp(cicolour$aes))
+    cicolours <- c(quote_string(cicolour$arg), column_name(cicolour$aes))
     cicolour <- list(aes = "cicolour")
   }
 
@@ -241,7 +241,7 @@ shape_plot <- function(data,
   if (!is.null(col.group)) {
 
     if(!is.factor(data[[col.group]])) stop("col.group must be factor")
-    group_string <- sprintf(', group = %s', fixsp(col.group))
+    group_string <- sprintf(', group = %s', column_name(col.group))
     scale_fill_string <- c('',
                            make_layer('# Set the scale for fill colours',
                                       f = "scale_fill_grey",
@@ -249,12 +249,12 @@ shape_plot <- function(data,
                                               "end   = 1",
                                               sprintf('name  = "%s"', legend.name)),
                                       br = FALSE))
-    fill_string <- list(aes = sprintf('fill = %s', fixsp(col.group)))
+    fill_string <- list(aes = sprintf('fill = %s', column_name(col.group)))
   } else {
     group_string <- ''
     scale_fill_string <- 'scale_fill_identity() +'
-    fill_string <- list(aes = sprintf('fill = %s', fixsp(fill$aes)),
-                        arg = sprintf('fill = %s', fixq(fill$arg)))
+    fill_string <- list(aes = sprintf('fill = %s', column_name(fill$aes)),
+                        arg = sprintf('fill = %s', quote_string(fill$arg)))
   }
 
 
@@ -297,7 +297,7 @@ shape_plot <- function(data,
     shape.ciundercode(height),
 
     ## start ggplot
-    shape.start.ggplot(fixsp(col.x),
+    shape.start.ggplot(column_name(col.x),
                        est_string,
                        group_string),
 

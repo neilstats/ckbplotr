@@ -4,14 +4,14 @@ test_that("indent", {
                "  test text")
 })
 
-test_that("fixsp", {
-  expect_equal(fixsp("x y"), "`x y`")
-  expect_equal(fixsp("x-y"), "`x-y`")
-  expect_equal(fixsp("xy"), "xy")
+test_that("column_name", {
+  expect_equal(column_name("x y"), "`x y`")
+  expect_equal(column_name("x-y"), "`x-y`")
+  expect_equal(column_name("xy"), "xy")
 })
 
-test_that("fixq", {
-  expect_equal(fixq("x"), "\"x\"")
+test_that("quote_string", {
+  expect_equal(quote_string("x"), "\"x\"")
 })
 
 test_that("argset", {

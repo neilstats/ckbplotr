@@ -18,7 +18,7 @@ indent <- function(n, ...){
 #' @noRd
 #'
 
-fixsp <- function(x){
+column_name <- function(x){
   if(is.null(x)){ return(NULL) }
   for (i in 1:length(x)){
     if (grepl("[[:blank:]]|[[:punct:]]", x[[i]])){
@@ -34,8 +34,8 @@ fixsp <- function(x){
 #' @keywords internal
 #' @noRd
 #'
-fixq <- function(x){
-  if(is.list(x)){return(lapply(x, fixq))}
+quote_string <- function(x){
+  if(is.list(x)){return(lapply(x, quote_string))}
   paste0('\"', x, '\"')
 }
 
