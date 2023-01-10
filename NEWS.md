@@ -1,3 +1,7 @@
+# ckbplotr 0.8.0.9000
+
+* Small fix to calculation of text size on plots.
+
 # ckbplotr 0.8.0
 
 * In shape_plot() and forest_plot() the height and panel.width arguments, respectively, will set the size of the plotting panels (so fix_panel() no longer needs to used).

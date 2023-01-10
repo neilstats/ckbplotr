@@ -183,6 +183,16 @@ shape_plot <- function(data,
   }
 
 
+
+
+  # Text size ----
+  text_size <- round(base_size_to_text_size(base_size), 6)
+
+
+
+
+
+
   # Log scale and exponentiate estimates ----
   if (logscale == TRUE){
     scale <- "log"
@@ -337,7 +347,7 @@ shape_plot <- function(data,
                                 uci_string,
                                 est_string,
                                 addarg,
-                                base_size,
+                                text_size,
                                 plotcolour,
                                 digits),
 
@@ -347,7 +357,7 @@ shape_plot <- function(data,
                                  lci_string,
                                  col.n,
                                  addarg,
-                                 base_size,
+                                 text_size,
                                  plotcolour)
            },
 

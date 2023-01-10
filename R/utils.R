@@ -164,3 +164,16 @@ makeunit <- function(x){
 
 }
 
+
+
+
+#' Turn font size in pt into mm and multiply
+#'
+#' multiply 0.8 to match default size of axis text in ggplot
+#'
+#' @keywords internal
+#' @noRd
+
+base_size_to_text_size <- function(x, m = 0.8){
+  m * x/.pt
+}

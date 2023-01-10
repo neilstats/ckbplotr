@@ -702,6 +702,12 @@ forest_plot <- function(
 
 
 
+  # Text size ----
+  text_size <- round(base_size_to_text_size(base_size), 6)
+
+
+
+
   # Spacing ----
 
   ## handle old methods for horizontal spacing and column positioning >>>
@@ -1016,7 +1022,7 @@ forest_plot <- function(
                                    addarg,
                                    xto,
                                    xfrom,
-                                   base_size,
+                                   text_size,
                                    plotcolour,
                                    col.heading.space,
                                    panel.names,
@@ -1036,7 +1042,7 @@ forest_plot <- function(
                                   addarg,
                                   xfrom,
                                   xto,
-                                  base_size,
+                                  text_size,
                                   plotcolour,
                                   col.heading.space,
                                   panel.names,
@@ -1053,7 +1059,7 @@ forest_plot <- function(
                             col.right.parse,
                             col.right.pos,
                             col.right.hjust,
-                            base_size,
+                            text_size,
                             plotcolour,
                             tf,
                             inv_tf)
@@ -1063,7 +1069,7 @@ forest_plot <- function(
            forest.xlab.panel.headings(addaes,
                                       xmid,
                                       addarg,
-                                      base_size,
+                                      text_size,
                                       plotcolour,
                                       panel.names,
                                       xlab,

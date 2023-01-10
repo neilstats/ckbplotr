@@ -408,7 +408,7 @@ forest.col.right.line <- function(col.right.all,
                                   addarg,
                                   xto,
                                   xfrom,
-                                  base_size,
+                                  text_size,
                                   plotcolour,
                                   col.heading.space,
                                   panel.names,
@@ -446,7 +446,7 @@ forest.col.right.line <- function(col.right.all,
         arg = c(..10[..10!=""],
                 sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                 sprintf('hjust = %s', ..5),
-                sprintf('size  = %s', base_size/(11/3)),
+                sprintf('size  = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'na.rm = TRUE',
                 sprintf('parse = %s', ..7)),
@@ -459,7 +459,7 @@ forest.col.right.line <- function(col.right.all,
                 'label = title'),
         arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                 sprintf('hjust    = %s', ..5),
-                sprintf('size     = %s', base_size/(11/3)),
+                sprintf('size     = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -479,7 +479,7 @@ forest.col.right.line <- function(col.right.all,
 
 #' code for columns to left of panels
 #' @noRd
-forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.left.hjust, col.bold, col.left.space, addaes, addarg, xfrom, xto, base_size, plotcolour, col.heading.space, panel.names, tf, inv_tf) {
+forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.left.hjust, col.bold, col.left.space, addaes, addarg, xfrom, xto, text_size, plotcolour, col.heading.space, panel.names, tf, inv_tf) {
   x <- unlist(purrr::pmap(
     list(col.left,
          as.numeric(col.left.pos),
@@ -506,7 +506,7 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
         arg = c(..9[..9!=""],
                 sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                 sprintf('hjust = %s', ..5),
-                sprintf('size  = %s', base_size/(11/3)),
+                sprintf('size  = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'na.rm = TRUE'),
         br = FALSE
@@ -518,7 +518,7 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
                 'label = title'),
         arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                 sprintf('hjust    = %s', ..5),
-                sprintf('size     = %s', base_size/(11/3)),
+                sprintf('size     = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -544,7 +544,7 @@ forest.addtext <- function(xto,
                            col.right.parse,
                            col.right.pos,
                            col.right.hjust,
-                           base_size,
+                           text_size,
                            plotcolour,
                            tf,
                            inv_tf) {
@@ -571,7 +571,7 @@ forest.addtext <- function(xto,
                     as.numeric(col.right.pos[[1]]),
                     makeunit(col.right.pos[[1]])),
             sprintf('hjust = %s', col.right.hjust[[1]]),
-            sprintf('size  = %s', base_size/(11/3)),
+            sprintf('size  = %s', text_size),
             sprintf('colour  = %s', quote_string(plotcolour)),
             'na.rm = TRUE',
             'parse = TRUE')
@@ -581,7 +581,7 @@ forest.addtext <- function(xto,
 
 #' ccode for x-axis labels and panel headings
 #' @noRd
-forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolour, panel.names, xlab, panel.headings, col.heading.space) {
+forest.xlab.panel.headings <- function(addaes, xmid, addarg, text_size, plotcolour, panel.names, xlab, panel.headings, col.heading.space) {
   c(
     make_layer(
       '# Add xlab below each axis',
@@ -590,7 +590,7 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
               sprintf('y = -Inf, x = %s, label = xlab', xmid)),
       arg = c(addarg$xlab,
               'hjust = 0.5',
-              sprintf('size  = %s', base_size/(11/3)),
+              sprintf('size  = %s', text_size),
               sprintf('colour  = %s', quote_string(plotcolour)),
               'vjust = 4.4',
               'fontface = "bold"',
@@ -608,7 +608,7 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
         arg = c(addarg$panel.name,
                 'hjust = 0.5',
                 'nudge_y = 2',
-                sprintf('size  = %s', base_size/(11/3)),
+                sprintf('size  = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),

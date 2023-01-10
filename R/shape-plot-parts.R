@@ -181,7 +181,7 @@ shape.estimates.text <- function(addaes,
                                  uci_string,
                                  est_string,
                                  addarg,
-                                 base_size,
+                                 text_size,
                                  plotcolour,
                                  digits) {
   make_layer(
@@ -195,7 +195,7 @@ shape.estimates.text <- function(addaes,
                     digits)),
     arg = c(addarg$estimates,
             'vjust = -0.8',
-            sprintf('size  = %s', base_size/(11/3)),
+            sprintf('size  = %s', text_size),
             sprintf('colour = %s', quote_string(plotcolour)))
   )
 }
@@ -206,7 +206,7 @@ shape.n.events.text <- function(addaes,
                                 lci_string,
                                 col.n,
                                 addarg,
-                                base_size,
+                                text_size,
                                 plotcolour) {
   make_layer(
     '# Plot n events text',
@@ -216,7 +216,7 @@ shape.n.events.text <- function(addaes,
             sprintf('label = %s', col.n)),
     arg = c(addarg$n,
             'vjust = 1.8',
-            sprintf('size  = %s', base_size/(11/3)),
+            sprintf('size  = %s', text_size),
             sprintf('colour = %s', quote_string(plotcolour)))
   )
 }
