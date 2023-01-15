@@ -55,45 +55,20 @@ geom_text_move <- function(mapping = NULL, data = NULL,
 #' @format NULL
 #' @usage NULL
 GeomTextMove <- ggproto("GeomTextMove", GeomText,
-                        default_aes = aes(
-                          colour = "black", size = 3.88, angle = 0, hjust = 0.5,
-                          vjust = 0.5, alpha = NA, family = "", fontface = 1, lineheight = 1.2),
-
                         draw_panel = function(data, panel_params, coord, parse = FALSE,
                                               na.rm = FALSE, check_overlap = FALSE,
                                               move_x = unit(0, "pt"),
                                               move_y = unit(0, "pt")) {
-                          lab <- data$label
-                          if (parse) {
-                            lab <- ggplot2:::parse_safe(as.character(lab))
-                          }
-
-                          data <- coord$transform(data, panel_params)
-
-                          if (is.character(data$vjust)) {
-                            data$vjust <- compute_just(data$vjust, data$y)
-                          }
-                          if (is.character(data$hjust)) {
-                            data$hjust <- compute_just(data$hjust, data$x)
-                          }
-
-                          grid::textGrob(
-                            lab,
-                            grid::unit.c(unit(data$x, "native") + move_x), grid::unit.c(unit(data$y, "native") + move_y), default.units = "native",
-                            hjust = data$hjust, vjust = data$vjust,
-                            rot = data$angle,
-                            gp = grid::gpar(
-                              col = alpha(data$colour, data$alpha),
-                              fontsize = data$size * .pt,
-                              fontfamily = data$family,
-                              fontface = data$fontface,
-                              lineheight = data$lineheight
-                            ),
-                            check.overlap = check_overlap
-                          )
-                        },
-
-                        draw_key = draw_key_text
+                          text_grob <- ggplot2::GeomText$draw_panel(data = data,
+                                                                    panel_params = panel_params,
+                                                                    coord = coord,
+                                                                    parse = parse,
+                                                                    na.rm = na.rm,
+                                                                    check_overlap = check_overlap)
+                          text_grob$x <- text_grob$x + move_x
+                          text_grob$y <- text_grob$y + move_y
+                          return(text_grob)
+                        }
 )
 
 
