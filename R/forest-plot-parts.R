@@ -12,51 +12,15 @@ forest.axes <- function(scale, xticks, bottom.space) {
     make_layer(
       '# Set the scale for the y axis (the rows)',
       f = "scale_y_continuous",
-      arg = c('breaks = -rowlabels$row',
-              'labels = rowlabels$row.label',
-              sprintf('limits = c(-max(rowlabels$row) - %s, NA)',
+      arg = c('breaks = -attr(datatoplot, "rowlabels")$row',
+              'labels = attr(datatoplot, "rowlabels")$row.label',
+              sprintf('limits = c(-max(attr(datatoplot, "rowlabels")$row) - %s, NA)',
                       deparse(bottom.space)),
               'expand = c(0,0)')
     )
   )
 }
 
-#' code for row labels vector
-#' @noRd
-forest.row.labels.vec <- function(bold.labels) {
-  c(
-    '# Get data frame of row positions and labels, so these can be used in the plot',
-    'rowlabels <- datatoplot %>%',
-    indent(14,
-           'dplyr::group_by(row) %>%',
-           'dplyr::summarise(row.label = dplyr::first(row.label),',
-           indent(17, sprintf('bold = all(is.na(estimate_transformed) | all(key %%in%% %s)),',
-                              ds(bold.labels)),
-                  '.groups = "drop") %>%'),
-           'dplyr::mutate(row.label = dplyr::if_else(bold & row.label != "",',
-           indent(41, 'paste0("**", row.label, "**"),',
-                  'as.character(row.label))) %>% '),
-           'dplyr::arrange(row)'),
-    ''
-  )
-}
-
-#' code for indentifying CIx that extend outside axis limits
-#' @noRd
-forest.check.cis <- function(xto, xfrom) {
-  c(
-    '# Identify any CIs that extend outside axis limits',
-    'datatoplot <- datatoplot %>%',
-    indent(16,
-           sprintf('dplyr::mutate(cioverright  = (uci_transformed > %s),', xto),
-           indent(14,
-                  sprintf('uci_transformed = pmin(uci_transformed, %s),', xto),
-                  sprintf('lci_transformed = pmin(lci_transformed, %s),', xto),
-                  sprintf('cioverleft  = (lci_transformed < %s),', xfrom),
-                  sprintf('lci_transformed = pmax(lci_transformed, %s),', xfrom),
-                  sprintf('uci_transformed = pmax(uci_transformed, %s))', xfrom))),
-    '')
-}
 
 #' code for CI colours if using panel.width
 #' @noRd
@@ -359,18 +323,18 @@ forest.scales.coords <- function(xfrom, xto) {
 
 #' code to add arrows to CIs
 #' @noRd
-forest.arrows <- function(addaes, cicolour, addarg, base_line_size) {
+forest.arrows <- function(addaes, cicolour, addarg, base_line_size, xfrom, xto) {
   c(make_layer(
     '# Add tiny segments with arrows when the CIs go outside axis limits',
     f = 'geom_segment',
     aes = c(addaes$ci,
             'y = -row',
             'yend = -row',
-            'x = uci_transformed-0.000001',
-            'xend = uci_transformed',
+            sprintf('x = %s', xto - 1e-6),
+            sprintf('xend = %s', xto),
             sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
-            'data = ~ dplyr::filter(.x, cioverright == TRUE)',
+            sprintf('data = ~ dplyr::filter(.x, uci_transformed > %s)', xto),
             sprintf('colour = %s', quote_string(cicolour$arg[1])),
             sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
@@ -382,11 +346,11 @@ forest.arrows <- function(addaes, cicolour, addarg, base_line_size) {
     aes = c(addaes$ci,
             'y = -row',
             'yend = -row',
-            'x = lci_transformed+0.000001',
-            'xend = lci_transformed',
+            sprintf('x = %s', xfrom + 1e-6),
+            sprintf('xend = %s', xfrom),
             sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
-            'data = ~ dplyr::filter(.x, cioverleft == TRUE)',
+            sprintf('data = ~ dplyr::filter(.x, lci_transformed < %s)', xfrom),
             sprintf('colour = %s', quote_string(cicolour$arg[1])),
             sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
@@ -578,7 +542,7 @@ forest.addtext <- function(xto,
 }
 
 
-#' ccode for x-axis labels and panel headings
+#' code for x-axis labels and panel headings
 #' @noRd
 forest.xlab.panel.headings <- function(addaes, xmid, addarg, text_size, plotcolour, panel.names, xlab, panel.headings, col.heading.space) {
   c(

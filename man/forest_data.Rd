@@ -28,7 +28,8 @@ forest_data(
   addtext = NULL,
   cols = panels,
   headings = NULL,
-  colnames = NULL
+  colnames = NULL,
+  bold.labels = NULL
 )
 
 make_forest_data(
@@ -54,7 +55,8 @@ make_forest_data(
   addtext = NULL,
   cols = panels,
   headings = NULL,
-  colnames = NULL
+  colnames = NULL,
+  bold.labels = NULL
 )
 }
 \arguments{

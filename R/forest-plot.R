@@ -89,7 +89,8 @@ forest_data <- function(
     addtext       = NULL,
     cols          = panels,
     headings      = NULL,
-    colnames      = NULL
+    colnames      = NULL,
+    bold.labels   = NULL
 ){
 
   # legacy arguments
@@ -375,6 +376,19 @@ forest_data <- function(
   if (!scalepoints) {
     datatoplot$size <- 1
   }
+
+  rowlabels <- datatoplot %>%
+    dplyr::group_by(.data$row) %>%
+    dplyr::summarise(row.label = dplyr::first(.data$row.label),
+                     bold = all(is.na(.data$estimate_transformed) | all(.data$key %in% bold.labels)),
+                     .groups = "drop") %>%
+    dplyr::mutate(row.label = dplyr::if_else(.data$bold & .data$row.label != "",
+                                             paste0("**", .data$row.label, "**"),
+                                             as.character(.data$row.label))) %>%
+    dplyr::arrange(.data$row) %>%
+    dplyr::select(.data$row, .data$row.label)
+
+  attr(datatoplot, "rowlabels") <- rowlabels
 
   return(datatoplot)
 }
@@ -914,6 +928,7 @@ forest_plot <- function(
       argset(blankrows),
       argset(scalepoints),
       argset(minse),
+      argset(bold.labels),
       if (!identical(addtext,
                      eval(formals(ckbplotr::forest_data)[["addtext"]]))){
         sprintf('addtext = %s',
@@ -938,12 +953,6 @@ forest_plot <- function(
 
     # code to prepare data for plotting using forest_data()
     prep.data.code,
-
-    # code to create a vector of row labels
-    forest.row.labels.vec(bold.labels),
-
-    # code to identify CIs that extend outside axis limits
-    forest.check.cis(xto, xfrom),
 
     # fill may be a list
     if (exists("fill_orig")){forest.fillcode(fill_orig, panel.names)},
@@ -1009,7 +1018,7 @@ forest_plot <- function(
                       type = ci_order[[2]]),
 
            # code to add arrows to CIs
-           forest.arrows(addaes, cicolour, addarg, base_line_size),
+           forest.arrows(addaes, cicolour, addarg, base_line_size, xfrom, xto),
 
            # code for plotting diamonds
            if(!is.null(col.diamond) || !is.null(diamond)){
