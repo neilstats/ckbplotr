@@ -12,9 +12,9 @@ forest.axes <- function(scale, xticks, bottom.space) {
     make_layer(
       '# Set the scale for the y axis (the rows)',
       f = "scale_y_continuous",
-      arg = c('breaks = -1:-max(datatoplot$row)',
-              'labels = rowlabels',
-              sprintf('limits = c(-max(datatoplot$row) - %s, NA)',
+      arg = c('breaks = -rowlabels$row',
+              'labels = rowlabels$row.label',
+              sprintf('limits = c(-max(rowlabels$row) - %s, NA)',
                       deparse(bottom.space)),
               'expand = c(0,0)')
     )
@@ -25,7 +25,7 @@ forest.axes <- function(scale, xticks, bottom.space) {
 #' @noRd
 forest.row.labels.vec <- function(bold.labels) {
   c(
-    '# Get a character vector of the row labels, so these can be used in the plot',
+    '# Get data frame of row positions and labels, so these can be used in the plot',
     'rowlabels <- datatoplot %>%',
     indent(14,
            'dplyr::group_by(row) %>%',
@@ -36,8 +36,7 @@ forest.row.labels.vec <- function(bold.labels) {
            'dplyr::mutate(row.label = dplyr::if_else(bold & row.label != "",',
            indent(41, 'paste0("**", row.label, "**"),',
                   'as.character(row.label))) %>% '),
-           'dplyr::arrange(row) %>%',
-           'dplyr::pull(row.label)'),
+           'dplyr::arrange(row)'),
     ''
   )
 }

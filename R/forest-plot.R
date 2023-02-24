@@ -163,8 +163,10 @@ forest_data <- function(
   if (is.null(row.labels)) {
     out <- panels[[1]] %>%
       dplyr::mutate(row.label = !!rlang::sym(col.key),
-                    key = !!rlang::sym(col.key)) %>%
-      dplyr::select(.data$row.label, .data$key)
+                    key = !!rlang::sym(col.key),
+                    row.height = NA,
+                    spacing_row = FALSE) %>%
+      dplyr::select(.data$row.label, .data$key, .data$row.height, .data$spacing_row)
   } else {
 
     if (is.null(rows)) stop("argument rows must be given if row.labels is used")
@@ -202,24 +204,32 @@ forest_data <- function(
       if(all(is.na(data$row.label))){
         out <- dplyr::mutate(data, row.label = !!heading)
       } else {
-        out <- dplyr::add_row(data, row.label = !!heading, .before = 1)
+        out <- dplyr::add_row(data,
+                              row.label = !!heading,
+                              spacing_row = FALSE,
+                              .before = 1)
         if (blank_after_heading > 0){
-          for (i in 1:blank_after_heading) {
-            out <- tibble::add_row(out, row.label = "", .before = 2)
-          }
+            out <- tibble::add_row(out,
+                                   row.label = "",
+                                   row.height = blank_after_heading,
+                                   spacing_row = TRUE,
+                                   .before = 2)
         }
       }
       if (blank_after_section > 0){
-        for (i in 1:blank_after_section) {
-          out <- tibble::add_row(out, row.label = "")
-        }
+          out <- tibble::add_row(out,
+                                 row.label = "",
+                                 row.height = blank_after_section,
+                                 spacing_row = TRUE)
       }
       out
     }
 
     ## add headings/subheadings for row labels
     out <- row.labels %>%
-      dplyr::mutate(row.label = .data$heading3) %>%
+      dplyr::mutate(row.label = .data$heading3,
+                    row.height = NA,
+                    spacing_row = FALSE) %>%
       dplyr::group_by(.data$heading1, .data$heading2) %>%
       tidyr::nest() %>%
       dplyr::mutate(res = purrr::map(.data$data,
@@ -248,6 +258,7 @@ forest_data <- function(
       out <- out %>%
         dplyr::add_row(row.label = "",
                        extrarowkey = paste0(extrarowkeys[[k]]),
+                       spacing_row = FALSE,
                        .after = which(out$key == extrarowkeys[[k]]))
     }
   }
@@ -263,7 +274,8 @@ forest_data <- function(
   }
 
   out <- out %>%
-    dplyr::mutate(row = 1:dplyr::n()) %>%
+    dplyr::mutate(row = cumsum(dplyr::coalesce(.data$row.height, 1))) %>%
+    dplyr::filter(!.data$spacing_row) %>%
     dplyr::select(.data$row, .data$row.label, .data$key, .data$extrarowkey, .data$addtextrow)
 
   # make datatoplot
@@ -989,7 +1001,6 @@ forest_plot <- function(
                               pointsize),
 
            # code for CI lines plotted after points
-           # code for CI lines plotted before points
            forest.cis(addaes,
                       cicolour,
                       addarg,
