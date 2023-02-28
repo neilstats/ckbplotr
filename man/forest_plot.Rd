@@ -65,6 +65,7 @@ forest_plot(
   quiet = FALSE,
   printplot = !quiet,
   showcode = !quiet,
+  data.function = NULL,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -144,6 +145,7 @@ make_forest_plot(
   quiet = FALSE,
   printplot = !quiet,
   showcode = !quiet,
+  data.function = NULL,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -317,6 +319,8 @@ given in the col.key column.}
 \item{printplot}{Print the plot. (Default: !quiet)}
 
 \item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)}
+
+\item{data.function}{Name of a function to apply to data frame before plotting.}
 
 \item{addcode}{A character vector of code to add to the generated code.
 The first element should be a regular expression.

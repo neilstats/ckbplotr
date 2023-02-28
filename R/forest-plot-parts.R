@@ -215,7 +215,7 @@ forest.facet <- function() {
   make_layer(
     '# Put the different panels in side-by-side plots using facets',
     f = 'facet_wrap',
-    arg = c('~panel, nrow = 1')
+    arg = c('vars(panel), nrow = 1')
   )
 }
 

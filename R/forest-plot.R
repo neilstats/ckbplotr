@@ -493,6 +493,7 @@ make_forest_data <- forest_data
 #' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
 #' @param printplot Print the plot. (Default: !quiet)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
+#' @param data.function Name of a function to apply to data frame before plotting.
 #' @param addcode A character vector of code to add to the generated code.
 #'                The first element should be a regular expression.
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
@@ -582,6 +583,7 @@ forest_plot <- function(
     quiet         = FALSE,
     printplot     = !quiet,
     showcode      = !quiet,
+    data.function = NULL,
     addcode       = NULL,
     addaes        = NULL,
     addarg        = NULL,
@@ -978,6 +980,10 @@ forest_plot <- function(
     if (exists("ciunder_orig")) {
       forest.ciundercode(ciunder_orig)
     },
+
+    # code for user function on datatoplot
+    sprintf('datatoplot <- %s(datatoplot)', data.function),
+    '',
 
     # code to initiate the ggplot
     forest.start.ggplot(),
