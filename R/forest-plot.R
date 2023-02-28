@@ -202,27 +202,21 @@ forest_data <- function(
 
     ## function to add headings/subheadings for row labels
     add_heading <- function(data, heading, blank_after_heading, blank_after_section){
+      out <- tibble::add_row(data,
+                             row.label = !!heading,
+                             spacing_row = FALSE,
+                             .before = 1) %>%
+        tibble::add_row(row.label = "",
+                        row.height = blank_after_heading,
+                        spacing_row = TRUE,
+                        .before = 2)
       if(all(is.na(data$row.label))){
         out <- dplyr::mutate(data, row.label = !!heading)
-      } else {
-        out <- dplyr::add_row(data,
-                              row.label = !!heading,
-                              spacing_row = FALSE,
-                              .before = 1)
-        if (blank_after_heading > 0){
-            out <- tibble::add_row(out,
-                                   row.label = "",
-                                   row.height = blank_after_heading,
-                                   spacing_row = TRUE,
-                                   .before = 2)
-        }
       }
-      if (blank_after_section > 0){
-          out <- tibble::add_row(out,
-                                 row.label = "",
-                                 row.height = blank_after_section,
-                                 spacing_row = TRUE)
-      }
+      out <- tibble::add_row(out,
+                             row.label = "",
+                             row.height = blank_after_section,
+                             spacing_row = TRUE)
       out
     }
 
