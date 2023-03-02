@@ -336,11 +336,11 @@ forest_data <- function(
                     uci_transformed = tf(.data$uci)
       )
     if (is.null(minse)){
-      minse <- min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)
+      minse <- min((datatoplot$uci - datatoplot$lci)/(2*1.96), na.rm = TRUE)
     } else {
-      if (minse > min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)) stop("minse is larger than the minimum standard error in the data")
+      if (minse > min((datatoplot$uci - datatoplot$lci)/(2*1.96), na.rm = TRUE)) stop("minse is larger than the minimum standard error in the data")
     }
-    datatoplot$size <- 1.96*minse/(datatoplot$estimate - datatoplot$lci)
+    datatoplot$size <- 2*1.96*minse/(datatoplot$uci - datatoplot$lci)
   } else {
     datatoplot <- datatoplot %>%
       dplyr::mutate(estimate_transformed = tf(.data$estimate),
