@@ -32,6 +32,17 @@ levels…
 …and convert other ggplots to CKB style.
 <img src="man/figures/README-a-plot-1.png" width="80%" style="display: block; margin: auto;" />
 
+## Key features
+
+Functions that create plots (such as `shape_plot()` and `forest_plot()`)
+return both:
+
+- A **ggplot2 plot**. This allows users to further manipulate the plot
+  using ggplot2 code, such as `+ theme()` to customise the plot.
+- The **ggplot2 code used to create the plot**. This allows uses to see
+  exactly how the plot has been created, and adapt the code for other
+  uses. (In RStudio the code will also be shown in the Viewer pane.)
+
 ## Installation
 
 ### From R-universe
@@ -60,9 +71,3 @@ remotes::install_github('neilstats/ckbplotr')
 
 Read `vignette("ckbplotr")` to see how to use the `shape_plot()`,
 `forest_plot()`, and `plot_like_ckb()` functions.
-
-## ggplot2 code
-
-The `shape_plot()` and `forest_plot()` functions return both a plot and
-the ggplot2 code used to create the plot. In RStudio the ggplot2 code
-used to create the plot will be shown in the Viewer pane.
