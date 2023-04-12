@@ -109,19 +109,29 @@ The argument should be a character vector. The first element defines where the c
 ### Example
 We wish to use `geom_segment()` to add dashed lines to the plot, and these should be added to the plot before the point estimates:
 ```{r}
-forest_plot(panels         = list(resultsA, resultsB),
-            col.key        = "variable",
-            panel.headings = c("Analysis A", "Analysis B"),
-            exponentiate   = TRUE,
-            colour = "grey",
-            addcode = c("# Plot points at the transformed estimates",
-                        "# Plot dashed line",
-                        "geom_segment(aes(x = estimate_transformed, xend = estimate_transformed, y= -row, yend = -1),",
-                        "linetype = 'dashed',",
-                        "data = ~ dplyr::filter(.,row.label=='nmr_s_vldl_tg')) +",
-                        ""))
+code_to_add <- c('# Add vertical dashed lines',
+                 'geom_segment(aes(x    = estimate_transformed,',
+                 '                 xend = estimate_transformed,',
+                 '                 yend = -0.7),',
+                 '             linetype = "dashed",',
+                 '             colour = "grey40",',
+                 '             data = ~ dplyr::filter(diamonds, key %in% c("nmr_s_vldl_tg"))) +',
+                 '')
+
+
+forestplot1 <- make_forest_plot(panels           = list(resultsA),
+                                col.key          = "variable",
+                                exponentiate     = TRUE,
+                                panel.names      = c("Analysis A"),
+                                diamond = c("nmr_s_vldl_tg"),
+                                addcode = c("# Plot points at the transformed estimates",
+                                            code_to_add))
 ```
 
+
+## The data.function argument
+
+In `forest_plot()`, the `data.function` argument can be used to apply a defined function to the data frame immediately before the ggplot2 code.
 
 ### Example
 We want to manipulate the plot data before creating the plot:
@@ -136,8 +146,7 @@ forest_plot(panels         = list(resultsA, resultsB),
             col.key        = "variable",
             panel.headings = c("Analysis A", "Analysis B"),
             exponentiate   = TRUE,
-            addcode        = c("# Create the ggplot",
-                               "datatoplot <- change_plot_data(datatoplot)"))
+            data.function = "change_plot_data")
 ```
 
 
