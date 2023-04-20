@@ -37,7 +37,7 @@
     
     <a class="navbar-brand me-2" href="index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,6 +106,15 @@
 <p>…create forest plots… <img src="reference/figures/README-example-forest-plot-1.png" width="90%" style="display: block; margin: auto;"></p>
 <p>…and convert other ggplots to CKB style. <img src="reference/figures/README-a-plot-1.png" width="80%" style="display: block; margin: auto;"></p>
 <div class="section level2">
+<h2 id="key-features">Key features<a class="anchor" aria-label="anchor" href="#key-features"></a>
+</h2>
+<p>Functions that create plots (such as <code><a href="reference/shape_plot.html">shape_plot()</a></code> and <code><a href="reference/forest_plot.html">forest_plot()</a></code>) return both:</p>
+<ul>
+<li>A <strong>ggplot2 plot</strong>. This allows users to further manipulate the plot using ggplot2 code, such as <code>+ theme()</code> to customise the plot.</li>
+<li>The <strong>ggplot2 code used to create the plot</strong>. This allows uses to see exactly how the plot has been created, and adapt the code for other uses. (In RStudio the code will also be shown in the Viewer pane.)</li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="section level3">
@@ -130,11 +139,6 @@
 <h2 id="get-started">Get started<a class="anchor" aria-label="anchor" href="#get-started"></a>
 </h2>
 <p>Read <code><a href="articles/ckbplotr.html">vignette("ckbplotr")</a></code> to see how to use the <code><a href="reference/shape_plot.html">shape_plot()</a></code>, <code><a href="reference/forest_plot.html">forest_plot()</a></code>, and <code><a href="reference/plot_like_ckb.html">plot_like_ckb()</a></code> functions.</p>
-</div>
-<div class="section level2">
-<h2 id="ggplot2-code">ggplot2 code<a class="anchor" aria-label="anchor" href="#ggplot2-code"></a>
-</h2>
-<p>The <code><a href="reference/shape_plot.html">shape_plot()</a></code> and <code><a href="reference/forest_plot.html">forest_plot()</a></code> functions return both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the Viewer pane.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

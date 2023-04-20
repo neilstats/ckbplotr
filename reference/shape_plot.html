@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,6 +98,7 @@
 <span>  <span class="va">xlims</span>,</span>
 <span>  <span class="va">ylims</span>,</span>
 <span>  height <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
@@ -145,6 +146,7 @@
 <span>  <span class="va">xlims</span>,</span>
 <span>  <span class="va">ylims</span>,</span>
 <span>  height <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ext <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.025</span><span class="op">)</span>,</span>
 <span>  ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
@@ -268,6 +270,10 @@ estimates. (Default: 3)</p></dd>
 
 <dt>height</dt>
 <dd><p>Panel height to use and apply different formatting to short CIs. A grid::unit() object, or if numeric is assumed to be in mm.</p></dd>
+
+
+<dt>width</dt>
+<dd><p>Panel width.A grid::unit() object, or if numeric is assumed to be in mm.</p></dd>
 
 
 <dt>gap</dt>
