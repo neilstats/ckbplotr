@@ -12,52 +12,15 @@ forest.axes <- function(scale, xticks, bottom.space) {
     make_layer(
       '# Set the scale for the y axis (the rows)',
       f = "scale_y_continuous",
-      arg = c('breaks = -1:-max(datatoplot$row)',
-              'labels = rowlabels',
-              sprintf('limits = c(-max(datatoplot$row) - %s, NA)',
+      arg = c('breaks = -attr(datatoplot, "rowlabels")$row',
+              'labels = attr(datatoplot, "rowlabels")$row.label',
+              sprintf('limits = c(-max(attr(datatoplot, "rowlabels")$row) - %s, NA)',
                       deparse(bottom.space)),
               'expand = c(0,0)')
     )
   )
 }
 
-#' code for row labels vector
-#' @noRd
-forest.row.labels.vec <- function(bold.labels) {
-  c(
-    '# Get a character vector of the row labels, so these can be used in the plot',
-    'rowlabels <- datatoplot %>%',
-    indent(14,
-           'dplyr::group_by(row) %>%',
-           'dplyr::summarise(row.label = dplyr::first(row.label),',
-           indent(17, sprintf('bold = all(is.na(estimate_transformed) | all(key %%in%% %s)),',
-                              ds(bold.labels)),
-                  '.groups = "drop") %>%'),
-           'dplyr::mutate(row.label = dplyr::if_else(bold & row.label != "",',
-           indent(41, 'paste0("**", row.label, "**"),',
-                  'as.character(row.label))) %>% '),
-           'dplyr::arrange(row) %>%',
-           'dplyr::pull(row.label)'),
-    ''
-  )
-}
-
-#' code for indentifying CIx that extend outside axis limits
-#' @noRd
-forest.check.cis <- function(xto, xfrom) {
-  c(
-    '# Identify any CIs that extend outside axis limits',
-    'datatoplot <- datatoplot %>%',
-    indent(16,
-           sprintf('dplyr::mutate(cioverright  = (uci_transformed > %s),', xto),
-           indent(14,
-                  sprintf('uci_transformed = pmin(uci_transformed, %s),', xto),
-                  sprintf('lci_transformed = pmin(lci_transformed, %s),', xto),
-                  sprintf('cioverleft  = (lci_transformed < %s),', xfrom),
-                  sprintf('lci_transformed = pmax(lci_transformed, %s),', xfrom),
-                  sprintf('uci_transformed = pmax(uci_transformed, %s))', xfrom))),
-    '')
-}
 
 #' code for CI colours if using panel.width
 #' @noRd
@@ -252,7 +215,7 @@ forest.facet <- function() {
   make_layer(
     '# Put the different panels in side-by-side plots using facets',
     f = 'facet_wrap',
-    arg = c('~panel, nrow = 1')
+    arg = c('vars(panel), nrow = 1')
   )
 }
 
@@ -360,18 +323,18 @@ forest.scales.coords <- function(xfrom, xto) {
 
 #' code to add arrows to CIs
 #' @noRd
-forest.arrows <- function(addaes, cicolour, addarg, base_line_size) {
+forest.arrows <- function(addaes, cicolour, addarg, base_line_size, xfrom, xto) {
   c(make_layer(
     '# Add tiny segments with arrows when the CIs go outside axis limits',
     f = 'geom_segment',
     aes = c(addaes$ci,
             'y = -row',
             'yend = -row',
-            'x = uci_transformed-0.000001',
-            'xend = uci_transformed',
+            sprintf('x = %s', xto - 1e-6),
+            sprintf('xend = %s', xto),
             sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
-            'data = ~ dplyr::filter(.x, cioverright == TRUE)',
+            sprintf('data = ~ dplyr::filter(.x, uci_transformed > %s)', xto),
             sprintf('colour = %s', quote_string(cicolour$arg[1])),
             sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
@@ -383,11 +346,11 @@ forest.arrows <- function(addaes, cicolour, addarg, base_line_size) {
     aes = c(addaes$ci,
             'y = -row',
             'yend = -row',
-            'x = lci_transformed+0.000001',
-            'xend = lci_transformed',
+            sprintf('x = %s', xfrom + 1e-6),
+            sprintf('xend = %s', xfrom),
             sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
-            'data = ~ dplyr::filter(.x, cioverleft == TRUE)',
+            sprintf('data = ~ dplyr::filter(.x, lci_transformed < %s)', xfrom),
             sprintf('colour = %s', quote_string(cicolour$arg[1])),
             sprintf('linewidth = %s', base_line_size),
             sprintf('arrow = arrow(type = "closed", length = unit(%s, "pt"))', 8 * base_line_size),
@@ -408,7 +371,7 @@ forest.col.right.line <- function(col.right.all,
                                   addarg,
                                   xto,
                                   xfrom,
-                                  base_size,
+                                  text_size,
                                   plotcolour,
                                   col.heading.space,
                                   panel.names,
@@ -446,7 +409,7 @@ forest.col.right.line <- function(col.right.all,
         arg = c(..10[..10!=""],
                 sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                 sprintf('hjust = %s', ..5),
-                sprintf('size  = %s', base_size/(11/3)),
+                sprintf('size  = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'na.rm = TRUE',
                 sprintf('parse = %s', ..7)),
@@ -459,7 +422,7 @@ forest.col.right.line <- function(col.right.all,
                 'label = title'),
         arg = c(sprintf('move_x = unit(%s, "%s")', ..2, ..3),
                 sprintf('hjust    = %s', ..5),
-                sprintf('size     = %s', base_size/(11/3)),
+                sprintf('size     = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -479,7 +442,7 @@ forest.col.right.line <- function(col.right.all,
 
 #' code for columns to left of panels
 #' @noRd
-forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.left.hjust, col.bold, col.left.space, addaes, addarg, xfrom, xto, base_size, plotcolour, col.heading.space, panel.names, tf, inv_tf) {
+forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.left.hjust, col.bold, col.left.space, addaes, addarg, xfrom, xto, text_size, plotcolour, col.heading.space, panel.names, tf, inv_tf) {
   x <- unlist(purrr::pmap(
     list(col.left,
          as.numeric(col.left.pos),
@@ -506,7 +469,7 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
         arg = c(..9[..9!=""],
                 sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                 sprintf('hjust = %s', ..5),
-                sprintf('size  = %s', base_size/(11/3)),
+                sprintf('size  = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'na.rm = TRUE'),
         br = FALSE
@@ -518,7 +481,7 @@ forest.col.left.line <- function(col.left, col.left.pos, col.left.heading, col.l
                 'label = title'),
         arg = c(sprintf('move_x = unit(-%s, "%s")', ..2, ..3),
                 sprintf('hjust    = %s', ..5),
-                sprintf('size     = %s', base_size/(11/3)),
+                sprintf('size     = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -544,7 +507,7 @@ forest.addtext <- function(xto,
                            col.right.parse,
                            col.right.pos,
                            col.right.hjust,
-                           base_size,
+                           text_size,
                            plotcolour,
                            tf,
                            inv_tf) {
@@ -571,7 +534,7 @@ forest.addtext <- function(xto,
                     as.numeric(col.right.pos[[1]]),
                     makeunit(col.right.pos[[1]])),
             sprintf('hjust = %s', col.right.hjust[[1]]),
-            sprintf('size  = %s', base_size/(11/3)),
+            sprintf('size  = %s', text_size),
             sprintf('colour  = %s', quote_string(plotcolour)),
             'na.rm = TRUE',
             'parse = TRUE')
@@ -579,9 +542,9 @@ forest.addtext <- function(xto,
 }
 
 
-#' ccode for x-axis labels and panel headings
+#' code for x-axis labels and panel headings
 #' @noRd
-forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolour, panel.names, xlab, panel.headings, col.heading.space) {
+forest.xlab.panel.headings <- function(addaes, xmid, addarg, text_size, plotcolour, panel.names, xlab, panel.headings, col.heading.space) {
   c(
     make_layer(
       '# Add xlab below each axis',
@@ -590,7 +553,7 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
               sprintf('y = -Inf, x = %s, label = xlab', xmid)),
       arg = c(addarg$xlab,
               'hjust = 0.5',
-              sprintf('size  = %s', base_size/(11/3)),
+              sprintf('size  = %s', text_size),
               sprintf('colour  = %s', quote_string(plotcolour)),
               'vjust = 4.4',
               'fontface = "bold"',
@@ -608,7 +571,7 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
         arg = c(addarg$panel.name,
                 'hjust = 0.5',
                 'nudge_y = 2',
-                sprintf('size  = %s', base_size/(11/3)),
+                sprintf('size  = %s', text_size),
                 sprintf('colour  = %s', quote_string(plotcolour)),
                 'fontface = "bold"',
                 sprintf('data = dplyr::tibble(panel = factor(%s', paste(deparse(panel.names), collapse = '')),
@@ -621,17 +584,21 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, base_size, plotcolo
 }
 
 
-#' code to set panel width
+#' code to set panel width and/or height
 #' @noRd
-forest.panel.width <- function(panel.width) {
-  if(!inherits(panel.width, "unit")){return(NULL)}
+forest.panel.size <- function(panel.width, panel.height) {
+  if(!inherits(panel.width, "unit") &
+     !inherits(panel.height, "unit")){return(NULL)}
 
   make_layer(
-    '# Fix panel width',
+    '# Fix panel size',
     f = 'ggh4x::force_panelsizes',
-    arg = sprintf('cols = unit(%s, "%s")',
+    arg = c(sprintf('cols = unit(%s, "%s")',
                   as.numeric(panel.width),
                   makeunit(panel.width)),
+            sprintf('rows = unit(%s, "%s")',
+                    as.numeric(panel.height),
+                    makeunit(panel.height))),
     plus = TRUE
   )
 }

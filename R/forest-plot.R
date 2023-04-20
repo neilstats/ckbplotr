@@ -89,7 +89,8 @@ forest_data <- function(
     addtext       = NULL,
     cols          = panels,
     headings      = NULL,
-    colnames      = NULL
+    colnames      = NULL,
+    bold.labels   = NULL
 ){
 
   # legacy arguments
@@ -163,8 +164,10 @@ forest_data <- function(
   if (is.null(row.labels)) {
     out <- panels[[1]] %>%
       dplyr::mutate(row.label = !!rlang::sym(col.key),
-                    key = !!rlang::sym(col.key)) %>%
-      dplyr::select(.data$row.label, .data$key)
+                    key = !!rlang::sym(col.key),
+                    row.height = NA,
+                    spacing_row = FALSE) %>%
+      dplyr::select(.data$row.label, .data$key, .data$row.height, .data$spacing_row)
   } else {
 
     if (is.null(rows)) stop("argument rows must be given if row.labels is used")
@@ -199,27 +202,29 @@ forest_data <- function(
 
     ## function to add headings/subheadings for row labels
     add_heading <- function(data, heading, blank_after_heading, blank_after_section){
+      out <- tibble::add_row(data,
+                             row.label = !!heading,
+                             spacing_row = FALSE,
+                             .before = 1) %>%
+        tibble::add_row(row.label = "",
+                        row.height = blank_after_heading,
+                        spacing_row = TRUE,
+                        .before = 2)
       if(all(is.na(data$row.label))){
         out <- dplyr::mutate(data, row.label = !!heading)
-      } else {
-        out <- dplyr::add_row(data, row.label = !!heading, .before = 1)
-        if (blank_after_heading > 0){
-          for (i in 1:blank_after_heading) {
-            out <- tibble::add_row(out, row.label = "", .before = 2)
-          }
-        }
       }
-      if (blank_after_section > 0){
-        for (i in 1:blank_after_section) {
-          out <- tibble::add_row(out, row.label = "")
-        }
-      }
+      out <- tibble::add_row(out,
+                             row.label = "",
+                             row.height = blank_after_section,
+                             spacing_row = TRUE)
       out
     }
 
     ## add headings/subheadings for row labels
     out <- row.labels %>%
-      dplyr::mutate(row.label = .data$heading3) %>%
+      dplyr::mutate(row.label = .data$heading3,
+                    row.height = NA,
+                    spacing_row = FALSE) %>%
       dplyr::group_by(.data$heading1, .data$heading2) %>%
       tidyr::nest() %>%
       dplyr::mutate(res = purrr::map(.data$data,
@@ -248,6 +253,7 @@ forest_data <- function(
       out <- out %>%
         dplyr::add_row(row.label = "",
                        extrarowkey = paste0(extrarowkeys[[k]]),
+                       spacing_row = FALSE,
                        .after = which(out$key == extrarowkeys[[k]]))
     }
   }
@@ -263,7 +269,8 @@ forest_data <- function(
   }
 
   out <- out %>%
-    dplyr::mutate(row = 1:dplyr::n()) %>%
+    dplyr::mutate(row = cumsum(dplyr::coalesce(.data$row.height, 1))) %>%
+    dplyr::filter(!.data$spacing_row) %>%
     dplyr::select(.data$row, .data$row.label, .data$key, .data$extrarowkey, .data$addtextrow)
 
   # make datatoplot
@@ -329,11 +336,11 @@ forest_data <- function(
                     uci_transformed = tf(.data$uci)
       )
     if (is.null(minse)){
-      minse <- min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)
+      minse <- min((datatoplot$uci - datatoplot$lci)/(2*1.96), na.rm = TRUE)
     } else {
-      if (minse > min((datatoplot$estimate - datatoplot$lci)/1.96, na.rm = TRUE)) stop("minse is larger than the minimum standard error in the data")
+      if (minse > min((datatoplot$uci - datatoplot$lci)/(2*1.96), na.rm = TRUE)) stop("minse is larger than the minimum standard error in the data")
     }
-    datatoplot$size <- 1.96*minse/(datatoplot$estimate - datatoplot$lci)
+    datatoplot$size <- 2*1.96*minse/(datatoplot$uci - datatoplot$lci)
   } else {
     datatoplot <- datatoplot %>%
       dplyr::mutate(estimate_transformed = tf(.data$estimate),
@@ -363,6 +370,19 @@ forest_data <- function(
   if (!scalepoints) {
     datatoplot$size <- 1
   }
+
+  rowlabels <- datatoplot %>%
+    dplyr::group_by(.data$row) %>%
+    dplyr::summarise(row.label = dplyr::first(.data$row.label),
+                     bold = all(is.na(.data$estimate_transformed) | all(.data$key %in% bold.labels)),
+                     .groups = "drop") %>%
+    dplyr::mutate(row.label = dplyr::if_else(.data$bold & .data$row.label != "",
+                                             paste0("**", .data$row.label, "**"),
+                                             as.character(.data$row.label))) %>%
+    dplyr::arrange(.data$row) %>%
+    dplyr::select(.data$row, .data$row.label)
+
+  attr(datatoplot, "rowlabels") <- rowlabels
 
   return(datatoplot)
 }
@@ -463,10 +483,12 @@ make_forest_data <- forest_data
 #' @param plot.margin Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
 
 #' @param panel.width Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.
+#' @param panel.height Set height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
 #' @param stroke Size of outline of shapes. (Default: 0)
 #' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
 #' @param printplot Print the plot. (Default: !quiet)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
+#' @param data.function Name of a function to apply to data frame before plotting.
 #' @param addcode A character vector of code to add to the generated code.
 #'                The first element should be a regular expression.
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
@@ -550,12 +572,14 @@ forest_plot <- function(
     mid.space     = unit(5, "mm"),
     plot.margin   = margin(8, 8, 8, 8, "mm"),
     panel.width   = NULL,
+    panel.height  = NULL,
     base_size     = 11,
     base_line_size = base_size/22,
     stroke        = 0,
     quiet         = FALSE,
     printplot     = !quiet,
     showcode      = !quiet,
+    data.function = NULL,
     addcode       = NULL,
     addaes        = NULL,
     addarg        = NULL,
@@ -698,6 +722,12 @@ forest_plot <- function(
   } else {
     fill <- list(arg = fill)
   }
+
+
+
+
+  # Text size ----
+  text_size <- round(base_size_to_text_size(base_size), 6)
 
 
 
@@ -855,6 +885,10 @@ forest_plot <- function(
     fill <- list(aes = "fill")
   }
 
+  # Panel.height ----
+  if (!missing(panel.height) & !inherits(panel.height, "unit")){
+    panel.height <- grid::unit(panel.height, "mm")
+  }
 
   # Code for preparing data for plotting using forest_data() ----
   prep.data.code <- make_layer(
@@ -896,6 +930,7 @@ forest_plot <- function(
       argset(blankrows),
       argset(scalepoints),
       argset(minse),
+      argset(bold.labels),
       if (!identical(addtext,
                      eval(formals(ckbplotr::forest_data)[["addtext"]]))){
         sprintf('addtext = %s',
@@ -921,12 +956,6 @@ forest_plot <- function(
     # code to prepare data for plotting using forest_data()
     prep.data.code,
 
-    # code to create a vector of row labels
-    forest.row.labels.vec(bold.labels),
-
-    # code to identify CIs that extend outside axis limits
-    forest.check.cis(xto, xfrom),
-
     # fill may be a list
     if (exists("fill_orig")){forest.fillcode(fill_orig, panel.names)},
 
@@ -951,6 +980,10 @@ forest_plot <- function(
     if (exists("ciunder_orig")) {
       forest.ciundercode(ciunder_orig)
     },
+
+    # code for user function on datatoplot
+    sprintf('datatoplot <- %s(datatoplot)', data.function),
+    '',
 
     # code to initiate the ggplot
     forest.start.ggplot(),
@@ -983,7 +1016,6 @@ forest_plot <- function(
                               pointsize),
 
            # code for CI lines plotted after points
-           # code for CI lines plotted before points
            forest.cis(addaes,
                       cicolour,
                       addarg,
@@ -992,7 +1024,7 @@ forest_plot <- function(
                       type = ci_order[[2]]),
 
            # code to add arrows to CIs
-           forest.arrows(addaes, cicolour, addarg, base_line_size),
+           forest.arrows(addaes, cicolour, addarg, base_line_size, xfrom, xto),
 
            # code for plotting diamonds
            if(!is.null(col.diamond) || !is.null(diamond)){
@@ -1016,7 +1048,7 @@ forest_plot <- function(
                                    addarg,
                                    xto,
                                    xfrom,
-                                   base_size,
+                                   text_size,
                                    plotcolour,
                                    col.heading.space,
                                    panel.names,
@@ -1036,7 +1068,7 @@ forest_plot <- function(
                                   addarg,
                                   xfrom,
                                   xto,
-                                  base_size,
+                                  text_size,
                                   plotcolour,
                                   col.heading.space,
                                   panel.names,
@@ -1053,7 +1085,7 @@ forest_plot <- function(
                             col.right.parse,
                             col.right.pos,
                             col.right.hjust,
-                            base_size,
+                            text_size,
                             plotcolour,
                             tf,
                             inv_tf)
@@ -1063,7 +1095,7 @@ forest_plot <- function(
            forest.xlab.panel.headings(addaes,
                                       xmid,
                                       addarg,
-                                      base_size,
+                                      text_size,
                                       plotcolour,
                                       panel.names,
                                       xlab,
@@ -1073,8 +1105,8 @@ forest_plot <- function(
            # code for the axes
            forest.axes(scale, xticks, bottom.space),
 
-           # code for panel width
-           forest.panel.width(panel.width),
+           # code for panel size
+           forest.panel.size(panel.width, panel.height),
 
            # code for the plot title
            if (title != ""){forest.title(title)},

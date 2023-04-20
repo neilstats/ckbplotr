@@ -1,3 +1,14 @@
+# ckbplotr 0.8.1
+
+* blankrows argument of forest_plot() now allows decimals and negative numbers.
+* Added panel.height argument to forest_plot() and width argument to shape_plot().
+* Added data.function argument to forest_plot().
+* Small fixes and improvements.
+  * Corrected calculation of text size on plots.
+  * Upper and lower confidence interval limits used to imply SE where necessary.
+  * Refactoring.
+  * Updated documentation.
+
 # ckbplotr 0.8.0
 
 * In shape_plot() and forest_plot() the height and panel.width arguments, respectively, will set the size of the plotting panels (so fix_panel() no longer needs to used).

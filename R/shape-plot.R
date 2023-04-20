@@ -37,6 +37,7 @@
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
 #' @param height Panel height to use and apply different formatting to short CIs. A grid::unit() object, or if numeric is assumed to be in mm.
+#' @param width Panel width.A grid::unit() object, or if numeric is assumed to be in mm.
 #' @param xbreaks Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)
 #' @param ybreaks Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
@@ -87,7 +88,8 @@ shape_plot <- function(data,
                        lines         = FALSE,
                        xlims,
                        ylims,
-                       height  = NULL,
+                       height        = NULL,
+                       width         = NULL,
                        gap           = c(0.025, 0.025),
                        ext           = c(0.025, 0.025),
                        ratio         = 1.5,
@@ -174,13 +176,23 @@ shape_plot <- function(data,
   # String for point size aesthetic
   if (scalepoints) {
     if (!is.null(col.lci)) {
-      size <- sprintf('1.96/(%s - %s)', column_name(col.estimate), column_name(col.lci))
+      size <- sprintf('2*1.96/(%s - %s)', column_name(col.uci), column_name(col.lci))
     } else {
       size <- sprintf('1/%s', column_name(col.stderr))
     }
   } else {
     size <- '1'
   }
+
+
+
+
+  # Text size ----
+  text_size <- round(base_size_to_text_size(base_size), 6)
+
+
+
+
 
 
   # Log scale and exponentiate estimates ----
@@ -234,6 +246,12 @@ shape_plot <- function(data,
   if (!missing(height)) {
     if (!missing(ciunder)) warning("ciunder ignored when using height")
     ciunder <- "ciunder"
+  }
+
+
+  # Width ----
+  if (!missing(width) & !inherits(width, "unit")){
+    width <- grid::unit(width, "mm")
   }
 
 
@@ -337,7 +355,7 @@ shape_plot <- function(data,
                                 uci_string,
                                 est_string,
                                 addarg,
-                                base_size,
+                                text_size,
                                 plotcolour,
                                 digits),
 
@@ -347,7 +365,7 @@ shape_plot <- function(data,
                                  lci_string,
                                  col.n,
                                  addarg,
-                                 base_size,
+                                 text_size,
                                  plotcolour)
            },
 
@@ -376,6 +394,7 @@ shape_plot <- function(data,
                         deparse(gap),
                         deparse(ext),
                         deparse(ratio),
+                        width,
                         height,
                         base_size,
                         base_line_size,

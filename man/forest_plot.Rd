@@ -59,12 +59,14 @@ forest_plot(
   mid.space = unit(5, "mm"),
   plot.margin = margin(8, 8, 8, 8, "mm"),
   panel.width = NULL,
+  panel.height = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
   quiet = FALSE,
   printplot = !quiet,
   showcode = !quiet,
+  data.function = NULL,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -138,12 +140,14 @@ make_forest_plot(
   mid.space = unit(5, "mm"),
   plot.margin = margin(8, 8, 8, 8, "mm"),
   panel.width = NULL,
+  panel.height = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
   quiet = FALSE,
   printplot = !quiet,
   showcode = !quiet,
+  data.function = NULL,
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
@@ -306,6 +310,8 @@ given in the col.key column.}
 
 \item{panel.width}{Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.}
 
+\item{panel.height}{Set height of panels. A grid::unit object, if a numeric is given assumed to be in mm.}
+
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
@@ -317,6 +323,8 @@ given in the col.key column.}
 \item{printplot}{Print the plot. (Default: !quiet)}
 
 \item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)}
+
+\item{data.function}{Name of a function to apply to data frame before plotting.}
 
 \item{addcode}{A character vector of code to add to the generated code.
 The first element should be a regular expression.
