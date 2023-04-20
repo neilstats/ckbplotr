@@ -26,10 +26,11 @@ Imports:
     grid,
     gridExtra,
     ggtext,
-    gridtext  (>= 0.1.5),
+    gridtext (>= 0.1.5),
     knitr,
     rmarkdown,
-    ggh4x
+    ggh4x,
+    lifecycle
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests:
