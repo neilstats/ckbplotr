@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,12 +127,14 @@
 <span>  mid.space <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">5</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>  plot.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>  panel.width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  panel.height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
 <span>  stroke <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  printplot <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
 <span>  showcode <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
+<span>  data.function <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addaes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addarg <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -206,12 +208,14 @@
 <span>  mid.space <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">5</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>  plot.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>  panel.width <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  panel.height <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  base_size <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>  base_line_size <span class="op">=</span> <span class="va">base_size</span><span class="op">/</span><span class="fl">22</span>,</span>
 <span>  stroke <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  printplot <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
 <span>  showcode <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
+<span>  data.function <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addaes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addarg <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -476,6 +480,10 @@ given in the col.key column.</p></dd>
 <dd><p>Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.</p></dd>
 
 
+<dt>panel.height</dt>
+<dd><p>Set height of panels. A grid::unit object, if a numeric is given assumed to be in mm.</p></dd>
+
+
 <dt>base_size</dt>
 <dd><p>base font size, given in pts.</p></dd>
 
@@ -498,6 +506,10 @@ given in the col.key column.</p></dd>
 
 <dt>showcode</dt>
 <dd><p>Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)</p></dd>
+
+
+<dt>data.function</dt>
+<dd><p>Name of a function to apply to data frame before plotting.</p></dd>
 
 
 <dt>addcode</dt>

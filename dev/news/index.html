@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.7.1.9000" id="ckbplotr-0719000">ckbplotr 0.7.1.9000<a class="anchor" aria-label="anchor" href="#ckbplotr-0719000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.8.0.9000" id="ckbplotr-0809000">ckbplotr 0.8.0.9000<a class="anchor" aria-label="anchor" href="#ckbplotr-0809000"></a></h2>
+<ul><li>blankrows argument of forest_plot() now allows decimals and negative numbers.</li>
+<li>Added panel.height argument to forest_plot() and width argument to shape_plot().</li>
+<li>Added data.function argument to forest_plot().</li>
+<li>Small fixes and improvements.
+<ul><li>Corrected calculation of text size on plots.</li>
+<li>Upper and lower confidence interval limits used to imply SE where necessary.</li>
+<li>Refactoring.</li>
+<li>Updated documentation.</li>
+</ul></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.8.0" id="ckbplotr-080">ckbplotr 0.8.0<a class="anchor" aria-label="anchor" href="#ckbplotr-080"></a></h2>
 <ul><li>In shape_plot() and forest_plot() the height and panel.width arguments, respectively, will set the size of the plotting panels (so fix_panel() no longer needs to used).</li>
 <li>Arguments height and width have been added to plot_like_ckb().</li>
 <li>The above two points were achieved using the ggh4x package which is now a dependency.</li>
@@ -80,7 +92,7 @@
 <li>shape_plot() now has a digits argument to specify number of decimal places to estimates text.</li>
 <li>shape_plot() default shape is now 16 (square) or 22 (filled square) if col.group is set.</li>
 <li>Added argument axes to plot_like_ckb() to control which axis lines should be added.</li>
-<li>Update for ckbplotr2 3.4.0</li>
+<li>Update for ggplot2 3.4.0</li>
 <li>Minor fixes and improvements.</li>
 </ul></div>
     <div class="section level2">
