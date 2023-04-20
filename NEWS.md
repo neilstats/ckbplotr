@@ -1,4 +1,4 @@
-# ckbplotr 0.8.0.9000
+# ckbplotr 0.8.1
 
 * blankrows argument of forest_plot() now allows decimals and negative numbers.
 * Added panel.height argument to forest_plot() and width argument to shape_plot().
