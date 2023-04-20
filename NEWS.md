@@ -1,6 +1,13 @@
 # ckbplotr 0.8.0.9000
 
-* Small fix to calculation of text size on plots.
+* blankrows argument of forest_plot() now allows decimals and negative numbers.
+* Added panel.height argument to forest_plot() and width argument to shape_plot().
+* Added data.function argument to forest_plot().
+* Small fixes and improvements.
+  * Corrected calculation of text size on plots.
+  * Upper and lower confidence interval limits used to imply SE where necessary.
+  * Refactoring.
+  * Updated documentation.
 
 # ckbplotr 0.8.0
 
