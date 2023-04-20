@@ -176,7 +176,7 @@ shape_plot <- function(data,
   # String for point size aesthetic
   if (scalepoints) {
     if (!is.null(col.lci)) {
-      size <- sprintf('1.96/(%s - %s)', column_name(col.estimate), column_name(col.lci))
+      size <- sprintf('2*1.96/(%s - %s)', column_name(col.uci), column_name(col.lci))
     } else {
       size <- sprintf('1/%s', column_name(col.stderr))
     }
