@@ -37,6 +37,7 @@
 #' @param xlims A numeric vector of length two. The limits of the x-axis.
 #' @param ylims A numeric vector of length two. The limits of the y-axis.
 #' @param height Panel height to use and apply different formatting to short CIs. A grid::unit() object, or if numeric is assumed to be in mm.
+#' @param width Panel width.A grid::unit() object, or if numeric is assumed to be in mm.
 #' @param xbreaks Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)
 #' @param ybreaks Breaks for the y axis. Passed to ggplots::scale_y_continuous. (Default: NULL)
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
@@ -87,7 +88,8 @@ shape_plot <- function(data,
                        lines         = FALSE,
                        xlims,
                        ylims,
-                       height  = NULL,
+                       height        = NULL,
+                       width         = NULL,
                        gap           = c(0.025, 0.025),
                        ext           = c(0.025, 0.025),
                        ratio         = 1.5,
@@ -247,6 +249,12 @@ shape_plot <- function(data,
   }
 
 
+  # Width ----
+  if (!missing(width) & !inherits(width, "unit")){
+    width <- grid::unit(width, "mm")
+  }
+
+
   # Using groups ----
   if (!is.null(col.group)) {
 
@@ -386,6 +394,7 @@ shape_plot <- function(data,
                         deparse(gap),
                         deparse(ext),
                         deparse(ratio),
+                        width,
                         height,
                         base_size,
                         base_line_size,
