@@ -483,6 +483,7 @@ make_forest_data <- forest_data
 #' @param plot.margin Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
 
 #' @param panel.width Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.
+#' @param panel.height Set height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
 #' @param stroke Size of outline of shapes. (Default: 0)
 #' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
 #' @param printplot Print the plot. (Default: !quiet)
@@ -571,6 +572,7 @@ forest_plot <- function(
     mid.space     = unit(5, "mm"),
     plot.margin   = margin(8, 8, 8, 8, "mm"),
     panel.width   = NULL,
+    panel.height  = NULL,
     base_size     = 11,
     base_line_size = base_size/22,
     stroke        = 0,
@@ -883,6 +885,10 @@ forest_plot <- function(
     fill <- list(aes = "fill")
   }
 
+  # Panel.height ----
+  if (!missing(panel.height) & !inherits(panel.height, "unit")){
+    panel.height <- grid::unit(panel.height, "mm")
+  }
 
   # Code for preparing data for plotting using forest_data() ----
   prep.data.code <- make_layer(
@@ -1099,8 +1105,8 @@ forest_plot <- function(
            # code for the axes
            forest.axes(scale, xticks, bottom.space),
 
-           # code for panel width
-           forest.panel.width(panel.width),
+           # code for panel size
+           forest.panel.size(panel.width, panel.height),
 
            # code for the plot title
            if (title != ""){forest.title(title)},

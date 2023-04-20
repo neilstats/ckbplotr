@@ -584,17 +584,21 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, text_size, plotcolo
 }
 
 
-#' code to set panel width
+#' code to set panel width and/or height
 #' @noRd
-forest.panel.width <- function(panel.width) {
-  if(!inherits(panel.width, "unit")){return(NULL)}
+forest.panel.size <- function(panel.width, panel.height) {
+  if(!inherits(panel.width, "unit") &
+     !inherits(panel.height, "unit")){return(NULL)}
 
   make_layer(
-    '# Fix panel width',
+    '# Fix panel size',
     f = 'ggh4x::force_panelsizes',
-    arg = sprintf('cols = unit(%s, "%s")',
+    arg = c(sprintf('cols = unit(%s, "%s")',
                   as.numeric(panel.width),
                   makeunit(panel.width)),
+            sprintf('rows = unit(%s, "%s")',
+                    as.numeric(panel.height),
+                    makeunit(panel.height))),
     plus = TRUE
   )
 }

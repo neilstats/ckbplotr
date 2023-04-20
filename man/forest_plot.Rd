@@ -59,6 +59,7 @@ forest_plot(
   mid.space = unit(5, "mm"),
   plot.margin = margin(8, 8, 8, 8, "mm"),
   panel.width = NULL,
+  panel.height = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
@@ -139,6 +140,7 @@ make_forest_plot(
   mid.space = unit(5, "mm"),
   plot.margin = margin(8, 8, 8, 8, "mm"),
   panel.width = NULL,
+  panel.height = NULL,
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
@@ -307,6 +309,8 @@ given in the col.key column.}
 \item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))}
 
 \item{panel.width}{Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.}
+
+\item{panel.height}{Set height of panels. A grid::unit object, if a numeric is given assumed to be in mm.}
 
 \item{base_size}{base font size, given in pts.}
 
