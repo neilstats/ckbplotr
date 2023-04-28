@@ -967,9 +967,6 @@ forest_plot <- function(
     if(!is.null(col.diamond) || !is.null(diamond)){
       forest.diamondscode(diamond,
                           col.diamond,
-                          fixed_panel_width,
-                          panel.width,
-                          cicolour,
                           panel.names)
     },
 
@@ -1043,7 +1040,7 @@ forest_plot <- function(
 
            # code for plotting diamonds
            if(!is.null(col.diamond) || !is.null(diamond)){
-             forest.plotdiamondscode(cicolour, fill, stroke)
+             forest.plotdiamondscode(colour, fill, stroke)
            },
 
            # code for scales and coordinates

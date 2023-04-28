@@ -107,9 +107,6 @@ forest.ciundercode <- function(ciunder) {
 #' @noRd
 forest.diamondscode <- function(diamond,
                                 col.diamond,
-                                fixed_panel_width,
-                                panel.width,
-                                cicolour,
                                 panel.names) {
   if (!is.null(diamond)){
     x <- c(
@@ -163,52 +160,20 @@ forest.diamondscode <- function(diamond,
       ''
     )
   }
-
-  if(inherits(panel.width, "unit")){
-    if (is.list(cicolour$colours)){
-      x <- c(
-        x,
-        '## Add colour',
-        'diamonds <- diamonds %>%',
-        indent(2,
-               'dplyr::mutate(cicolour = dplyr::case_when(')
-      )
-
-      for (i in 1:length(cicolour$colours)){
-        x <- c(x,
-               indent(27,
-                      sprintf('panel == %s ~ %s,',
-                              quote_string(panel.names[[i]]),
-                              cicolour$colours[[i]][1])))
-      }
-      x <- c(x,
-             indent(27, 'TRUE ~ "black"))'),
-             '')
-    } else {
-      x <- c(
-        x,
-        '## Add colour',
-        'diamonds <- diamonds %>%',
-        indent(2,
-               sprintf('dplyr::mutate(cicolour = %s)', cicolour$colours[1])),
-        ''
-      )
-    }
-  }
   x
 }
 
 #' code for plotting diamonds
 #' @noRd
-forest.plotdiamondscode <- function(cicolour, fill, stroke) {
+forest.plotdiamondscode <- function(colour, fill, stroke) {
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
     aes = c('x = x, y = y, group = row',
-            sprintf('colour = %s', column_name(cicolour$aes[1])),
+            sprintf('colour = %s', column_name(colour$aes)),
             sprintf('fill = %s', column_name(fill$aes))),
     arg = c('data = diamonds',
-            sprintf('colour = %s', quote_string(cicolour$arg[1])),
+            sprintf('colour = %s', quote_string(colour$arg)),
             sprintf('fill = %s', quote_string(fill$arg)),
             sprintf('linewidth = %s', stroke))
   )
