@@ -292,6 +292,8 @@ forest.plot.points <- function(addaes,
 #' code for plotting confidence interval lines
 #' @noRd
 forest.cis <- function(addaes, cicolour, addarg, ciunder, base_line_size,
+                       xfrom,
+                       xto,
                        type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
   make_layer(
@@ -301,8 +303,8 @@ forest.cis <- function(addaes, cicolour, addarg, ciunder, base_line_size,
            "after"  = '# Plot the CIs - after plotting points'),
     f = 'geom_errorbar',
     aes = c(addaes$ci,
-            'xmin = lci_transformed',
-            'xmax = uci_transformed',
+            sprintf('xmin = pmin(pmax(lci_transformed, %s), %s)', xfrom, xto),
+            sprintf('xmax = pmin(pmax(uci_transformed, %s), %s)', xfrom, xto),
             sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
             switch(type,

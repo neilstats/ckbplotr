@@ -1013,6 +1013,8 @@ forest_plot <- function(
                       addarg,
                       ciunder,
                       base_line_size,
+                      xfrom,
+                      xto,
                       type = ci_order[[1]]),
 
            # code to plot points
@@ -1032,6 +1034,8 @@ forest_plot <- function(
                       addarg,
                       ciunder,
                       base_line_size,
+                      xfrom,
+                      xto,
                       type = ci_order[[2]]),
 
            # code to add arrows to CIs
