@@ -32,10 +32,9 @@ forest.cicolourcode <- function(scale,
                                 stroke,
                                 panel.width,
                                 shape,
-                                cicolours,
+                                cicolour,
                                 panel.names) {
 
-  if(!inherits(panel.width, "unit")){return(NULL)}
   panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
 
   x <- c(
@@ -49,24 +48,24 @@ forest.cicolourcode <- function(scale,
                           (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm, c(shape$arg, column_name(shape$aes)))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
-  if(is.list(cicolours)){
-    for (i in 1:length(cicolours)){
+  if(is.list(cicolour$colours)){
+    for (i in 1:length(cicolour$colours)){
       x<- c(x,
             indent(27,
                    sprintf('panel == %s & narrowci ~ %s,',
                            quote_string(panel.names[[i]]),
-                           cicolours[[i]][length(cicolours[[i]])]),
+                           cicolour$colours[[i]][length(cicolour$colours[[i]])]),
                    sprintf('panel == %s & !narrowci ~ %s,',
                            quote_string(panel.names[[i]]),
-                           cicolours[[i]][1])))
+                           cicolour$colours[[i]][1])))
     }
     x <- c(x,
            indent(27, 'TRUE ~ "black"))'),
            '')
   } else {
     x <- c(x,
-           indent(27, sprintf('narrowci ~ %s,', cicolours[length(cicolours)]),
-                  sprintf('TRUE     ~ %s))', cicolours[1])),
+           indent(27, sprintf('narrowci ~ %s,', cicolour$colours[length(cicolour$colours)]),
+                  sprintf('TRUE     ~ %s))', cicolour$colours[1])),
            '')
   }
   x
@@ -106,7 +105,12 @@ forest.ciundercode <- function(ciunder) {
 
 #' code for preparing data for diamonds
 #' @noRd
-forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, panel.names) {
+forest.diamondscode <- function(diamond,
+                                col.diamond,
+                                fixed_panel_width,
+                                panel.width,
+                                cicolour,
+                                panel.names) {
   if (!is.null(diamond)){
     x <- c(
       '# Create data frame for diamonds to be plotted',
@@ -160,25 +164,36 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
     )
   }
 
-  if(inherits(panel.width, "mm") && is.list(cicolours)){
-    x <- c(
-      x,
-      '## Add colour',
-      'diamonds <- diamonds %>%',
-      indent(2,
-             'dplyr::mutate(cicolour = dplyr::case_when(')
-    )
+  if(inherits(panel.width, "unit")){
+    if (is.list(cicolour$colours)){
+      x <- c(
+        x,
+        '## Add colour',
+        'diamonds <- diamonds %>%',
+        indent(2,
+               'dplyr::mutate(cicolour = dplyr::case_when(')
+      )
 
-    for (i in 1:length(cicolours)){
+      for (i in 1:length(cicolour$colours)){
+        x <- c(x,
+               indent(27,
+                      sprintf('panel == %s ~ %s,',
+                              quote_string(panel.names[[i]]),
+                              cicolour$colours[[i]][1])))
+      }
       x <- c(x,
-             indent(27,
-                    sprintf('panel == %s ~ %s,',
-                            quote_string(panel.names[[i]]),
-                            cicolours[[i]][1])))
+             indent(27, 'TRUE ~ "black"))'),
+             '')
+    } else {
+      x <- c(
+        x,
+        '## Add colour',
+        'diamonds <- diamonds %>%',
+        indent(2,
+               sprintf('dplyr::mutate(cicolour = %s)', cicolour$colours[1])),
+        ''
+      )
     }
-    x <- c(x,
-           indent(27, 'TRUE ~ "black"))'),
-           '')
   }
   x
 }
@@ -586,16 +601,14 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, text_size, plotcolo
 
 #' code to set panel width and/or height
 #' @noRd
-forest.panel.size <- function(panel.width, panel.height) {
-  if(!inherits(panel.width, "unit") &
-     !inherits(panel.height, "unit")){return(NULL)}
-
+forest.panel.size <- function(panel.width,
+                              panel.height) {
   make_layer(
     '# Fix panel size',
     f = 'ggh4x::force_panelsizes',
     arg = c(sprintf('cols = unit(%s, "%s")',
-                  as.numeric(panel.width),
-                  makeunit(panel.width)),
+                    as.numeric(panel.width),
+                    makeunit(panel.width)),
             sprintf('rows = unit(%s, "%s")',
                     as.numeric(panel.height),
                     makeunit(panel.height))),
