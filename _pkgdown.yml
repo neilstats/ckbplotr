@@ -40,3 +40,6 @@ news:
     href: https://github.com/neilstats/ckbplotr/releases/latest
 
 url: https://neilstats.github.io/ckbplotr/
+
+figures:
+  dpi: 320
