@@ -35,6 +35,7 @@ column_name <- function(x){
 #' @noRd
 #'
 quote_string <- function(x){
+  if(is.null(x)){return(x)}
   if(is.list(x)){return(lapply(x, quote_string))}
   paste0('\"', x, '\"')
 }

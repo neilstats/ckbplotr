@@ -32,10 +32,9 @@ forest.cicolourcode <- function(scale,
                                 stroke,
                                 panel.width,
                                 shape,
-                                cicolours,
+                                cicolour,
                                 panel.names) {
 
-  if(!inherits(panel.width, "unit")){return(NULL)}
   panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
 
   x <- c(
@@ -49,24 +48,24 @@ forest.cicolourcode <- function(scale,
                           (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm, c(shape$arg, column_name(shape$aes)))),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
-  if(is.list(cicolours)){
-    for (i in 1:length(cicolours)){
+  if(is.list(cicolour$colours)){
+    for (i in 1:length(cicolour$colours)){
       x<- c(x,
             indent(27,
                    sprintf('panel == %s & narrowci ~ %s,',
                            quote_string(panel.names[[i]]),
-                           cicolours[[i]][length(cicolours[[i]])]),
+                           cicolour$colours[[i]][length(cicolour$colours[[i]])]),
                    sprintf('panel == %s & !narrowci ~ %s,',
                            quote_string(panel.names[[i]]),
-                           cicolours[[i]][1])))
+                           cicolour$colours[[i]][1])))
     }
     x <- c(x,
            indent(27, 'TRUE ~ "black"))'),
            '')
   } else {
     x <- c(x,
-           indent(27, sprintf('narrowci ~ %s,', cicolours[length(cicolours)]),
-                  sprintf('TRUE     ~ %s))', cicolours[1])),
+           indent(27, sprintf('narrowci ~ %s,', cicolour$colours[length(cicolour$colours)]),
+                  sprintf('TRUE     ~ %s))', cicolour$colours[1])),
            '')
   }
   x
@@ -106,7 +105,9 @@ forest.ciundercode <- function(ciunder) {
 
 #' code for preparing data for diamonds
 #' @noRd
-forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, panel.names) {
+forest.diamondscode <- function(diamond,
+                                col.diamond,
+                                panel.names) {
   if (!is.null(diamond)){
     x <- c(
       '# Create data frame for diamonds to be plotted',
@@ -150,7 +151,7 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
              'dplyr::mutate(y = - row + c(0, -0.25, 0, 0.25))'),
       '',
       '# Remove plotting of points if a diamond is to be used',
-      sprintf('if (any(datatoplot[["%s"]])) {', col.diamond),
+      sprintf('if (any(datatoplot[["%s"]], na.rm = TRUE)) {', col.diamond),
       indent(2,
              sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$estimate_transformed <- NA', col.diamond, col.diamond),
              sprintf('  datatoplot[!is.na(datatoplot[["%s"]]) & datatoplot[["%s"]],]$lci_transformed <- NA', col.diamond, col.diamond),
@@ -159,41 +160,20 @@ forest.diamondscode <- function(diamond, col.diamond, panel.width, cicolours, pa
       ''
     )
   }
-
-  if(inherits(panel.width, "mm") && is.list(cicolours)){
-    x <- c(
-      x,
-      '## Add colour',
-      'diamonds <- diamonds %>%',
-      indent(2,
-             'dplyr::mutate(cicolour = dplyr::case_when(')
-    )
-
-    for (i in 1:length(cicolours)){
-      x <- c(x,
-             indent(27,
-                    sprintf('panel == %s ~ %s,',
-                            quote_string(panel.names[[i]]),
-                            cicolours[[i]][1])))
-    }
-    x <- c(x,
-           indent(27, 'TRUE ~ "black"))'),
-           '')
-  }
   x
 }
 
 #' code for plotting diamonds
 #' @noRd
-forest.plotdiamondscode <- function(cicolour, fill, stroke) {
+forest.plotdiamondscode <- function(colour, fill, stroke) {
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
     aes = c('x = x, y = y, group = row',
-            sprintf('colour = %s', column_name(cicolour$aes[1])),
+            sprintf('colour = %s', column_name(colour$aes)),
             sprintf('fill = %s', column_name(fill$aes))),
     arg = c('data = diamonds',
-            sprintf('colour = %s', quote_string(cicolour$arg[1])),
+            sprintf('colour = %s', quote_string(colour$arg)),
             sprintf('fill = %s', quote_string(fill$arg)),
             sprintf('linewidth = %s', stroke))
   )
@@ -277,6 +257,8 @@ forest.plot.points <- function(addaes,
 #' code for plotting confidence interval lines
 #' @noRd
 forest.cis <- function(addaes, cicolour, addarg, ciunder, base_line_size,
+                       xfrom,
+                       xto,
                        type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
   make_layer(
@@ -286,8 +268,8 @@ forest.cis <- function(addaes, cicolour, addarg, ciunder, base_line_size,
            "after"  = '# Plot the CIs - after plotting points'),
     f = 'geom_errorbar',
     aes = c(addaes$ci,
-            'xmin = lci_transformed',
-            'xmax = uci_transformed',
+            sprintf('xmin = pmin(pmax(lci_transformed, %s), %s)', xfrom, xto),
+            sprintf('xmax = pmin(pmax(uci_transformed, %s), %s)', xfrom, xto),
             sprintf('colour = %s', column_name(cicolour$aes[1]))),
     arg = c(addarg$ci,
             switch(type,
@@ -586,16 +568,14 @@ forest.xlab.panel.headings <- function(addaes, xmid, addarg, text_size, plotcolo
 
 #' code to set panel width and/or height
 #' @noRd
-forest.panel.size <- function(panel.width, panel.height) {
-  if(!inherits(panel.width, "unit") &
-     !inherits(panel.height, "unit")){return(NULL)}
-
+forest.panel.size <- function(panel.width,
+                              panel.height) {
   make_layer(
     '# Fix panel size',
     f = 'ggh4x::force_panelsizes',
     arg = c(sprintf('cols = unit(%s, "%s")',
-                  as.numeric(panel.width),
-                  makeunit(panel.width)),
+                    as.numeric(panel.width),
+                    makeunit(panel.width)),
             sprintf('rows = unit(%s, "%s")',
                     as.numeric(panel.height),
                     makeunit(panel.height))),

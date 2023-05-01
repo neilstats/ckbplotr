@@ -624,6 +624,9 @@ forest_plot <- function(
 
 
   # Check arguments ----
+  fixed_panel_width <- !missing(panel.width)
+  fixed_panel_height <- !missing(panel.height)
+
   if (!missing(col.diamond) &&  !missing(diamond)) stop("Use either col.diamond or diamond, not both.")
 
   for (c in c(col.left, col.right)){
@@ -633,7 +636,7 @@ forest_plot <- function(
   }
 
   ## check if cicolour is a list (or longer than 1) but not using panel.width
-  if ((is.list(cicolour) | length(cicolour) > 1) & missing(panel.width)){
+  if ((is.list(cicolour) | length(cicolour) > 1) & !fixed_panel_width){
     stop("cicolour should be a list (or longer than 1) only when using panel.width")
   }
 
@@ -862,13 +865,14 @@ forest_plot <- function(
   if (is.null(xticks)) { xticks <- pretty(c(xfrom, xto)) }
 
 
-  # Aesthetic adjustments when using panel.width ----
-  if (!missing(panel.width)) {
+  # Panel.width + Aesthetic adjustments ----
+  if (fixed_panel_width) {
     if (!inherits(panel.width, "unit")){
       panel.width <- grid::unit(panel.width, "mm")
     }
     cicolours <- c(quote_string(cicolour$arg), column_name(cicolour$aes))
-    cicolour <- list(aes = "cicolour")
+    cicolour <- list(aes = "cicolour",
+                     colours = cicolours)
 
     if (missing(ciunder)) {
       ciunder <- c(TRUE, FALSE)
@@ -886,7 +890,7 @@ forest_plot <- function(
   }
 
   # Panel.height ----
-  if (!missing(panel.height) & !inherits(panel.height, "unit")){
+  if (fixed_panel_height & !inherits(panel.height, "unit")){
     panel.height <- grid::unit(panel.height, "mm")
   }
 
@@ -961,20 +965,24 @@ forest_plot <- function(
 
     # code for preparing data for diamonds
     if(!is.null(col.diamond) || !is.null(diamond)){
-      forest.diamondscode(diamond, col.diamond, panel.width, cicolours, panel.names)
+      forest.diamondscode(diamond,
+                          col.diamond,
+                          panel.names)
     },
 
     # code for CI colours if using panel.width
-    forest.cicolourcode(scale,
-                        inv_tf,
-                        xto,
-                        xfrom,
-                        pointsize,
-                        stroke,
-                        panel.width,
-                        shape,
-                        cicolours,
-                        panel.names),
+    if (fixed_panel_width) {
+      forest.cicolourcode(scale,
+                          inv_tf,
+                          xto,
+                          xfrom,
+                          pointsize,
+                          stroke,
+                          panel.width,
+                          shape,
+                          cicolour,
+                          panel.names)
+    },
 
     ## code for CI under - if using panel.width
     if (exists("ciunder_orig")) {
@@ -1002,6 +1010,8 @@ forest_plot <- function(
                       addarg,
                       ciunder,
                       base_line_size,
+                      xfrom,
+                      xto,
                       type = ci_order[[1]]),
 
            # code to plot points
@@ -1021,6 +1031,8 @@ forest_plot <- function(
                       addarg,
                       ciunder,
                       base_line_size,
+                      xfrom,
+                      xto,
                       type = ci_order[[2]]),
 
            # code to add arrows to CIs
@@ -1028,7 +1040,7 @@ forest_plot <- function(
 
            # code for plotting diamonds
            if(!is.null(col.diamond) || !is.null(diamond)){
-             forest.plotdiamondscode(cicolour, fill, stroke)
+             forest.plotdiamondscode(colour, fill, stroke)
            },
 
            # code for scales and coordinates
@@ -1106,7 +1118,10 @@ forest_plot <- function(
            forest.axes(scale, xticks, bottom.space),
 
            # code for panel size
-           forest.panel.size(panel.width, panel.height),
+           if (fixed_panel_width | fixed_panel_height){
+             forest.panel.size(panel.width,
+                               panel.height)
+           },
 
            # code for the plot title
            if (title != ""){forest.title(title)},
