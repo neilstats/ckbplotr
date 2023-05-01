@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -117,28 +117,28 @@ can have a custom sized gap between the plotting area and the axes)</li>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">plot</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/a-plot-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/a-plot-1.png" width="1280" style="display: block; margin: auto;"></p>
 <p>Apply just a CKB theme and use axis lines.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ckb.html">theme_ckb</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.line <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/theme-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/theme-1.png" width="1280" style="display: block; margin: auto;"></p>
 <p>Or apply the <code>plot_like_ckb</code> function to add separated
 axis lines and fix the aspect ratio.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-0-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-0-1.png" width="1280" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="axis-limits">Axis limits<a class="anchor" aria-label="anchor" href="#axis-limits"></a>
 </h3>
 <p>Set axis limits.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-1-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-1-1.png" width="1280" style="display: block; margin: auto;"></p>
 <p>If you do not want a gap between the axes, set
 <code>gap = c(0, 0)</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-2-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-2-1.png" width="1280" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="aspect-ratio-and-panel-sizes">Aspect ratio and panel sizes<a class="anchor" aria-label="anchor" href="#aspect-ratio-and-panel-sizes"></a>
@@ -146,12 +146,12 @@ axis lines and fix the aspect ratio.</p>
 <p>Change the aspect ratio of the plot.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, ratio <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/aspect-ratio-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/aspect-ratio-1.png" width="1920" style="display: block; margin: auto;"></p>
 <p>Set the width of the plot (<code>width</code> controls the length of
 the x axis).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, ratio <span class="op">=</span> <span class="fl">1.5</span>, width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">4</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/width-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/width-1.png" width="1920" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="modifying-the-appearance-of-the-plot">Modifying the appearance of the plot<a class="anchor" aria-label="anchor" href="#modifying-the-appearance-of-the-plot"></a>
@@ -161,14 +161,14 @@ the x axis).</p>
 non-data components of the plot.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, colour <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/colour-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/colour-1.png" width="1280" style="display: block; margin: auto;"></p>
 <p>If you wish to override some aspect of the theme applied by
 <code>plot_like_ckb</code>, then this can be done by adding a theme
 after the function.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"red"</span>, face <span class="op">=</span> <span class="st">"plain"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-3-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-3-1.png" width="1280" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="warning-about-axis-limits">Warning about axis limits<a class="anchor" aria-label="anchor" href="#warning-about-axis-limits"></a>
@@ -183,7 +183,7 @@ function.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The xlim and ylim ranges are too narrow</span></span>
 <span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-4-1.png" width="384" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/plot_like_ckb-example-4-1.png" width="1280" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -193,7 +193,7 @@ function.</p>
 <code class="sourceCode R"><span><span class="va">barplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span><span class="va">barplot</span>, xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">7.5</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">70</span><span class="op">)</span>, gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.005</span><span class="op">)</span>, ratio <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.ticks.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plot_like_ckb_files/figure-html/bar-chart-example-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="plot_like_ckb_files/figure-html/bar-chart-example-1.png" width="1920" style="display: block; margin: auto;"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
