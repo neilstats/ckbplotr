@@ -1,3 +1,7 @@
+# ckbplotr 0.8.2
+
+* Fixes.
+
 # ckbplotr 0.8.1
 
 * blankrows argument of forest_plot() now allows decimals and negative numbers.
