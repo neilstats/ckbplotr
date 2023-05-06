@@ -9,6 +9,7 @@ forest_plot(
   panels,
   row.labels = NULL,
   row.labels.levels = c("heading1", "heading2", "heading3"),
+  row.labels.heading = NULL,
   rows = NULL,
   exponentiate = TRUE,
   logscale = exponentiate,
@@ -91,6 +92,7 @@ make_forest_plot(
   panels,
   row.labels = NULL,
   row.labels.levels = c("heading1", "heading2", "heading3"),
+  row.labels.heading = NULL,
   rows = NULL,
   exponentiate = TRUE,
   logscale = exponentiate,
@@ -180,6 +182,8 @@ rows of the plot. Use NA if a lower level heading is not required for a given ro
 
 \item{row.labels.levels}{A character vector up to length 3. The names of columns in row.labels
 to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))}
+
+\item{row.labels.heading}{Title to be placed above row labels.}
 
 \item{rows}{A character vector. The top level labels of rows
 to be included in the plot.}

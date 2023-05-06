@@ -2,7 +2,9 @@
 #' @noRd
 forest.axes <- function(myscale,
                         xticks,
-                        bottom.space) {
+                        row.labels.heading,
+                        bottom.space,
+                        col.heading.space) {
   c(
     make_layer(
       '# Set the scale for the x axis (the estimates and CIs)',
@@ -14,10 +16,16 @@ forest.axes <- function(myscale,
     make_layer(
       '# Set the scale for the y axis (the rows)',
       f = "scale_y_continuous",
-      arg = c('breaks = -attr(datatoplot, "rowlabels")$row',
-              'labels = attr(datatoplot, "rowlabels")$row.label',
-              'limits = c(-max(attr(datatoplot, "rowlabels")$row) - {deparse(bottom.space)}, NA)',
-              'expand = c(0,0)')
+      arg = c(
+        if (!is.null(row.labels.heading)){
+          c('breaks = c({col.heading.space}, -attr(datatoplot, "rowlabels")$row)',
+            'labels = c({quote_string(glue::glue("**{row.labels.heading}**"))}, attr(datatoplot, "rowlabels")$row.label)')
+        } else {
+          c('breaks = -attr(datatoplot, "rowlabels")$row',
+            'labels = attr(datatoplot, "rowlabels")$row.label')
+        },
+        'limits = c(-max(attr(datatoplot, "rowlabels")$row) - {deparse(bottom.space)}, NA)',
+        'expand = c(0,0)')
     )
   )
 }

@@ -11,6 +11,7 @@
 #' @inheritParams theme_ckb
 #' @param logscale Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
 #' @param panel.headings Titles to be placed above each forest plot.
+#' @param row.labels.heading Title to be placed above row labels.
 #' @param estcolumn Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
 #' @param col.right.parse A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
@@ -91,6 +92,7 @@ forest_plot <- function(
     panels,
     row.labels    = NULL,
     row.labels.levels = c("heading1", "heading2", "heading3"),
+    row.labels.heading = NULL,
     rows          = NULL,
     exponentiate  = TRUE,
     logscale      = exponentiate,
@@ -680,7 +682,11 @@ forest_plot <- function(
                                       col.heading.space),
 
            # code for the axes
-           forest.axes(scale, xticks, bottom.space),
+           forest.axes(scale,
+                       xticks,
+                       row.labels.heading,
+                       bottom.space,
+                       col.heading.space),
 
            # code for panel size
            if (fixed_panel_width | fixed_panel_height){
