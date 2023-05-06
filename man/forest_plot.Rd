@@ -63,6 +63,7 @@ forest_plot(
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
+  diamonds.linewidth = base_line_size,
   quiet = FALSE,
   printplot = !quiet,
   showcode = !quiet,
@@ -144,6 +145,7 @@ make_forest_plot(
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
+  diamonds.linewidth = base_line_size,
   quiet = FALSE,
   printplot = !quiet,
   showcode = !quiet,
@@ -317,6 +319,8 @@ given in the col.key column.}
 \item{base_line_size}{base size for line elements}
 
 \item{stroke}{Size of outline of shapes. (Default: 0)}
+
+\item{diamonds.linewidth}{Line width for diamonds. (Default: base_line_size)}
 
 \item{quiet}{Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)}
 

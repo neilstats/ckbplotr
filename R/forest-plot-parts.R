@@ -160,7 +160,7 @@ forest.diamondscode <- function(diamond,
 #' @noRd
 forest.plotdiamondscode <- function(colour_list,
                                     fill_list,
-                                    stroke) {
+                                    diamonds.linewidth) {
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
@@ -170,7 +170,7 @@ forest.plotdiamondscode <- function(colour_list,
     arg = c('data = diamonds',
             'colour = {quote_string(colour_list$arg)}',
             'fill = {quote_string(fill_list$arg)}',
-            'linewidth = {stroke}')
+            'linewidth = {diamonds.linewidth}')
   )
 }
 

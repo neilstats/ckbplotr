@@ -53,6 +53,7 @@
 #' @param panel.width Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.
 #' @param panel.height Set height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
 #' @param stroke Size of outline of shapes. (Default: 0)
+#' @param diamonds.linewidth Line width for diamonds. (Default: base_line_size)
 #' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
 #' @param printplot Print the plot. (Default: !quiet)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
@@ -144,6 +145,7 @@ forest_plot <- function(
     base_size     = 11,
     base_line_size = base_size/22,
     stroke        = 0,
+    diamonds.linewidth = base_line_size,
     quiet         = FALSE,
     printplot     = !quiet,
     showcode      = !quiet,
@@ -602,7 +604,9 @@ forest_plot <- function(
 
            # code for plotting diamonds
            if(!is.null(col.diamond) || !is.null(diamond)){
-             forest.plotdiamondscode(colour_list, fill_list, stroke)
+             forest.plotdiamondscode(colour_list,
+                                     fill_list,
+                                     diamonds.linewidth)
            },
 
            # code for scales and coordinates
