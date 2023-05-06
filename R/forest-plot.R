@@ -244,6 +244,8 @@ forest_plot <- function(
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
 
+  # Panel headings ----
+  if (is.null(panel.headings)) { panel.headings <- names(panels) }
 
 
   # Create lists for aesthetics/arguments ----

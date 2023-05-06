@@ -33,11 +33,11 @@ The `shape_plot()` and `forest_plot()` functions generate code to produce plots.
 The plots returned by `shape_plot()` and `forest_plot()` are ggplot objects, so you can use `+` to add more layers or adjust the theme.
 
 ```{r}
-forest <- forest_plot(panels         = list(resultsA, resultsB),
-                      col.key        = "variable",
-                      panel.headings = c("Analysis A", "Analysis B"),
-                      showcode       = FALSE,
-                      printplot      = FALSE)
+forest <- forest_plot(panels    = list("Analysis A" = resultsA,
+                                       "Analysis B" = resultsB),
+                      col.key   = "variable",
+                      showcode  = FALSE,
+                      printplot = FALSE)
 
 forest$plot +
   annotate(geom = "segment",
@@ -89,9 +89,9 @@ This can be used to 'overwrite' some of the code that would otherwise be produce
 
 ### Example
 ```{r}
-forest_plot(panels         = list(resultsA, resultsB),
+forest_plot(panels         = list("Analysis A" = resultsA,
+                                  "Analysis B" = resultsB),
             col.key        = "variable",
-            panel.headings = c("Analysis A", "Analysis B"),
             ciunder        = TRUE,
             addarg = list(panel.name = "colour = 'red'"),
             addaes = list(point = "colour = dplyr::if_else(estimate_transformed > 1.01, 'orange', 'grey')"))
@@ -142,9 +142,9 @@ change_plot_data <- function(data){
                 auto_estcolumn = gsub("\\)", "]", auto_estcolumn))
 }
 
-forest_plot(panels         = list(resultsA, resultsB),
+forest_plot(panels          = list("Analysis A" = resultsA,
+                                   "Analysis B" = resultsB),
             col.key        = "variable",
-            panel.headings = c("Analysis A", "Analysis B"),
             exponentiate   = TRUE,
             data.function = "change_plot_data")
 ```
