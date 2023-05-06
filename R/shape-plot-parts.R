@@ -252,17 +252,15 @@ shape.titles <- function(xlab, title, ylab) {
   c(
     '# Add titles',
     glue::glue('xlab("{xlab}") +'),
+    glue::glue('ylab("{ylab}") +'),
     if (!is.null(title) && !title %in% c("", NA)){
-      c(glue::glue('ylab("{ylab}") +'),
-        glue::glue('ggtitle("{title}")'))
-    } else {
-      glue::glue('ylab("{ylab}")')
+        glue::glue('ggtitle("{title}") +')
     },
     ''
   )
 }
 
-#' code for plot_like_ckb()
+#' code for ckb_style()
 #' @noRd
 shape.plot.like.ckb <- function(xlims,
                                 ylims,
@@ -276,9 +274,8 @@ shape.plot.like.ckb <- function(xlims,
                                 plotcolour) {
   make_layer(
     '# Plot like a CKB plot',
-    f = "ckbplotr::plot_like_ckb",
-    arg = c('plot           = plot',
-            'xlims          = {xlims}',
+    f = "ckbplotr::ckb_style",
+    arg = c('xlims          = {xlims}',
             'ylims          = {ylims}',
             'gap            = {gap}',
             'ext            = {ext}',

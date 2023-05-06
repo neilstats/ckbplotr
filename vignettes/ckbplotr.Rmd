@@ -23,7 +23,7 @@ library(ckbplotr)
 ## Shape plots
 `shape_plot()` creates a plot of estimates and CIs against risk factor levels using the `ggplot2` package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio the ggplot2 code used to create the plot will be shown in the  Viewer pane.
 
-The function uses `plot_like_ckb()` to modify the theme and control the look of the plot.
+The function uses `ckb_style()` to modify the theme and control the look of the plot.
 
 ### Example data
 ```{r}
@@ -111,15 +111,15 @@ For more details on customising forest plots, see ["More with forest plots"](for
 
 
 ## Other plots
-Supply an existing [ggplot2](https://ggplot2.tidyverse.org/) plot as the `plot` argument to `plot_like_ckb()`:
+Use `+ ckb_style()` to covert an existing [ggplot2](https://ggplot2.tidyverse.org/) plot.
 ```{r a-plot, fig.height = 4, fig.width=8, out.width = "80%"}
 plot <- ggplot(data = mpg,
                aes(x = displ, y = hwy)) +
   geom_point(size = 1)
 
-ckbplot <- plot_like_ckb(plot = plot,
-                         xlims = c(0, 8),
-                         ylims = c(10, 50))
+ckbplot <- plot +
+  ckb_style(xlims = c(0, 8),
+            ylims = c(10, 50))
 
 gridExtra::grid.arrange(plot, ckbplot, ncol = 2)
 ```

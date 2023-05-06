@@ -82,7 +82,7 @@ forestplot <- forest_plot(row.labels        = ckbplotr_row_labels,
 ```{r a-plot, echo = FALSE, fig.width=8, out.width = "80%"}
 plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
 arrow <- grid::textGrob("\u2192")
-ckbplot <- plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
+ckbplot <- plot + ckb_style(xlims = c(0, 8), ylims = c(10, 50))
 grid.arrange(plot, arrow, ckbplot, ncol = 3, widths = c(1, 0.25, 1))
 ```
 
@@ -114,5 +114,5 @@ remotes::install_github('neilstats/ckbplotr')
 
 ## Get started
 
-Read `vignette("ckbplotr")` to see how to use the `shape_plot()`, `forest_plot()`, and `plot_like_ckb()` functions.
+Read `vignette("ckbplotr")` to see how to use `shape_plot()`, `forest_plot()`, and `ckb_style()`.
 

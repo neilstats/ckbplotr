@@ -2,7 +2,7 @@
 #' Make a shape plot with ggplot2
 #'
 #'
-#' @inheritParams plot_like_ckb
+#' @inheritParams ckb_style
 #'
 #' @param data The data frame containing estimates to be plotted.
 #' @param col.x Name of column that provides the x-axis value (e.g. exposure, risk factor, dependent variable). (Default: "x")
@@ -386,19 +386,19 @@ shape_plot <- function(data,
            shape.axes(deparse(xbreaks), scale, deparse(ybreaks)),
 
            # titles
-           shape.titles(xlab, title, ylab)),
+           shape.titles(xlab, title, ylab),
 
-    # plot_like_ckb()
-    shape.plot.like.ckb(deparse(xlims),
-                        deparse(ylims),
-                        deparse(gap),
-                        deparse(ext),
-                        deparse(ratio),
-                        width,
-                        height,
-                        base_size,
-                        base_line_size,
-                        plotcolour),
+           # ckb_style()
+           shape.plot.like.ckb(deparse(xlims),
+                               deparse(ylims),
+                               deparse(gap),
+                               deparse(ext),
+                               deparse(ratio),
+                               width,
+                               height,
+                               base_size,
+                               base_line_size,
+                               plotcolour)),
 
     # theme
     indent(2, shape.theme(legend.position))
