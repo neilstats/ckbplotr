@@ -28,7 +28,7 @@ fix_panel <- function(plot, width = NULL, height = NULL){
   gtable <- ggplot2::ggplotGrob(plot)
 
   # check arguments
-  if (!missing(width) & !missing(height) & gtable$respect){stop("Can only specificy one of width and height to maintain aspect ratio.)")}
+  if (!missing(width) & !missing(height) & gtable$respect){rlang::abort("Can only specificy one of width and height to maintain aspect ratio.)")}
 
   ## calculate ratio from numeric part of panel height / width
   ## assumes they are the same unit (probably "null" because created by ggplot)

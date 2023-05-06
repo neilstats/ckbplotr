@@ -112,11 +112,11 @@ shape_plot <- function(data,
                        envir         = NULL){
 
   # Check arguments ----
-  if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
-  if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
-  if (!is.null(col.group) && !missing(fill)) stop("col.group and fill both control fill, so do not specify both")
-  if (missing(xlims)) stop("xlims must be specified")
-  if (missing(ylims)) stop("ylims must be specified")
+  if (!is.null(col.lci) &&  is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
+  if ( is.null(col.lci) && !is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
+  if (!is.null(col.group) && !missing(fill)) rlang::abort("col.group and fill both control fill, so do not specify both")
+  if (missing(xlims)) rlang::abort("xlims must be specified")
+  if (missing(ylims)) rlang::abort("ylims must be specified")
 
   ## check if confidence intervals may be hidden
   if (missing(height)){
@@ -176,9 +176,9 @@ shape_plot <- function(data,
   # String for point size aesthetic
   if (scalepoints) {
     if (!is.null(col.lci)) {
-      size <- sprintf('2*1.96/(%s - %s)', column_name(col.uci), column_name(col.lci))
+      size <- glue::glue('2*1.96/({column_name(col.uci)} - {column_name(col.lci)})')
     } else {
-      size <- sprintf('1/%s', column_name(col.stderr))
+      size <- glue::glue('1/{column_name(col.stderr)}')
     }
   } else {
     size <- '1'
@@ -258,21 +258,21 @@ shape_plot <- function(data,
   # Using groups ----
   if (!is.null(col.group)) {
 
-    if(!is.factor(data[[col.group]])) stop("col.group must be factor")
-    group_string <- sprintf(', group = %s', column_name(col.group))
+    if(!is.factor(data[[col.group]])) rlang::abort("col.group must be factor")
+    group_string <- glue::glue(', group = {column_name(col.group)}')
     scale_fill_string <- c('',
                            make_layer('# Set the scale for fill colours',
                                       f = "scale_fill_grey",
                                       arg = c("start = 0",
                                               "end   = 1",
-                                              sprintf('name  = "%s"', legend.name)),
+                                              'name  = "{legend.name}"'),
                                       br = FALSE))
-    fill_string <- list(aes = sprintf('fill = %s', column_name(col.group)))
+    fill_string <- list(aes = glue::glue('fill = {column_name(col.group)}'))
   } else {
     group_string <- ''
     scale_fill_string <- 'scale_fill_identity() +'
-    fill_string <- list(aes = sprintf('fill = %s', column_name(fill$aes)),
-                        arg = sprintf('fill = %s', quote_string(fill$arg)))
+    fill_string <- list(aes = glue::glue('fill = {column_name(fill$aes)}'),
+                        arg = glue::glue('fill = {quote_string(fill$arg)}'))
   }
 
 

@@ -55,7 +55,7 @@ prepare_figure <- function(figure,
     pagedim <- switch(pagesize,
                       A4 = unit(c(210, 297), "mm"),
                       A5 = unit(c(148, 210), "mm"),
-                      stop("Invalid pagesize value."))
+                      rlang::abort("Invalid pagesize value."))
   }
 
   if (landscape){

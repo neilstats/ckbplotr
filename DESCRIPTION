@@ -30,7 +30,8 @@ Imports:
     knitr,
     rmarkdown,
     ggh4x,
-    lifecycle
+    lifecycle,
+    glue
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests:

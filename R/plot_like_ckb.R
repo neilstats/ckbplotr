@@ -71,7 +71,7 @@ plot_like_ckb <- function(
 ){
 
   # check arguments
-  if (!axes %in% c("both", "x", "y", "none")){stop("axes should be one of 'both', 'x', 'y' or 'none'.")}
+  if (!axes %in% c("both", "x", "y", "none")){rlang::abort("axes should be one of 'both', 'x', 'y' or 'none'.")}
 
   # panel sizes
   if (missing(width) & missing(height)){

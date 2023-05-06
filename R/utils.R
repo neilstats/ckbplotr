@@ -49,7 +49,7 @@ argset <- function(x){
   name <- paste(deparse(substitute(x)), collapse = '')
   value <- paste(deparse(x), collapse = '')
   if (!identical(x, eval(formals(ckbplotr::make_forest_data)[[name]]))){
-    sprintf('%s = %s', name, value)
+    glue::glue('{name} = {value}',)
   }
 }
 
@@ -59,13 +59,26 @@ argset <- function(x){
 #' @keywords internal
 #' @noRd
 #'
-make_layer <- function(name = NULL, f, aes = NULL, arg = NULL, plus = TRUE, br = TRUE, duplicates = FALSE){
+make_layer <- function(name       = NULL,
+                       f,
+                       aes        = NULL,
+                       arg        = NULL,
+                       plus       = TRUE,
+                       br         = TRUE,
+                       duplicates = FALSE,
+                       glue_environment = parent.frame()){
+
+  if (!is.null(aes)){
+    aes <- na.omit(purrr::map_chr(aes, \(x){y <- glue::glue(x, .envir = glue_environment); ifelse(length(y) == 1, y, NA)}))
+  }
+  if (!is.null(arg)){
+    arg <- na.omit(purrr::map_chr(arg, \(x){y <- glue::glue(x, .envir = glue_environment); ifelse(length(y) == 1, y, NA)}))
+  }
 
   if (!duplicates){
     aes <- aes[!duplicated(trimws(sub("=.*", "", aes)))]
     arg <- arg[!duplicated(trimws(sub("=.*", "", c(aes, arg))))[(length(aes) + 1):(length(aes) + length(arg))]]
   }
-
 
   if (!is.null(aes)){
     aes <- indent(4, paste0(aes, ","))
@@ -145,6 +158,7 @@ ds <- function(x){
 #' @keywords internal
 #' @noRd
 printunit <- function(x){
+  if(is.null(x)){return(NULL)}
   paste0('unit(', gsub('"', '', ds(as.numeric(x))), ', "', makeunit(x), '")')
 }
 
