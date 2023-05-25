@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,14 +115,14 @@ customise the column headings.</p>
 <code class="sourceCode R"><span><span class="va">resultsA</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"A"</span><span class="op">)</span></span>
 <span><span class="va">resultsB</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ckbplotr_forest_data</span>, <span class="va">name</span> <span class="op">==</span> <span class="st">"B"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span>,</span>
+<span>                                     <span class="st">"Analysis B"</span> <span class="op">=</span> <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
 <span>            row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
 <span>            rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>,</span>
 <span>                                  <span class="st">"Lipoprotein particle concentration"</span><span class="op">)</span>,</span>
 <span>            exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>            ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
 <span>            xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
@@ -136,19 +136,19 @@ customise the column headings.</p>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please check your final output carefully and see</span></span>
 <span><span class="co">#&gt;   vignette("forest_confidence_intervals") for more details.</span></span>
 <span><span class="co">#&gt; <span style="color: #555555;">This message is displayed once per session.</span></span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/adding-columns-of-text-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="forest_plot_files/figure-html/adding-columns-of-text-1.png" width="3200" style="display: block; margin: auto;"></p>
 <p>Multiple columns can be added by specifying vectors for
 <code>col.left</code>, <code>col.right</code>,
 <code>col.left.heading</code> and <code>col.right.heading</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span>,</span>
+<span>                                     <span class="st">"Analysis B"</span> <span class="op">=</span> <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
 <span>            row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
 <span>            rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>,</span>
 <span>                                  <span class="st">"Lipoprotein particle concentration"</span><span class="op">)</span>,</span>
 <span>            exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>            ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
 <span>            xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
@@ -160,7 +160,7 @@ customise the column headings.</p>
 <span>            col.right         <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>            col.right.heading <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HR"</span>, <span class="st">"N"</span><span class="op">)</span>,</span>
 <span>            col.heading.space <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/adding-columns-of-text-2-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="forest_plot_files/figure-html/adding-columns-of-text-2-1.png" width="3200" style="display: block; margin: auto;"></p>
 <p>The <code>col.left.hjust</code> and <code>col.right.hjust</code>
 arguments set the horizontal justification of the columns (0 = left, 0.5
 = center , 1 = right).</p>
@@ -195,14 +195,14 @@ that fit a colour scheme (or use a dark grey for less contrast when
 viewing on a screen or projector). See the next section for details on
 customising the colour(s) of point and confidence interval lines.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span>,</span>
+<span>                                     <span class="st">"Analysis B"</span> <span class="op">=</span> <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
 <span>            row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
 <span>            rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>,</span>
 <span>                                  <span class="st">"Lipoprotein particle concentration"</span><span class="op">)</span>,</span>
 <span>            exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>            ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
 <span>            xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
@@ -210,7 +210,7 @@ customising the colour(s) of point and confidence interval lines.</p>
 <span>            scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            pointsize         <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>            plotcolour        <span class="op">=</span> <span class="st">"navyblue"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/plot-colour-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="forest_plot_files/figure-html/plot-colour-1.png" width="3200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="setting-colours-and-shapes-bold-text-and-diamonds">Setting colours and shapes, bold text and diamonds<a class="anchor" aria-label="anchor" href="#setting-colours-and-shapes-bold-text-and-diamonds"></a>
@@ -274,13 +274,12 @@ values or column names.</p>
 <h3 id="using-values">Using values<a class="anchor" aria-label="anchor" href="#using-values"></a>
 </h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span><span class="op">)</span>,</span>
 <span>            col.key          <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            row.labels       <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
 <span>            row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
 <span>            rows             <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,</span>
 <span>            exponentiate     <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            panel.names      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span><span class="op">)</span>,</span>
 <span>            blankrows        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>            scalepoints      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            pointsize        <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -288,7 +287,7 @@ values or column names.</p>
 <span>            colour           <span class="op">=</span> <span class="st">"red"</span>,</span>
 <span>            cicolour         <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>            ciunder          <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/unnamed-chunk-2-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="forest_plot_files/figure-html/unnamed-chunk-2-1.png" width="1920" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="using-column-names">Using column names<a class="anchor" aria-label="anchor" href="#using-column-names"></a>
@@ -296,19 +295,17 @@ values or column names.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">resultsA</span><span class="op">[</span><span class="fl">9</span>,<span class="st">"shape"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">16</span></span>
 <span><span class="va">resultsA</span><span class="op">[</span><span class="fl">10</span>, <span class="st">"bold"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
-<span><span class="va">resultsA</span><span class="op">[</span><span class="fl">11</span>, <span class="st">"colour"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"red"</span></span>
 <span><span class="va">resultsA</span><span class="op">[</span><span class="fl">12</span>, <span class="st">"diamond"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
 <span><span class="va">resultsA</span><span class="op">[</span><span class="fl">13</span>, <span class="st">"ciunder"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></span>
 <span><span class="va">resultsA</span><span class="op">[</span><span class="fl">13</span>, <span class="st">"shape"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">22</span></span>
 <span><span class="va">resultsA</span><span class="op">[</span><span class="fl">13</span>, <span class="st">"fill"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"white"</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,</span>
+<span>  </span>
+<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span><span class="op">)</span>,</span>
 <span>            col.key          <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            row.labels       <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
 <span>            row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
 <span>            rows             <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,</span>
 <span>            exponentiate     <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            panel.names      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span><span class="op">)</span>,</span>
 <span>            blankrows        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>            scalepoints      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            pointsize        <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -319,7 +316,7 @@ values or column names.</p>
 <span>            col.diamond      <span class="op">=</span> <span class="st">"diamond"</span>,</span>
 <span>            ciunder          <span class="op">=</span> <span class="st">"ciunder"</span>,</span>
 <span>            stroke           <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/unnamed-chunk-3-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="forest_plot_files/figure-html/unnamed-chunk-3-1.png" width="1920" style="display: block; margin: auto;"></p>
 <p>If a parameter is not set, then default values are used for these
 aesthetics. If a parameter is set, then every data frame provided in
 <code>cols</code> must contain a column with that name.</p>
@@ -346,7 +343,7 @@ a list is supplied, only the first element will be used.)</p>
 <span>            col.left         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
 <span>            col.left.heading <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
 <span>            diamond          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nmr_l_ldl_tg"</span>, <span class="st">"nmr_m_ldl_tg"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/unnamed-chunk-4-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="forest_plot_files/figure-html/unnamed-chunk-4-1.png" width="1920" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -369,14 +366,14 @@ satisfactory layout.</p>
 <span><span class="co">#&gt; 1  nmr_s_ldl_p       2       14 =0.32       &lt;NA&gt;    &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; 2 nmr_s_vldl_p    &lt;NA&gt;     &lt;NA&gt;  &lt;NA&gt;          7   =0.83</span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span>,</span>
+<span>                                     <span class="st">"Analysis B"</span> <span class="op">=</span> <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
 <span>            row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
 <span>            rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Lipoprotein particle concentration"</span>,</span>
 <span>                                  <span class="st">"Triglycerides concentration"</span><span class="op">)</span>,</span>
 <span>            exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>            ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
 <span>            xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
@@ -388,7 +385,7 @@ satisfactory layout.</p>
 <span>            col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>            addtext           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA_extra</span>, <span class="va">resultsB_extra</span><span class="op">)</span>,</span>
 <span>            right.space       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">35</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;"></p>
+<p><img src="forest_plot_files/figure-html/unnamed-chunk-7-1.png" width="3200" style="display: block; margin: auto;"></p>
 <p>To add multiple tests results and/or text under the same row, use
 separate in the <code>addtext</code> data frames:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -397,13 +394,12 @@ separate in the <code>addtext</code> data frames:</p>
 <span><span class="co">#&gt; 1 nmr_s_ldl_p       2       12 =0.22       &lt;NA&gt;    &lt;NA&gt;</span></span>
 <span><span class="co">#&gt; 2 nmr_s_ldl_p    &lt;NA&gt;     &lt;NA&gt;  &lt;NA&gt;          7   =0.31</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span><span class="op">)</span>,</span>
 <span>            col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
 <span>            row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
 <span>            rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Lipoprotein particle concentration"</span><span class="op">)</span>,</span>
 <span>            exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span><span class="op">)</span>,</span>
 <span>            ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
 <span>            xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
@@ -415,7 +411,7 @@ separate in the <code>addtext</code> data frames:</p>
 <span>            col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>            addtext           <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA_extra</span><span class="op">)</span>,</span>
 <span>            right.space       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">35</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/unnamed-chunk-10-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="forest_plot_files/figure-html/unnamed-chunk-10-1.png" width="1920" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="different-limits-and-ticks-on-each-plot">Different limits and ticks on each plot<a class="anchor" aria-label="anchor" href="#different-limits-and-ticks-on-each-plot"></a>
@@ -432,58 +428,58 @@ package can be used for this last step.</p>
 <p>Step 1: Use <code><a href="../reference/forest_plot.html">forest_plot()</a></code> for each plot.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forestplot1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span><span class="op">)</span>,</span>
-<span>                           col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
-<span>                           row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
-<span>                           row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
-<span>                           rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Lipoprotein particle concentration"</span>,</span>
-<span>                                                 <span class="st">"Triglycerides concentration"</span><span class="op">)</span>,</span>
-<span>                           exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                           panel.names       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span><span class="op">)</span>,</span>
-<span>                           ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
-<span>                           xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
-<span>                           xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
-<span>                           blankrows         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>                           scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                           pointsize         <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                           col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
-<span>                           col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
-<span>                           col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>                           panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">20</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
-<span>                           printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
+<span>row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
+<span>rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Lipoprotein particle concentration"</span>,</span>
+<span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,</span>
+<span>exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>panel.names       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span><span class="op">)</span>,</span>
+<span>ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
+<span>xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
+<span>xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
+<span>blankrows         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>pointsize         <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
+<span>col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
+<span>col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">20</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">forestplot2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsB</span><span class="op">)</span>,</span>
-<span>                           col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
-<span>                           row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
-<span>                           row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
-<span>                           rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Lipoprotein particle concentration"</span>,</span>
-<span>                                                 <span class="st">"Triglycerides concentration"</span><span class="op">)</span>,</span>
-<span>                           exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                           panel.names       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis B"</span><span class="op">)</span>,</span>
-<span>                           ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
-<span>                           xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1.2</span><span class="op">)</span>,</span>
-<span>                           xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">1.2</span><span class="op">)</span>,</span>
-<span>                           blankrows         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>                           scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                           pointsize         <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                           col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
-<span>                           col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
-<span>                           col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>                           panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">20</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
-<span>                           printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span>col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
+<span>row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
+<span>rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Lipoprotein particle concentration"</span>,</span>
+<span><span class="st">"Triglycerides concentration"</span><span class="op">)</span>,</span>
+<span>exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>panel.names       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis B"</span><span class="op">)</span>,</span>
+<span>ci.delim          <span class="op">=</span> <span class="st">" - "</span>,</span>
+<span>xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1.2</span><span class="op">)</span>,</span>
+<span>xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">1.2</span><span class="op">)</span>,</span>
+<span>blankrows         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>pointsize         <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>col.left          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"n"</span><span class="op">)</span>,</span>
+<span>col.left.heading  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"No. of\nevents"</span><span class="op">)</span>,</span>
+<span>col.heading.space <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>panel.width       <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">20</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>printplot         <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <p>Step 2: Remove the axis text for all but the first plot.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">forestplot1</span><span class="op">$</span><span class="va">plot</span></span>
 <span></span>
 <span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">forestplot2</span><span class="op">$</span><span class="va">plot</span> <span class="op">+</span> </span>
-<span>  <span class="fu">theme</span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">theme</span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Step 3: Arrange the plots using <code>gridExtra</code> (there may be
 other packages that also work). (Adjust the <code>widths</code> argument
 until you get a suitable layout.)</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>,</span>
-<span>                        nrow <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                        widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plot_files/figure-html/unnamed-chunk-13-1.png" width="960" style="display: block; margin: auto;"></p>
+<span>nrow <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>widths <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="forest_plot_files/figure-html/unnamed-chunk-13-1.png" width="3200" style="display: block; margin: auto;"></p>
 <p>Note that if <code>scalepoints = TRUE</code> (and <code>minse</code>
 is not specified the same for each plot) then this scaling is on a
 plot-by-plot basis so box sizes are not comparable between plots.

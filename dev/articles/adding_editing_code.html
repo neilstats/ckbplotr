@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,11 +115,11 @@ customised plots.</p>
 <code><a href="../reference/forest_plot.html">forest_plot()</a></code> are ggplot objects, so you can use
 <code>+</code> to add more layers or adjust the theme.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
-<span>                      col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
-<span>                      panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
-<span>                      showcode       <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>                      printplot      <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span>,</span>
+<span>                                       <span class="st">"Analysis B"</span> <span class="op">=</span> <span class="va">resultsB</span><span class="op">)</span>,</span>
+<span>                      col.key   <span class="op">=</span> <span class="st">"variable"</span>,</span>
+<span>                      showcode  <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                      printplot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Narrow confidence interval lines may become hidden in the forest plot.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please check your final output carefully and see</span></span>
 <span><span class="co">#&gt;   vignette("forest_confidence_intervals") for more details.</span></span>
@@ -137,7 +137,7 @@ customised plots.</p>
 <span>           fill <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>           colour <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>plot.background <span class="op">=</span> <span class="fu">element_rect</span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-2-1.png" width="2240" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="adding-aesthetics-and-arguments-the-addaes-and-addarg-arguments">Adding aesthetics and arguments (the addaes and addarg
@@ -227,13 +227,13 @@ be produced by <code><a href="../reference/shape_plot.html">shape_plot()</a></co
 <h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span>,</span>
+<span>                                  <span class="st">"Analysis B"</span> <span class="op">=</span> <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
-<span>            panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>            ciunder        <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.name <span class="op">=</span> <span class="st">"colour = 'red'"</span><span class="op">)</span>,</span>
 <span>            addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>point <span class="op">=</span> <span class="st">"colour = dplyr::if_else(estimate_transformed &gt; 1.01, 'orange', 'grey')"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-3-1.png" width="2240" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -273,7 +273,7 @@ estimates:</p>
 <span>                                diamond <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"nmr_s_vldl_tg"</span><span class="op">)</span>,</span>
 <span>                                addcode <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# Plot points at the transformed estimates"</span>,</span>
 <span>                                            <span class="va">code_to_add</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-4-1.png" width="2240" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -293,12 +293,12 @@ immediately before the ggplot2 code.</p>
 <span>                auto_estcolumn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\)"</span>, <span class="st">"]"</span>, <span class="va">auto_estcolumn</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span>,</span>
+<span>                                   <span class="st">"Analysis B"</span> <span class="op">=</span> <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key        <span class="op">=</span> <span class="st">"variable"</span>,</span>
-<span>            panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>            exponentiate   <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            data.function <span class="op">=</span> <span class="st">"change_plot_data"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;"></p>
+<p><img src="adding_editing_code_files/figure-html/unnamed-chunk-5-1.png" width="2240" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">

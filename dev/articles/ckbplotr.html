@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.0.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,8 +112,8 @@ risk factor levels using the <code>ggplot2</code> package. The function
 returns both a plot and the ggplot2 code used to create the plot. In
 RStudio the ggplot2 code used to create the plot will be shown in the
 Viewer pane.</p>
-<p>The function uses <code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code> to modify the theme
-and control the look of the plot.</p>
+<p>The function uses <code><a href="../reference/ckb_style.html">ckb_style()</a></code> to modify the theme and
+control the look of the plot.</p>
 <div class="section level3">
 <h3 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
 </h3>
@@ -236,38 +236,37 @@ plotted. The first level (heading) labels will be included in the plot
 from top to bottom. Other labels will be in the order that they are in
 the <code>row.labels</code> data frame.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">resultsA</span>, <span class="va">resultsB</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span>panels            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"Analysis A"</span> <span class="op">=</span> <span class="va">resultsA</span>,</span>
+<span>                                     <span class="st">"Analysis B"</span> <span class="op">=</span> <span class="va">resultsB</span><span class="op">)</span>,</span>
 <span>            col.key           <span class="op">=</span> <span class="st">"variable"</span>,</span>
 <span>            row.labels        <span class="op">=</span> <span class="va">ckbplotr_row_labels</span>,</span>
 <span>            row.labels.levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"heading"</span>, <span class="st">"subheading"</span>, <span class="st">"label"</span><span class="op">)</span>,</span>
 <span>            rows              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Triglycerides concentration"</span>,</span>
 <span>                                  <span class="st">"Lipoprotein particle concentration"</span><span class="op">)</span>,</span>
 <span>            exponentiate      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>            panel.headings    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Analysis A"</span>, <span class="st">"Analysis B"</span><span class="op">)</span>,</span>
 <span>            xlim              <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            xticks            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1</span>, <span class="fl">1.1</span><span class="op">)</span>,</span>
 <span>            scalepoints       <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            pointsize         <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckbplotr_files/figure-html/using-row-labels-1.png" width="672" style="display: block; margin: auto;"></p>
-<p>In this plot we’ve also use the <code>panel.headings</code>,
-<code>xlim</code>, <code>xticks</code>, <code>scalepoints</code>, and
-<code>pointsize</code> arguments to customise the plot.</p>
+<p><img src="ckbplotr_files/figure-html/using-row-labels-1.png" width="2240" style="display: block; margin: auto;"></p>
+<p>In this plot we’ve also used a named list for <code>panels</code> and
+the <code>xlim</code>, <code>xticks</code>, <code>scalepoints</code>,
+and <code>pointsize</code> arguments to customise the plot.</p>
 <p>For more details on customising forest plots, see <a href="forest_plot.html">“More with forest plots”</a>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="other-plots">Other plots<a class="anchor" aria-label="anchor" href="#other-plots"></a>
 </h2>
-<p>Supply an existing <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> plot as the
-<code>plot</code> argument to <code><a href="../reference/plot_like_ckb.html">plot_like_ckb()</a></code>:</p>
+<p>Use <code>+ ckb_style()</code> to covert an existing <a href="https://ggplot2.tidyverse.org/" class="external-link">ggplot2</a> plot.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>,</span>
 <span>               <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">ckbplot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_like_ckb.html">plot_like_ckb</a></span><span class="op">(</span>plot <span class="op">=</span> <span class="va">plot</span>,</span>
-<span>                         xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>,</span>
-<span>                         ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ckbplot</span> <span class="op">&lt;-</span> <span class="va">plot</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span>xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>,</span>
+<span>            ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span><span class="va">plot</span>, <span class="va">ckbplot</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ckbplotr_files/figure-html/a-plot-1.png" width="80%" style="display: block; margin: auto;"></p>
