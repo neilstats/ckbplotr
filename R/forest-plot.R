@@ -211,15 +211,22 @@ forest_plot <- function(
 
 
 
-  # Check for scale ----
-  tf     <- identity
-  inv_tf <- identity
-  scale  <- "identity"
+  # Check for scale of x axis and transformation of estimates ----
+  axis_scale_fn         <- identity
+  axis_scale_inverse_fn <- identity
+  axis_scale            <- "identity"
   if (logscale == TRUE) {
+    axis_scale            <- "log"
+    axis_scale_fn         <- log
+    axis_scale_inverse_fn <- exp
+    if (missing(nullval)) {nullval <- 1}
+  }
+
+  tf           <- identity
+  inv_tf       <- identity
+  if (exponentiate == TRUE) {
     tf     <- exp
     inv_tf <- log
-    scale  <- "log"
-    if (missing(nullval)) {nullval <- 1}
   }
 
 
@@ -391,19 +398,19 @@ forest_plot <- function(
   ### get maximum width of each columns (incl. heading)
   widths_of_columns <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
   estcolumn_width <- gettextwidths(paste0("9.",
-                                         paste0(rep(9, digits), collapse = ""),
-                                         "(9.",
-                                         paste0(rep(9, digits), collapse = ""),
-                                         ci.delim,
-                                         "99.",
-                                         paste0(rep(9, digits), collapse = ""),
-                                         ")"))
+                                          paste0(rep(9, digits), collapse = ""),
+                                          "(9.",
+                                          paste0(rep(9, digits), collapse = ""),
+                                          ci.delim,
+                                          "99.",
+                                          paste0(rep(9, digits), collapse = ""),
+                                          ")"))
   widths_of_columns <- c(if(estcolumn){estcolumn_width}, widths_of_columns)
   widths_of_column_headings <- gettextwidths(col.right.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, then space for autoestcolumn, and gap between each column
   column_spacing <- cumsum(c(gettextwidths("I"),
-                           widths_of_columns + gettextwidths("W")))
+                             widths_of_columns + gettextwidths("W")))
   ## adjust for hjust
   column_spacing <- column_spacing + c(widths_of_columns*col.right.hjust, 0)
   ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
@@ -428,7 +435,7 @@ forest_plot <- function(
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, and gap between each column
   column_spacing <- cumsum(c(gettextwidths("I"),
-                           widths_of_columns + gettextwidths("W")))
+                             widths_of_columns + gettextwidths("W")))
   ## adjust for hjust
   column_spacing <- column_spacing + c(widths_of_columns*(1 - col.left.hjust), 0)
   ### if no column to plot (i.e. length 1) then width of W, if longer keep extra space on last element
@@ -466,7 +473,7 @@ forest_plot <- function(
 
   xfrom <- min(xlim)
   xto   <- max(xlim)
-  xmid  <- round(tf((inv_tf(xfrom) + inv_tf(xto)) / 2), 6)
+  xmid  <- round(axis_scale_inverse_fn((axis_scale_fn(xfrom) + axis_scale_fn(xto)) / 2), 6)
   if (is.null(xticks)) { xticks <- pretty(c(xfrom, xto)) }
 
 
@@ -540,8 +547,8 @@ forest_plot <- function(
 
     # code for CI colours if using panel.width
     if (fixed_panel_width) {
-      forest.cicolourcode(scale,
-                          inv_tf,
+      forest.cicolourcode(axis_scale,
+                          axis_scale_fn,
                           xto,
                           xfrom,
                           pointsize,
@@ -633,8 +640,8 @@ forest_plot <- function(
                                   text_size,
                                   plotcolour,
                                   col.heading.space,
-                                  tf,
-                                  inv_tf)
+                                  axis_scale_fn,
+                                  axis_scale_inverse_fn)
            },
 
            # code for columns to left of panel
@@ -652,8 +659,8 @@ forest_plot <- function(
                                  text_size,
                                  plotcolour,
                                  col.heading.space,
-                                 tf,
-                                 inv_tf)
+                                 axis_scale_fn,
+                                 axis_scale_inverse_fn)
            },
 
            # code for addtext
@@ -667,8 +674,8 @@ forest_plot <- function(
                             col.right.hjust,
                             text_size,
                             plotcolour,
-                            tf,
-                            inv_tf)
+                            axis_scale_fn,
+                            axis_scale_inverse_fn)
            },
 
            # code for x-axis labels and panel headings
@@ -682,7 +689,7 @@ forest_plot <- function(
                                       col.heading.space),
 
            # code for the axes
-           forest.axes(scale,
+           forest.axes(axis_scale,
                        xticks,
                        row.labels.heading,
                        bottom.space,

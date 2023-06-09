@@ -1,6 +1,6 @@
 #' code for the axes
 #' @noRd
-forest.axes <- function(myscale,
+forest.axes <- function(axis_scale,
                         xticks,
                         row.labels.heading,
                         bottom.space,
@@ -9,7 +9,7 @@ forest.axes <- function(myscale,
     make_layer(
       '# Set the scale for the x axis (the estimates and CIs)',
       f = "scale_x_continuous",
-      arg = c('trans  = "{myscale}"',
+      arg = c('trans  = "{axis_scale}"',
               "breaks = {paste(deparse(xticks), collapse = '')}",
               'expand = c(0,0)')
     ),
@@ -33,8 +33,8 @@ forest.axes <- function(myscale,
 
 #' code for CI colours if using panel.width
 #' @noRd
-forest.cicolourcode <- function(scale,
-                                inv_tf,
+forest.cicolourcode <- function(axis_scale,
+                                axis_scale_fn,
                                 xto,
                                 xfrom,
                                 pointsize,
@@ -45,13 +45,13 @@ forest.cicolourcode <- function(scale,
                                 panel.names) {
 
   panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
-  convert_pointsize <- (inv_tf(xto) - inv_tf(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm
+  convert_pointsize <- (axis_scale_fn(xto) - axis_scale_fn(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm
 
   x <- c(
     '# Create column for CI colour',
     'datatoplot <- datatoplot %>%',
     indent(2,
-           'dplyr::mutate(narrowci =  ({scale}(uci_transformed) - {scale}(lci_transformed)) <= ',
+           'dplyr::mutate(narrowci =  ({axis_scale}(uci_transformed) - {axis_scale}(lci_transformed)) <= ',
            indent(26,
                   'size * {convert_pointsize} * dplyr::recode({c(shape_list$arg, column_name(shape_list$aes))}, `22` = 0.6694, .default = 0.7553)) %>%'),
            'dplyr::mutate(cicolour = dplyr::case_when('))
@@ -425,8 +425,8 @@ forest.columns.right <- function(col.right.all,
                                  text_size,
                                  plotcolour,
                                  col.heading.space,
-                                 tf,
-                                 inv_tf) {
+                                 axis_scale_fn,
+                                 axis_scale_inverse_fn) {
   x <- unlist(purrr::pmap(
     list(column     = col.right.all,
          pos        = col.right.pos ,
@@ -434,7 +434,7 @@ forest.columns.right <- function(col.right.all,
          hjust      = col.right.hjust,
          bold       = if (is.null(col.bold)) FALSE else col.bold,
          parse      = col.right.parse,
-         xpos       = round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space), 6),
+         xpos       = round(axis_scale_inverse_fn(axis_scale_fn(xto) + (axis_scale_fn(xto) - axis_scale_fn(xfrom)) * col.right.space), 6),
          addaes     = if(is.null(addaes$col.right)){""} else{addaes$col.right},
          addarg     = if(is.null(addarg$col.right)){""} else{addarg$col.right},
          col.heading.space = col.heading.space,
@@ -459,8 +459,8 @@ forest.columns.left <- function(col.left,
                                 text_size,
                                 plotcolour,
                                 col.heading.space,
-                                tf,
-                                inv_tf) {
+                                axis_scale_fn,
+                                axis_scale_inverse_fn) {
   x <- unlist(purrr::pmap(
     list(column     = col.left,
          pos        = - col.left.pos,
@@ -468,7 +468,7 @@ forest.columns.left <- function(col.left,
          hjust      = col.left.hjust,
          bold       = if (is.null(col.bold)) FALSE else col.bold,
          parse      = FALSE,
-         xpos       = round(tf(inv_tf(xfrom) - (inv_tf(xto) - inv_tf(xfrom)) * col.left.space), 6),
+         xpos       = round(axis_scale_inverse_fn(axis_scale_fn(xfrom) - (axis_scale_fn(xto) - axis_scale_fn(xfrom)) * col.left.space), 6),
          addaes     = if(is.null(addaes$col.left)){""} else{addaes$col.left},
          addarg     = if(is.null(addarg$col.left)){""} else{addarg$col.left},
          col.heading.space = col.heading.space,
@@ -489,13 +489,13 @@ forest.addtext <- function(xto,
                            col.right.hjust,
                            text_size,
                            plotcolour,
-                           tf,
-                           inv_tf) {
+                           axis_scale_fn,
+                           axis_scale_inverse_fn) {
   make_layer(
     '## addtext',
     f = 'ckbplotr::geom_text_move',
     aes = c('y = -row',
-            'x = {round(tf(inv_tf(xto) + (inv_tf(xto) - inv_tf(xfrom)) * col.right.space[[1]]), 6)}',
+            'x = {round(axis_scale_inverse_fn(axis_scale_fn(xto) + (axis_scale_fn(xto) - axis_scale_fn(xfrom)) * col.right.space[[1]]), 6)}',
             if(is.character(col.bold[[1]])){
               if(col.right.parse[[1]]){
                 'label = dplyr::if_else({column_name(col.bold[[1]])} & !is.na({column_name(col.bold[[1]])}), paste0("bold(addtext)"), addtext)'
