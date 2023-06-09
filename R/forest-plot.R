@@ -91,7 +91,7 @@
 forest_plot <- function(
     panels,
     row.labels    = NULL,
-    row.labels.levels = c("heading1", "heading2", "heading3"),
+    row.labels.levels = NULL,
     row.labels.heading = NULL,
     rows          = NULL,
     exponentiate  = TRUE,

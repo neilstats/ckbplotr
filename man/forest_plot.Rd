@@ -8,7 +8,7 @@
 forest_plot(
   panels,
   row.labels = NULL,
-  row.labels.levels = c("heading1", "heading2", "heading3"),
+  row.labels.levels = NULL,
   row.labels.heading = NULL,
   rows = NULL,
   exponentiate = TRUE,
@@ -91,7 +91,7 @@ forest_plot(
 make_forest_plot(
   panels,
   row.labels = NULL,
-  row.labels.levels = c("heading1", "heading2", "heading3"),
+  row.labels.levels = NULL,
   row.labels.heading = NULL,
   rows = NULL,
   exponentiate = TRUE,
@@ -180,8 +180,8 @@ with the same name (which can be specified by col.key).}
 \item{row.labels}{A data frame that contains the labels to be used for the
 rows of the plot. Use NA if a lower level heading is not required for a given row.}
 
-\item{row.labels.levels}{A character vector up to length 3. The names of columns in row.labels
-to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))}
+\item{row.labels.levels}{A character vector. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows.}
 
 \item{row.labels.heading}{Title to be placed above row labels.}
 
@@ -258,9 +258,8 @@ confidence interval. (Default: ", ")}
 
 \item{nullval}{Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)}
 
-\item{blankrows}{A numeric vector of length 4 specifying the number of blank rows
-after a heading1, at the end of a heading1 'section', after
-a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
+\item{blankrows}{A numeric vector specifying the number of blank rows
+after a row label heading, at the end of a row label heading 'section'. (Default: c(1, 1, 0, 0))}
 
 \item{col.diamond}{Plot estimates and CIs as diamonds. Name of a column of logical values.}
 

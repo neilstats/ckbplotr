@@ -9,7 +9,7 @@ forest_data(
   panels,
   col.key = "key",
   row.labels = NULL,
-  row.labels.levels = c("heading1", "heading2", "heading3"),
+  row.labels.levels = NULL,
   rows = NULL,
   panel.names = NULL,
   col.estimate = "estimate",
@@ -36,7 +36,7 @@ make_forest_data(
   panels,
   col.key = "key",
   row.labels = NULL,
-  row.labels.levels = c("heading1", "heading2", "heading3"),
+  row.labels.levels = NULL,
   rows = NULL,
   panel.names = NULL,
   col.estimate = "estimate",
@@ -75,8 +75,8 @@ If row.labels data frame is not given, then this column will be used as row labe
 \item{row.labels}{A data frame that contains the labels to be used for the
 rows of the plot. Use NA if a lower level heading is not required for a given row.}
 
-\item{row.labels.levels}{A character vector up to length 3. The names of columns in row.labels
-to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))}
+\item{row.labels.levels}{A character vector. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows.}
 
 \item{rows}{A character vector. The top level labels of rows
 to be included in the plot.}
@@ -106,9 +106,8 @@ confidence interval. (Default: ", ")}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
-\item{blankrows}{A numeric vector of length 4 specifying the number of blank rows
-after a heading1, at the end of a heading1 'section', after
-a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
+\item{blankrows}{A numeric vector specifying the number of blank rows
+after a row label heading, at the end of a row label heading 'section'. (Default: c(1, 1, 0, 0))}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}

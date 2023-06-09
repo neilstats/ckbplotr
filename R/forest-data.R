@@ -13,8 +13,8 @@
 #'   (Default: "key")
 #' @param row.labels A data frame that contains the labels to be used for the
 #'   rows of the plot. Use NA if a lower level heading is not required for a given row.
-#' @param row.labels.levels A character vector up to length 3. The names of columns in row.labels
-#'   to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))
+#' @param row.labels.levels A character vector. The names of columns in row.labels
+#'   to use as headings/subheadings/labels for labelling rows.
 #' @param rows A character vector. The top level labels of rows
 #'   to be included in the plot.
 #' @param panel.names A character vector. The names to be used for each forest plot panel.
@@ -31,9 +31,8 @@
 #'   confidence interval. (Default: ", ")
 #' @param digits Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
-#' @param blankrows A numeric vector of length 4 specifying the number of blank rows
-#'   after a heading1, at the end of a heading1 'section', after
-#'   a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))
+#' @param blankrows A numeric vector specifying the number of blank rows
+#'   after a row label heading, at the end of a row label heading 'section'. (Default: c(1, 1, 0, 0))
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
@@ -69,7 +68,7 @@ forest_data <- function(
     panels,
     col.key       = "key",
     row.labels    = NULL,
-    row.labels.levels = c("heading1", "heading2", "heading3"),
+    row.labels.levels = NULL,
     rows          = NULL,
     panel.names   = NULL,
     col.estimate  = "estimate",
@@ -108,6 +107,11 @@ forest_data <- function(
 
   # check function arguments
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
+
+  if (is.null(row.labels.levels)) {
+    row.labels.levels <- names(row.labels)
+    row.labels.levels <- row.labels.levels[!row.labels.levels == col.key]
+  }
 
   check_forest_data_arguments(panels,
                               panel.names,
