@@ -158,11 +158,14 @@ forest_data <- function(
       dplyr::select(.data$row.label, .data$key, .data$row.height, .data$spacing_row)
   } else {
 
-    if (is.null(rows)) rlang::abort("argument rows must be given if row.labels is used")
     if (!col.key %in% names(row.labels)) rlang::abort(glue::glue("{col.key} must be a column in {deparse(substitute(row.labels))}"))
 
     for (panel in panels) {
       if (!col.key %in% names(panel)) rlang::abort(glue::glue("{col.key} must be a column in every data frame given in panels"))
+    }
+
+    if (missing(rows)) {
+      rows <- unique(row.labels[[ row.labels.levels[[1]] ]])
     }
 
     for (head1 in rows) {

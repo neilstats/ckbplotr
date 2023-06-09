@@ -74,10 +74,11 @@ forest_plot(panels       = list(resultsA, resultsB),
 ```
 
 ### Using row labels
-To use row labels, first create a data frame of labels. The data set must contain:
+To use row labels, first create a data frame of labels. The data set should contain:
 
 * a column used to match labels to the correct results, specified in the argument `col.key`.
-* up to three columns with headings/subheadings/labels for rows.
+* a column with labels for rows.
+* further columns, as needed, for headings and subheadings.
 
 If a particular level of label is not required it can be set to missing.
 
@@ -87,7 +88,7 @@ head(ckbplotr_row_labels)
 
 In `forest_plot()` specify the `row.labels` argument as the data frame of labels you've created. Use the `row.labels.levels` argument to choose which columns are used as headings/subheadings/labels.
 
-Use the `rows` argument to choose the results to be plotted. The first level (heading) labels will be included in the plot from top to bottom. Other labels will be in the order that they are in the `row.labels` data frame.
+The `rows` argument can be used to choose the results to be plotted. The first level of labels will be included in the plot from top to bottom. Other labels will be in the order that they are in the `row.labels` data frame.
 
 ```{r using-row-labels, fig.height = 5}
 forest_plot(panels            = list("Analysis A" = resultsA,
