@@ -123,6 +123,15 @@ plot_like_ckb <- function(
 
   # calculate plot limits
   limits <- list(xaxis = xlims, yaxis = ylims)
+
+  ## check for infinite values in transformed axis limits
+  if (any(!is.finite(tf_x(limits[["xaxis"]])))) {
+    rlang::abort("Infinite or NaN values in x-axis. Provide axis limits and check transformation of x scale.")
+  }
+  if (any(!is.finite(tf_y(limits[["yaxis"]])))) {
+    rlang::abort("Infinite or NaN values in y-axis. Provide axis limits and check transformation of y scale.")
+  }
+
   addtox <- c(gap[[1]]*diff(range(tf_x(limits[["xaxis"]]))),
               ext[[1]]*diff(range(tf_x(limits[["xaxis"]]))))
   addtoy <- c((1/ratio)*gap[[2]]*diff(range(tf_y(limits[["yaxis"]]))),
@@ -291,6 +300,15 @@ ggplot_add.ckbplot <- function(object, plot, object_name) {
 
   # calculate plot limits
   limits <- list(xaxis = xlims, yaxis = ylims)
+
+  ## check for infinite values in transformed axis limits
+  if (any(!is.finite(tf_x(limits[["xaxis"]])))) {
+    rlang::abort("Infinite or NaN values in x-axis. Provide axis limits and check transformation of x scale.")
+  }
+  if (any(!is.finite(tf_y(limits[["yaxis"]])))) {
+    rlang::abort("Infinite or NaN values in y-axis. Provide axis limits and check transformation of y scale.")
+  }
+
   addtox <- c(object$gap[[1]]*diff(range(tf_x(limits[["xaxis"]]))),
               object$ext[[1]]*diff(range(tf_x(limits[["xaxis"]]))))
   addtoy <- c((1/object$ratio)*object$gap[[2]]*diff(range(tf_y(limits[["yaxis"]]))),
