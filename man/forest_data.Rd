@@ -10,7 +10,6 @@ forest_data(
   col.key = "key",
   row.labels = NULL,
   row.labels.levels = NULL,
-  rows = NULL,
   panel.names = NULL,
   col.estimate = "estimate",
   col.stderr = "stderr",
@@ -37,7 +36,6 @@ make_forest_data(
   col.key = "key",
   row.labels = NULL,
   row.labels.levels = NULL,
-  rows = NULL,
   panel.names = NULL,
   col.estimate = "estimate",
   col.stderr = "stderr",
@@ -77,9 +75,6 @@ rows of the plot. Use NA if a lower level heading is not required for a given ro
 
 \item{row.labels.levels}{A character vector. The names of columns in row.labels
 to use as headings/subheadings/labels for labelling rows.}
-
-\item{rows}{A character vector. The top level labels of rows
-to be included in the plot.}
 
 \item{panel.names}{A character vector. The names to be used for each forest plot panel.
 If none provided, then they will be numbered 1, 2, 3 ...}

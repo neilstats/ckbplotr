@@ -15,8 +15,6 @@
 #'   rows of the plot. Use NA if a lower level heading is not required for a given row.
 #' @param row.labels.levels A character vector. The names of columns in row.labels
 #'   to use as headings/subheadings/labels for labelling rows.
-#' @param rows A character vector. The top level labels of rows
-#'   to be included in the plot.
 #' @param panel.names A character vector. The names to be used for each forest plot panel.
 #'   If none provided, then they will be numbered 1, 2, 3 ...
 #' @param col.estimate Name of column that provides point estimates.
@@ -69,7 +67,6 @@ forest_data <- function(
     col.key       = "key",
     row.labels    = NULL,
     row.labels.levels = NULL,
-    rows          = NULL,
     panel.names   = NULL,
     col.estimate  = "estimate",
     col.stderr    = "stderr",
@@ -168,16 +165,6 @@ forest_data <- function(
       if (!col.key %in% names(panel)) rlang::abort(glue::glue("{col.key} must be a column in every data frame given in panels"))
     }
 
-    if (missing(rows)) {
-      rows <- unique(row.labels[[ row.labels.levels[[1]] ]])
-    }
-
-    for (head1 in rows) {
-      if (!(head1 %in% row.labels[[ row.labels.levels[[1]] ]])) {
-        rlang::abort(glue::glue("{head1} is not in {row.labels.levels[[1]]} column of {deparse(substitute(row.labels))}"))
-      }
-    }
-
     ## number of levels of row labels
     n_row_label_levels <- length(row.labels.levels)
 
@@ -195,11 +182,6 @@ forest_data <- function(
             ifelse(length(non_missing_values) >= 1, non_missing_values[i], NA)
           })
     }
-
-    ## keep only rows where row_label_level_1 is in rows
-    row.labels <- dplyr::left_join(tibble::tibble(row_label_level_1 = rows),
-                                   row.labels,
-                                   by = "row_label_level_1")
 
     ## create out data frame using last level of row labels
     out <- row.labels %>%

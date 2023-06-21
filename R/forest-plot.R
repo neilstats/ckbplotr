@@ -93,7 +93,6 @@ forest_plot <- function(
     row.labels    = NULL,
     row.labels.levels = NULL,
     row.labels.heading = NULL,
-    rows          = NULL,
     exponentiate  = TRUE,
     logscale      = exponentiate,
     panel.names   = NULL,
@@ -495,7 +494,6 @@ forest_plot <- function(
         }'
       },
       argset(row.labels.levels),
-      argset(rows),
       'panels = {
       if (!missing(cols)) {{
         paste(deparse(substitute(cols)), collapse = "")

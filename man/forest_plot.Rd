@@ -10,7 +10,6 @@ forest_plot(
   row.labels = NULL,
   row.labels.levels = NULL,
   row.labels.heading = NULL,
-  rows = NULL,
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
@@ -93,7 +92,6 @@ make_forest_plot(
   row.labels = NULL,
   row.labels.levels = NULL,
   row.labels.heading = NULL,
-  rows = NULL,
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
@@ -184,9 +182,6 @@ rows of the plot. Use NA if a lower level heading is not required for a given ro
 to use as headings/subheadings/labels for labelling rows.}
 
 \item{row.labels.heading}{Title to be placed above row labels.}
-
-\item{rows}{A character vector. The top level labels of rows
-to be included in the plot.}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 

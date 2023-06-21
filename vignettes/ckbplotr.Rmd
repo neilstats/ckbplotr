@@ -101,25 +101,6 @@ forest_plot(panels            = list("Analysis A" = resultsA,
 ```
 
 Use the `row.labels.levels` argument to choose which columns are used as headings/subheadings/labels. If not provided, all columns will be used.
-
-The `rows` argument can be used to choose the results to be plotted. The first level of labels will be included in the plot from top to bottom. Other labels will be in the order that they are in the `row.labels` data frame.
-
-```{r using-row-labels-more, fig.height = 5}
-forest_plot(panels            = list("Analysis A" = resultsA,
-                                     "Analysis B" = resultsB),
-            col.key           = "variable",
-            row.labels        = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows              = c("Triglycerides concentration",
-                                  "Lipoprotein particle concentration"),
-            exponentiate      = TRUE,
-            xlim              = c(0.9, 1.1),
-            xticks            = c(0.9, 1, 1.1),
-            scalepoints       = TRUE,
-            pointsize         = 3)
-```
-In this plot we've also used a named list for `panels` and the `xlim`, `xticks`, `scalepoints`, and `pointsize` arguments to customise the plot.
-
 For more details on customising forest plots, see ["More with forest plots"](forest_plot.html).
 
 

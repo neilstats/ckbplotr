@@ -33,13 +33,14 @@ Notes: This has been designed to work well for shape 15 (the default) and 22. Th
 ```{r forest-plot}
 resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
 resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
+row_labels <- dplyr::filter(ckbplotr_row_labels,
+                            heading %in% c("Lipoprotein particle concentration",
+                                           "Triglycerides concentration"))
 
 forest_plot(
   panels            = list(resultsA, resultsB),
   col.key           = "variable",
-  row.labels        = ckbplotr_row_labels,
-  row.labels.levels = c("heading", "subheading", "label"),
-  rows              = c("Lipoprotein particle concentration"),
+  row.labels        = row_labels,
   exponentiate      = TRUE,
   panel.names       = c("Analysis A", "Analysis B"),
   ci.delim          = " - ",
@@ -66,9 +67,7 @@ As well as changing colour, we may also wish to change if confidence interval li
 forest_plot(
   panels            = list(resultsA, resultsB),
   col.key           = "variable",
-  row.labels        = ckbplotr_row_labels,
-  row.labels.levels = c("heading", "subheading", "label"),
-  rows              = c("Lipoprotein particle concentration"),
+  row.labels        = row_labels,
   exponentiate      = TRUE,
   panel.names       = c("Analysis A", "Analysis B"),
   ci.delim          = " - ",
@@ -91,16 +90,10 @@ forest_plot(
 When using `panel.width`, `cicolour` can be a list of vectors of colour names. `fill` can also be list of colour names.
 
 ```{r forest-plot-4}
-resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
-resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
-
 forest_plot(
   panels            = list(resultsA, resultsB),
   col.key           = "variable",
-  row.labels        = ckbplotr_row_labels,
-  row.labels.levels = c("heading", "subheading", "label"),
-  rows              = c("Lipoprotein particle concentration"),
-  exponentiate      = TRUE,
+  row.labels        = row_labels,
   panel.names       = c("Analysis A", "Analysis B"),
   ci.delim          = " - ",
   xlim              = c(0.9, 1.1),

@@ -33,13 +33,14 @@ Use the `col.left` and `col.right` arguments to add columns of text either side 
 resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
 resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
 
+row_labels <- dplyr::filter(ckbplotr_row_labels,
+                            heading %in% c("Lipoprotein particle concentration",
+                                           "Triglycerides concentration"))
+
 forest_plot(panels            = list("Analysis A" = resultsA,
                                      "Analysis B" = resultsB),
             col.key           = "variable",
-            row.labels        = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows              = c("Triglycerides concentration",
-                                  "Lipoprotein particle concentration"),
+            row.labels        = row_labels,
             exponentiate      = TRUE,
             ci.delim          = " - ",
             xlim              = c(0.9, 1.1),
@@ -58,10 +59,7 @@ Multiple columns can be added by specifying vectors for `col.left`, `col.right`,
 forest_plot(panels            = list("Analysis A" = resultsA,
                                      "Analysis B" = resultsB),
             col.key           = "variable",
-            row.labels        = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows              = c("Triglycerides concentration",
-                                  "Lipoprotein particle concentration"),
+            row.labels        = row_labels,
             exponentiate      = TRUE,
             ci.delim          = " - ",
             xlim              = c(0.9, 1.1),
@@ -93,10 +91,7 @@ The colour used for the plot can be changed with the `plotcolour` argument. This
 forest_plot(panels            = list("Analysis A" = resultsA,
                                      "Analysis B" = resultsB),
             col.key           = "variable",
-            row.labels        = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows              = c("Triglycerides concentration",
-                                  "Lipoprotein particle concentration"),
+            row.labels        = row_labels,
             exponentiate      = TRUE,
             ci.delim          = " - ",
             xlim              = c(0.9, 1.1),
@@ -128,11 +123,12 @@ Note that `col.bold`, and `col.diamond` must be column names in the supplied dat
 
 ### Using values
 ```{r, fig.height = 4, fig.width = 6}
+row_labels <- dplyr::filter(ckbplotr_row_labels,
+                            heading == "Triglycerides concentration")
+
 forest_plot(panels           = list("Analysis A" = resultsA),
             col.key          = "variable",
-            row.labels       = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows             = c("Triglycerides concentration"),
+            row.labels       = row_labels,
             exponentiate     = TRUE,
             blankrows        = c(0, 1, 0, 1),
             scalepoints      = TRUE,
@@ -154,9 +150,7 @@ resultsA[13, "fill"] <- "white"
   
 forest_plot(panels           = list("Analysis A" = resultsA),
             col.key          = "variable",
-            row.labels       = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows             = c("Triglycerides concentration"),
+            row.labels       = row_labels,
             exponentiate     = TRUE,
             blankrows        = c(0, 1, 0, 1),
             scalepoints      = TRUE,
@@ -177,9 +171,7 @@ As an alternative to using `col.diamond`, provide a character vector in the `dia
 ```{r, fig.height = 4, fig.width = 6}
 forest_plot(panels           = list(resultsA),
             col.key          = "variable",
-            row.labels       = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows             = c("Triglycerides concentration"),
+            row.labels       = row_labels,
             exponentiate     = TRUE,
             panel.names      = c("Analysis A"),
             ci.delim         = " - ",
@@ -222,13 +214,13 @@ resultsB_extra
 ```
 
 ```{r, fig.width = 10}
+row_labels <- dplyr::filter(ckbplotr_row_labels,
+                            heading == "Lipoprotein particle concentration")
+
 forest_plot(panels            = list("Analysis A" = resultsA,
                                      "Analysis B" = resultsB),
             col.key           = "variable",
-            row.labels        = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows              = c("Lipoprotein particle concentration",
-                                  "Triglycerides concentration"),
+            row.labels        = row_labels,
             exponentiate      = TRUE,
             ci.delim          = " - ",
             xlim              = c(0.9, 1.1),
@@ -262,9 +254,7 @@ resultsA_extra
 ```{r, fig.height = 4, fig.width = 6}
 forest_plot(panels            = list("Analysis A" = resultsA),
             col.key           = "variable",
-            row.labels        = ckbplotr_row_labels,
-            row.labels.levels = c("heading", "subheading", "label"),
-            rows              = c("Lipoprotein particle concentration"),
+            row.labels        = row_labels,
             exponentiate      = TRUE,
             ci.delim          = " - ",
             xlim              = c(0.9, 1.1),
@@ -304,44 +294,38 @@ However, one approach to work around this is to use `forest_plot()` for each plo
 Step 1: Use `forest_plot()` for each plot.
 ```{r}
 forestplot1 <- forest_plot(panels            = list(resultsA),
-col.key           = "variable",
-row.labels        = ckbplotr_row_labels,
-row.labels.levels = c("heading", "subheading", "label"),
-rows              = c("Lipoprotein particle concentration",
-"Triglycerides concentration"),
-exponentiate      = TRUE,
-panel.names       = c("Analysis A"),
-ci.delim          = " - ",
-xlim              = c(0.9, 1.1),
-xticks            = c(0.9, 1, 1.1),
-blankrows         = c(1, 1, 0, 1),
-scalepoints       = TRUE,
-pointsize         = 3,
-col.left          = c("n"),
-col.left.heading  = c("No. of\nevents"),
-col.heading.space = 1.5,
-panel.width       = unit(20, "mm"),
-printplot         = FALSE)
+                           col.key           = "variable",
+                           row.labels        = row_labels,
+                           exponentiate      = TRUE,
+                           panel.names       = c("Analysis A"),
+                           ci.delim          = " - ",
+                           xlim              = c(0.9, 1.1),
+                           xticks            = c(0.9, 1, 1.1),
+                           blankrows         = c(1, 1, 0, 1),
+                           scalepoints       = TRUE,
+                           pointsize         = 3,
+                           col.left          = c("n"),
+                           col.left.heading  = c("No. of\nevents"),
+                           col.heading.space = 1.5,
+                           panel.width       = unit(20, "mm"),
+                           printplot         = FALSE)
 
 forestplot2 <- forest_plot(panels            = list(resultsB),
-col.key           = "variable",
-row.labels        = ckbplotr_row_labels,
-row.labels.levels = c("heading", "subheading", "label"),
-rows              = c("Lipoprotein particle concentration",
-"Triglycerides concentration"),
-exponentiate      = TRUE,
-panel.names       = c("Analysis B"),
-ci.delim          = " - ",
-xlim              = c(0.8, 1.2),
-xticks            = c(0.8, 1, 1.2),
-blankrows         = c(1, 1, 0, 1),
-scalepoints       = TRUE,
-pointsize         = 3,
-col.left          = c("n"),
-col.left.heading  = c("No. of\nevents"),
-col.heading.space = 1.5,
-panel.width       = unit(20, "mm"),
-printplot         = FALSE)
+                           col.key           = "variable",
+                           row.labels        = row_labels,
+                           exponentiate      = TRUE,
+                           panel.names       = c("Analysis B"),
+                           ci.delim          = " - ",
+                           xlim              = c(0.8, 1.2),
+                           xticks            = c(0.8, 1, 1.2),
+                           blankrows         = c(1, 1, 0, 1),
+                           scalepoints       = TRUE,
+                           pointsize         = 3,
+                           col.left          = c("n"),
+                           col.left.heading  = c("No. of\nevents"),
+                           col.heading.space = 1.5,
+                           panel.width       = unit(20, "mm"),
+                           printplot         = FALSE)
 ```
 
 Step 2: Remove the axis text for all but the first plot.
@@ -349,14 +333,14 @@ Step 2: Remove the axis text for all but the first plot.
 p1 <- forestplot1$plot
 
 p2 <- forestplot2$plot + 
-theme(axis.text.y = element_blank())
+  theme(axis.text.y = element_blank())
 ```
 
 Step 3: Arrange the plots using `gridExtra` (there may be other packages that also work). (Adjust the `widths` argument until you get a suitable layout.)
 ```{r}
 gridExtra::grid.arrange(p1, p2,
-nrow = 1,
-widths = c(1, 0.5))
+                        nrow = 1,
+                        widths = c(1, 0.5))
 ```
 
 Note that if `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots. However, if different axis scales are used then confidence intervals are not comparable either so this may be not be a problem.

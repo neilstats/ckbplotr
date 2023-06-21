@@ -44,10 +44,7 @@ shapeplot <- shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,]
 resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
 forestplot <- forest_plot(panels            = list(resultsA),
                           col.key           = "variable",
-                          row.labels        = ckbplotr_row_labels,
-                          row.labels.levels = c("heading", "subheading", "label"),
-                          rows              = c("Triglycerides concentration",
-                                                "Lipoprotein particle concentration"),
+                          row.labels        = row_labels,
                           exponentiate      = TRUE,
                           xlim              = c(0.9, 1.1),
                           xticks            = c(0.9, 1, 1.1),
