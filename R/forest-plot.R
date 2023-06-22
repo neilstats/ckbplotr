@@ -193,17 +193,21 @@ forest_plot <- function(
     message("Note: boldheadings argument is now called bold.labels")
   }
 
-
   # Check arguments ----
+  panels_list <- panels
+  if (is.data.frame(panels)) {
+    panels_list <- list(panels)
+  }
+
   fixed_panel_width <- !missing(panel.width)
   fixed_panel_height <- !missing(panel.height)
-  column_names_in_data <- names(panels[[1]])
+  column_names_in_data <- names(panels_list[[1]])
 
   check_forest_plot_arguments (col.diamond,
                                diamond,
                                col.left,
                                col.right,
-                               panels,
+                               panels_list,
                                cicolour,
                                fixed_panel_width)
 
@@ -249,11 +253,11 @@ forest_plot <- function(
 
 
   # Default panel.names ----
-  if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
+  if (is.null(panel.names)) { panel.names <- as.character(1:length(panels_list)) }
 
 
   # Panel headings ----
-  if (is.null(panel.headings)) { panel.headings <- names(panels) }
+  if (is.null(panel.headings)) { panel.headings <- names(panels_list) }
 
 
   # Create lists for aesthetics/arguments ----
@@ -395,7 +399,7 @@ forest_plot <- function(
     text_about_auto_spacing <- "Automatically calculated horizontal spacing and positioning:\n"
   }
   ### get maximum width of each columns (incl. heading)
-  widths_of_columns <- gettextwidths(lapply(col.right, function(y) c(sapply(panels, function(x) x[[y]]))))
+  widths_of_columns <- gettextwidths(lapply(col.right, function(y) c(sapply(panels_list, function(x) x[[y]]))))
   estcolumn_width <- gettextwidths(paste0("9.",
                                           paste0(rep(9, digits), collapse = ""),
                                           "(9.",
@@ -429,7 +433,7 @@ forest_plot <- function(
 
   ## calculate automatic col.left.pos and col.left.space
   ### get maximum width of each columns (incl. heading)
-  widths_of_columns <- gettextwidths(lapply(col.left, function(y) c(sapply(panels, function(x) x[[y]]))))
+  widths_of_columns <- gettextwidths(lapply(col.left, function(y) c(sapply(panels_list, function(x) x[[y]]))))
   widths_of_column_headings <- gettextwidths(col.left.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, and gap between each column
@@ -457,10 +461,10 @@ forest_plot <- function(
   ## xfrom, xto, etc. are used by other code sections, so this must come first
   if (is.null(xlim)) {
     if (is.null(col.lci)) {
-      allvalues <- sapply(panels, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
+      allvalues <- sapply(panels_list, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
                                                 tf(x[[col.estimate]] + 1.96 * x[[col.stderr]])))
     } else {
-      allvalues <- sapply(panels, function(x) c(tf(x[[col.lci]]),
+      allvalues <- sapply(panels_list, function(x) c(tf(x[[col.lci]]),
                                                 tf(x[[col.uci]])))
     }
     xlim <- range(pretty(allvalues))

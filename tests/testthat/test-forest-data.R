@@ -43,7 +43,7 @@ test_that("forest_data throws an error if panel.names is not unique", {
 })
 
 test_that("forest_data throws an error if panels and panel.names have different lengths", {
-  expect_error(forest_data(panels = list(1,2,3),
+  expect_error(forest_data(panels = ckbplotr_forest_data,
                            panel.names = c("a", "b"),
                            row.labels = NULL,
                            row.labels.levels = NULL,
@@ -54,7 +54,7 @@ test_that("forest_data throws an error if panels and panel.names have different 
 })
 
 test_that("forest_data throws an error if blankrows is less than 2*(length(row.labels.levels)-1)", {
-  expect_error(forest_data(panels = list(1),
+  expect_error(forest_data(panels = list(ckbplotr_forest_data),
                            panel.names = "panel",
                            row.labels = NULL,
                            row.labels.levels = c("heading", "subheading"),
@@ -65,7 +65,7 @@ test_that("forest_data throws an error if blankrows is less than 2*(length(row.l
 
 # Test if function throws an error if row.labels.levels is not a column in row.labels
 test_that("forest_data throws an error if row.labels.levels is not a column in row.labels", {
-  expect_error(forest_data(panels = list(data.frame(x = 1)),
+  expect_error(forest_data(panels = ckbplotr_forest_data,
                            panel.names = "panel",
                            row.labels = data.frame(x = 1:10),
                            row.labels.levels = c("y"),
@@ -76,7 +76,7 @@ test_that("forest_data throws an error if row.labels.levels is not a column in r
 })
 
 test_that("forest_data throws an error if row.labels.levels columns are not character", {
-  expect_error(forest_data(panels = list(data.frame(x = 1)),
+  expect_error(forest_data(panels = ckbplotr_forest_data,
                            panel.names = "panel",
                            row.labels = data.frame(y = 1:5),
                            row.labels.levels = c("y"),
