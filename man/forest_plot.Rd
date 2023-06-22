@@ -10,6 +10,7 @@ forest_plot(
   row.labels = NULL,
   row.labels.levels = NULL,
   row.labels.heading = NULL,
+  row.labels.space = c(0, 1, 0, 0),
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
@@ -38,7 +39,7 @@ forest_plot(
   xlim = NULL,
   xticks = NULL,
   nullval = NULL,
-  blankrows = c(1, 1, 0, 0),
+  blankrows = NULL,
   col.diamond = NULL,
   diamond = NULL,
   col.bold = NULL,
@@ -92,6 +93,7 @@ make_forest_plot(
   row.labels = NULL,
   row.labels.levels = NULL,
   row.labels.heading = NULL,
+  row.labels.space = c(0, 1, 0, 0),
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
@@ -120,7 +122,7 @@ make_forest_plot(
   xlim = NULL,
   xticks = NULL,
   nullval = NULL,
-  blankrows = c(1, 1, 0, 0),
+  blankrows = NULL,
   col.diamond = NULL,
   diamond = NULL,
   col.bold = NULL,
@@ -182,6 +184,9 @@ rows of the plot. Use NA if a lower level heading is not required for a given ro
 to use as headings/subheadings/labels for labelling rows.}
 
 \item{row.labels.heading}{Title to be placed above row labels.}
+
+\item{row.labels.space}{A numeric vector specifying the space
+after a row label heading, at the end of a row label heading 'section'. (Default: c(0, 1, 0, 0))}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
@@ -253,8 +258,7 @@ confidence interval. (Default: ", ")}
 
 \item{nullval}{Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)}
 
-\item{blankrows}{A numeric vector specifying the number of blank rows
-after a row label heading, at the end of a row label heading 'section'. (Default: c(1, 1, 0, 0))}
+\item{blankrows}{DEPRECATED}
 
 \item{col.diamond}{Plot estimates and CIs as diamonds. Name of a column of logical values.}
 

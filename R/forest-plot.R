@@ -75,6 +75,7 @@
 #' @param col.left.space DEPRACTED
 #' @param heading.space DEPRECATED. Even older method for specifying spacing.
 #' @param plot.space DEPRECATED. Even older method for specifying spacing.
+#' @param blankrows DEPRECATED
 #'
 #' @return A list:
 #' \describe{
@@ -93,6 +94,7 @@ forest_plot <- function(
     row.labels    = NULL,
     row.labels.levels = NULL,
     row.labels.heading = NULL,
+    row.labels.space = c(0, 1, 0, 0),
     exponentiate  = TRUE,
     logscale      = exponentiate,
     panel.names   = NULL,
@@ -121,7 +123,7 @@ forest_plot <- function(
     xlim          = NULL,
     xticks        = NULL,
     nullval       = NULL,
-    blankrows     = c(1, 1, 0, 0),
+    blankrows     = NULL,
     col.diamond   = NULL,
     diamond       = NULL,
     col.bold      = NULL,
@@ -191,6 +193,10 @@ forest_plot <- function(
   if (!missing(boldheadings)) {
     bold.labels <- boldheadings
     message("Note: boldheadings argument is now called bold.labels")
+  }
+  if (!missing(blankrows)) {
+    row.labels.space <- blankrows
+    message("Note: blankrows argument is now called row.labels.space")
   }
 
   # Check arguments ----
@@ -505,6 +511,7 @@ forest_plot <- function(
         paste(deparse(substitute(panels)), collapse = "")
       }}
       }',
+      argset(row.labels.space),
       argset(panel.names),
       argset(col.key),
       argset(col.estimate),
@@ -517,7 +524,6 @@ forest_plot <- function(
       argset(ci.delim),
       argset(digits),
       argset(exponentiate),
-      argset(blankrows),
       argset(scalepoints),
       argset(minse),
       argset(bold.labels),

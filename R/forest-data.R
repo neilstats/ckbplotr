@@ -29,8 +29,8 @@
 #'   confidence interval. (Default: ", ")
 #' @param digits Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
-#' @param blankrows A numeric vector specifying the number of blank rows
-#'   after a row label heading, at the end of a row label heading 'section'. (Default: c(1, 1, 0, 0))
+#' @param row.labels.space A numeric vector specifying the space
+#'   after a row label heading, at the end of a row label heading 'section'. (Default: c(0, 1, 0, 0))
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
@@ -64,10 +64,8 @@
 
 forest_data <- function(
     panels,
-    col.key       = "key",
-    row.labels    = NULL,
-    row.labels.levels = NULL,
     panel.names   = NULL,
+    col.key       = "key",
     col.estimate  = "estimate",
     col.stderr    = "stderr",
     col.lci       = NULL,
@@ -75,10 +73,12 @@ forest_data <- function(
     col.left      = NULL,
     col.right     = NULL,
     col.keep      = NULL,
+    row.labels    = NULL,
+    row.labels.levels = NULL,
+    row.labels.space = c(0, 1, 0, 0),
     ci.delim      = ", ",
     digits        = 2,
     exponentiate  = TRUE,
-    blankrows     = c(1, 1, 0, 0),
     scalepoints   = FALSE,
     minse         = NULL,
     addtext       = NULL,
@@ -126,7 +126,7 @@ forest_data <- function(
                               panel.names,
                               row.labels,
                               row.labels.levels,
-                              blankrows,
+                              row.labels.space,
                               col.lci,
                               col.uci)
 
@@ -210,8 +210,8 @@ forest_data <- function(
           dplyr::mutate(res = purrr::map(.data$data,
                                          ~ add_row_label_above(.,
                                                                .data[[paste0("row_label_level_", i)]],
-                                                               blankrows[[i*2-1]],
-                                                               blankrows[[i*2]]))) %>%
+                                                               row.labels.space[[i*2-1]],
+                                                               row.labels.space[[i*2]]))) %>%
           dplyr::select(-.data$data) %>%
           tidyr::unnest(cols = "res") %>%
           dplyr::ungroup()
@@ -454,7 +454,7 @@ check_forest_data_arguments <- function(panels,
                                         panel.names,
                                         row.labels,
                                         row.labels.levels,
-                                        blankrows,
+                                        row.labels.space,
                                         col.lci,
                                         col.uci,
                                         call = rlang::caller_env()) {
@@ -478,8 +478,8 @@ check_forest_data_arguments <- function(panels,
     rlang::abort("panels and panel.names must be the same length",
                  call = call)
   }
-  if (!(length(blankrows) >= 2*(length(row.labels.levels) - 1))) {
-    rlang::abort("blankrows must be at least 2*(length(row.labels.levels)-1)",
+  if (!(length(row.labels.space) >= 2*(length(row.labels.levels) - 1))) {
+    rlang::abort("row.labels.space must be at least 2*(length(row.labels.levels)-1)",
                  call = call)
   }
   if (!is.null(row.labels) && !all(row.labels.levels %in% names(row.labels))) {

@@ -3,7 +3,7 @@ test_that("forest_data throws an error if col.lci is specified but col.uci is no
                            panel.names = NULL,
                            row.labels = NULL,
                            row.labels.levels = NULL,
-                           blankrows = NULL,
+                           row.labels.space = NULL,
                            col.lci = "a",
                            col.uci = NULL),
                "col.lci and col.uci must both be specified")
@@ -14,7 +14,7 @@ test_that("forest_data throws an error if col.uci is specified but col.lci is no
                            panel.names = NULL,
                            row.labels = NULL,
                            row.labels.levels = NULL,
-                           blankrows = NULL,
+                           row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = "a"),
                "col.lci and col.uci must both be specified")
@@ -25,7 +25,7 @@ test_that("forest_data throws an error if panel.names is not a character vector"
                            panel.names = 1,
                            row.labels = NULL,
                            row.labels.levels = NULL,
-                           blankrows = NULL,
+                           row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
                "panel.names must be a character vector")
@@ -36,7 +36,7 @@ test_that("forest_data throws an error if panel.names is not unique", {
                            panel.names = c("a", "b", "a"),
                            row.labels = NULL,
                            row.labels.levels = NULL,
-                           blankrows = NULL,
+                           row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
                "panel.names must be unique")
@@ -47,18 +47,18 @@ test_that("forest_data throws an error if panels and panel.names have different 
                            panel.names = c("a", "b"),
                            row.labels = NULL,
                            row.labels.levels = NULL,
-                           blankrows = NULL,
+                           row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
                "panels and panel.names must be the same length")
 })
 
-test_that("forest_data throws an error if blankrows is less than 2*(length(row.labels.levels)-1)", {
+test_that("forest_data throws an error if row.labels.space is less than 2*(length(row.labels.levels)-1)", {
   expect_error(forest_data(panels = list(ckbplotr_forest_data),
                            panel.names = "panel",
                            row.labels = NULL,
                            row.labels.levels = c("heading", "subheading"),
-                           blankrows = 1,
+                           row.labels.space = 1,
                            col.lci = NULL,
                            col.uci = NULL))
 })
@@ -69,7 +69,7 @@ test_that("forest_data throws an error if row.labels.levels is not a column in r
                            panel.names = "panel",
                            row.labels = data.frame(x = 1:10),
                            row.labels.levels = c("y"),
-                           blankrows = NULL,
+                           row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
                "row.labels.levels must be columns in row.labels")
@@ -80,7 +80,7 @@ test_that("forest_data throws an error if row.labels.levels columns are not char
                            panel.names = "panel",
                            row.labels = data.frame(y = 1:5),
                            row.labels.levels = c("y"),
-                           blankrows = NULL,
+                           row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
                "row.labels.levels columns must be character")

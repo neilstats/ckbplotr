@@ -7,10 +7,8 @@
 \usage{
 forest_data(
   panels,
-  col.key = "key",
-  row.labels = NULL,
-  row.labels.levels = NULL,
   panel.names = NULL,
+  col.key = "key",
   col.estimate = "estimate",
   col.stderr = "stderr",
   col.lci = NULL,
@@ -18,10 +16,12 @@ forest_data(
   col.left = NULL,
   col.right = NULL,
   col.keep = NULL,
+  row.labels = NULL,
+  row.labels.levels = NULL,
+  row.labels.space = c(0, 1, 0, 0),
   ci.delim = ", ",
   digits = 2,
   exponentiate = TRUE,
-  blankrows = c(1, 1, 0, 0),
   scalepoints = FALSE,
   minse = NULL,
   addtext = NULL,
@@ -33,10 +33,8 @@ forest_data(
 
 make_forest_data(
   panels,
-  col.key = "key",
-  row.labels = NULL,
-  row.labels.levels = NULL,
   panel.names = NULL,
+  col.key = "key",
   col.estimate = "estimate",
   col.stderr = "stderr",
   col.lci = NULL,
@@ -44,10 +42,12 @@ make_forest_data(
   col.left = NULL,
   col.right = NULL,
   col.keep = NULL,
+  row.labels = NULL,
+  row.labels.levels = NULL,
+  row.labels.space = c(0, 1, 0, 0),
   ci.delim = ", ",
   digits = 2,
   exponentiate = TRUE,
-  blankrows = c(1, 1, 0, 0),
   scalepoints = FALSE,
   minse = NULL,
   addtext = NULL,
@@ -63,21 +63,15 @@ estimates, and standard errors or confidence interval limits. If you
 specify a row.labels data frame, then they must also all contain a key column
 with the same name (which can be specified by col.key).}
 
+\item{panel.names}{A character vector. The names to be used for each forest plot panel.
+If none provided, then they will be numbered 1, 2, 3 ...}
+
 \item{col.key}{Name of column that links the results given in each data frame
 provided in panels and the labels given in row.labels.
 
 If row.labels data frame is not given, then this column will be used as row labels.
 
 (Default: "key")}
-
-\item{row.labels}{A data frame that contains the labels to be used for the
-rows of the plot. Use NA if a lower level heading is not required for a given row.}
-
-\item{row.labels.levels}{A character vector. The names of columns in row.labels
-to use as headings/subheadings/labels for labelling rows.}
-
-\item{panel.names}{A character vector. The names to be used for each forest plot panel.
-If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.estimate}{Name of column that provides point estimates.
 (Default: "estimate")}
@@ -94,15 +88,21 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.keep}{Names of additional columns to be kept in returned data frame.}
 
+\item{row.labels}{A data frame that contains the labels to be used for the
+rows of the plot. Use NA if a lower level heading is not required for a given row.}
+
+\item{row.labels.levels}{A character vector. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows.}
+
+\item{row.labels.space}{A numeric vector specifying the space
+after a row label heading, at the end of a row label heading 'section'. (Default: c(0, 1, 0, 0))}
+
 \item{ci.delim}{Character string to separate lower and upper limits of
 confidence interval. (Default: ", ")}
 
 \item{digits}{Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
-
-\item{blankrows}{A numeric vector specifying the number of blank rows
-after a row label heading, at the end of a row label heading 'section'. (Default: c(1, 1, 0, 0))}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}
