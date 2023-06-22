@@ -8,7 +8,7 @@ theme_ckb(
   base_size = 11,
   base_line_size = base_size/22,
   colour = "black",
-  plot.margin = margin(0.5, 0, 0.5, 0, "lines")
+  plot.margin = margin(0.5, 0.5, 0.5, 0.5, "lines")
 )
 }
 \arguments{
