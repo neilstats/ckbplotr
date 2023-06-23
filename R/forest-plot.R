@@ -100,8 +100,8 @@ forest_plot <- function(
     panel.names   = NULL,
     panel.headings = NULL,
     col.key       = "key",
-    col.estimate  = "estimate",
-    col.stderr    = "stderr",
+    col.estimate  = c("estimate", "est", "beta", "loghr"),
+    col.stderr    = c("stderr", "std.err", "se"),
     col.lci       = NULL,
     col.uci       = NULL,
     col.left      = NULL,
@@ -207,7 +207,7 @@ forest_plot <- function(
 
   fixed_panel_width <- !missing(panel.width)
   fixed_panel_height <- !missing(panel.height)
-  column_names_in_data <- names(panels_list[[1]])
+  column_names_in_data <- purrr::reduce(lapply(panels_list, names), intersect)
 
   check_forest_plot_arguments (col.diamond,
                                diamond,
@@ -217,6 +217,16 @@ forest_plot <- function(
                                cicolour,
                                fixed_panel_width)
 
+  # Match estimate and stderr column names ----
+  if (length(col.estimate[col.estimate %in% column_names_in_data]) == 0) {
+    rlang::abort(glue::glue("Column '{col.estimate}' does not exist in panels data frame."))
+  }
+  col.estimate <- col.estimate[col.estimate %in% column_names_in_data][[1]]
+
+  if (length(col.stderr[col.stderr %in% column_names_in_data]) == 0) {
+    rlang::abort(glue::glue("Column '{col.stderr}' does not exist in panels data frame."))
+  }
+  col.stderr <- col.stderr[col.stderr %in% column_names_in_data][[1]]
 
 
 

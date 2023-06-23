@@ -18,8 +18,7 @@
 #' @param panel.names A character vector. The names to be used for each forest plot panel.
 #'   If none provided, then they will be numbered 1, 2, 3 ...
 #' @param col.estimate Name of column that provides point estimates.
-#'   (Default: "estimate")
-#' @param col.stderr Name of column that provides standard errors. (Default: "stderr")
+#' @param col.stderr Name of column that provides standard errors.
 #' @param col.lci Name of column that provides lower limit of confidence intervals.
 #' @param col.uci Name of column that provides upper limit of confidence intervals.
 #' @param col.left Names of columns to be printed to the left of the plot.
