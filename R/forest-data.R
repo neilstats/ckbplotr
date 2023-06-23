@@ -46,6 +46,10 @@
 #'   The character strings, heterogeneity test, and trend test results will
 #'   be plotted in the column of estimates and CIs, below the row with the key
 #'   given in the col.key column.
+#' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
+#' @param diamond Alternative to col.diamond. A character vectors identify the rows
+#'                (using the key values) for which the estimate and CI should be plotted using a diamond.
+#' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
 #' @param cols DEPRECATED.
 #' @param headings DEPRECATED.
 #' @param colnames DEPRECATED.
@@ -81,10 +85,12 @@ forest_data <- function(
     scalepoints   = FALSE,
     minse         = NULL,
     addtext       = NULL,
+    diamond       = NULL,
+    col.diamond   = NULL,
+    bold.labels   = NULL,
     cols          = panels,
     headings      = NULL,
-    colnames      = NULL,
-    bold.labels   = NULL
+    colnames      = NULL
 ){
 
   # legacy arguments
@@ -344,6 +350,29 @@ forest_data <- function(
       NA_character_)) %>%
     dplyr::select(-.data$extrarowkey, -.data$addtextrow) %>%
     dplyr::arrange(panel, row)
+
+  # Create diamonds_polygon column
+  datatoplot$as_diamond <- FALSE
+  if (!is.null(diamond) | !is.null(col.diamond)){
+    datatoplot <- datatoplot %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(
+        diamond_polygon = list(data.frame(x = c(.data$lci_transformed,
+                                                .data$estimate_transformed,
+                                                .data$uci_transformed,
+                                                .data$estimate_transformed),
+                                          y = c(0, -0.25, 0, 0.25)))) %>%
+      dplyr::ungroup()
+
+    if (!is.null(col.diamond)){
+      datatoplot <- datatoplot %>%
+        dplyr::mutate(diamond_polygon = dplyr::if_else(.data$key %in% diamond | .data[[col.diamond]], .data$diamond_polygon, NA))
+    } else {
+      datatoplot <- datatoplot %>%
+        dplyr::mutate(diamond_polygon = dplyr::if_else(.data$key %in% diamond, .data$diamond_polygon, NA))
+    }
+    datatoplot$as_diamond <- !sapply(datatoplot$diamond_polygon, is.null)
+  }
 
 
   # Create rowlabels data frame and add as attribute to datatoplot data frame

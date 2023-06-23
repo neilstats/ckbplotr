@@ -108,62 +108,6 @@ forest.ciundercode <- function(ciunder) {
   purrr::map_chr(x, glue::glue, .envir = environment())
 }
 
-#' code for preparing data for diamonds
-#' @noRd
-forest.diamondscode <- function(diamond,
-                                col.diamond,
-                                panel.names) {
-  if (!is.null(diamond)){
-    x <- c(
-      '# Create data frame for diamonds to be plotted',
-      'diamonds <- datatoplot %>%',
-      indent(2,
-             'dplyr::filter(key %in% {deparse(diamond)}) %>%',
-             'dplyr::mutate(x1 = lci_transformed,',
-             indent(14,
-                    'x2 = estimate_transformed,',
-                    'x3 = uci_transformed,',
-                    'x4 = estimate_transformed) %>%'),
-             'tidyr::gather(part, x, x1:x4) %>%',
-             'dplyr::arrange(panel, row, part) %>%',
-             'dplyr::mutate(y = row + c(0, -0.25, 0, 0.25))'),
-      '',
-      '# Remove plotting of points if a diamond is to be used',
-      'datatoplot <- datatoplot %>% ',
-      indent(2,
-             'dplyr::mutate(estimate_transformed = dplyr::if_else(key %in% {deparse(diamond)}, as.numeric(NA), estimate_transformed),',
-             indent(7,
-                    'lci_transformed = dplyr::if_else(key %in% {deparse(diamond)}, as.numeric(NA), lci_transformed),',
-                    'uci_transformed = dplyr::if_else(key %in% {deparse(diamond)}, as.numeric(NA), uci_transformed))'),
-             ''
-      ))
-  } else {
-    x <- c(
-      '# Create data frame for diamonds to be plotted',
-      'diamonds <- datatoplot %>%',
-      indent(2,
-             'dplyr::filter({column_name(col.diamond)} == TRUE) %>%',
-             'dplyr::mutate(x1 = lci_transformed,',
-             indent(14,
-                    'x2 = estimate_transformed,',
-                    'x3 = uci_transformed,',
-                    'x4 = estimate_transformed) %>%'),
-             'tidyr::gather(part, x, x1:x4) %>%',
-             'dplyr::arrange(panel, row, part) %>%',
-             'dplyr::mutate(y = row + c(0, -0.25, 0, 0.25))'),
-      '',
-      '# Remove plotting of points if a diamond is to be used',
-      'if (any(datatoplot[["{col.diamond}"]], na.rm = TRUE)) {{',
-      indent(2,
-             '  datatoplot[!is.na(datatoplot[["{col.diamond}"]]) & datatoplot[["{col.diamond}"]],]$estimate_transformed <- NA',
-             '  datatoplot[!is.na(datatoplot[["{col.diamond}"]]) & datatoplot[["{col.diamond}"]],]$lci_transformed <- NA',
-             '  datatoplot[!is.na(datatoplot[["{col.diamond}"]]) & datatoplot[["{col.diamond}"]],]$uci_transformed <- NA'),
-      '}}',
-      ''
-    )
-  }
-  return(purrr::map_chr(x, glue::glue, .envir = environment()))
-}
 
 #' code for plotting diamonds
 #' @noRd
@@ -173,13 +117,13 @@ forest.plotdiamondscode <- function(colour_list,
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
-    aes = c('x = x, y = y, group = row',
+    aes = c('x = x, y = row + y, group = row',
             'colour = {column_name(colour_list$aes)}',
             'fill = {column_name(fill_list$aes)}'),
-    arg = c('data = diamonds',
-            'colour = {quote_string(colour_list$arg)}',
+    arg = c('colour = {quote_string(colour_list$arg)}',
             'fill = {quote_string(fill_list$arg)}',
-            'linewidth = {diamonds.linewidth}')
+            'linewidth = {diamonds.linewidth}',
+            'data = ~ tidyr::unnest(., diamond_polygon)')
   )
 }
 
@@ -244,7 +188,7 @@ forest.plot.points <- function(addaes,
               'colour = {column_name(colour_list$aes)}',
               'fill   = {column_name(fill_list$aes)}'),
       arg = c(addarg$point,
-              'data   = ~ dplyr::filter(.x, estimate_transformed > {xfrom}, estimate_transformed < {xto})',
+              'data   = ~ dplyr::filter(.x, estimate_transformed > {xfrom}, estimate_transformed < {xto}, !as_diamond)',
               'shape  = {shape_list$arg}',
               'colour = {quote_string(colour_list$arg)}',
               'fill   = {quote_string(fill_list$arg)}',
@@ -284,9 +228,9 @@ forest.cis <- function(addaes,
             'colour = {column_name(cicolour_list$aes[1])}'),
     arg = c(addarg$ci,
             switch(type,
-                   "all"    = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed))',
-                   "before" = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & {ciunder})',
-                   "after"  = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed) & !{ciunder})'),
+                   "all"    = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), !as_diamond)',
+                   "before" = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), {ciunder}, !as_diamond)',
+                   "after"  = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), !{ciunder}, !as_diamond)'),
             'colour    = {quote_string(cicolour_list$arg[1])}',
             'width     = 0',
             'linewidth = {base_line_size}',

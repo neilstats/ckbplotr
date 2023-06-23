@@ -40,9 +40,6 @@
 #' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use colour.)
 #' @param fill Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
-#' @param col.diamond Plot estimates and CIs as diamonds. Name of a column of logical values.
-#' @param diamond Alternative to col.diamond. A character vectors identify the rows
-#'                (using the key values) for which the estimate and CI should be plotted using a diamond.
 #' @param col.bold Plot text as bold. Name of a column of logical values.
 #' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
 #' @param bottom.space Size of space between bottom row and axis. (Default: 0.7)
@@ -209,13 +206,11 @@ forest_plot <- function(
   fixed_panel_height <- !missing(panel.height)
   column_names_in_data <- purrr::reduce(lapply(panels_list, names), intersect)
 
-  check_forest_plot_arguments (col.diamond,
-                               diamond,
-                               col.left,
-                               col.right,
-                               panels_list,
-                               cicolour,
-                               fixed_panel_width)
+  check_forest_plot_arguments(col.left,
+                              col.right,
+                              panels_list,
+                              cicolour,
+                              fixed_panel_width)
 
   # Match estimate and stderr column names ----
   if (length(col.estimate[col.estimate %in% column_names_in_data]) == 0) {
@@ -537,6 +532,8 @@ forest_plot <- function(
       argset(scalepoints),
       argset(minse),
       argset(bold.labels),
+      argset(diamond),
+      argset(col.diamond),
       if (!identical(addtext,
                      eval(formals(ckbplotr::forest_data)[["addtext"]]))){
         glue::glue('addtext = {paste(deparse(substitute(addtext)), collapse = "")}')
@@ -555,13 +552,6 @@ forest_plot <- function(
 
     # fill may be a list
     if (!is.null(fill_list$values)){forest.fillcode(fill_list$values, panel.names)},
-
-    # code for preparing data for diamonds
-    if(!is.null(col.diamond) || !is.null(diamond)){
-      forest.diamondscode(diamond,
-                          col.diamond,
-                          panel.names)
-    },
 
     # code for CI colours if using panel.width
     if (fixed_panel_width) {
@@ -769,17 +759,12 @@ make_forest_plot <- forest_plot
 #'
 #' @keywords internal
 #' @noRd
-check_forest_plot_arguments <- function(col.diamond,
-                                        diamond,
-                                        col.left,
+check_forest_plot_arguments <- function(col.left,
                                         col.right,
                                         panels,
                                         cicolour,
                                         fixed_panel_width,
                                         call = rlang::caller_env()) {
-  if (!is.null(col.diamond) &&  !is.null(diamond)){
-    rlang::abort("Use either col.diamond or diamond, not both.", call = call)
-  }
 
   for (c in c(col.left, col.right)){
     if (any(unlist(lapply(panels, function(x) !c %in% names(x))))){
