@@ -95,8 +95,8 @@ forest_data <- function(
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
   if (any(unlist(lapply(panels, function(x) !col.key %in% names(x))))) {
-    rlang::warn(glue::glue("col.key '{col.key}' not found, using row number."))
-    col.key <- "key"
+      rlang::inform(glue::glue("col.key '{col.key}' not found, using row number as row labels."))
+      col.key <- "key"
     for (i in seq_along(panels)){
       panels[[i]][["key"]] <- seq_len(nrow(panels[[i]]))
     }
