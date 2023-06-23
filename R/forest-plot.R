@@ -62,16 +62,7 @@
 #' @param addarg Specify additional arguments for some ggplot layers.
 #' @param addlayer Adding ggplot layers.
 #' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
-#' @param label.space DEPRECATED. Old method for specifying spacing.
-#' @param panel.space DEPRECATED. Old method for specifying spacing.
-#' @param margin DEPRECATED. Old method for specifying margins.
-#' @param colheadings DEPRECATED.
-#' @param boldheadings DEPRECATED.
-#' @param units DEPRECATED
-#' @param col.right.space DEPRACTED
-#' @param col.left.space DEPRACTED
-#' @param heading.space DEPRECATED. Even older method for specifying spacing.
-#' @param plot.space DEPRECATED. Even older method for specifying spacing.
+#' @param rows DEPRECATED
 #' @param blankrows DEPRECATED
 #'
 #' @return A list:
@@ -155,52 +146,9 @@ forest_plot <- function(
     addarg        = NULL,
     addlayer      = NULL,
     envir         = NULL,
-    cols          = panels,
-    headings      = NULL,
-    colnames      = NULL,
-    colheadings   = colnames,
-    boldheadings  = NULL,
-    heading.space = NULL,
-    panel.space   = NULL,
-    label.space   = NULL,
-    plot.space    = NULL,
-    col.right.space = NULL,
-    col.left.space  = NULL,
-    margin          = NULL,
-    units          = NULL,
     rows          = NULL
 ){
 
-
-  # Legacy arguments ----
-  if (!missing(cols)) {
-    panels <- cols
-    message("Note: cols argument is now called panels")
-  }
-  if (!missing(headings)) {
-    row.labels <- headings
-    message("Note: headings argument is now called row.labels")
-  }
-  if (!missing(colnames)) {
-    panel.names <- colnames
-    message("Note: colnames argument is now called panel.names")
-  }
-  if (!missing(colheadings)) {
-    panel.headings <- colheadings
-    message("Note: colheadings argument is now called panel.headings")
-  }
-  if (!missing(boldheadings)) {
-    bold.labels <- boldheadings
-    message("Note: boldheadings argument is now called bold.labels")
-  }
-  if (!missing(blankrows)) {
-    row.labels.space <- blankrows
-    message("Note: blankrows argument is now called row.labels.space")
-  }
-
-  if (!missing(rows)){
-    rlang::inform("Note: rows argument now has no effect")
-  }
 
   # Check arguments ----
   panels_list <- panels
@@ -211,6 +159,17 @@ forest_plot <- function(
   fixed_panel_width <- !missing(panel.width)
   fixed_panel_height <- !missing(panel.height)
   column_names_in_data <- purrr::reduce(lapply(panels_list, names), intersect)
+
+  # rows argument no longer used
+  if (!missing(rows)){
+    rlang::inform("Note: rows argument now has no effect")
+  }
+
+  # blankrows no longer used
+  if (!missing(blankrows)){
+    row.labels.space <- blankrows
+    rlang::warn("Note: blankrows argument now called row.labels.space")
+  }
 
   ## check col.left and col.right columns exist
   for (c in c(col.left, col.right)){
@@ -386,38 +345,6 @@ forest_plot <- function(
 
 
   # Spacing ----
-
-  ## handle old methods for horizontal spacing and column positioning >>>
-  if(!is.null(margin) | !is.null(label.space) | !is.null(panel.space) |
-     !is.null(plot.space) | !is.null(heading.space) |
-     !is.null(col.right.space) | !is.null(col.left.space) |
-     !is.null(col.left.space) | !is.null(col.right.space)){
-    message("You're using old arguments for horizontal spacing and positioning.\n",
-            "See the package documentation for details on current methods.\n",
-            "For now, I will try to convert these.")
-
-    ## spacing
-    units       <- if(!is.null(units)){units}else{"lines"}
-    margin      <- if(!is.null(margin)){margin}else{c(2,6,2,1)}
-    label.space <- ifelse(is.null(label.space), ifelse(is.null(heading.space), 4, heading.space), label.space)
-    panel.space <- ifelse(is.null(panel.space), ifelse(is.null(plot.space), 8, plot.space), panel.space)
-    left.space  <- unit(label.space, units)
-    right.space <- unit(margin[2] - margin[4], units)
-    mid.space   <- unit(panel.space - as.numeric(left.space) - as.numeric(right.space), units)
-    plot.margin <- unit(margin - c(0, as.numeric(right.space), 0, 0), units)
-
-    ## positioning
-    col.left.space  <- if(!is.null(col.left.space)){col.left.space}else{0.02}
-    col.right.space <- if(!is.null(col.right.space)){col.right.space}else{0.02}
-    col.left.pos <- unit(0, "mm")
-    col.right.pos <- unit(0, "mm")
-  } else {
-    col.left.space <- 0
-    col.right.space <- 0
-  }
-  ## <<< end of handling old methods
-
-
   if((is.null(right.space) & !is.null(col.right.pos)) |
      is.null(left.space) & !is.null(col.left.pos) ){
     message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
@@ -522,24 +449,9 @@ forest_plot <- function(
     plus = FALSE,
     f = 'datatoplot <- ckbplotr::forest_data',
     arg = c(
-      if (!identical(row.labels,
-                     eval(formals(ckbplotr::forest_data)[["row.labels"]]))){
-        'row.labels = {
-        if (!missing(headings)) {{
-          paste(deparse(substitute(headings)), collapse = "")
-        }} else {{
-          paste(deparse(substitute(row.labels)), collapse = "")
-        }}
-        }'
-      },
+      'panels = {paste(deparse(substitute(panels)), collapse = "")}',
+      argset(row.labels),
       argset(row.labels.levels),
-      'panels = {
-      if (!missing(cols)) {{
-        paste(deparse(substitute(cols)), collapse = "")
-      }} else {{
-        paste(deparse(substitute(panels)), collapse = "")
-      }}
-      }',
       argset(row.labels.space),
       argset(panel.names),
       argset(col.key),
@@ -558,10 +470,7 @@ forest_plot <- function(
       argset(bold.labels),
       argset(diamond),
       argset(col.diamond),
-      if (!identical(addtext,
-                     eval(formals(ckbplotr::forest_data)[["addtext"]]))){
-        glue::glue('addtext = {paste(deparse(substitute(addtext)), collapse = "")}')
-      }))
+      argset(addtext)))
 
 
 
@@ -671,7 +580,6 @@ forest_plot <- function(
                                   col.right.hjust,
                                   col.bold,
                                   col.right.parse,
-                                  col.right.space,
                                   addaes,
                                   addarg,
                                   xto,
@@ -690,7 +598,6 @@ forest_plot <- function(
                                  col.left.heading,
                                  col.left.hjust,
                                  col.bold,
-                                 col.left.space,
                                  addaes,
                                  addarg,
                                  xfrom,
@@ -706,7 +613,6 @@ forest_plot <- function(
            if (!is.null(addtext)){
              forest.addtext(xto,
                             xfrom,
-                            col.right.space,
                             col.bold,
                             col.right.parse,
                             col.right.pos,

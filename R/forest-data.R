@@ -50,9 +50,6 @@
 #' @param diamond Alternative to col.diamond. A character vectors identify the rows
 #'                (using the key values) for which the estimate and CI should be plotted using a diamond.
 #' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
-#' @param cols DEPRECATED.
-#' @param headings DEPRECATED.
-#' @param colnames DEPRECATED.
 #'
 #' @return A dataset from which a forest plot can be generated.
 #'
@@ -67,45 +64,28 @@
 
 forest_data <- function(
     panels,
-    panel.names   = NULL,
-    col.key       = "key",
-    col.estimate  = "estimate",
-    col.stderr    = "stderr",
-    col.lci       = NULL,
-    col.uci       = NULL,
-    col.left      = NULL,
-    col.right     = NULL,
-    col.keep      = NULL,
-    row.labels    = NULL,
+    panel.names       = NULL,
+    col.key           = "key",
+    col.estimate      = "estimate",
+    col.stderr        = "stderr",
+    col.lci           = NULL,
+    col.uci           = NULL,
+    col.left          = NULL,
+    col.right         = NULL,
+    col.keep          = NULL,
+    row.labels        = NULL,
     row.labels.levels = NULL,
-    row.labels.space = c(0, 1, 0, 0),
-    ci.delim      = ", ",
-    digits        = 2,
-    exponentiate  = TRUE,
-    scalepoints   = FALSE,
-    minse         = NULL,
-    addtext       = NULL,
-    diamond       = NULL,
-    col.diamond   = NULL,
-    bold.labels   = NULL,
-    cols          = panels,
-    headings      = NULL,
-    colnames      = NULL
+    row.labels.space  = c(0, 1, 0, 0),
+    ci.delim          = ", ",
+    digits            = 2,
+    exponentiate      = TRUE,
+    scalepoints       = FALSE,
+    minse             = NULL,
+    addtext           = NULL,
+    diamond           = NULL,
+    col.diamond       = NULL,
+    bold.labels       = NULL
 ){
-
-  # legacy arguments
-  if (!missing(cols)) {
-    panels <- cols
-    message("Note: cols argument is now called panels")
-  }
-  if (!missing(headings)) {
-    row.labels <- headings
-    message("Note: headings argument is now called row.labels")
-  }
-  if (!missing(colnames)) {
-    panel.names <- colnames
-    message("Note: colnames argument is now called panel.names")
-  }
 
   # check function arguments
   if (is.data.frame(panels)) {
