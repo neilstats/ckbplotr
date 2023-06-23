@@ -41,7 +41,6 @@
 #' @param fill Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param col.bold Plot text as bold. Name of a column of logical values.
-#' @param bold.labels A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)
 #' @param bottom.space Size of space between bottom row and axis. (Default: 0.7)
 #' @param left.space Size of gap to leave to the left of panels.
 #' @param right.space Size of gap to leave to the right of panels.
@@ -475,10 +474,10 @@ forest_plot <- function(
   if (is.null(xlim)) {
     if (is.null(col.lci)) {
       allvalues <- sapply(panels_list, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
-                                                tf(x[[col.estimate]] + 1.96 * x[[col.stderr]])))
+                                                     tf(x[[col.estimate]] + 1.96 * x[[col.stderr]])))
     } else {
       allvalues <- sapply(panels_list, function(x) c(tf(x[[col.lci]]),
-                                                tf(x[[col.uci]])))
+                                                     tf(x[[col.uci]])))
     }
     xlim <- range(pretty(allvalues))
     ## check for zero as axis limit when using exponential

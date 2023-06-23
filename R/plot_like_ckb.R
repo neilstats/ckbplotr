@@ -12,7 +12,7 @@
 theme_ckb <- function(base_size      = 11,
                       base_line_size = base_size/22,
                       colour         = "black",
-                      plot.margin    = margin(0.5, 0.5, 0.5, 0.5, "lines")){
+                      plot.margin    = margin(0.5, 1.5, 0.5, 0.5, "lines")){
   theme_bw(base_size = base_size,
            base_line_size = base_line_size) %+replace%
     theme(panel.grid        = element_blank(),
@@ -69,7 +69,7 @@ plot_like_ckb <- function(
     base_size = 11,
     base_line_size = base_size/22,
     colour = "black",
-    plot.margin = margin(0.5, 0.5, 0.5, 0.5, "lines"),
+    plot.margin = margin(0.5, 1.5, 0.5, 0.5, "lines"),
     axes = "both"
 ){
 
@@ -212,7 +212,7 @@ ckb_style <- function(
     base_size      = 11,
     base_line_size = base_size/22,
     colour         = "black",
-    plot.margin    = margin(0.5, 0.5, 0.5, 0.5, "lines"),
+    plot.margin    = margin(0.5, 1.5, 0.5, 0.5, "lines"),
     axes           = "both"
 ){
 
