@@ -474,7 +474,9 @@ make_auto_estcolumn_text <- function(estimate_transformed,
   est <- format(round(estimate_transformed, digits), nsmall = digits, trim = T)
   lci <- format(round(lci_transformed, digits),      nsmall = digits, trim = T)
   uci <- format(round(uci_transformed, digits),      nsmall = digits, trim = T)
-  glue::glue("{est} ({lci}{ci.delim}{uci})")
+  text <- glue::glue("{est} ({lci}{ci.delim}{uci})")
+  text[lci == "NA" | uci == "NA"] <- est[lci == "NA" | uci == "NA"]
+  return(text)
 }
 
 
