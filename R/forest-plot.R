@@ -212,11 +212,29 @@ forest_plot <- function(
   fixed_panel_height <- !missing(panel.height)
   column_names_in_data <- purrr::reduce(lapply(panels_list, names), intersect)
 
-  check_forest_plot_arguments(col.left,
-                              col.right,
-                              panels_list,
-                              cicolour,
-                              fixed_panel_width)
+  ## check col.left and col.right columns exist
+  for (c in c(col.left, col.right)){
+    if (!c %in% column_names_in_data){
+      rlang::abort(glue::glue("Column '{c}' does not exist in every panels data frame."))
+    }
+  }
+
+  ## check if cicolour is a list (or longer than 1) but not using panel.width
+  if ((is.list(cicolour) | length(cicolour) > 1) & !fixed_panel_width){
+    rlang::abort("cicolour should be a list (or longer than 1) only when using panel.width")
+  }
+
+  ## check if confidence intervals may be hidden
+  if (!fixed_panel_width){
+    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
+                    'i' = 'Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.'),
+                  use_cli_format = TRUE,
+                  .frequency = "once",
+                  .frequency_id = "forest_narrow_cis")
+  }
+
+
+
 
   # Match estimate and stderr column names ----
   if (length(col.estimate[col.estimate %in% column_names_in_data]) == 0) {
@@ -773,40 +791,3 @@ forest_plot <- function(
 #' @describeIn forest_plot Synonym for `forest_plot()`
 #' @export
 make_forest_plot <- forest_plot
-
-
-
-#' Check arguments of forest_plot()
-#'
-#' @keywords internal
-#' @noRd
-check_forest_plot_arguments <- function(col.left,
-                                        col.right,
-                                        panels,
-                                        cicolour,
-                                        fixed_panel_width,
-                                        call = rlang::caller_env()) {
-
-  for (c in c(col.left, col.right)){
-    if (any(unlist(lapply(panels, function(x) !c %in% names(x))))){
-      rlang::abort(glue::glue("Column '{c}' does not exist in every panels data frame."),
-                   call = call)
-    }
-  }
-
-  ## check if cicolour is a list (or longer than 1) but not using panel.width
-  if ((is.list(cicolour) | length(cicolour) > 1) & !fixed_panel_width){
-    rlang::abort("cicolour should be a list (or longer than 1) only when using panel.width",
-                 call = call)
-  }
-
-  ## check if confidence intervals may be hidden
-  if (!fixed_panel_width){
-    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
-                    'i' = 'Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.'),
-                  use_cli_format = TRUE,
-                  .frequency = "once",
-                  .frequency_id = "forest_narrow_cis")
-  }
-}
-

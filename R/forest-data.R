@@ -127,13 +127,30 @@ forest_data <- function(
     row.labels.levels <- row.labels.levels[!row.labels.levels == col.key]
   }
 
-  check_forest_data_arguments(panels,
-                              panel.names,
-                              row.labels,
-                              row.labels.levels,
-                              row.labels.space,
-                              col.lci,
-                              col.uci)
+  if (!is.null(col.lci) && is.null(col.uci)) {
+    rlang::abort("col.lci and col.uci must both be specified")
+  }
+  if (is.null(col.lci) && !is.null(col.uci)){
+    rlang::abort("col.lci and col.uci must both be specified")
+  }
+  if (!is.character(panel.names)) {
+    rlang::abort("panel.names must be a character vector")
+  }
+  if (!all(!duplicated(panel.names))) {
+    rlang::abort("panel.names must be unique")
+  }
+  if (length(panels) != length(panel.names)) {
+    rlang::abort("panels and panel.names must be the same length")
+  }
+  if (!(length(row.labels.space) >= 2*(length(row.labels.levels) - 1))) {
+    rlang::abort("row.labels.space must be at least 2*(length(row.labels.levels)-1)")
+  }
+  if (!is.null(row.labels) && !all(row.labels.levels %in% names(row.labels))) {
+    rlang::abort("row.labels.levels must be columns in row.labels")
+  }
+  if(!is.null(row.labels) && !all(sapply(row.labels[row.labels.levels], is.character))) {
+    rlang::abort("row.labels.levels columns must be character")
+  }
 
   # Make vector of keys after which extra rows are added for addtext
   addtextcols <- tibble::tibble(text = character(),
@@ -479,45 +496,3 @@ make_auto_estcolumn_text <- function(estimate_transformed,
   return(text)
 }
 
-
-check_forest_data_arguments <- function(panels,
-                                        panel.names,
-                                        row.labels,
-                                        row.labels.levels,
-                                        row.labels.space,
-                                        col.lci,
-                                        col.uci,
-                                        call = rlang::caller_env()) {
-  if (!is.null(col.lci) && is.null(col.uci)) {
-    rlang::abort("col.lci and col.uci must both be specified",
-                 call = call)
-  }
-  if (is.null(col.lci) && !is.null(col.uci)){
-    rlang::abort("col.lci and col.uci must both be specified",
-                 call = call)
-  }
-  if (!is.character(panel.names)) {
-    rlang::abort("panel.names must be a character vector",
-                 call = call)
-  }
-  if (!all(!duplicated(panel.names))) {
-    rlang::abort("panel.names must be unique",
-                 call = call)
-  }
-  if (length(panels) != length(panel.names)) {
-    rlang::abort("panels and panel.names must be the same length",
-                 call = call)
-  }
-  if (!(length(row.labels.space) >= 2*(length(row.labels.levels) - 1))) {
-    rlang::abort("row.labels.space must be at least 2*(length(row.labels.levels)-1)",
-                 call = call)
-  }
-  if (!is.null(row.labels) && !all(row.labels.levels %in% names(row.labels))) {
-    rlang::abort("row.labels.levels must be columns in row.labels",
-                 call = call)
-  }
-  if(!is.null(row.labels) && !all(sapply(row.labels[row.labels.levels], is.character))) {
-    rlang::abort("row.labels.levels columns must be character",
-                 call = call)
-  }
-}
