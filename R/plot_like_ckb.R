@@ -141,10 +141,10 @@ plot_like_ckb <- function(
 
   # update plot
   plot <- plot +
-    coord_fixed(xlim   = limits[["x"]],
-                ylim   = limits[["y"]],
-                expand = FALSE,
-                clip = "off") +
+    coord_cartesian(xlim   = limits[["x"]],
+                    ylim   = limits[["y"]],
+                    expand = FALSE,
+                    clip = "off") +
     ggh4x::force_panelsizes(rows = full_height,
                             cols = full_width,
                             respect = TRUE) +
@@ -319,10 +319,10 @@ ggplot_add.ckbplot <- function(object, plot, object_name) {
 
   # update plot
   plot <- plot +
-    coord_fixed(xlim   = limits[["x"]],
-                ylim   = limits[["y"]],
-                expand = FALSE,
-                clip = "off") +
+    coord_cartesian(xlim   = limits[["x"]],
+                    ylim   = limits[["y"]],
+                    expand = FALSE,
+                    clip = "off") +
     ggh4x::force_panelsizes(rows = object$full_height,
                             cols = object$full_width,
                             respect = TRUE) +
