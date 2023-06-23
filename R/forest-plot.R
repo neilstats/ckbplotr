@@ -167,7 +167,8 @@ forest_plot <- function(
     col.right.space = NULL,
     col.left.space  = NULL,
     margin          = NULL,
-    units          = NULL
+    units          = NULL,
+    rows          = NULL
 ){
 
 
@@ -195,6 +196,10 @@ forest_plot <- function(
   if (!missing(blankrows)) {
     row.labels.space <- blankrows
     message("Note: blankrows argument is now called row.labels.space")
+  }
+
+  if (!missing(rows)){
+    rlang::inform("Note: rows argument now has no effect")
   }
 
   # Check arguments ----
