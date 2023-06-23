@@ -61,6 +61,7 @@
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
 #' @param addaes Specify additional aesthetics for some ggplot layers.
 #' @param addarg Specify additional arguments for some ggplot layers.
+#' @param addlayer Adding ggplot layers.
 #' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
 #' @param label.space DEPRECATED. Old method for specifying spacing.
 #' @param panel.space DEPRECATED. Old method for specifying spacing.
@@ -153,6 +154,7 @@ forest_plot <- function(
     addcode       = NULL,
     addaes        = NULL,
     addarg        = NULL,
+    addlayer      = NULL,
     envir         = NULL,
     cols          = panels,
     headings      = NULL,
@@ -581,6 +583,13 @@ forest_plot <- function(
 
     indent(2,
 
+           # addlayer$start
+           if (!is.null(addlayer$start)){
+             c("# Additional layer",
+               paste(c(deparse(substitute(addlayer)$start), " +"), collapse = ""),
+               "")
+           },
+
            # the code to put panels in facets
            forest.facet(),
 
@@ -720,7 +729,15 @@ forest_plot <- function(
                         left.space,
                         right.space,
                         substitute(mid.space),
-                        substitute(plot.margin))
+                        substitute(plot.margin),
+                        addlayer),
+
+           # addlayer$end
+           if (!is.null(addlayer$end)){
+             c("# Additional layer",
+               paste(deparse(substitute(addlayer)$end), collapse = ""),
+               "")
+           }
     )
   )
 

@@ -52,6 +52,7 @@
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
 #' @param addaes Specify additional aesthetics for some ggplot layers.
 #' @param addarg Specify additional arguments for some ggplot layers.
+#' @param addlayer Adding ggplot layers.
 #' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
 #'
 #' @return A list:
@@ -109,6 +110,7 @@ shape_plot <- function(data,
                        addcode       = NULL,
                        addaes        = NULL,
                        addarg        = NULL,
+                       addlayer      = NULL,
                        envir         = NULL){
 
   # Check arguments ----
@@ -321,6 +323,13 @@ shape_plot <- function(data,
 
     indent(2,
 
+           # addlayer$start
+           if (!is.null(addlayer$start)){
+             c("# Additional layer",
+               paste(c(deparse(substitute(addlayer)$start), " +"), collapse = ""),
+               "")
+           },
+
            ## add lines
            if(lines){
              shape.lines(addaes,
@@ -401,7 +410,15 @@ shape_plot <- function(data,
                                plotcolour)),
 
     # theme
-    indent(2, shape.theme(legend.position))
+    indent(2, shape.theme(legend.position, addlayer)),
+
+    # addlayer$end
+    if (!is.null(addlayer$end)){
+      c("# Additional layer",
+        paste(deparse(substitute(addlayer)$end), collapse = ""),
+        "")
+    }
+
   )
 
 
