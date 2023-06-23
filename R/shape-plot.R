@@ -68,8 +68,8 @@
 
 shape_plot <- function(data,
                        col.x         = "x",
-                       col.estimate  = "estimate",
-                       col.stderr    = "stderr",
+                       col.estimate  = c("estimate", "est", "beta", "loghr"),
+                       col.stderr    = c("stderr", "std.err", "se"),
                        col.lci       = NULL,
                        col.uci       = NULL,
                        col.n         = NULL,
@@ -132,6 +132,22 @@ shape_plot <- function(data,
   if(!missing(height) && !missing(col.group) && !missing(cicolour)){
     warning("cicolour is ignored if using height and col.group")
   }
+
+
+
+  # Match estimate and stderr column names ----
+  column_names_in_data <- names(data)
+  if (length(col.estimate[col.estimate %in% column_names_in_data]) == 0) {
+    rlang::abort(glue::glue("Column '{col.estimate}' does not exist in panels data frame."))
+  }
+  col.estimate <- col.estimate[col.estimate %in% column_names_in_data][[1]]
+
+  if (length(col.stderr[col.stderr %in% column_names_in_data]) == 0) {
+    rlang::abort(glue::glue("Column '{col.stderr}' does not exist in panels data frame."))
+  }
+  col.stderr <- col.stderr[col.stderr %in% column_names_in_data][[1]]
+
+
 
 
   # Aesthetics ----
