@@ -96,13 +96,13 @@ forest_data <- function(
   }
 
   ## check columns in addtext are character
-    for (addtextframe in addtext){
-      for (textcol in c("text", "het_dof", "het_stat", "het_p", "trend_stat", "trend_[")){
-        if (!is.null(addtextframe[[textcol]]) && !is.character(addtextframe[[textcol]])){
-          rlang::abort(glue::glue("'{textcol}' in addtext is not character"))
-        }
+  for (addtextframe in addtext){
+    for (textcol in c("text", "het_dof", "het_stat", "het_p", "trend_stat", "trend_p")){
+      if (!is.null(addtextframe[[textcol]]) && !is.character(addtextframe[[textcol]])){
+        rlang::abort(glue::glue("'{textcol}' in addtext is not character"))
       }
     }
+  }
 
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
