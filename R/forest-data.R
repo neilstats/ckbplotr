@@ -91,10 +91,24 @@ forest_data <- function(
   if (is.data.frame(panels)) {
     panels <- list(panels)
   }
+  if (is.data.frame(addtext)) {
+    addtext <- list(addtext)
+  }
+
+  ## check columns in addtext are character
+    for (addtextframe in addtext){
+      for (textcol in c("text", "het_dof", "het_stat", "het_p", "trend_stat", "trend_[")){
+        if (!is.null(addtextframe[[textcol]]) && !is.character(addtextframe[[textcol]])){
+          rlang::abort(glue::glue("'{textcol}' in addtext is not character"))
+        }
+      }
+    }
 
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
-  if (any(unlist(lapply(panels, function(x) !col.key %in% names(x))))) {
+  column_names_in_data <- purrr::reduce(lapply(panels, names), intersect)
+
+  if (!col.key %in% column_names_in_data) {
     if (col.key != "key") {
       rlang::inform(glue::glue("col.key '{col.key}' not found, using row number as row labels."))
       col.key <- "key"
