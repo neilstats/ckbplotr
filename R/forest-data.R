@@ -95,8 +95,10 @@ forest_data <- function(
   if (is.null(panel.names)) { panel.names <- as.character(1:length(panels)) }
 
   if (any(unlist(lapply(panels, function(x) !col.key %in% names(x))))) {
+    if (col.key != "key") {
       rlang::inform(glue::glue("col.key '{col.key}' not found, using row number as row labels."))
       col.key <- "key"
+    }
     for (i in seq_along(panels)){
       panels[[i]][["key"]] <- seq_len(nrow(panels[[i]]))
     }
@@ -316,7 +318,9 @@ forest_data <- function(
     } else {
       if (minse > min((datatoplot$uci - datatoplot$lci)/(2*1.96), na.rm = TRUE)) rlang::abort("minse is larger than the minimum standard error in the data")
     }
-    datatoplot$size <- 2*1.96*minse/(datatoplot$uci - datatoplot$lci)
+    if (scalepoints){
+      datatoplot$size <- 2*1.96*minse/(datatoplot$uci - datatoplot$lci)
+    }
   } else {
     datatoplot <- datatoplot %>%
       dplyr::mutate(estimate_transformed = tf(.data$estimate),
@@ -328,11 +332,9 @@ forest_data <- function(
     } else {
       if (minse > min(datatoplot$stderr, na.rm = TRUE)) rlang::abort("minse is larger than the minimum standard error in the data")
     }
-    datatoplot$size <- minse/datatoplot$stderr
-  }
-
-  if (!scalepoints) {
-    datatoplot$size <- 1
+    if (scalepoints) {
+      datatoplot$size <- minse/datatoplot$stderr
+    }
   }
 
   # Create auto_estcolumn column (text of estimates and CIs)
