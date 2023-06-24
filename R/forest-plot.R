@@ -345,78 +345,31 @@ forest_plot <- function(
 
 
   # Spacing ----
-  if((is.null(right.space) & !is.null(col.right.pos)) |
-     is.null(left.space) & !is.null(col.left.pos) ){
-    message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
-  }
+  horizontal_spacing <- get_horizontal_spacing(
+    right.space,
+    col.right.pos,
+    left.space,
+    col.left.pos,
+    col.right,
+    panels_list,
+    digits,
+    ci.delim,
+    estcolumn,
+    col.right.heading,
+    col.right.hjust,
+    base_size,
+    grid,
+    get.gpar,
+    col.left,
+    col.left.heading,
+    col.left.hjust)
+  text_about_auto_spacing <- horizontal_spacing$text_about_auto_spacing
+  col.right.pos <- horizontal_spacing$col.right.pos
+  col.left.pos <- horizontal_spacing$col.left.pos
+  right.space <- horizontal_spacing$right.space
+  left.space <- horizontal_spacing$left.space
 
-  gettextwidths <- function(x){
-    purrr::map_dbl(x, ~ max(purrr::map_dbl(., ~ grid::convertWidth(unit(1, "strwidth", data = as.character(.)),
-                                                                   "mm",
-                                                                   valueOnly = T))))
-  }
 
-  ## calculate automatic col.right.pos and col.right.space
-  if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
-    text_about_auto_spacing <- "Automatically calculated horizontal spacing and positioning:\n"
-  }
-  ### get maximum width of each columns (incl. heading)
-  widths_of_columns <- gettextwidths(lapply(col.right, function(y) c(sapply(panels_list, function(x) x[[y]]))))
-  estcolumn_width <- gettextwidths(paste0("9.",
-                                          paste0(rep(9, digits), collapse = ""),
-                                          "(9.",
-                                          paste0(rep(9, digits), collapse = ""),
-                                          ci.delim,
-                                          "99.",
-                                          paste0(rep(9, digits), collapse = ""),
-                                          ")"))
-  widths_of_columns <- c(if(estcolumn){estcolumn_width}, widths_of_columns)
-  widths_of_column_headings <- gettextwidths(col.right.heading)
-  widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
-  ### initial gap, then space for autoestcolumn, and gap between each column
-  column_spacing <- cumsum(c(gettextwidths("I"),
-                             widths_of_columns + gettextwidths("W")))
-  ## adjust for hjust
-  column_spacing <- column_spacing + c(widths_of_columns*col.right.hjust, 0)
-  ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
-  if (length(column_spacing) == 1){column_spacing <- 0}
-  if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths("W")}
-  ### text on plot is 0.8 size, and adjust for base_size
-  column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
-  if (is.null(right.space)){
-    right.space <- unit(column_spacing[length(column_spacing)], "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- right.space   = ", printunit(right.space)))
-  }
-  if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
-  if (is.null(col.right.pos)){
-    col.right.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- col.right.pos = ", printunit(col.right.pos)))
-  }
-
-  ## calculate automatic col.left.pos and col.left.space
-  ### get maximum width of each columns (incl. heading)
-  widths_of_columns <- gettextwidths(lapply(col.left, function(y) c(sapply(panels_list, function(x) x[[y]]))))
-  widths_of_column_headings <- gettextwidths(col.left.heading)
-  widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
-  ### initial gap, and gap between each column
-  column_spacing <- cumsum(c(gettextwidths("I"),
-                             widths_of_columns + gettextwidths("W")))
-  ## adjust for hjust
-  column_spacing <- column_spacing + c(widths_of_columns*(1 - col.left.hjust), 0)
-  ### if no column to plot (i.e. length 1) then width of W, if longer keep extra space on last element
-  if (length(column_spacing) == 1){column_spacing <- gettextwidths("W")}
-  # if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths("W")}
-  ### text on plot is 0.8 size, and adjust for base_size
-  column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
-  if (is.null(left.space)){
-    left.space <- unit(column_spacing[length(column_spacing)], "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- left.space    = ", printunit(left.space)))
-  }
-  if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
-  if (is.null(col.left.pos)){
-    col.left.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- col.left.pos  = ", printunit(col.left.pos)))
-  }
 
 
   # Calculate xfrom, xto, xmid, xticks ----
@@ -699,4 +652,111 @@ forest_plot <- function(
   # Return invisible ----
   return(invisible(list(plot = plot,
                         code = plotcode)))
+}
+
+
+#' Get widths of text strings
+#'
+#' @keywords internal
+#' @noRd
+gettextwidths <- function(x){
+  purrr::map_dbl(x, ~ max(purrr::map_dbl(., ~ grid::convertWidth(unit(1, "strwidth", data = as.character(.)),
+                                                                 "mm",
+                                                                 valueOnly = T))))
+}
+
+
+#' Horizontal spacing for text columns in forest_plot()
+#'
+#' @keywords internal
+#' @noRd
+get_horizontal_spacing <- function(right.space,
+                                   col.right.pos,
+                                   left.space,
+                                   col.left.pos,
+                                   col.right,
+                                   panels_list,
+                                   digits,
+                                   ci.delim,
+                                   estcolumn,
+                                   col.right.heading,
+                                   col.right.hjust,
+                                   base_size,
+                                   grid,
+                                   get.gpar,
+                                   col.left,
+                                   col.left.heading,
+                                   col.left.hjust) {
+  if((is.null(right.space) & !is.null(col.right.pos)) |
+     is.null(left.space) & !is.null(col.left.pos) ){
+    message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
+  }
+
+  ## calculate automatic col.right.pos and col.right.space
+  if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
+    text_about_auto_spacing <- "Automatically calculated horizontal spacing and positioning:\n"
+  }
+  ### get maximum width of each columns (incl. heading)
+  widths_of_columns <- gettextwidths(lapply(col.right, function(y) c(sapply(panels_list, function(x) x[[y]]))))
+  estcolumn_width <- gettextwidths(paste0("9.",
+                                          paste0(rep(9, digits), collapse = ""),
+                                          "(9.",
+                                          paste0(rep(9, digits), collapse = ""),
+                                          ci.delim,
+                                          "99.",
+                                          paste0(rep(9, digits), collapse = ""),
+                                          ")"))
+  widths_of_columns <- c(if(estcolumn){estcolumn_width}, widths_of_columns)
+  widths_of_column_headings <- gettextwidths(col.right.heading)
+  widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
+  ### initial gap, then space for autoestcolumn, and gap between each column
+  column_spacing <- cumsum(c(gettextwidths("I"),
+                             widths_of_columns + gettextwidths("W")))
+  ## adjust for hjust
+  column_spacing <- column_spacing + c(widths_of_columns*col.right.hjust, 0)
+  ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
+  if (length(column_spacing) == 1){column_spacing <- 0}
+  if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths("W")}
+  ### text on plot is 0.8 size, and adjust for base_size
+  column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
+  if (is.null(right.space)){
+    right.space <- unit(column_spacing[length(column_spacing)], "mm")
+    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- right.space   = ", printunit(right.space)))
+  }
+  if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
+  if (is.null(col.right.pos)){
+    col.right.pos <- unit(column_spacing, "mm")
+    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- col.right.pos = ", printunit(col.right.pos)))
+  }
+
+  ## calculate automatic col.left.pos and col.left.space
+  ### get maximum width of each columns (incl. heading)
+  widths_of_columns <- gettextwidths(lapply(col.left, function(y) c(sapply(panels_list, function(x) x[[y]]))))
+  widths_of_column_headings <- gettextwidths(col.left.heading)
+  widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
+  ### initial gap, and gap between each column
+  column_spacing <- cumsum(c(gettextwidths("I"),
+                             widths_of_columns + gettextwidths("W")))
+  ## adjust for hjust
+  column_spacing <- column_spacing + c(widths_of_columns*(1 - col.left.hjust), 0)
+  ### if no column to plot (i.e. length 1) then width of W, if longer keep extra space on last element
+  if (length(column_spacing) == 1){column_spacing <- gettextwidths("W")}
+  # if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths("W")}
+  ### text on plot is 0.8 size, and adjust for base_size
+  column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
+  if (is.null(left.space)){
+    left.space <- unit(column_spacing[length(column_spacing)], "mm")
+    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- left.space    = ", printunit(left.space)))
+  }
+  if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
+  if (is.null(col.left.pos)){
+    col.left.pos <- unit(column_spacing, "mm")
+    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- col.left.pos  = ", printunit(col.left.pos)))
+  }
+
+  return(list(text_about_auto_spacing = text_about_auto_spacing,
+              col.right.pos = col.right.pos,
+              col.left.pos = col.left.pos,
+              right.space = right.space,
+              left.space = left.space))
 }
