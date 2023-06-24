@@ -613,8 +613,6 @@ forest_plot <- function(
            if (!is.null(addtext)){
              forest.addtext(xto,
                             xfrom,
-                            col.bold,
-                            col.right.parse,
                             col.right.pos,
                             col.right.hjust,
                             text_size,

@@ -425,8 +425,6 @@ forest.columns.left <- function(col.left,
 #' @noRd
 forest.addtext <- function(xto,
                            xfrom,
-                           col.bold,
-                           col.right.parse,
                            col.right.pos,
                            col.right.hjust,
                            text_size,
@@ -437,17 +435,8 @@ forest.addtext <- function(xto,
     '## addtext',
     f = 'ckbplotr::geom_text_move',
     aes = c('y = row',
-            'x = {round(axis_scale_inverse_fn(axis_scale_fn(xto) + (axis_scale_fn(xto) - axis_scale_fn(xfrom))), 6)}',
-            if(is.character(col.bold[[1]])){
-              if(col.right.parse[[1]]){
-                'label = dplyr::if_else({column_name(col.bold[[1]])} & !is.na({column_name(col.bold[[1]])}), paste0("bold(addtext)"), addtext)'
-              } else {
-                c('label = addtext',
-                  'fontface = dplyr::if_else({column_name(col.bold[[1]])} & !is.na({column_name(col.bold[[1]])}),"bold", "plain")')
-              }
-            } else {
-              'label = addtext'
-            }),
+            'x = {xto}',
+            'label = addtext'),
     arg = c('move_x = {printunit(col.right.pos[[1]])}',
             'hjust  = {col.right.hjust[[1]]}',
             'size   = {text_size}',
