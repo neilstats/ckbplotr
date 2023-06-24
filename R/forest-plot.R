@@ -373,11 +373,13 @@ forest_plot <- function(
   # Calculate xfrom, xto, xmid, xticks ----
   ## xfrom, xto, etc. are used by other code sections, so this must come first
   if (is.null(col.lci)) {
-    allvalues <- sapply(panels_list, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
-                                                   tf(x[[col.estimate]] + 1.96 * x[[col.stderr]])))
+    allvalues <- unlist(lapply(panels_list, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
+                                                   tf(x[[col.estimate]] + 1.96 * x[[col.stderr]]))),
+                        use.names = FALSE)
   } else {
-    allvalues <- sapply(panels_list, function(x) c(tf(x[[col.lci]]),
-                                                   tf(x[[col.uci]])))
+    allvalues <- unlist(lapply(panels_list, function(x) c(tf(x[[col.lci]]),
+                                                   tf(x[[col.uci]]))),
+                        use.names = FALSE)
   }
   allvalues_range <- range(pretty(allvalues))
   ## check for zero as axis limit when using exponential
@@ -693,7 +695,7 @@ get_horizontal_spacing <- function(right.space,
     text_about_auto_spacing <- "Automatically calculated horizontal spacing and positioning:\n"
   }
   ### get maximum width of each columns (incl. heading)
-  widths_of_columns <- gettextwidths(lapply(col.right, function(y) c(sapply(panels_list, function(x) x[[y]]))))
+  widths_of_columns <- gettextwidths(lapply(col.right, function(y) unlist(lapply(panels_list, function(x) x[[y]]), use.names = FALSE)))
   estcolumn_width <- gettextwidths(paste0("9.",
                                           paste0(rep(9, digits), collapse = ""),
                                           "(9.",
@@ -727,7 +729,7 @@ get_horizontal_spacing <- function(right.space,
 
   ## calculate automatic col.left.pos and col.left.space
   ### get maximum width of each columns (incl. heading)
-  widths_of_columns <- gettextwidths(lapply(col.left, function(y) c(sapply(panels_list, function(x) x[[y]]))))
+  widths_of_columns <- gettextwidths(lapply(col.left, function(y) unlist(lapply(panels_list, function(x) x[[y]]), use.names = FALSE)))
   widths_of_column_headings <- gettextwidths(col.left.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, and gap between each column

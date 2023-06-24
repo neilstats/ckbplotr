@@ -181,11 +181,12 @@ forest_data <- function(
 
   # create data frame of row numbers and labels
   if (is.null(row.labels)) {
-    out <- panels[[1]] %>%
-      dplyr::mutate(row.label = !!rlang::sym(col.key),
-                    key = !!rlang::sym(col.key),
-                    row.height = NA,
-                    spacing_row = FALSE) %>%
+
+    keys <- unique(unlist(lapply(panels, function(x) x[[col.key]])))
+    out <- tibble::tibble(row.label = keys,
+                          key = keys,
+                          row.height = NA,
+                          spacing_row = FALSE) %>%
       dplyr::select(.data$row.label, .data$key, .data$row.height, .data$spacing_row)
   } else {
 
