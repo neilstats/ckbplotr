@@ -358,8 +358,6 @@ forest_plot <- function(
     col.right.heading,
     col.right.hjust,
     base_size,
-    grid,
-    get.gpar,
     col.left,
     col.left.heading,
     col.left.hjust)
@@ -682,8 +680,6 @@ get_horizontal_spacing <- function(right.space,
                                    col.right.heading,
                                    col.right.hjust,
                                    base_size,
-                                   grid,
-                                   get.gpar,
                                    col.left,
                                    col.left.heading,
                                    col.left.hjust) {
