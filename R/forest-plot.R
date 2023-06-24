@@ -691,9 +691,3 @@ forest_plot <- function(
   return(invisible(list(plot = plot,
                         code = plotcode)))
 }
-
-
-
-#' @describeIn forest_plot Synonym for `forest_plot()`
-#' @export
-make_forest_plot <- forest_plot

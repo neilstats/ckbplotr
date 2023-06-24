@@ -393,11 +393,6 @@ forest_data <- function(
 }
 
 
-#' @describeIn forest_data Synonym for `forest_data()`
-#' @export
-make_forest_data <- forest_data
-
-
 
 
 #' Create heterogeneity string

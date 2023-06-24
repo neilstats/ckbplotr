@@ -48,7 +48,7 @@ quote_string <- function(x){
 argset <- function(x){
   name <- paste(deparse(substitute(x)), collapse = '')
   value <- paste(deparse(x), collapse = '')
-  if (!identical(x, eval(formals(ckbplotr::make_forest_data)[[name]]))){
+  if (!identical(x, eval(formals(ckbplotr::forest_data)[[name]]))){
     glue::glue('{name} = {value}',)
   }
 }

@@ -465,8 +465,3 @@ shape_plot <- function(data,
                         code = plotcode)))
 }
 
-
-
-#' @describeIn shape_plot Synonym for `shape_plot()`
-#' @export
-make_shape_plot <- shape_plot
