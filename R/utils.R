@@ -80,13 +80,17 @@ make_layer <- function(name       = NULL,
     arg <- arg[!duplicated(trimws(sub("=.*", "", c(aes, arg))))[(length(aes) + 1):(length(aes) + length(arg))]]
   }
 
-  if (!is.null(aes)){
+  if (length(aes) > 0){
     aes <- indent(4, paste0(aes, ","))
     aes[[1]] <- paste0("aes(", trimws(aes[[1]]))
     aes[[length(aes)]] <- sub(",$", "),", aes[[length(aes)]])
+  } else {
+    aes <- NULL
   }
-  if (!is.null(arg)){
+  if (length(arg) > 0){
     arg <- paste0(arg, ",")
+  } else {
+    arg <- NULL
   }
   args <- indent(nchar(f)+1, c(aes, arg))
   args[[1]] <- paste0(f, "(", trimws(args[[1]]))

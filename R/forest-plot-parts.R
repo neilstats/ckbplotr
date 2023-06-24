@@ -176,32 +176,42 @@ forest.plot.points <- function(addaes,
                                xfrom,
                                xto,
                                stroke,
-                               pointsize) {
+                               pointsize,
+                               scalepoints) {
   c(
     make_layer(
-      c('# Plot points at the transformed estimates',
-        '## Scale by inverse of the SE'),
+      '# Plot points at the transformed estimates',
       f = 'geom_point',
       aes = c(addaes$point,
-              'size   = size',
+              if (scalepoints){
+                'size = size'
+              },
               'shape  = {column_name(shape_list$aes)}',
               'colour = {column_name(colour_list$aes)}',
               'fill   = {column_name(fill_list$aes)}'),
       arg = c(addarg$point,
-              'data   = ~ dplyr::filter(.x, estimate_transformed > {xfrom}, estimate_transformed < {xto}, !as_diamond)',
+              'data   = ~ dplyr::filter(.x',
+              indent(25, c('estimate_transformed > {xfrom}',
+                           'estimate_transformed < {xto}',
+                           '!as_diamond)')),
               'shape  = {shape_list$arg}',
+              if (!scalepoints){
+                'size   = {pointsize}'
+              },
               'colour = {quote_string(colour_list$arg)}',
               'fill   = {quote_string(fill_list$arg)}',
               'stroke = {stroke}',
               'na.rm  = TRUE')
     ),
-    make_layer(
-      c('# Scale the size of points by their side length',
-        '# and make the scale range from zero upwards'),
-      f = 'scale_radius',
-      arg = c('limits = c(0, 1)',
-              'range  = c(0, {pointsize})')
-    )
+    if (scalepoints){
+      make_layer(
+        c('# Scale the size of points by their side length',
+          '# and make the scale range from zero upwards'),
+        f = 'scale_radius',
+        arg = c('limits = c(0, 1)',
+                'range  = c(0, {pointsize})')
+      )
+    }
   )
 }
 
@@ -242,13 +252,27 @@ forest.cis <- function(addaes,
 #' code for scales and coordinates
 #' @noRd
 forest.scales.coords <- function(xfrom,
-                                 xto) {
+                                 xto,
+                                 shape_list,
+                                 fill_list,
+                                 colour_list,
+                                 cicolour_list) {
+
+  shape_scale_needed <- !is.null(shape_list$aes)
+  fill_scale_needed <- !is.null(fill_list$aes)
+  colour_scale_needed <- any(!is.null(colour_list$aes),
+                             !is.null(cicolour_list$aes))
   x <- c(
-    '# Use identity for aesthetic scales',
-    'scale_shape_identity() +',
-    'scale_fill_identity() +',
-    'scale_colour_identity() +',
-    '',
+    if (any(shape_scale_needed,
+            fill_scale_needed,
+            colour_scale_needed)){
+      c(
+        '# Use identity for aesthetic scales',
+        if (shape_scale_needed) {'scale_shape_identity() +'},
+        if (fill_scale_needed) {'scale_fill_identity() +'},
+        if (colour_scale_needed) {'scale_colour_identity() +'},
+        '')
+    },
     make_layer(
       '# Set coordinate system',
       f = 'coord_cartesian',
@@ -267,37 +291,22 @@ forest.arrows <- function(addaes,
                           base_line_size,
                           xfrom,
                           xto) {
-  c(make_layer(
+  make_layer(
     '# Add tiny segments with arrows when the CIs go outside axis limits',
     f = 'geom_segment',
     aes = c(addaes$ci,
             'y      = row',
             'yend   = row',
-            'x      = {xto} - 1e-6',
-            'xend   = {xto}',
+            'x      = x',
+            'xend   = xend',
             'colour = {column_name(cicolour_list$aes[1])}'),
     arg = c(addarg$ci,
-            'data      = ~ dplyr::filter(.x, uci_transformed > {xto})',
+            'data      = ~ dplyr::bind_rows(dplyr::filter(.x, uci_transformed > {xto}) %>% dplyr::mutate(x = {xto} - 1e-6, xend = {xto})',
+            indent(31, 'dplyr::filter(.x, lci_transformed < {xfrom}) %>% dplyr::mutate(x = {xfrom} + 1e-6, xend = {xfrom}))'),
             'colour    = {quote_string(cicolour_list$arg[1])}',
             'linewidth = {base_line_size}',
             'arrow     = arrow(type = "closed", length = unit({8 * base_line_size}, "pt"))',
-            'na.rm     = TRUE'),
-    br = FALSE
-  ),
-  make_layer(
-    f = 'geom_segment',
-    aes = c(addaes$ci,
-            'y      = row',
-            'yend   = row',
-            'x      = {xfrom} + 1e-6',
-            'xend   = {xfrom}',
-            'colour = {column_name(cicolour_list$aes[1])}'),
-    arg = c(addarg$ci,
-            'data      = ~ dplyr::filter(.x, lci_transformed < {xfrom})',
-            'colour    = {quote_string(cicolour_list$arg[1])}',
-            'linewidth = {base_line_size}',
-            'arrow     = arrow(type = "closed", length = unit({8 * base_line_size}, "pt"))',
-            'na.rm     = TRUE'))
+            'na.rm     = TRUE')
   )
 }
 
@@ -479,12 +488,11 @@ forest.xlab.panel.headings <- function(addaes,
         '# Add panel name above each panel',
         f = 'geom_text',
         aes = c(addaes$panel.name,
-                'y     = - {col.heading.space}',
+                'y     = - {col.heading.space + 2}',
                 'x     = {xmid}',
                 'label = title'),
         arg = c(addarg$panel.name,
                 'hjust    = 0.5',
-                'nudge_y  = 2',
                 'size     = {text_size}',
                 'colour   = {quote_string(plotcolour)}',
                 'fontface = "bold"',
@@ -523,7 +531,7 @@ forest.theme <- function(base_size,
                          plot.margin,
                          addlayer) {
   make_layer(
-    '# Control the overall look of the plots',
+    '# Control the overall look of the plot',
     f = 'theme',
     arg = c('text             = element_text(size = {base_size}, colour = {quote_string(plotcolour)})',
             'line             = element_line(linewidth = {base_line_size})',

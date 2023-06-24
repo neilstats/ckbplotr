@@ -421,19 +421,21 @@ forest_plot <- function(
 
   # Calculate xfrom, xto, xmid, xticks ----
   ## xfrom, xto, etc. are used by other code sections, so this must come first
-  if (is.null(xlim)) {
-    if (is.null(col.lci)) {
-      allvalues <- sapply(panels_list, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
-                                                     tf(x[[col.estimate]] + 1.96 * x[[col.stderr]])))
-    } else {
-      allvalues <- sapply(panels_list, function(x) c(tf(x[[col.lci]]),
-                                                     tf(x[[col.uci]])))
-    }
-    xlim <- range(pretty(allvalues))
-    ## check for zero as axis limit when using exponential
-    if (exponentiate & isTRUE(all.equal(0, xlim[[1]]))){
-      xlim[[1]] <- min(allvalues, na.rm = TRUE)
-    }
+  if (is.null(col.lci)) {
+    allvalues <- sapply(panels_list, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
+                                                   tf(x[[col.estimate]] + 1.96 * x[[col.stderr]])))
+  } else {
+    allvalues <- sapply(panels_list, function(x) c(tf(x[[col.lci]]),
+                                                   tf(x[[col.uci]])))
+  }
+  allvalues_range <- range(pretty(allvalues))
+  ## check for zero as axis limit when using exponential
+  if (exponentiate & isTRUE(all.equal(0, allvalues_range[[1]]))){
+    allvalues_range[[1]] <- min(allvalues, na.rm = TRUE)
+  }
+
+  if (is.null(xlim)){
+    xlim <- allvalues_range
   }
 
   xfrom <- min(xlim)
@@ -441,6 +443,7 @@ forest_plot <- function(
   xmid  <- round(axis_scale_inverse_fn((axis_scale_fn(xfrom) + axis_scale_fn(xto)) / 2), 6)
   if (is.null(xticks)) { xticks <- pretty(c(xfrom, xto)) }
 
+  values_outside_xlim <- min(allvalues_range) < xfrom | max(allvalues_range) > xto
 
 
   # Code for preparing data for plotting using forest_data() ----
@@ -546,7 +549,8 @@ forest_plot <- function(
                               xfrom,
                               xto,
                               stroke,
-                              pointsize),
+                              pointsize,
+                              scalepoints),
 
            # code for CI lines plotted after points
            forest.cis(addaes,
@@ -559,7 +563,9 @@ forest_plot <- function(
                       type = ci_order[[2]]),
 
            # code to add arrows to CIs
-           forest.arrows(addaes, cicolour_list, addarg, base_line_size, xfrom, xto),
+           if (values_outside_xlim) {
+             forest.arrows(addaes, cicolour_list, addarg, base_line_size, xfrom, xto)
+           },
 
            # code for plotting diamonds
            if(!is.null(col.diamond) || !is.null(diamond)){
@@ -569,7 +575,12 @@ forest_plot <- function(
            },
 
            # code for scales and coordinates
-           forest.scales.coords(xfrom, xto),
+           forest.scales.coords(xfrom,
+                                xto,
+                                shape_list,
+                                fill_list,
+                                colour_list,
+                                cicolour_list),
 
            # code for columns to right of panel
            if (!is.null(col.right) | estcolumn) {
