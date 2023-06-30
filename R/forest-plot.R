@@ -631,11 +631,6 @@ forest_plot <- function(
     )
   )
 
-  # Add additional code ----
-  if (!is.null(addcode)){
-    plotcode <- append(plotcode, addcode[2:length(addcode)], grep(addcode[1], trimws(plotcode))[1]-1)
-  }
-
   # Show code in RStudio viewer ----
   if (showcode){ displaycode(plotcode, text_about_auto_spacing) }
 
