@@ -394,7 +394,7 @@ forest.columns.right <- function(col.right.all,
          text_size  = text_size,
          plotcolour = plotcolour),
     forest.col.code))
-  c('# Add columns to right side of plots', x)
+  c('# Add columns to right side of panels', x)
 }
 
 #' code for columns to left of panels
@@ -427,7 +427,7 @@ forest.columns.left <- function(col.left,
          text_size  = text_size,
          plotcolour = plotcolour),
     forest.col.code))
-  c('# Add columns to left side of plots', x)
+  c('# Add columns to left side of panel', x)
 }
 
 #' code for addtext
@@ -480,15 +480,15 @@ forest.xlab.panel.headings <- function(addaes,
               'colour   = {quote_string(plotcolour)}',
               'vjust    = 4.4',
               'fontface = "bold"',
-              'data = dplyr::tibble(panel = sort(unique(datatoplot$panel))',
-              indent(21, 'xlab = {ds(xlab)})'))
+              'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
+              indent(23, 'xlab = {ds(xlab)})'))
     ),
     if (!all(panel.headings == "")){
       make_layer(
         '# Add panel name above each panel',
         f = 'geom_text',
         aes = c(addaes$panel.name,
-                'y     = - {col.heading.space + 2}',
+                'y     = - {col.heading.space + 1.5}',
                 'x     = {xmid}',
                 'label = title'),
         arg = c(addarg$panel.name,
@@ -496,8 +496,8 @@ forest.xlab.panel.headings <- function(addaes,
                 'size     = {text_size}',
                 'colour   = {quote_string(plotcolour)}',
                 'fontface = "bold"',
-                'data = dplyr::tibble(panel = sort(unique(datatoplot$panel))',
-                indent(21, 'title = {ds(panel.headings)})'))
+                'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
+                indent(23, 'title = {ds(panel.headings)})'))
       )
     }
   )
