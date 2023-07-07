@@ -382,17 +382,23 @@ forest_plot <- function(
                         use.names = FALSE)
   }
   allvalues_range <- range(pretty(allvalues))
-  ## check for zero as axis limit when using exponential
-  if (exponentiate & isTRUE(all.equal(0, allvalues_range[[1]]))){
+  ## check for zero as axis limit when using log scale
+  if (logscale & isTRUE(all.equal(0, allvalues_range[[1]]))){
     allvalues_range[[1]] <- min(allvalues, na.rm = TRUE)
   }
 
+  ## set xlim, and create xfrom and xto
   if (is.null(xlim)){
     xlim <- allvalues_range
   }
-
   xfrom <- min(xlim)
   xto   <- max(xlim)
+
+  ## check xfrom and xto for zero and logscale
+  if (logscale & (isTRUE(all.equal(0, xfrom)) | isTRUE(all.equal(0, xfrom)))){
+    rlang::abort("Axis limit cannot be zero if plotting on a log scale.")
+  }
+
   xmid  <- round(axis_scale_inverse_fn((axis_scale_fn(xfrom) + axis_scale_fn(xto)) / 2), 6)
   if (is.null(xticks)) { xticks <- pretty(c(xfrom, xto)) }
 
