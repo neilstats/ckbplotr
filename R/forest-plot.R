@@ -268,7 +268,12 @@ forest_plot <- function(
     cicolour_list <- list(aes = cicolour)
   } else {
     if (missing(cicolour)) {
-      cicolour <- c(cicolour, if (fill == "white") cicolour else "white")
+      if (!is.list(fill)) {
+        cicolour <- c(cicolour, if (fill == "white") cicolour else "white")
+      } else {
+        cicolour <- lapply(fill,
+                           \(x) c(cicolour, if (x == "white") cicolour else "white") )
+      }
     }
     cicolour_list <- list(arg = cicolour)
   }
