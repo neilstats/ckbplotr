@@ -39,6 +39,7 @@ forest.cicolourcode <- function(axis_scale,
                                 xto,
                                 xfrom,
                                 pointsize,
+                                scalepoints,
                                 stroke,
                                 panel.width,
                                 shape_list,
@@ -47,6 +48,7 @@ forest.cicolourcode <- function(axis_scale,
 
   panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
   convert_pointsize <- (axis_scale_fn(xto) - axis_scale_fn(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm
+  size <- if (scalepoints) "size" else "1"
 
   x <- c(
     '# Create column for CI colour',
@@ -54,7 +56,7 @@ forest.cicolourcode <- function(axis_scale,
     indent(2,
            'dplyr::mutate(narrowci =  ({axis_scale}(uci_transformed) - {axis_scale}(lci_transformed)) <= ',
            indent(26,
-                  'size * {convert_pointsize} * dplyr::recode({c(shape_list$arg, column_name(shape_list$aes))}, `22` = 0.6694, .default = 0.7553)) %>%'),
+                  '{size} * {convert_pointsize} * dplyr::case_match({c(quote_string(shape_list$arg), column_name(shape_list$aes))}, "22" ~ 0.6694, "filled square" ~ 0.6694, .default = 0.7553)) %>%'),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(is.list(cicolour_list$values)){
@@ -194,7 +196,7 @@ forest.plot.points <- function(addaes,
               indent(25, c('estimate_transformed > {xfrom}',
                            'estimate_transformed < {xto}',
                            '!as_diamond)')),
-              'shape  = {shape_list$arg}',
+              'shape  = {if (is.numeric(shape_list$arg)) shape_list$arg else quote_string(shape_list$arg)}',
               if (!scalepoints){
                 'size   = {pointsize}'
               },

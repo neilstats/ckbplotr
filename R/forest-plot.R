@@ -460,6 +460,7 @@ forest_plot <- function(
                           xto,
                           xfrom,
                           pointsize,
+                          scalepoints,
                           stroke,
                           panel.width,
                           shape_list,
