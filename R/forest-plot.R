@@ -160,11 +160,6 @@ forest_plot <- function(
   fixed_panel_height <- !missing(panel.height)
   column_names_in_data <- purrr::reduce(lapply(panels_list, names), intersect)
 
-  # rows argument no longer used
-  if (!missing(rows)){
-    rlang::inform("Note: rows argument now has no effect")
-  }
-
   # blankrows no longer used
   if (!missing(blankrows)){
     row.labels.space <- blankrows
@@ -419,6 +414,7 @@ forest_plot <- function(
       'panels = {paste(deparse(substitute(panels)), collapse = "")}',
       argset(row.labels),
       argset(row.labels.levels),
+      argset(rows),
       argset(row.labels.space),
       argset(panel.names),
       argset(col.key),

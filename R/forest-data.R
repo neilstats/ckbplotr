@@ -75,6 +75,7 @@ forest_data <- function(
     col.keep          = NULL,
     row.labels        = NULL,
     row.labels.levels = NULL,
+    rows              = NULL,
     row.labels.space  = c(0, 1, 0, 0),
     ci.delim          = ", ",
     digits            = 2,
@@ -146,6 +147,13 @@ forest_data <- function(
   }
   if(!is.null(row.labels) && !all(sapply(row.labels[row.labels.levels], is.character))) {
     rlang::abort("row.labels.levels columns must be character")
+  }
+
+
+  # filter row.labels according to rows argument
+  if (!is.null(rows)) {
+    row.labels <- row.labels %>%
+      dplyr::filter(.data[[row.labels.levels[[1]]]] %in% rows)
   }
 
   # Make vector of keys after which extra rows are added for addtext
