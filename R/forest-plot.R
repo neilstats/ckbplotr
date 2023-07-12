@@ -482,10 +482,10 @@ forest_plot <- function(
 
     indent(2,
 
-           # addlayer$start
-           if (!is.null(addlayer$start)){
+           # add$start
+           if (!is.null(add$start)){
              c("# Additional layer",
-               paste(c(deparse(substitute(addlayer)$start), " +"), collapse = ""),
+               paste(c(deparse(substitute(add)$start), " +"), collapse = ""),
                "")
            },
 
@@ -632,12 +632,12 @@ forest_plot <- function(
                         right.space,
                         substitute(mid.space),
                         substitute(plot.margin),
-                        addlayer),
+                        add),
 
-           # addlayer$end
-           if (!is.null(addlayer$end)){
+           # add$end
+           if (!is.null(add$end)){
              c("# Additional layer",
-               paste(deparse(substitute(addlayer)$end), collapse = ""),
+               paste(deparse(substitute(add)$end), collapse = ""),
                "")
            }
     )

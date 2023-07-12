@@ -531,7 +531,7 @@ forest.theme <- function(base_size,
                          right.space,
                          mid.space,
                          plot.margin,
-                         addlayer) {
+                         add) {
   make_layer(
     '# Control the overall look of the plot',
     f = 'theme',
@@ -567,7 +567,7 @@ forest.theme <- function(base_size,
             'plot.background  = element_blank()',
             'plot.margin      = {paste(deparse(plot.margin), collapse = "")} + unit(c(0, {as.numeric(right.space)}, 0, 0), "{makeunit(right.space)}")'
     ),
-    plus = !is.null(addlayer$end),
+    plus = !is.null(add$end),
     duplicates = TRUE,
   )
 }
