@@ -1,6 +1,8 @@
 #' code for the axes
 #' @noRd
 forest.axes <- function(axis_scale,
+                        xfrom,
+                        xto,
                         xticks,
                         row.labels.heading,
                         bottom.space,
@@ -10,6 +12,7 @@ forest.axes <- function(axis_scale,
       '# Set the scale for the x axis (the estimates and CIs)',
       f = "scale_x_continuous",
       arg = c('trans  = "{axis_scale}"',
+              "limits = c({xfrom}, {xto})",
               "breaks = {paste(deparse(xticks), collapse = '')}",
               'expand = c(0,0)')
     ),

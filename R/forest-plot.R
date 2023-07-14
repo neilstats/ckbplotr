@@ -605,6 +605,8 @@ forest_plot <- function(
 
            # code for the axes
            forest.axes(axis_scale,
+                       xfrom,
+                       xto,
                        xticks,
                        row.labels.heading,
                        bottom.space,
