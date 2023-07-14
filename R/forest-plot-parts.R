@@ -153,11 +153,13 @@ forest.facet <- function() {
 #' @noRd
 forest.nullline <- function(nullval,
                             base_line_size,
-                            plotcolour) {
+                            plotcolour,
+                            addarg) {
   make_layer(
     '# Add a line at null effect',
     f = "annotate",
-    arg = c('geom      = "segment"',
+    arg = c(addarg$nullline,
+            'geom      = "segment"',
             'y         = 0.7',
             'yend      = Inf',
             'x         = {nullval}',

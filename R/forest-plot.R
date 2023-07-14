@@ -489,7 +489,7 @@ forest_plot <- function(
            forest.facet(),
 
            # code for line at null
-           if (!is.null(nullval)) { forest.nullline(nullval, base_line_size, plotcolour) },
+           if (!is.null(nullval)) { forest.nullline(nullval, base_line_size, plotcolour, addarg) },
 
            # code for CI lines plotted before points
            forest.cis(addaes,
