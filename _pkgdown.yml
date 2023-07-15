@@ -5,34 +5,39 @@ development:
 
 template:
   bootstrap: 5
+  bootswatch: cosmo
   bslib:
-    link-decoration: "none"
+    primary: "#011e41"
+    base_font: {google: {family: "Source Sans Pro", wght: [400, 600], ital: [0, 1]}}
+    code_font: {google: "Source Code Pro"}
+    font_scale: 1
+    border-radius: 0
+    pkgdown-nav-height: 78px
+    line-height-base: 1.6
 
 articles:
 - title: Introduction
   navbar: ~
   contents:
   - ckbplotr
-  - plot_like_ckb
-- title: Shape plots and forest plots
+- title: Plots
   navbar: ~
   contents:
-  - shape_plot
-  - forest_plot
-  - shape_confidence_intervals
-  - forest_confidence_intervals
-- title: Further plot customisation
-  contents:
-  - adding_editing_code
-  - special_characters_formatting
+  - ckb_style
+  - forest_plots
+  - shape_plots
+  - customising_plots
 - title: Saving plots
   navbar: ~
   contents:
-  - save_figure
+  - save_plots
 - title: Related packages
   contents:
   - ggplot2
   - page_layouts
+- title: Generated code
+  contents:
+  - web-only/generated_code
 
 news:
   releases:

@@ -8,62 +8,87 @@
 #'
 #'
 #' @inheritParams forest_data
-#' @inheritParams theme_ckb
-#' @param logscale Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
-#' @param panel.headings Titles to be placed above each forest plot.
-#' @param row.labels.heading Title to be placed above row labels.
-#' @param estcolumn Include column of estimates and confidence intervals to the
+#' @param logscale
+#' Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
+#' @param panel.headings
+#' Titles to be placed above each forest plot.
+#' @param row.labels.heading
+#' Title to be placed above row labels.
+#' @param estcolumn
+#' Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
-#' @param col.right.parse A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
+#' @param col.right.parse
+#' A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
 #' Should the contents of the columns be parsed into expressions. (Default: FALSE)
-#' @param col.left.pos A unit vector to position col.right columns.
-#' @param col.right.pos A unit vector to position col.right columns.
-#' @param col.left.hjust A numeric vector. The horizontal justification of
-#' col.left columns. (Default: 1)
-#' @param col.right.hjust A numeric vector. The horizontal justification of
-#' col.right columns. (Default: 0)
-#' @param col.left.heading A character vector of titles for col.left columns. (Default: "")
-#' @param col.right.heading A character vector of titles for the column of estimates
-#' (if estcolumn = TRUE) and col.right columns. (Default: "HR (95% CI)")
-#' @param col.heading.space Position of the titles given by col.left.heading and
+#' @param col.left.pos,col.right.pos
+#' A unit vector to position col.left/col.right columns.
+#' @param col.left.hjust,col.right.hjust
+#' A numeric vector. The horizontal justification of
+#' col.left/col.right columns. (Default: 1)
+#' @param col.left.heading,col.right.heading
+#' Headings for columns.
+#' @param col.heading.space
+#' Position of the titles given by col.left.heading and
 #' col.right.heading. Increase to move them up. (Default: 0)
-#' @param title Title to appear at the top of the plot.
-#' @param xlab Label to appear below the x-axis. (Default: "HR (95% CI)")
-#' @param xlim A numeric vector. The limits of the x axis.
-#' @param xticks A numeric vector. The tick points of the x axis.
-#' @param nullval Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)
-#' @param pointsize The (largest) size of box to use for plotting point
-#'                  estimates. (Default: 3)
-#' @param shape Shape of points. An integer, or name of a column of integers. (Default: 15 (square))
-#' @param plotcolour Colour for all parts of the plot. (Default: "black")
-#' @param colour Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
-#' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use colour.)
-#' @param fill Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)
-#' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
-#' @param col.bold Plot text as bold. Name of a column of logical values.
-#' @param bottom.space Size of space between bottom row and axis. (Default: 0.7)
-#' @param left.space Size of gap to leave to the left of panels.
-#' @param right.space Size of gap to leave to the right of panels.
-#' @param mid.space Size of additional gap to leave between panels. (Default: unit(5, "mm"))
-#' @param plot.margin Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
-
-#' @param panel.width Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.
-#' @param panel.height Set height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
-#' @param stroke Size of outline of shapes. (Default: 0)
-#' @param diamonds.linewidth Line width for diamonds. (Default: base_line_size)
-#' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
-#' @param printplot Print the plot. (Default: !quiet)
-#' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
-#' @param data.function Name of a function to apply to data frame before plotting.
-#' @param addcode A character vector of code to add to the generated code.
-#'                The first element should be a regular expression.
-#'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
-#' @param addaes Specify additional aesthetics for some ggplot layers.
-#' @param addarg Specify additional arguments for some ggplot layers.
-#' @param addlayer Adding ggplot layers.
-#' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
-#' @param rows DEPRECATED
-#' @param blankrows DEPRECATED
+#' @param title
+#' Title to appear at the top of the plot.
+#' @param xlab
+#' Label to appear below the x-axis. (Default: "HR (95% CI)")
+#' @param xlim
+#' A numeric vector. The limits of the x axis.
+#' @param xticks
+#' A numeric vector. The tick points of the x axis.
+#' @param nullval
+#' Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)
+#' @param pointsize
+#' The (largest) size of box to use for plotting point estimates. (Default: 3)
+#' @param shape
+#' Shape of points. An integer, or name of a column of integers. (Default: 15 (square))
+#' @param plotcolour
+#' Colour for all parts of the plot. (Default: "black")
+#' @param colour
+#' Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
+#' @param cicolour
+#' Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use colour.)
+#' @param fill
+#' Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)
+#' @param ciunder
+#' Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
+#' @param col.bold
+#' Plot text as bold. Name of a column of logical values.
+#' @param bottom.space
+#' Space between bottom row and axis. (Default: 0.7)
+#' @param left.space,right.space,mid.space
+#' Space to the left/right/between panels.
+#' (Default mid.space: unit(5, "mm"))
+#' @param plot.margin
+#' Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
+#' @param panel.width,panel.height
+#' Set width/height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
+#' If panel.width is used, will alsovapply different formatting to narrow CIs.
+#' @param base_size
+#' base font size, given in pts.
+#' @param base_line_size
+#' base size for line elements
+#' @param stroke
+#' Size of outline of shapes. (Default: 0)
+#' @param diamonds.linewidth
+#' Line width for diamonds. (Default: base_line_size)
+#' @param quiet
+#' Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
+#' @param printplot
+#' Print the plot. (Default: !quiet)
+#' @param showcode
+#' Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
+#' @param data.function
+#' Name of a function to apply to data frame before plotting.
+#' @param addaes,addarg,add
+#' Methods for customising the plot. See documentation for details.
+#' @param envir
+#' Environment in which to evaluate the plot code.
+#' May be useful when calling this function inside another function.
+#' @param blankrows
+#' DEPRECATED
 #'
 #' @return A list:
 #' \describe{
@@ -79,74 +104,73 @@
 
 forest_plot <- function(
     panels,
-    row.labels    = NULL,
-    row.labels.levels = NULL,
+    row.labels         = NULL,
+    row.labels.levels  = NULL,
+    rows               = NULL,
     row.labels.heading = NULL,
-    row.labels.space = c(0, 1, 0, 0),
-    exponentiate  = TRUE,
-    logscale      = exponentiate,
-    panel.names   = NULL,
-    panel.headings = NULL,
-    col.key       = "key",
-    col.estimate  = c("estimate", "est", "beta", "loghr"),
-    col.stderr    = c("stderr", "std.err", "se"),
-    col.lci       = NULL,
-    col.uci       = NULL,
-    col.left      = NULL,
-    col.right     = NULL,
-    col.right.parse   = FALSE,
-    col.left.heading  = "",
-    col.right.heading = "HR (95% CI)",
-    col.left.pos    = NULL,
-    col.right.pos   = NULL,
-    col.left.hjust    = 1,
-    col.right.hjust   = 0,
-    col.heading.space = 0,
-    estcolumn     = TRUE,
-    col.keep      = NULL,
-    ci.delim      = ", ",
-    digits        = 2,
-    title         = "",
-    xlab          = "HR (95% CI)",
-    xlim          = NULL,
-    xticks        = NULL,
-    nullval       = NULL,
-    blankrows     = NULL,
-    col.diamond   = NULL,
-    diamond       = NULL,
-    col.bold      = NULL,
-    bold.labels   = NULL,
-    scalepoints   = FALSE,
-    minse         = NULL,
-    pointsize     = 3,
-    shape     = 15,
-    plotcolour = "black",
-    colour    = plotcolour,
-    cicolour  = colour,
-    fill      = colour,
-    ciunder   = NULL,
-    addtext       = NULL,
-    bottom.space  = 0.7,
-    left.space    = NULL,
-    right.space   = NULL,
-    mid.space     = unit(5, "mm"),
-    plot.margin   = margin(8, 8, 8, 8, "mm"),
-    panel.width   = NULL,
-    panel.height  = NULL,
-    base_size     = 11,
-    base_line_size = base_size/22,
-    stroke        = 0,
+    row.labels.space   = c(0, 1, 0, 0),
+    exponentiate       = TRUE,
+    logscale           = exponentiate,
+    panel.names        = NULL,
+    panel.headings     = NULL,
+    col.key            = "key",
+    col.estimate       = c("estimate", "est", "beta", "loghr"),
+    col.stderr         = c("stderr", "std.err", "se"),
+    col.lci            = NULL,
+    col.uci            = NULL,
+    col.left           = NULL,
+    col.right          = NULL,
+    col.right.parse    = FALSE,
+    col.left.heading   = "",
+    col.right.heading  = xlab,
+    col.left.pos       = NULL,
+    col.right.pos      = NULL,
+    col.left.hjust     = 1,
+    col.right.hjust    = 0,
+    col.heading.space  = 0,
+    estcolumn          = TRUE,
+    col.keep           = NULL,
+    ci.delim           = ", ",
+    digits             = 2,
+    title              = "",
+    xlab               = "HR (95% CI)",
+    xlim               = NULL,
+    xticks             = NULL,
+    nullval            = NULL,
+    col.diamond        = NULL,
+    diamond            = NULL,
+    col.bold           = NULL,
+    bold.labels        = NULL,
+    scalepoints        = FALSE,
+    minse              = NULL,
+    pointsize          = 3,
+    shape              = 15,
+    plotcolour         = "black",
+    colour             = plotcolour,
+    cicolour           = colour,
+    fill               = colour,
+    ciunder            = NULL,
+    addtext            = NULL,
+    bottom.space       = 0.7,
+    left.space         = NULL,
+    right.space        = NULL,
+    mid.space          = unit(5, "mm"),
+    plot.margin        = margin(8, 8, 8, 8, "mm"),
+    panel.width        = NULL,
+    panel.height       = NULL,
+    base_size          = 11,
+    base_line_size     = base_size/22,
+    stroke             = 0,
     diamonds.linewidth = base_line_size,
-    quiet         = FALSE,
-    printplot     = !quiet,
-    showcode      = !quiet,
-    data.function = NULL,
-    addcode       = NULL,
-    addaes        = NULL,
-    addarg        = NULL,
-    addlayer      = NULL,
-    envir         = NULL,
-    rows          = NULL
+    quiet              = FALSE,
+    printplot          = !quiet,
+    showcode           = !quiet,
+    data.function      = NULL,
+    addaes             = NULL,
+    addarg             = NULL,
+    add                = NULL,
+    envir              = NULL,
+    blankrows          = NULL
 ){
 
 

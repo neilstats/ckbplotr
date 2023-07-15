@@ -22,7 +22,7 @@ fix_panel <- function(plot, width = NULL, height = NULL){
   lifecycle::deprecate_warn("0.8.1",
                             "fix_panel()",
                             "ggh4x::force_panelsizes()",
-                            details = "forest_plot(), shape_plot(), and ckb_style() alo have arguments for setting panel width and height.")
+                            details = "forest_plot(), shape_plot(), and ckb_style() also have arguments for setting panel width and height.")
 
   # generate grob from ggplot2 plot
   gtable <- ggplot2::ggplotGrob(plot)

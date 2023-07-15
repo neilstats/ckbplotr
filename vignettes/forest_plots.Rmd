@@ -1,0 +1,311 @@
+---
+title: "Forest plots"
+output:
+  rmarkdown::html_vignette:
+    toc: TRUE
+vignette: >
+  %\VignetteIndexEntry{Forest plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 4,
+  fig.height = 3,
+  fig.align = "center",
+  out.width = '60%',
+  dpi = 120,
+  message = FALSE
+)
+library(ckbplotr)
+```
+
+
+## Introduction
+
+The `forest_plot()` function creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio, the code used to create the plot will be shown in the Viewer pane (see [Plot code example] for an example).
+
+## Basic usage
+
+Supply a data frame of estimates (by default, assumed to be log hazard ratios) and standard errors to the `forest_plot()` function:
+```{r}
+my_results <- data.frame(
+  subgroup   = c("men", "women", "35_49", "50_64", "65_79"),
+  est        = c( 0.45,    0.58,    0.09,    0.35,     0.6),
+  se         = c( 0.07,    0.06,    0.06,    0.05,    0.08)
+)
+
+forest_plot(my_results)
+```
+Use `col.est` and `col.stderr` to set the columns that contain estimates and standard errors. By default, the function will look for columns with names estimate/est/beta/loghr and stderr/std.err/se.
+
+If your estimates are not on the log scale, then set `exponentiate=FALSE`.
+
+
+
+
+
+
+## Row labels
+
+Set `col.key` to identify the rows of the forest plot.
+```{r}
+forest_plot(my_results, col.key = "subgroup")
+```
+
+```{r}
+my_row_labels <- data.frame(
+  subgroup = c("men", "women", "35_49", "50_64", "65_79"),
+  label    = c("Men", "Women", "35 - 49", "50 - 64", "65 - 79")
+)
+
+forest_plot(my_results,
+            col.key    = "subgroup",
+            row.labels = my_row_labels)
+```
+
+To quickly add subheadings, include labels with a missing col.key:
+```{r}
+row_labels <- data.frame(
+  subgroup = c(NA, "men", "women",
+               NA, "35_49", "50_64", "65_79"),
+  label    = c("Sex", "Men", "Women",
+               "Age (years)", "35 - 49", "50 - 64", "65 - 79")
+)
+
+forest_plot(my_results,
+            col.key    = "subgroup",
+            row.labels = row_labels)
+```
+
+To automatically create groupings and add subheadings, use multiple columns in the `row.labels` data frame.
+```{r}
+row_labels <- data.frame(
+  subgroup = c("men", "women",
+               "35_49", "50_64", "65_79"),
+  group    = c("Sex", "Sex",
+               "Age (years)", "Age (years)", "Age (years)"),
+  label    = c("Men", "Women",
+               "35 - 49", "50 - 64", "65 - 79")
+)
+
+forest_plot(my_results,
+            col.key = "subgroup",
+            row.labels = row_labels)
+```
+
+Use the `row.labels.levels` argument to choose columns for row labels and the hierarchy for grouping. (Otherwise, all character columns in the row labels data frame will be used.)
+```{r}
+forest_plot(my_results,
+            col.key           = "subgroup",
+            row.labels        = row_labels,
+            row.labels.levels = c("label"))
+```
+
+The order of rows is set by the `row.labels` data frame.
+```{r}
+row_labels <- data.frame(
+  subgroup = c("women", "men",
+               "65_79", "50_64", "35_49"),
+  group    = c("Sex", "Sex",
+               "Age (years)", "Age (years)", "Age (years)"),
+  label    = c("Women", "Men",
+               "65 - 79", "50 - 64", "35 - 49")
+)
+
+forest_plot(my_results,
+            col.key           = "subgroup",
+            row.labels        = row_labels)
+```
+
+Add a heading above the row labels with `row.labels.heading`:
+```{r}
+forest_plot(my_results,
+            col.key            = "subgroup",
+            row.labels         = row_labels,
+            row.labels.heading = "Subgroup")
+```
+
+
+
+
+
+## Multiple panels
+```{r, fig.width=6, out.width='75%'}
+my_resultsA <- my_results
+
+my_resultsB <- data.frame(
+  subgroup   = c("men", "women", "35_49", "50_64", "65_79"),
+  est        = c(0.48, 0.54, 0.06, 0.3, 0.54),
+  se         = c(0.12, 0.11, 0.11, 0.09, 0.15)
+)
+
+forest_plot(list("Observational" = my_resultsA,
+                 "Genetic"       = my_resultsB),
+            col.key    = "subgroup",
+            row.labels = row_labels)
+```
+
+You can use `split()` to create a list of data frames from a single data frame:
+```{r, fig.width=6, out.width='75%'}
+my_resultsAB <- data.frame(
+  analysis = factor(c(rep("Observational", 5), rep("Genetic", 5)),
+                    levels = c("Observational", "Genetic")),
+  subgroup = c("men", "women", "35_49", "50_64", "65_79",
+               "men", "women", "35_49", "50_64", "65_79"),
+  est      = c( 0.45, 0.58, 0.09, 0.35, 0.6,
+                0.48, 0.54, 0.06, 0.3, 0.54),
+  se        = c(0.07, 0.06, 0.06, 0.05, 0.08,
+                0.12, 0.11, 0.11, 0.09, 0.15)
+)
+
+forest_plot(split(my_resultsAB, ~ analysis),
+            col.key    = "subgroup",
+            row.labels = row_labels)
+```
+
+
+
+## Adding columns of text
+
+Use `col.left` and `col.right` to add columns of text either side of each panel. Use `col.left.heading` and `col.right.heading` to customise the column headings.
+```{r adding-columns-of-text}
+my_results$n <- c(834, 923, 587, 694, 476)
+
+forest_plot(my_results,
+            col.key          = "subgroup",
+            row.labels       = row_labels,
+            col.left         = "n",
+            col.left.heading = "No. of events")
+```
+Use `col.left.hjust` and `col.right.hjust` to set the horizontal justification of the columns (0 = left, 0.5 = center, 1 = right).
+
+
+
+## Scaling point size
+Set `scalepoints = TRUE` to have point size (area) proportional to the inverse of the variance (SE^2^) of the estimate.
+```{r}
+forest_plot(my_results,
+            col.key     = "subgroup",
+            row.labels  = row_labels,
+            scalepoints = TRUE)
+```
+
+
+
+## Confidence interval lines
+
+Narrow confidence interval lines can be hidden by points. Set the `panel.width` argument to change the appearance of narrow confidence interval lines. The function will by default try to change the colour and plotting order of confidence intervals so that they are not hidden. You can also supply vectors and lists to the `cicolour` argument to have more control.
+
+Note that the calculations for identifying narrow confidence intervals has has been designed to work well for shapes 15 (the default) and 22, and for symmetric confidence intervals. These may not be completely accurate in all scenarios, so check your final output carefully.
+
+```{r, fig.width=6, fig.height = 5, out.width='75%'}
+forest_plot(split(my_resultsAB, ~ analysis),
+            col.key     = "subgroup",
+            row.labels  = row_labels,
+            scalepoints = TRUE,
+            pointsize   = 8,
+            xlim        = c(0.5, 3),
+            panel.width = unit(28, "mm"))
+```
+
+
+```{r, fig.width=6, fig.height = 5, out.width='75%'}
+forest_plot(split(my_resultsAB, ~ analysis),
+            col.key     = "subgroup",
+            row.labels  = row_labels,
+            scalepoints = TRUE,
+            pointsize   = 10,
+            xlim        = c(0.5, 8),
+            
+            shape       = "square filled",
+            stroke      = 0.5,
+            fill        = list("black", "white"),
+            panel.width = unit(28, "mm"))
+```
+
+
+
+
+
+
+
+
+
+
+## Different limits on panels
+
+`forest_plot()` uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales applied, so it's not directly possible to have different limits and ticks on each forest plot.
+
+However, one approach to work around this is to use `forest_plot()` for each plot you need, remove the row labels from all but the first, then arrange them side-by-side:
+
+```{r, fig.width=6, out.width='75%'}
+p1 <- forest_plot(my_results,
+                  col.key = "subgroup",
+                  row.labels = row_labels,
+                  xlim = c(0.5, 3 + 1e-10),
+                  xticks = c(0.5, 1, 2),
+                  quiet = TRUE)
+
+p2 <- forest_plot(my_resultsB,
+                  col.key = "subgroup",
+                  row.labels = row_labels,
+                  plot.margin = margin(8, 8, 8, 0, unit = "mm"),
+                  xlim = c(0.1, 4),
+                  xticks = c(0.1, 1, 2, 4),
+                  quiet = TRUE)
+
+panel1 <- p1$plot
+panel2 <- p2$plot + theme(axis.text.y = element_blank()) ## remove row labels
+
+figure <- gridExtra::gtable_cbind(ggplot_gtable(ggplot_build(panel1)),
+                                  ggplot_gtable(ggplot_build(panel2)))
+grid::grid.draw(figure)
+```
+
+Note that if `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots.
+
+
+
+
+
+
+## Adding heterogeneity and trend test results
+The `addtext` argument can be used to add results of heterogeneity or trend tests, or some other text, in the text column of estimates and CIs.
+
+The automatic positioning of columns and spacing of panels does not take into account this additional text, so you may need to use the `right.space` and `col.right.pos` arguments for a satisfactory layout.
+
+```{r, echo = FALSE}
+
+```
+
+```{r}
+```
+
+```{r}
+```
+
+
+
+## Customisation
+See  [Customising plots](customising_plots.html) for more ways to customise forest plots.
+
+
+## Notes
+
+#### Spacing
+The function attempts to set the positions of columns of text and spacing automatically. Where this does not produce a satisfactory layout, you can use the arguments `col.left.pos`, `col.right.pos`, `left.space`, `right.space`, and `mid.space` to control positions and spacing manually.
+
+The plot will fill the vertical space available. Use `plot.margin` to change the top and bottom margins as needed.
+
+#### Confidence intervals
+When standard errors are supplied to the `shape_plot()` and `forest_plot()` functions, confidence intervals are calculated as 95\% confidence intervals using the Normal approximation method (with critical value 1.96).
+
+
+#### Stroke
+The `stroke` argument sets the stroke aesthetic for plotted shapes. See https://ggplot2.tidyverse.org/articles/ggplot2-specs.html for more details. The stroke size adds to the total size of a shape, so unless `stroke = 0` the scaling of size by inverse variance will be very slightly inaccurate (but there are probably more important things to worry about).
+
+

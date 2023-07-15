@@ -14,6 +14,7 @@ ckbplotr provides functions to help create and style plots in R. It is being dev
 Useful links:
 \itemize{
   \item \url{https://neilstats.github.io/ckbplotr/}
+  \item \doi{10.5281/zenodo.6382217}
   \item Report bugs at \url{https://github.com/neilstats/ckbplotr/issues}
 }
 

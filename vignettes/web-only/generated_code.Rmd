@@ -1,0 +1,71 @@
+---
+title: "Generated code"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Generated code}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+```{r setup, include = FALSE}
+library(ckbplotr)
+```
+
+The `shape_plot()` and `forest_plot()` functions return both a plot and the code used to generate plot (which will be shown in the RStudio Viewer pane). Examples of generated code are shown below.
+
+## Shape plot
+
+```{r, shape-example}
+my_results <- data.frame(
+  x   = c(  12,   14, 15.5,   18),
+  est = c(0.05, 0.21, 0.15, 0.32),
+  se  = c(0.05, 0.05, 0.05, 0.05)
+)
+
+shape <- shape_plot(my_results,
+                    xlims        = c(10, 20),
+                    ylims        = c(0.75, 2),
+                    exponentiate = TRUE,
+                    printplot    = FALSE)
+
+```
+
+The code now stored in `shape$code` and shown in the RStudio Viewer pane is:
+```{r, shape-example-code, results ='asis', echo = FALSE}
+cat("",
+    "```",
+    shape$code,
+    "```",
+    sep = "\n")
+```
+
+
+## Forest plot
+
+```{r, forest-example}
+my_results <- data.frame(
+  subgroup   = c("men", "women", "35_49", "50_64", "65_79"),
+  est        = c( 0.45,    0.58,    0.09,    0.35,     0.6),
+  se         = c( 0.07,    0.06,    0.06,    0.05,    0.08)
+)
+
+forest <- forest_plot(my_results, printplot = FALSE)
+```
+
+The code now stored in `forest$code` and shown in the RStudio Viewer pane is:
+```{r, forest-example-code, results ='asis', echo = FALSE}
+cat("",
+    "```",
+    forest$code,
+    "```",
+    sep = "\n")
+```

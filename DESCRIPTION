@@ -31,7 +31,8 @@ Imports:
     rmarkdown,
     ggh4x,
     lifecycle,
-    glue
+    glue,
+    cli
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Suggests:
@@ -39,7 +40,7 @@ Suggests:
     covr,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-URL: https://neilstats.github.io/ckbplotr/
+URL: https://neilstats.github.io/ckbplotr/, https://doi.org/10.5281/zenodo.6382217
 BugReports: https://github.com/neilstats/ckbplotr/issues
 License: GPL (>= 3)
 Config/testthat/edition: 3

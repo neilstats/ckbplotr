@@ -2,14 +2,13 @@
 % Please edit documentation in R/shape-plot.R
 \name{shape_plot}
 \alias{shape_plot}
-\alias{make_shape_plot}
 \title{Make a shape plot with ggplot2}
 \usage{
 shape_plot(
   data,
   col.x = "x",
-  col.estimate = "estimate",
-  col.stderr = "stderr",
+  col.estimate = c("estimate", "est", "beta", "loghr"),
+  col.stderr = c("stderr", "std.err", "se"),
   col.lci = NULL,
   col.uci = NULL,
   col.n = NULL,
@@ -50,54 +49,7 @@ shape_plot(
   addcode = NULL,
   addaes = NULL,
   addarg = NULL,
-  envir = NULL
-)
-
-make_shape_plot(
-  data,
-  col.x = "x",
-  col.estimate = "estimate",
-  col.stderr = "stderr",
-  col.lci = NULL,
-  col.uci = NULL,
-  col.n = NULL,
-  exponentiate = FALSE,
-  logscale = exponentiate,
-  scalepoints = FALSE,
-  digits = 2,
-  minse = NA,
-  pointsize = 3,
-  col.group = NULL,
-  shape = 15,
-  plotcolour = "black",
-  colour = plotcolour,
-  cicolour = colour,
-  fill = colour,
-  ciunder = NULL,
-  lines = FALSE,
-  xlims,
-  ylims,
-  height = NULL,
-  width = NULL,
-  gap = c(0.025, 0.025),
-  ext = c(0.025, 0.025),
-  ratio = 1.5,
-  base_size = 11,
-  base_line_size = base_size/22,
-  stroke = base_size/22,
-  xbreaks = NULL,
-  ybreaks = NULL,
-  xlab = "Risk factor",
-  ylab = "Estimate (95\% CI)",
-  legend.name = "",
-  legend.position = "top",
-  title = NULL,
-  quiet = FALSE,
-  printplot = !quiet,
-  showcode = !quiet,
-  addcode = NULL,
-  addaes = NULL,
-  addarg = NULL,
+  addlayer = NULL,
   envir = NULL
 )
 }
@@ -196,6 +148,8 @@ The remaining elements are added to the generated code just before the first mat
 
 \item{addarg}{Specify additional arguments for some ggplot layers.}
 
+\item{addlayer}{Adding ggplot layers.}
+
 \item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
 }
 \value{
@@ -208,8 +162,3 @@ A list:
 \description{
 Make a shape plot with ggplot2
 }
-\section{Functions}{
-\itemize{
-\item \code{make_shape_plot()}: Synonym for \code{shape_plot()}
-
-}}
