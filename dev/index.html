@@ -17,7 +17,9 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.6/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.6/font.css" rel="stylesheet">
+<!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Create CKB Plots">
 <meta property="og:description" content="ckbplotr provides functions to help create and style plots in R.
@@ -34,7 +36,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
     
     <a class="navbar-brand me-2" href="index.html">ckbplotr</a>
 
@@ -56,12 +58,11 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/plot_like_ckb.html">Make any ggplot like a CKB plot</a>
-    <a class="dropdown-item" href="articles/shape_plot.html">Shape plots</a>
-    <a class="dropdown-item" href="articles/forest_plot.html">Forest plots</a>
-    <a class="dropdown-item" href="articles/shape_confidence_intervals.html">Confidence interval lines in shape plots</a>
-    <a class="dropdown-item" href="articles/forest_confidence_intervals.html">Confidence interval lines in forest plots</a>
-    <a class="dropdown-item" href="articles/save_figure.html">Save figures to files</a>
+    <a class="dropdown-item" href="articles/ckb_style.html">CKB style with ggplot</a>
+    <a class="dropdown-item" href="articles/forest_plots.html">Forest plots</a>
+    <a class="dropdown-item" href="articles/shape_plots.html">Shape plots</a>
+    <a class="dropdown-item" href="articles/customising_plots.html">Customising plots</a>
+    <a class="dropdown-item" href="articles/save_plots.html">Save plots to files</a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="articles/index.html">More articles...</a>
   </div>
@@ -101,45 +102,43 @@
 </div>
 <!-- badges: start -->
 
-<p><code>ckbplotr</code> provides functions to help create and style plots in R. It is being developed by, and primarily for, <a href="http://www.ckbiobank.org" class="external-link">China Kadoorie Biobank</a> researchers.</p>
-<p><em>This package is under development. If you find an error or bug or have a suggestion for improvement please create an issue on GitHub or contact the author at <a href="mailto:neil.wright@ndph.ox.ac.uk" class="email">neil.wright@ndph.ox.ac.uk</a>, <a href="https://twitter.com/NeilStats" class="external-link">@NeilStats</a>, or <a href="https://fediscience.org/@neilstats" class="external-link">@NeilStats@fediscience.org</a>.</em></p>
-<p>It can be used to: create plots of estimates and CIs against risk factor levels… <img src="reference/figures/README-example-shape-plot-1.png" width="50%" style="display: block; margin: auto;"></p>
-<p>…create forest plots… <img src="reference/figures/README-example-forest-plot-1.png" width="90%" style="display: block; margin: auto;"></p>
-<p>…and convert other ggplots to CKB style. <img src="reference/figures/README-a-plot-1.png" width="80%" style="display: block; margin: auto;"></p>
+<p><code>ckbplotr</code> provides functions to help create and style plots in R. It is developed by, and primarily for, <a href="http://www.ckbiobank.org" class="external-link">China Kadoorie Biobank</a> researchers.</p>
 <div class="section level2">
 <h2 id="key-features">Key features<a class="anchor" aria-label="anchor" href="#key-features"></a>
 </h2>
-<p>Functions that create plots (such as <code><a href="reference/shape_plot.html">shape_plot()</a></code> and <code><a href="reference/forest_plot.html">forest_plot()</a></code>) return both:</p>
+<p>The package can be used to apply CKB style and to create plots by generating ggplot2 code. Functions that create plots (such as <code><a href="reference/shape_plot.html">shape_plot()</a></code> and <code><a href="reference/forest_plot.html">forest_plot()</a></code>) return both:</p>
 <ul>
-<li>A <strong>ggplot2 plot</strong>. This allows users to further manipulate the plot using ggplot2 code, such as <code>+ theme()</code> to customise the plot.</li>
-<li>The <strong>ggplot2 code used to create the plot</strong>. This allows uses to see exactly how the plot has been created, and adapt the code for other uses. (In RStudio the code will also be shown in the Viewer pane.)</li>
+<li>
+<strong>A ggplot2 plot</strong>.</li>
+<li>
+<strong>The ggplot2 code used to create the plot</strong>, allowing users to see exactly how the plot has been created and adapt the code for other uses. In RStudio the code will also be shown in the Viewer pane.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<div class="section level3">
-<h3 id="from-r-universe">From R-universe<a class="anchor" aria-label="anchor" href="#from-r-universe"></a>
-</h3>
-<p>The latest version of <code>ckbplotr</code> can be installed from the neilstats R-universe using <code><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages()</a></code>.</p>
+<p>Install the latest version of <code>ckbplotr</code> from the neilstats R-universe:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'ckbplotr'</span>,</span>
-<span>                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'https://neilstats.r-universe.dev'</span>, <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>                 repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'https://neilstats.r-universe.dev'</span>,</span>
+<span>                           <span class="st">'https://cloud.r-project.org'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This will also install dependencies from the CRAN repository.</p>
-</div>
-<div class="section level3">
-<h3 id="from-github">From github<a class="anchor" aria-label="anchor" href="#from-github"></a>
-</h3>
-<p>The latest version of <code>ckbplotr</code> can also be installed from github using the <code>remotes</code> package.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'remotes'</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'neilstats/ckbplotr'</span><span class="op">)</span></span></code></pre></div>
-</div>
 </div>
 <div class="section level2">
 <h2 id="get-started">Get started<a class="anchor" aria-label="anchor" href="#get-started"></a>
 </h2>
-<p>Read <code><a href="articles/ckbplotr.html">vignette("ckbplotr")</a></code> to see how to use the <code><a href="reference/shape_plot.html">shape_plot()</a></code>, <code><a href="reference/forest_plot.html">forest_plot()</a></code>, and <code><a href="reference/plot_like_ckb.html">plot_like_ckb()</a></code> functions.</p>
+<p>Read <code><a href="articles/ckbplotr.html">vignette("ckbplotr")</a></code> to get started.</p>
+</div>
+<div class="section level2">
+<h2 id="citing-ckbplotr">Citing ckbplotr<a class="anchor" aria-label="anchor" href="#citing-ckbplotr"></a>
+</h2>
+<p>If you find this package useful, please consider citing as:</p>
+<p>Wright N (2023). ckbplotr: Create CKB Plots. <a href="https://neilstats.github.io/ckbplotr/" class="uri">https://neilstats.github.io/ckbplotr/</a>, <a href="https://doi.org/10.5281/zenodo.6382217" class="external-link uri">https://doi.org/10.5281/zenodo.6382217</a>.</p>
+</div>
+<div class="section level2">
+<h2 id="package-development">Package development<a class="anchor" aria-label="anchor" href="#package-development"></a>
+</h2>
+<p>This package is under development. If you find an error or bug or have a suggestion for improvement please <a href="https://github.com/neilstats/ckbplotr/issues" class="external-link">create an issue on GitHub</a> or contact the author at <a href="https://fediscience.org/@neilstats" class="external-link">@NeilStats@fediscience.org</a>.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -177,7 +176,6 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/neilstats/ckbplotr/actions" class="external-link"><img src="https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/neilstats/ckbplotr?branch=main" class="external-link"><img src="https://codecov.io/gh/neilstats/ckbplotr/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://zenodo.org/badge/latestdoi/189028664" class="external-link"><img src="https://zenodo.org/badge/189028664.svg" alt="DOI"></a></li>
 </ul>
 </div>
