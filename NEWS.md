@@ -1,4 +1,4 @@
-# ckbplotr (development version)
+# ckbplotr 0.9.0
 
 * `+ ckb_style()` can now be used to make a ggplot into CKB style (instead of using plot_like_ckb()).
 * add argument added to forest_plot() and shape_plot() for adding layers (and other ggplot2 objects) to plots.
