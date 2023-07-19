@@ -7,16 +7,16 @@
     <loc>https://neilstats.github.io/ckbplotr/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/adding_editing_code.html</loc>
+    <loc>https://neilstats.github.io/ckbplotr/articles/ckb_style.html</loc>
   </url>
   <url>
     <loc>https://neilstats.github.io/ckbplotr/articles/ckbplotr.html</loc>
   </url>
   <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/forest_confidence_intervals.html</loc>
+    <loc>https://neilstats.github.io/ckbplotr/articles/customising_plots.html</loc>
   </url>
   <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/forest_plot.html</loc>
+    <loc>https://neilstats.github.io/ckbplotr/articles/forest_plots.html</loc>
   </url>
   <url>
     <loc>https://neilstats.github.io/ckbplotr/articles/ggplot2.html</loc>
@@ -28,19 +28,13 @@
     <loc>https://neilstats.github.io/ckbplotr/articles/page_layouts.html</loc>
   </url>
   <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/plot_like_ckb.html</loc>
+    <loc>https://neilstats.github.io/ckbplotr/articles/save_plots.html</loc>
   </url>
   <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/save_figure.html</loc>
+    <loc>https://neilstats.github.io/ckbplotr/articles/shape_plots.html</loc>
   </url>
   <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/shape_confidence_intervals.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/shape_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/special_characters_formatting.html</loc>
+    <loc>https://neilstats.github.io/ckbplotr/articles/web-only/generated_code.html</loc>
   </url>
   <url>
     <loc>https://neilstats.github.io/ckbplotr/authors.html</loc>
@@ -52,16 +46,10 @@
     <loc>https://neilstats.github.io/ckbplotr/news/index.html</loc>
   </url>
   <url>
+    <loc>https://neilstats.github.io/ckbplotr/reference/ckb_style.html</loc>
+  </url>
+  <url>
     <loc>https://neilstats.github.io/ckbplotr/reference/ckbplotr-package.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/ckbplotr_forest_data.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/ckbplotr_row_labels.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/ckbplotr_shape_data.html</loc>
   </url>
   <url>
     <loc>https://neilstats.github.io/ckbplotr/reference/fix_panel.html</loc>
