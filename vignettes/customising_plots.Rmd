@@ -1,0 +1,197 @@
+---
+title: "Customising plots"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Customising plots}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 4,
+  fig.height = 3,
+  fig.align = "center",
+  out.width = '60%',
+  dpi = 120,
+  message = FALSE
+)
+library(ckbplotr)
+my_results <- data.frame(
+  subgroup   = c("men", "women", "35_49", "50_64", "65_79"),
+  est        = c( 0.45,    0.58,    0.09,    0.35,     0.6),
+  se         = c( 0.07,    0.06,    0.06,    0.05,    0.08)
+)
+```
+
+
+## Arguments
+In `shape_plot()` and `forest_plot()` use `base_size` to set the base font and line size (default: 11pts) and use `base_line_size` to separately set the base thickness of lines (default: base_size/22).
+
+In `forest_plot()` use `plotcolour` to change the colour for all parts of the plot. In `shape_plot()` use `plotcolour` to change the colour for non-data aspects of the plot.
+
+In `shape_plot()` and `forest_plot()` several arguments can be used to change visual properties for parts of the plot. These can be names of columns in your data or single values. In `shape_plot()` use:
+
+| argument    | controls                                          | type      |
+|-------------|---------------------------------------------------|-----------|
+| shape       | plotting character for points                     | integer   |
+| colour      | colour of points                                  | character |
+| cicolour    | colour of CI lines                                | character |
+| fill        | fill colour of points                             | character |
+| ciunder     | if the CI line should be plotted before the point | logical   |
+
+In `forest_plot()` use:
+
+| argument    | controls                                          | type      |
+|-------------|---------------------------------------------------|-----------|
+| shape       | plotting character for points                     | integer   |
+| colour      | colour of points and lines                        | character |
+| fill        | fill colour of points                             | character |
+| ciunder     | if the CI line should be plotted before the point | logical   |
+| col.bold    | if text is bold                                   | logical   |
+| col.diamond | if a diamond should be plotted                    | logical   |
+
+Note that `col.bold`, and `col.diamond` must be column names in the supplied data frames, while the others can be fixed values or column names. For diamonds, alternatively provide a character vector of keys in the `diamond` argument.
+
+
+
+
+## Adding to the ggplot
+In `forest_plot()` you can add additional ggplot objects to the plot with the `add` argument. The argument should be a named list, where the name `start` is an object to be included in the ggplot immediately after `ggplot()` (i.e. before anything else is added to the ggplot) and the name `end` will add to the end.
+
+This argument can be used, for example, to add additional geoms to the plot:
+```{r}
+hr_geom <- geom_text(aes(label = auto_estcolumn),
+                     size = 3,
+                     hjust = 0,
+                     nudge_y = 0.25,
+                     colour = "red")
+
+forest_plot(my_results,
+            estcolumn = FALSE,
+            add = list(start = hr_geom))
+```
+
+Or to use `theme` to customise the plot:
+```{r}
+my_theme <- theme(axis.text.x = element_text(colour = "purple",
+                                             angle = 45,
+                                             hjust = 1))
+forest_plot(my_results,
+            add = list(end = my_theme))
+```
+
+To add multiple objects, use a list:
+```{r}
+my_parts <- list(hr_geom,
+                 my_theme)
+forest_plot(my_results,
+            estcolumn = FALSE,
+            add = list(end = my_parts))
+```
+
+
+
+
+
+## The data.function argument
+Use the `data.function` argument in `forest_plot()` to change the plot data immediately before plotting. 
+
+For example, you can tweak the text in the generated estimates column:
+```{r}
+my_func <- function(dfr){
+  dfr$auto_estcolumn <- sub("\\(", "[", dfr$auto_estcolumn)
+  dfr$auto_estcolumn <- sub("\\)", "]", dfr$auto_estcolumn)
+  return(dfr)
+}
+
+forest_plot(my_results,
+            data.function = "my_func")
+```
+
+
+
+
+
+## Adding aesthetics and arguments
+The addaes and addarg arguments in `shape_plot()` and `forest_plot()` can be used to add additional aesthetics and arguments code to the ggplot layers created by the functions. These arguments must be named lists of character strings, and the names of elements defines where the aesthetics/arguments code is added.
+
+In `shape_plot()`  the following names will add aesthetics and arguments to layers:
+
+| name      | layer that plots                      |
+|-----------|---------------------------------------|
+| lines     | lines of linear fit through estimates |
+| point     | point estimates                       |
+| estimates | text of estimates                     |
+| n         | text of number of events (n)          |
+| ci        | confidence intervals                  |
+
+In `forest_plot()` the following names will add aesthetics and arguments to layers:
+
+| name       | layer that plots     |
+|------------|----------------------|
+| ci         | confidence intervals |
+| point      | point estimates      |
+| col.right  | col.right columns    |
+| col.left   | col.left columns     |
+| xlab       | x-axis label         |
+| panel.name | names above panels   |
+| nullline   | line at null         |
+
+Where duplicate aesthetics/arguments might be defined and created, they are kept with the priority:
+
+1. Aesthetic arguments specified using addaes and addarg
+2. Aesthetic arguments created by the function
+3. Other arguments specified using addaes and addarg
+4. Other arguments created by the function
+
+This can be used to 'overwrite' some of the code that would otherwise be produced by `shape_plot()` and `forest_plot()`.
+
+
+For example, adjusting the position and appearance of panel headings:
+```{r, include = FALSE}
+row_labels <- data.frame(
+  subgroup = c("women", "men",
+               "65_79", "50_64", "35_49"),
+  group    = c("Sex", "Sex",
+               "Age (years)", "Age (years)", "Age (years)"),
+  label    = c("Women", "Men",
+               "65 - 79", "50 - 64", "35 - 49")
+)
+
+my_resultsA <- data.frame(
+  subgroup   = c("men", "women", "35_49", "50_64", "65_79"),
+  est        = c( 0.45,    0.58,    0.09,    0.35,     0.6),
+  se         = c( 0.07,    0.06,    0.06,    0.05,    0.08)
+)
+
+my_resultsB <- data.frame(
+  subgroup   = c("men", "women", "35_49", "50_64", "65_79"),
+  est        = c(0.48, 0.54, 0.06, 0.3, 0.54),
+  se         = c(0.12, 0.11, 0.11, 0.09, 0.15)
+)
+
+```
+
+```{r, fig.width=6.5, out.width='75%', warning=FALSE}
+forest_plot(list("a) Observational" = my_resultsA,
+                 "b) Genetic"       = my_resultsB),
+            col.key    = "subgroup",
+            row.labels = row_labels,
+            addaes = list(panel.name = "x = 0.5"),
+            addarg = list(panel.name = c("size = 4.5",
+                                         "colour = 'navyblue'",
+                                         "hjust = 0")))
+```
+
+Changing the appearance of the line at the 'null':
+```{r, fig.width=6.5, out.width='75%', warning=FALSE}
+forest_plot(list("a) Observational" = my_resultsA,
+                 "b) Genetic"       = my_resultsB),
+            col.key    = "subgroup",
+            row.labels = row_labels,
+            addarg = list(nullline = c("linetype = 'dashed'",
+                                       "colour = 'darkorange'")))
+```

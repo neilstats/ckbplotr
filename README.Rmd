@@ -11,8 +11,8 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  fig.width = 4,
-  fig.height = 4,
+  fig.width = 16,
+  fig.height = 16,
   fig.align = "center",
   dpi = 300)
 library(ckbplotr)
@@ -22,97 +22,51 @@ library(gridExtra)
 # ckbplotr <img src="man/figures/logo.png" align="right" width = "120" />
 <!-- badges: start -->
 [![R build status](https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg)](https://github.com/neilstats/ckbplotr/actions)
-[![Codecov test coverage](https://codecov.io/gh/neilstats/ckbplotr/branch/main/graph/badge.svg)](https://codecov.io/gh/neilstats/ckbplotr?branch=main)
 [![DOI](https://zenodo.org/badge/189028664.svg)](https://zenodo.org/badge/latestdoi/189028664)
 <!-- badges: end -->
 
-`ckbplotr` provides functions to help create and style plots in R. It is being
+`ckbplotr` provides functions to help create and style plots in R. It is 
 developed by, and primarily for, [China Kadoorie Biobank](http://www.ckbiobank.org) 
 researchers.
 
-*This package is under development. If you find an error or bug or have a suggestion for improvement please create an issue on GitHub or contact the author at [neil.wright@ndph.ox.ac.uk](mailto:neil.wright@ndph.ox.ac.uk), [\@NeilStats](https://twitter.com/NeilStats), or [\@NeilStats\@fediscience.org](https://fediscience.org/@neilstats).*
 
-It can be used to: create plots of estimates and CIs against risk factor levels...
-```{r example-shape-plot, echo = FALSE, warning = FALSE, message = FALSE, out.width = "50%"}
-results <- ckbplotr_shape_data %>% 
-  dplyr::filter(is_female == 0)
-
-plot <- shape_plot(results,
-                   col.x        = "rf",
-                   col.estimate = "est",
-                   col.stderr   = "se",
-                   col.n        = "n",
-                   xlims        = c(15,50),
-                   ylims        = c(0.5, 2.5),
-                   scalepoints  = TRUE,
-                   ciunder      = TRUE,
-                   printplot     = FALSE,
-                   envir        = environment())
-
-plot$plot + theme(plot.margin = margin(8, 8, 8, 8, "mm"))
-```
-
-
-...create forest plots...
-```{r example-forest-plot, echo = FALSE, warning = FALSE, message = FALSE, fig.width = 8, fig.height = 6, out.width = "90%"}
-resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
-resultsB <- dplyr::filter(ckbplotr_forest_data, name == "B")
-
-forestplot <- forest_plot(row.labels        = ckbplotr_row_labels,
-                          row.labels.levels = c("heading", "subheading", "label"),
-                          rows              = c("Lipoprotein particle concentration",
-                                                "Triglycerides concentration"),
-                          panels            = list(resultsA, resultsB),
-                          exponentiate      = TRUE,
-                          panel.names       = c("Analysis A", "Analysis B"),
-                          col.key           = "variable",
-                          ci.delim          = " - ",
-                          xlim              = c(0.9, 1.1),
-                          xticks            = c(0.9, 1, 1.1),
-                          blankrows         = c(1, 1, 0, 1),
-                          scalepoints       = TRUE,
-                          pointsize         = 3,
-                          col.left          = c("n"),
-                          col.left.heading  = c("No. of\nevents"),
-                          col.heading.space = 1.5,
-                          envir             = environment())
-```
-
-...and convert other ggplots to CKB style.
-```{r a-plot, echo = FALSE, fig.width=8, out.width = "80%"}
-plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
-arrow <- grid::textGrob("\u2192")
-ckbplot <- plot_like_ckb(plot = plot, xlims = c(0, 8), ylims = c(10, 50))
-grid.arrange(plot, arrow, ckbplot, ncol = 3, widths = c(1, 0.25, 1))
-```
 
 ## Key features
 
-Functions that create plots (such as `shape_plot()` and `forest_plot()`) return both:
+The package can be used to apply CKB style and to create plots by generating ggplot2 code. Functions that create plots (such as `shape_plot()` and `forest_plot()`) return both:
 
-- A **ggplot2 plot**. This allows users to further manipulate the plot using ggplot2 code, such as `+ theme()` to customise the plot.
-- The **ggplot2 code used to create the plot**. This allows uses to see exactly how the plot has been created, and adapt the code for other uses. (In RStudio the code will also be shown in the Viewer pane.)
+- **A ggplot2 plot**.
+- **The ggplot2 code used to create the plot**, allowing users to see exactly how the plot has been created and adapt the code for other uses. In RStudio the code will also be shown in the Viewer pane.
+
 
 
 ## Installation
 
-### From R-universe
-The latest version of `ckbplotr` can be installed from the neilstats R-universe using `install.packages()`.
+Install the latest version of `ckbplotr` from the neilstats R-universe:
 ```{r install from runiverse, eval = FALSE}
 install.packages('ckbplotr',
-                 repos = c('https://neilstats.r-universe.dev', 'https://cloud.r-project.org'))
+                 repos = c('https://neilstats.r-universe.dev',
+                           'https://cloud.r-project.org'))
 ```
 This will also install dependencies from the CRAN repository.
 
-### From github
-The latest version of `ckbplotr` can also be installed from 
-github using the `remotes` package.
-```{r install from github, eval = FALSE}
-install.packages('remotes')
-remotes::install_github('neilstats/ckbplotr')
-```
+
 
 ## Get started
 
-Read `vignette("ckbplotr")` to see how to use the `shape_plot()`, `forest_plot()`, and `plot_like_ckb()` functions.
+Read `vignette("ckbplotr")` to get started.
+
+
+
+## Citing ckbplotr
+
+If you find this package useful, please consider citing as:
+
+Wright N (2023). ckbplotr: Create CKB Plots. https://neilstats.github.io/ckbplotr/, https://doi.org/10.5281/zenodo.6382217. 
+
+
+
+## Package development
+
+This package is under development. If you find an error or bug or have a suggestion for improvement please [create an issue on GitHub](https://github.com/neilstats/ckbplotr/issues) or contact the author at [\@NeilStats\@fediscience.org](https://fediscience.org/@neilstats).
 

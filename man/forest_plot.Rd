@@ -2,28 +2,29 @@
 % Please edit documentation in R/forest-plot.R
 \name{forest_plot}
 \alias{forest_plot}
-\alias{make_forest_plot}
 \title{Make a forest plot with ggplot2}
 \usage{
 forest_plot(
   panels,
   row.labels = NULL,
-  row.labels.levels = c("heading1", "heading2", "heading3"),
+  row.labels.levels = NULL,
   rows = NULL,
+  row.labels.heading = NULL,
+  row.labels.space = c(0, 1, 0, 0),
   exponentiate = TRUE,
   logscale = exponentiate,
   panel.names = NULL,
   panel.headings = NULL,
   col.key = "key",
-  col.estimate = "estimate",
-  col.stderr = "stderr",
+  col.estimate = c("estimate", "est", "beta", "loghr"),
+  col.stderr = c("stderr", "std.err", "se"),
   col.lci = NULL,
   col.uci = NULL,
   col.left = NULL,
   col.right = NULL,
   col.right.parse = FALSE,
   col.left.heading = "",
-  col.right.heading = "HR (95\% CI)",
+  col.right.heading = xlab,
   col.left.pos = NULL,
   col.right.pos = NULL,
   col.left.hjust = 1,
@@ -38,7 +39,6 @@ forest_plot(
   xlim = NULL,
   xticks = NULL,
   nullval = NULL,
-  blankrows = c(1, 1, 0, 0),
   col.diamond = NULL,
   diamond = NULL,
   col.bold = NULL,
@@ -63,108 +63,16 @@ forest_plot(
   base_size = 11,
   base_line_size = base_size/22,
   stroke = 0,
+  diamonds.linewidth = base_line_size,
   quiet = FALSE,
   printplot = !quiet,
   showcode = !quiet,
   data.function = NULL,
-  addcode = NULL,
   addaes = NULL,
   addarg = NULL,
+  add = NULL,
   envir = NULL,
-  cols = panels,
-  headings = NULL,
-  colnames = NULL,
-  colheadings = colnames,
-  boldheadings = NULL,
-  heading.space = NULL,
-  panel.space = NULL,
-  label.space = NULL,
-  plot.space = NULL,
-  col.right.space = NULL,
-  col.left.space = NULL,
-  margin = NULL,
-  units = NULL
-)
-
-make_forest_plot(
-  panels,
-  row.labels = NULL,
-  row.labels.levels = c("heading1", "heading2", "heading3"),
-  rows = NULL,
-  exponentiate = TRUE,
-  logscale = exponentiate,
-  panel.names = NULL,
-  panel.headings = NULL,
-  col.key = "key",
-  col.estimate = "estimate",
-  col.stderr = "stderr",
-  col.lci = NULL,
-  col.uci = NULL,
-  col.left = NULL,
-  col.right = NULL,
-  col.right.parse = FALSE,
-  col.left.heading = "",
-  col.right.heading = "HR (95\% CI)",
-  col.left.pos = NULL,
-  col.right.pos = NULL,
-  col.left.hjust = 1,
-  col.right.hjust = 0,
-  col.heading.space = 0,
-  estcolumn = TRUE,
-  col.keep = NULL,
-  ci.delim = ", ",
-  digits = 2,
-  title = "",
-  xlab = "HR (95\% CI)",
-  xlim = NULL,
-  xticks = NULL,
-  nullval = NULL,
-  blankrows = c(1, 1, 0, 0),
-  col.diamond = NULL,
-  diamond = NULL,
-  col.bold = NULL,
-  bold.labels = NULL,
-  scalepoints = FALSE,
-  minse = NULL,
-  pointsize = 3,
-  shape = 15,
-  plotcolour = "black",
-  colour = plotcolour,
-  cicolour = colour,
-  fill = colour,
-  ciunder = NULL,
-  addtext = NULL,
-  bottom.space = 0.7,
-  left.space = NULL,
-  right.space = NULL,
-  mid.space = unit(5, "mm"),
-  plot.margin = margin(8, 8, 8, 8, "mm"),
-  panel.width = NULL,
-  panel.height = NULL,
-  base_size = 11,
-  base_line_size = base_size/22,
-  stroke = 0,
-  quiet = FALSE,
-  printplot = !quiet,
-  showcode = !quiet,
-  data.function = NULL,
-  addcode = NULL,
-  addaes = NULL,
-  addarg = NULL,
-  envir = NULL,
-  cols = panels,
-  headings = NULL,
-  colnames = NULL,
-  colheadings = colnames,
-  boldheadings = NULL,
-  heading.space = NULL,
-  panel.space = NULL,
-  label.space = NULL,
-  plot.space = NULL,
-  col.right.space = NULL,
-  col.left.space = NULL,
-  margin = NULL,
-  units = NULL
+  blankrows = NULL
 )
 }
 \arguments{
@@ -176,11 +84,15 @@ with the same name (which can be specified by col.key).}
 \item{row.labels}{A data frame that contains the labels to be used for the
 rows of the plot. Use NA if a lower level heading is not required for a given row.}
 
-\item{row.labels.levels}{A character vector up to length 3. The names of columns in row.labels
-to use as headings/subheadings/labels for labelling rows. (Default: c("heading1", "heading2", "heading3"))}
+\item{row.labels.levels}{A character vector. The names of columns in row.labels
+to use as headings/subheadings/labels for labelling rows.}
 
-\item{rows}{A character vector. The top level labels of rows
-to be included in the plot.}
+\item{rows}{If set, then only rows matching these labels (at the first level) will be included.}
+
+\item{row.labels.heading}{Title to be placed above row labels.}
+
+\item{row.labels.space}{A numeric vector specifying the space
+after a row label heading, at the end of a row label heading 'section'. (Default: c(0, 1, 0, 0))}
 
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting. (Default: TRUE)}
 
@@ -193,41 +105,22 @@ If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{col.key}{Name of column that links the results given in each data frame
 provided in panels and the labels given in row.labels.
-
 If row.labels data frame is not given, then this column will be used as row labels.
-
 (Default: "key")}
 
-\item{col.estimate}{Name of column that provides point estimates.
-(Default: "estimate")}
+\item{col.estimate, col.stderr, col.lci, col.uci}{Names of columns for: point estimates, standard errors, lower and upper limits of confidence intervals.}
 
-\item{col.stderr}{Name of column that provides standard errors. (Default: "stderr")}
-
-\item{col.lci}{Name of column that provides lower limit of confidence intervals.}
-
-\item{col.uci}{Name of column that provides upper limit of confidence intervals.}
-
-\item{col.left}{Names of columns to be printed to the left of the plot.}
-
-\item{col.right}{Names of columns to be printed to the right of the plot.}
+\item{col.left, col.right}{Names of columns to be printed to the left/right of the plot.}
 
 \item{col.right.parse}{A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
 Should the contents of the columns be parsed into expressions. (Default: FALSE)}
 
-\item{col.left.heading}{A character vector of titles for col.left columns. (Default: "")}
+\item{col.left.heading, col.right.heading}{Headings for columns.}
 
-\item{col.right.heading}{A character vector of titles for the column of estimates
-(if estcolumn = TRUE) and col.right columns. (Default: "HR (95\% CI)")}
+\item{col.left.pos, col.right.pos}{A unit vector to position col.left/col.right columns.}
 
-\item{col.left.pos}{A unit vector to position col.right columns.}
-
-\item{col.right.pos}{A unit vector to position col.right columns.}
-
-\item{col.left.hjust}{A numeric vector. The horizontal justification of
-col.left columns. (Default: 1)}
-
-\item{col.right.hjust}{A numeric vector. The horizontal justification of
-col.right columns. (Default: 0)}
+\item{col.left.hjust, col.right.hjust}{A numeric vector. The horizontal justification of
+col.left/col.right columns. (Default: 1)}
 
 \item{col.heading.space}{Position of the titles given by col.left.heading and
 col.right.heading. Increase to move them up. (Default: 0)}
@@ -237,8 +130,7 @@ right of each plot. (Default: TRUE)}
 
 \item{col.keep}{Names of additional columns to be kept in returned data frame.}
 
-\item{ci.delim}{Character string to separate lower and upper limits of
-confidence interval. (Default: ", ")}
+\item{ci.delim}{Character string to separate lower and upper limits of confidence interval. (Default: ", ")}
 
 \item{digits}{Number of digits after decimal point to show for estimates and confidence intervals. (Default: 2)}
 
@@ -252,10 +144,6 @@ confidence interval. (Default: ", ")}
 
 \item{nullval}{Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)}
 
-\item{blankrows}{A numeric vector of length 4 specifying the number of blank rows
-after a heading1, at the end of a heading1 'section', after
-a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
-
 \item{col.diamond}{Plot estimates and CIs as diamonds. Name of a column of logical values.}
 
 \item{diamond}{Alternative to col.diamond. A character vectors identify the rows
@@ -265,13 +153,11 @@ a heading2, and at the end of a heading2 'section. (Default: c(1, 1, 0, 0))}
 
 \item{bold.labels}{A character vector identifying row labels (using key values) which should additionally be bold. (Default: NULL)}
 
-\item{scalepoints}{Should the points be scaled by inverse of the standard
-error? (Default: FALSE)}
+\item{scalepoints}{Should the points be scaled by inverse of the standard error? (Default: FALSE)}
 
 \item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 
-\item{pointsize}{The (largest) size of box to use for plotting point
-estimates. (Default: 3)}
+\item{pointsize}{The (largest) size of box to use for plotting point estimates. (Default: 3)}
 
 \item{shape}{Shape of points. An integer, or name of a column of integers. (Default: 15 (square))}
 
@@ -298,25 +184,23 @@ The character strings, heterogeneity test, and trend test results will
 be plotted in the column of estimates and CIs, below the row with the key
 given in the col.key column.}
 
-\item{bottom.space}{Size of space between bottom row and axis. (Default: 0.7)}
+\item{bottom.space}{Space between bottom row and axis. (Default: 0.7)}
 
-\item{left.space}{Size of gap to leave to the left of panels.}
-
-\item{right.space}{Size of gap to leave to the right of panels.}
-
-\item{mid.space}{Size of additional gap to leave between panels. (Default: unit(5, "mm"))}
+\item{left.space, right.space, mid.space}{Space to the left/right/between panels.
+(Default mid.space: unit(5, "mm"))}
 
 \item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))}
 
-\item{panel.width}{Panel width to set and apply different formatting to narrow CIs. A grid::unit object, if a numeric is given assumed to be in mm.}
-
-\item{panel.height}{Set height of panels. A grid::unit object, if a numeric is given assumed to be in mm.}
+\item{panel.width, panel.height}{Set width/height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
+If panel.width is used, will alsovapply different formatting to narrow CIs.}
 
 \item{base_size}{base font size, given in pts.}
 
 \item{base_line_size}{base size for line elements}
 
 \item{stroke}{Size of outline of shapes. (Default: 0)}
+
+\item{diamonds.linewidth}{Line width for diamonds. (Default: base_line_size)}
 
 \item{quiet}{Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)}
 
@@ -326,41 +210,12 @@ given in the col.key column.}
 
 \item{data.function}{Name of a function to apply to data frame before plotting.}
 
-\item{addcode}{A character vector of code to add to the generated code.
-The first element should be a regular expression.
-The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)}
+\item{addaes, addarg, add}{Methods for customising the plot. See documentation for details.}
 
-\item{addaes}{Specify additional aesthetics for some ggplot layers.}
+\item{envir}{Environment in which to evaluate the plot code.
+May be useful when calling this function inside another function.}
 
-\item{addarg}{Specify additional arguments for some ggplot layers.}
-
-\item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
-
-\item{cols}{DEPRECATED.}
-
-\item{headings}{DEPRECATED.}
-
-\item{colnames}{DEPRECATED.}
-
-\item{colheadings}{DEPRECATED.}
-
-\item{boldheadings}{DEPRECATED.}
-
-\item{heading.space}{DEPRECATED. Even older method for specifying spacing.}
-
-\item{panel.space}{DEPRECATED. Old method for specifying spacing.}
-
-\item{label.space}{DEPRECATED. Old method for specifying spacing.}
-
-\item{plot.space}{DEPRECATED. Even older method for specifying spacing.}
-
-\item{col.right.space}{DEPRACTED}
-
-\item{col.left.space}{DEPRACTED}
-
-\item{margin}{DEPRECATED. Old method for specifying margins.}
-
-\item{units}{DEPRECATED}
+\item{blankrows}{DEPRECATED}
 }
 \value{
 A list:
@@ -376,8 +231,3 @@ Creates a forest plot with ggplot
 The function returns the plot and ggplot2 code to create the plot.
 In RStudio, the ggplot2 code will be shown in the viewer.
 }
-\section{Functions}{
-\itemize{
-\item \code{make_forest_plot()}: Synonym for \code{forest_plot()}
-
-}}

@@ -55,7 +55,7 @@ prepare_figure <- function(figure,
     pagedim <- switch(pagesize,
                       A4 = unit(c(210, 297), "mm"),
                       A5 = unit(c(148, 210), "mm"),
-                      stop("Invalid pagesize value."))
+                      rlang::abort("Invalid pagesize value."))
   }
 
   if (landscape){
@@ -117,11 +117,9 @@ prepare_figure <- function(figure,
     maxwidth = pagedim[1] - 2 * footer.pos[1])
 
   ## Arrange page with title and footer
-  page <- gridExtra::arrangeGrob(titleGrob,
-                                 figure_with_margins,
-                                 footerGrob,
-                                 nrow = 3,
-                                 heights = c(0, 1, 0))
+  page <- grid::gList(titleGrob,
+                      figure_with_margins,
+                      footerGrob)
 
   ## Dimensions
   attr(page, "width")  <- grid::convertUnit(pagedim[[1]], "mm")

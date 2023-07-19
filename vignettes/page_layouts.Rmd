@@ -12,6 +12,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(ckbplotr)
 ```
 
 The package does not currently include any functions for composing multiple plots, but these package may be useful:
@@ -21,46 +22,3 @@ The package does not currently include any functions for composing multiple plot
 * [cowplot](https://cran.r-project.org/package=cowplot)
 * [egg](https://cran.r-project.org/package=egg)
 * [multipanelfigure](https://cran.r-project.org/package=multipanelfigure)
-
-
-
-## Example
-Using the [grid](https://stat.ethz.ch/R-manual/R-devel/library/grid/html/00Index.html) and [gridExtra](https://cran.r-project.org/package=gridExtra) packages gives a lot of control but may need more work to create the desired output. Here is an example of placing two plots side-by-side.
-```{r}
-library(ckbplotr)
-
-# Make the plots, with suitable margins
-shapeplot <- shape_plot(ckbplotr_shape_data[ckbplotr_shape_data$is_female == 0,],
-                        col.x        = "rf",
-                        col.estimate = "est",
-                        col.stderr   = "se",
-                        col.n        = "n",
-                        xlims        = c(15, 50),
-                        ylims        = c(0.5, 3),
-                        scalepoints  = TRUE,
-                        title        = NULL,
-                        printplot    = FALSE)
-
-resultsA <- dplyr::filter(ckbplotr_forest_data, name == "A")
-forestplot <- forest_plot(panels            = list(resultsA),
-                          col.key           = "variable",
-                          row.labels        = ckbplotr_row_labels,
-                          row.labels.levels = c("heading", "subheading", "label"),
-                          rows              = c("Triglycerides concentration",
-                                                "Lipoprotein particle concentration"),
-                          exponentiate      = TRUE,
-                          panel.headings    = c(""),
-                          xlim              = c(0.9, 1.1),
-                          xticks            = c(0.9, 1, 1.1),
-                          scalepoints       = TRUE,
-                          pointsize         = 3,
-                          printplot         = FALSE,
-                          estcolumn         = FALSE)
-
-
-# Arrange the plots side-by-side
-plots <- gridExtra::arrangeGrob(shapeplot$plot, forestplot$plot, nrow = 1)
-
-grid::grid.draw(plots)
-```
-

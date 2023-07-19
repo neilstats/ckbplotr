@@ -28,31 +28,29 @@ shape.cicolourcode <- function(scale,
     uci_string <- paste0(scale, '(', uci_string, ')')
   }
 
+  adjust_size <- (ymax - ymin) * (pointsize + 2 * stroke) / height.mm
+
   x <- c(
     '# Create column for CI colour',
     'datatoplot <- datatoplot %>%',
     indent(2,
-           sprintf('dplyr::mutate(narrowci = ((%s) - (%s)) <= ',
-                   uci_string, lci_string),
+           glue::glue('dplyr::mutate(narrowci = (({uci_string}) - ({lci_string})) <= '),
            indent(26,
-                  sprintf('(%s)/max(%s) * %s * dplyr::recode(%s, `22` = 0.6694, .default = 0.7553)) %%>%%',
-                          size, size,
-                          (ymax - ymin) * (pointsize + 2 * stroke) / height.mm,
-                          c(shape$arg, column_name(shape$aes)))),
+                  glue::glue('({size})/max({size}) * {adjust_size} * dplyr::recode({c(shape$arg, column_name(shape$aes))}, `22` = 0.6694, .default = 0.7553)) %>%')),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(!is.null(col.group)){
     x <- c(x,
            indent(27,
-                  sprintf('as.numeric(%s) / length(levels(%s)) > 0.5 ~ %s,', col.group, col.group, '"black"'),
-                  sprintf('narrowci ~ %s,', '"white"'),
-                  sprintf('TRUE     ~ %s))', '"black"')),
+                  glue::glue('as.numeric({col.group}) / length(levels({col.group})) > 0.5 ~ "black",'),
+                  'narrowci ~ "white",',
+                  'TRUE     ~ "black"))'),
            '')
   } else {
     x <- c(x,
            indent(27,
-                  sprintf('narrowci ~ %s,', cicolours[length(cicolours)]),
-                  sprintf('TRUE     ~ %s))', cicolours[1])),
+                  glue::glue('narrowci ~ {cicolours[length(cicolours)]},'),
+                  glue::glue('TRUE     ~ {cicolours[1]}))')),
            '')
   }
   x
@@ -78,7 +76,7 @@ shape.ciundercode <- function(height) {
 #' @noRd
 shape.start.ggplot <- function(col.x, est_string, group_string) {
   c('# Create the plot with main aesthetics',
-    sprintf('plot <- ggplot(datatoplot, aes(x = %s, y = %s%s)) +', col.x, est_string, group_string),
+    glue::glue('plot <- ggplot(datatoplot, aes(x = {col.x}, y = {est_string}{group_string})) +'),
     '')
 }
 
@@ -87,17 +85,17 @@ shape.start.ggplot <- function(col.x, est_string, group_string) {
 shape.axes <- function(xbreaks, scale, ybreaks) {
   c(if (!is.null(xbreaks) && xbreaks != "NULL"){
     c('# Set the x-axis scale',
-      sprintf('scale_x_continuous(breaks = %s) +', xbreaks),
+      glue::glue('scale_x_continuous(breaks = {xbreaks}) +'),
       '')
   },
   if (ybreaks == "NULL" & scale != "identity") {
     c('# Set the y-axis scale',
-      sprintf('scale_y_continuous(trans = "%s") +', scale),
+      glue::glue('scale_y_continuous(trans = "{scale}") +'),
       '')
   } else if (scale != "identity") {
     c('# Set the y-axis scale',
-      sprintf('scale_y_continuous(trans  = "%s",', scale),
-      sprintf('                   breaks = %s) +', ybreaks),
+      glue::glue('scale_y_continuous(trans  = "{scale}",'),
+      glue::glue('                   breaks = {ybreaks}) +'),
       '')
   })
 }
@@ -110,8 +108,8 @@ shape.scales <- function(one_over_minse, pointsize, scale_fill_string) {
     '# Set the scale for the size of boxes',
     f = "scale_radius",
     arg = c('guide  = "none"',
-            sprintf('limits = c(0, %s)', one_over_minse),
-            sprintf('range  = c(0, %s)', pointsize))
+            'limits = c(0, {one_over_minse})',
+            'range  = c(0, {pointsize})')
   ),
   '# Use identity for aesthetic scales',
   'scale_shape_identity() +',
@@ -132,18 +130,16 @@ shape.lines <- function(addaes,
              f = "stat_smooth",
              aes = c(addaes$lines,
                      if (!is.null(col.lci)) {
-                       sprintf('weight = 1/((%s - %s)^2)',
-                               column_name(col.estimate),
-                               column_name(col.lci))
+                       'weight = 1/(({column_name(col.estimate)} - {column_name(col.lci)})^2)'
                      } else {
-                       sprintf('weight = 1/(%s^2)', column_name(col.stderr))
+                       'weight = 1/({column_name(col.stderr)}^2)'
                      }),
              arg = c(addarg$lines,
-                     'method   = "glm"',
-                     'formula  = y ~ x',
-                     'se       = FALSE',
-                     sprintf('colour = %s', quote_string(plotcolour)),
-                     'linetype = "dashed"',
+                     'method    = "glm"',
+                     'formula   = y ~ x',
+                     'se        = FALSE',
+                     'colour    = {quote_string(plotcolour)}',
+                     'linetype  = "dashed"',
                      'linewidth = 0.25')
   )
 }
@@ -163,15 +159,15 @@ shape.estimates.points <- function(addaes,
     f = "geom_point",
     aes = c(
       addaes$point,
-      sprintf('size = %s', size),
-      sprintf('shape = %s', column_name(shape$aes)),
-      sprintf('%s', fill_string$aes),
-      sprintf('colour = %s', column_name(colour$aes))),
+      'size   = {size}',
+      'shape  = {column_name(shape$aes)}',
+      '{fill_string$aes}',
+      'colour = {column_name(colour$aes)}'),
     arg = c(addarg$point,
-            sprintf('shape = %s', shape$arg),
-            sprintf('colour = %s', quote_string(colour$arg)),
-            sprintf('%s', fill_string$arg),
-            sprintf('stroke = %s', stroke))
+            'shape  = {shape$arg}',
+            'colour = {quote_string(colour$arg)}',
+            '{fill_string$arg}',
+            'stroke = {stroke}')
   )
 }
 
@@ -188,15 +184,12 @@ shape.estimates.text <- function(addaes,
     '# Plot point estimates text',
     f = "geom_text",
     aes = c(addaes$estimates,
-            sprintf('y = %s', uci_string),
-            sprintf('label = format(round(%s, %s), nsmall = %s)',
-                    est_string,
-                    digits,
-                    digits)),
+            'y     = {uci_string}',
+            'label = format(round({est_string}, {digits}), nsmall = {digits})'),
     arg = c(addarg$estimates,
             'vjust = -0.8',
-            sprintf('size  = %s', text_size),
-            sprintf('colour = %s', quote_string(plotcolour)))
+            'size  = {text_size}',
+            'colour = {quote_string(plotcolour)}')
   )
 }
 
@@ -212,12 +205,12 @@ shape.n.events.text <- function(addaes,
     '# Plot n events text',
     f = "geom_text",
     aes = c(addaes$n,
-            sprintf('y = %s', lci_string),
-            sprintf('label = %s', col.n)),
+            'y     = {lci_string}',
+            'label = {col.n}'),
     arg = c(addarg$n,
-            'vjust = 1.8',
-            sprintf('size  = %s', text_size),
-            sprintf('colour = %s', quote_string(plotcolour)))
+            'vjust  = 1.8',
+            'size   = {text_size}',
+            'colour = {quote_string(plotcolour)}')
   )
 }
 
@@ -238,16 +231,16 @@ shape.cis <- function(addaes,
     '# Plot the CIs',
     f = "geom_linerange",
     aes = c(addaes$ci,
-            sprintf('ymin = %s', lci_string),
-            sprintf('ymax = %s', uci_string),
-            sprintf('colour = %s', column_name(cicolour$aes))),
+            'ymin = {lci_string}',
+            'ymax = {uci_string}',
+            'colour = {column_name(cicolour$aes)}'),
     arg = c(addarg$ci,
             switch(type,
                    "all" = NULL,
-                   "before" = sprintf('data = ~ dplyr::filter(.x, %s)', column_name(ciunder)),
-                   "after" = sprintf('data = ~ dplyr::filter(.x, !%s)', column_name(ciunder))),
-            sprintf('colour = %s', quote_string(cicolour$arg)),
-            sprintf('linewidth = %s', base_line_size))
+                   "before" = 'data = ~ dplyr::filter(.x, {column_name(ciunder)})',
+                   "after" = 'data = ~ dplyr::filter(.x, !{column_name(ciunder)})'),
+            'colour = {quote_string(cicolour$arg)}',
+            'linewidth = {base_line_size}')
   )
 }
 
@@ -258,18 +251,16 @@ shape.cis <- function(addaes,
 shape.titles <- function(xlab, title, ylab) {
   c(
     '# Add titles',
-    sprintf('xlab("%s") +', xlab),
+    glue::glue('xlab("{xlab}") +'),
+    glue::glue('ylab("{ylab}") +'),
     if (!is.null(title) && !title %in% c("", NA)){
-      c(sprintf('ylab("%s") +', ylab),
-        sprintf('ggtitle("%s")', title))
-    } else {
-      sprintf('ylab("%s")', ylab)
+        glue::glue('ggtitle("{title}") +')
     },
     ''
   )
 }
 
-#' code for plot_like_ckb()
+#' code for ckb_style()
 #' @noRd
 shape.plot.like.ckb <- function(xlims,
                                 ylims,
@@ -283,34 +274,29 @@ shape.plot.like.ckb <- function(xlims,
                                 plotcolour) {
   make_layer(
     '# Plot like a CKB plot',
-    f = "ckbplotr::plot_like_ckb",
-    arg = c('plot           = plot',
-            sprintf('xlims          = %s', xlims),
-            sprintf('ylims          = %s', ylims),
-            sprintf('gap            = %s', gap),
-            sprintf('ext            = %s', ext),
-            sprintf('ratio          = %s', ratio),
-            sprintf('width          = unit(%s, "%s")',
-                    as.numeric(width),
-                    makeunit(width)),
-            sprintf('height         = unit(%s, "%s")',
-                    as.numeric(height),
-                    makeunit(height)),
-            sprintf('base_size      = %s', base_size),
-            sprintf('base_line_size = %s', base_line_size),
-            sprintf('colour         = %s', quote_string(plotcolour))),
+    f = "ckbplotr::ckb_style",
+    arg = c('xlims          = {xlims}',
+            'ylims          = {ylims}',
+            'gap            = {gap}',
+            'ext            = {ext}',
+            'ratio          = {ratio}',
+            'width          = {printunit(width)}',
+            'height         = {printunit(height)}',
+            'base_size      = {base_size}',
+            'base_line_size = {base_line_size}',
+            'colour         = {quote_string(plotcolour)}'),
     plus = TRUE
   )
 }
 
 #' code for theme
 #' @noRd
-shape.theme <- function(legend.position) {
+shape.theme <- function(legend.position, addlayer) {
   make_layer(
     '# Add theme',
     f = "theme",
-    arg = c(sprintf('legend.position = %s', deparse(legend.position))),
-    plus = FALSE
+    arg = 'legend.position = {deparse(legend.position)}',
+    plus = !is.null(addlayer$end)
   )
 }
 

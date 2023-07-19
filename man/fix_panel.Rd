@@ -19,7 +19,7 @@ A gtable object
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 
-plot_like_ckb() and shape_plot() have width and height arguments and
+ckb_style(), plot_like_ckb() and shape_plot() have width and height arguments and
 forest_plot() has panel.width and panel.height arguments. These use
 ggh4x::force_panelsizes() to fix panel sizes.
 }

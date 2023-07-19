@@ -1,0 +1,128 @@
+---
+title: "CKB style with ggplot"
+output:
+  rmarkdown::html_vignette:
+    fig_width: 4
+    fig_height: 4
+    toc: TRUE
+vignette: >
+  %\VignetteIndexEntry{CKB style with ggplot}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 4,
+  fig.height = 4,
+  fig.align = "center",
+  out.width = '50%'
+)
+```
+
+```{r setup, include = FALSE}
+library(ckbplotr)
+```
+
+`+ ckb_style()` does three things to a ggplot2 plot:
+
+1. applies a CKB theme (i.e. change the overall appearance)
+2. extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)
+3. applies a fixed aspect ratio
+
+## Examples with a scatter plot
+Make a scatter plot with `ggplot`.
+```{r a-plot}
+plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
+plot
+```
+
+Use `+ ckb_style()` to apply a CKB theme, add separated axis lines and fix the aspect ratio.
+```{r plot_like_ckb-example-0}
+plot + ckb_style()
+```
+
+Or apply just a CKB theme and use axis lines.
+```{r theme}
+plot + theme_ckb() + theme(axis.line = element_line())
+```
+
+
+### Axis limits
+Set axis limits.
+```{r plot_like_ckb-example-1}
+plot + ckb_style(xlims = c(0, 8), ylims = c(10, 50))
+```
+
+If you do not want a gap between the axes, set `gap = c(0, 0)`.
+```{r plot_like_ckb-example-2}
+plot + ckb_style(xlims = c(0, 8), ylims = c(10, 50), gap = c(0, 0))
+```
+
+### Aspect ratio and panel sizes
+Change the aspect ratio of the plot.
+```{r aspect-ratio, fig.width = 6}
+plot + ckb_style(xlims = c(0, 8),
+                 ylims = c(10, 50),
+                 ratio = 0.3)
+```
+
+Set the width of the plot (`width` controls the length of the x axis).
+```{r width, fig.width = 6}
+plot + ckb_style(xlims = c(0, 8),
+                 ylims = c(10, 50),
+                 ratio = 1.5,
+                 width = unit(4, "cm"))
+```
+
+
+
+### Modifying the appearance of the plot
+The `colour` arguments of `theme_ckb()` and `ckb_style()` can be used to change the colour of the non-data components of the plot.
+```{r colour}
+plot + ckb_style(xlims = c(0, 8),
+                 ylims = c(10, 50),
+                 colour = "darkred")
+```
+
+The `plot.margin` arguments of `theme_ckb()` and `ckb_style()` can be used to adjust the margin around the plot.
+```{r plotmargin}
+plot + ckb_style(xlims = c(0, 8),
+                 ylims = c(10, 50),
+                 plot.margin = margin(2, 2, 2, 2, unit = "cm"))
+```
+
+If you wish to override some aspect of the theme applied by `ckb_style()` or `theme_ckb()`, 
+then this can be done by adding a theme after `+ ckb_style()`,
+```{r plot_like_ckb-example-3}
+plot + ckb_style(xlims = c(0, 8),
+                 ylims = c(10, 50)) +
+  theme(axis.title = element_text(colour = "red", face = "plain"))
+```
+
+
+### Warning about axis limits
+If any data points you are plotting fall outside the axes, then they will still
+be drawn and may show up in places such as the axes, the legend, the plot title, 
+or the plot margins. There is also no warning if data points fall outside the whole plot area.
+
+So it is best to check that your `xlim` and `ylim` values are suitable for your 
+data before using the function.
+```{r plot_like_ckb-example-4}
+# The xlim and ylim ranges are too narrow
+plot + ckb_style(xlims = c(0, 4), ylims = c(20, 50))
+```
+
+
+## Bar chart example
+```{r bar-chart-example, fig.width = 6, out.width = '70%'}
+ggplot(mpg, aes(class)) + 
+  geom_bar() +
+  ckb_style(xlims = c(0.5, 7.5),
+            ylims = c(0, 70),
+            gap = c(0.025, 0.005),
+            ratio = 0.5) +
+  theme(axis.ticks.x = element_blank())
+```

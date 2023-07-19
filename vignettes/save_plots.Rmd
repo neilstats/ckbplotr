@@ -1,0 +1,72 @@
+---
+title: "Save plots to files"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Save plots to files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+```{r setup, include = FALSE}
+library(ckbplotr)
+```
+
+## ggsave
+The easiest way to save a plot is to to use the `ggplot2::ggsave()` function. Remember that `shape_plot()` and `forest_plot()` both return a list of the plot and code, so you need to use `$plot` to save just the plot to a file.
+```{r}
+my_results <- data.frame(
+  x   = c(  12,   14, 15.5,   18),
+  est = c(0.05, 0.21, 0.15, 0.32),
+  se  = c(0.05, 0.05, 0.05, 0.05)
+)
+
+my_plot <- shape_plot(my_results,
+                      xlims = c(10, 20),
+                      ylims = c(0.75, 2),
+                      exponentiate = TRUE,
+                      quiet = TRUE)
+```
+
+```{r, eval = FALSE}
+ggsave("myplot.png",
+       plot = my_plot$plot,
+       width = 14, height = 14, units = "cm")
+```
+
+Plots created with this package have transparent backgrounds, so if you're saving to a png file and want a solid white background (or generally want to change the background colour of a plot) use `theme()`:
+```{r, eval = FALSE}
+my_plot_with_bg <- my_plot$plot + 
+  theme(plot.background = element_rect(fill = "white", colour = NA))
+ggsave("myplot.png",
+       plot = my_plot_with_bg,
+       width = 14, height = 14, units = "cm")
+```
+
+
+## Save with title and footnote
+Use `save_figure()` to add a title and footer to a plot and save to a file. The following code will save the plot (sized to 14 by 14 cm) in an A4 sized PDF file, with title and footer.
+```{r save-shape-plot, eval = FALSE}
+save_figure(my_plot$plot,
+            name   = "Figure 1",
+            title  = "Figure 1: My example shape plot",
+            footer = "An example footer text.",
+            size   = unit(c(14, 14), "cm"))
+```
+```{r, fig.width=8.27, fig.height=11.69, out.width='40%', out.extra='style="margin: auto; display: block; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;"', echo = FALSE}
+figure <- prepare_figure(my_plot$plot,
+                         title  = "Figure 1: My example shape plot",
+                         footer = "An example footer text.",
+                         size   = unit(c(14, 14), "cm"))
+grid::grid.draw(figure$page)
+```
+
+The function has several arguments that allow for customization of appearance and layout. For example: use `ext` to set the file extension (and also format); set `landscape = TRUE` to create a landscape page; and set `cropped = TRUE` to also save a plot without additional margins, title or footer.

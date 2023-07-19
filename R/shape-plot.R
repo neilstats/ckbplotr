@@ -2,7 +2,7 @@
 #' Make a shape plot with ggplot2
 #'
 #'
-#' @inheritParams plot_like_ckb
+#' @inheritParams ckb_style
 #'
 #' @param data The data frame containing estimates to be plotted.
 #' @param col.x Name of column that provides the x-axis value (e.g. exposure, risk factor, dependent variable). (Default: "x")
@@ -52,6 +52,7 @@
 #'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
 #' @param addaes Specify additional aesthetics for some ggplot layers.
 #' @param addarg Specify additional arguments for some ggplot layers.
+#' @param addlayer Adding ggplot layers.
 #' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
 #'
 #' @return A list:
@@ -67,8 +68,8 @@
 
 shape_plot <- function(data,
                        col.x         = "x",
-                       col.estimate  = "estimate",
-                       col.stderr    = "stderr",
+                       col.estimate  = c("estimate", "est", "beta", "loghr"),
+                       col.stderr    = c("stderr", "std.err", "se"),
                        col.lci       = NULL,
                        col.uci       = NULL,
                        col.n         = NULL,
@@ -109,14 +110,15 @@ shape_plot <- function(data,
                        addcode       = NULL,
                        addaes        = NULL,
                        addarg        = NULL,
+                       addlayer      = NULL,
                        envir         = NULL){
 
   # Check arguments ----
-  if (!is.null(col.lci) &&  is.null(col.uci)) stop("col.lci and col.uci must both be specified")
-  if ( is.null(col.lci) && !is.null(col.uci)) stop("col.lci and col.uci must both be specified")
-  if (!is.null(col.group) && !missing(fill)) stop("col.group and fill both control fill, so do not specify both")
-  if (missing(xlims)) stop("xlims must be specified")
-  if (missing(ylims)) stop("ylims must be specified")
+  if (!is.null(col.lci) &&  is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
+  if ( is.null(col.lci) && !is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
+  if (!is.null(col.group) && !missing(fill)) rlang::abort("col.group and fill both control fill, so do not specify both")
+  if (missing(xlims)) rlang::abort("xlims must be specified")
+  if (missing(ylims)) rlang::abort("ylims must be specified")
 
   ## check if confidence intervals may be hidden
   if (missing(height)){
@@ -130,6 +132,22 @@ shape_plot <- function(data,
   if(!missing(height) && !missing(col.group) && !missing(cicolour)){
     warning("cicolour is ignored if using height and col.group")
   }
+
+
+
+  # Match estimate and stderr column names ----
+  column_names_in_data <- names(data)
+  if (length(col.estimate[col.estimate %in% column_names_in_data]) == 0) {
+    rlang::abort(glue::glue("Column '{col.estimate}' does not exist in panels data frame."))
+  }
+  col.estimate <- col.estimate[col.estimate %in% column_names_in_data][[1]]
+
+  if (length(col.stderr[col.stderr %in% column_names_in_data]) == 0) {
+    rlang::abort(glue::glue("Column '{col.stderr}' does not exist in panels data frame."))
+  }
+  col.stderr <- col.stderr[col.stderr %in% column_names_in_data][[1]]
+
+
 
 
   # Aesthetics ----
@@ -176,9 +194,9 @@ shape_plot <- function(data,
   # String for point size aesthetic
   if (scalepoints) {
     if (!is.null(col.lci)) {
-      size <- sprintf('2*1.96/(%s - %s)', column_name(col.uci), column_name(col.lci))
+      size <- glue::glue('2*1.96/({column_name(col.uci)} - {column_name(col.lci)})')
     } else {
-      size <- sprintf('1/%s', column_name(col.stderr))
+      size <- glue::glue('1/{column_name(col.stderr)}')
     }
   } else {
     size <- '1'
@@ -258,21 +276,21 @@ shape_plot <- function(data,
   # Using groups ----
   if (!is.null(col.group)) {
 
-    if(!is.factor(data[[col.group]])) stop("col.group must be factor")
-    group_string <- sprintf(', group = %s', column_name(col.group))
+    if(!is.factor(data[[col.group]])) rlang::abort("col.group must be factor")
+    group_string <- glue::glue(', group = {column_name(col.group)}')
     scale_fill_string <- c('',
                            make_layer('# Set the scale for fill colours',
                                       f = "scale_fill_grey",
                                       arg = c("start = 0",
                                               "end   = 1",
-                                              sprintf('name  = "%s"', legend.name)),
+                                              'name  = "{legend.name}"'),
                                       br = FALSE))
-    fill_string <- list(aes = sprintf('fill = %s', column_name(col.group)))
+    fill_string <- list(aes = glue::glue('fill = {column_name(col.group)}'))
   } else {
     group_string <- ''
     scale_fill_string <- 'scale_fill_identity() +'
-    fill_string <- list(aes = sprintf('fill = %s', column_name(fill$aes)),
-                        arg = sprintf('fill = %s', quote_string(fill$arg)))
+    fill_string <- list(aes = glue::glue('fill = {column_name(fill$aes)}'),
+                        arg = glue::glue('fill = {quote_string(fill$arg)}'))
   }
 
 
@@ -320,6 +338,13 @@ shape_plot <- function(data,
                        group_string),
 
     indent(2,
+
+           # addlayer$start
+           if (!is.null(addlayer$start)){
+             c("# Additional layer",
+               paste(c(deparse(substitute(addlayer)$start), " +"), collapse = ""),
+               "")
+           },
 
            ## add lines
            if(lines){
@@ -386,22 +411,30 @@ shape_plot <- function(data,
            shape.axes(deparse(xbreaks), scale, deparse(ybreaks)),
 
            # titles
-           shape.titles(xlab, title, ylab)),
+           shape.titles(xlab, title, ylab),
 
-    # plot_like_ckb()
-    shape.plot.like.ckb(deparse(xlims),
-                        deparse(ylims),
-                        deparse(gap),
-                        deparse(ext),
-                        deparse(ratio),
-                        width,
-                        height,
-                        base_size,
-                        base_line_size,
-                        plotcolour),
+           # ckb_style()
+           shape.plot.like.ckb(deparse(xlims),
+                               deparse(ylims),
+                               deparse(gap),
+                               deparse(ext),
+                               deparse(ratio),
+                               width,
+                               height,
+                               base_size,
+                               base_line_size,
+                               plotcolour)),
 
     # theme
-    indent(2, shape.theme(legend.position))
+    indent(2, shape.theme(legend.position, addlayer)),
+
+    # addlayer$end
+    if (!is.null(addlayer$end)){
+      c("# Additional layer",
+        paste(deparse(substitute(addlayer)$end), collapse = ""),
+        "")
+    }
+
   )
 
 
@@ -432,8 +465,3 @@ shape_plot <- function(data,
                         code = plotcode)))
 }
 
-
-
-#' @describeIn shape_plot Synonym for `shape_plot()`
-#' @export
-make_shape_plot <- shape_plot
