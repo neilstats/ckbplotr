@@ -1,3 +1,7 @@
+# ckbplotr 0.9.1
+
+* Fix error when using col.lci and col.uci arguments in shape_plot() and forest_plot().
+
 # ckbplotr 0.9.0
 
 * `+ ckb_style()` can now be used to make a ggplot into CKB style (instead of using plot_like_ckb()).

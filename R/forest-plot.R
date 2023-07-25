@@ -220,11 +220,18 @@ forest_plot <- function(
   }
   col.estimate <- col.estimate[col.estimate %in% column_names_in_data][[1]]
 
-  if (length(col.stderr[col.stderr %in% column_names_in_data]) == 0) {
-    rlang::abort(glue::glue("Column '{col.stderr}' does not exist in panels data frame."))
+  if (!is.null(col.lci) | !is.null(col.uci)) {
+    for (x in c(col.lci, col.uci)){
+      if (!x %in% column_names_in_data){
+        rlang::abort(glue::glue("Column '{x}' does not exist in panels data frame."))
+      }
+    }
+  } else {
+    if (length(col.stderr[col.stderr %in% column_names_in_data]) == 0) {
+      rlang::abort(glue::glue("Column '{col.stderr}' does not exist in panels data frame."))
+    }
+    col.stderr <- col.stderr[col.stderr %in% column_names_in_data][[1]]
   }
-  col.stderr <- col.stderr[col.stderr %in% column_names_in_data][[1]]
-
 
 
   # Check for scale of x axis and transformation of estimates ----
