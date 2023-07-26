@@ -59,7 +59,7 @@ Note that `col.bold`, and `col.diamond` must be column names in the supplied dat
 
 
 ## Adding to the ggplot
-In `forest_plot()` you can add additional ggplot objects to the plot with the `add` argument. The argument should be a named list, where the name `start` is an object to be included in the ggplot immediately after `ggplot()` (i.e. before anything else is added to the ggplot) and the name `end` will add to the end.
+In `forest_plot()` and `shape_plot()` you can add additional ggplot objects to the plot with the `add` argument. The argument should be a named list, where the name `start` is an object to be included in the ggplot immediately after `ggplot()` (i.e. before anything else is added to the ggplot) and the name `end` will add to the end.
 
 This argument can be used, for example, to add additional geoms to the plot:
 ```{r}

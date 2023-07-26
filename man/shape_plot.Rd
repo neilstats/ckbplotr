@@ -46,10 +46,9 @@ shape_plot(
   quiet = FALSE,
   printplot = !quiet,
   showcode = !quiet,
-  addcode = NULL,
   addaes = NULL,
   addarg = NULL,
-  addlayer = NULL,
+  add = NULL,
   envir = NULL
 )
 }
@@ -140,15 +139,7 @@ estimates. (Default: 3)}
 
 \item{showcode}{Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)}
 
-\item{addcode}{A character vector of code to add to the generated code.
-The first element should be a regular expression.
-The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)}
-
-\item{addaes}{Specify additional aesthetics for some ggplot layers.}
-
-\item{addarg}{Specify additional arguments for some ggplot layers.}
-
-\item{addlayer}{Adding ggplot layers.}
+\item{addaes, addarg, add}{Methods for customising the plot. See documentation for details.}
 
 \item{envir}{Environment in which to evaluate the plot code. May be useful when calling this function inside another function.}
 }

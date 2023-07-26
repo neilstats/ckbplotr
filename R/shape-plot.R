@@ -47,12 +47,8 @@
 #' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
 #' @param printplot Print the plot. (Default: !quiet)
 #' @param showcode Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)
-#' @param addcode A character vector of code to add to the generated code.
-#'                The first element should be a regular expression.
-#'                The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)
-#' @param addaes Specify additional aesthetics for some ggplot layers.
-#' @param addarg Specify additional arguments for some ggplot layers.
-#' @param addlayer Adding ggplot layers.
+#' @param addaes,addarg,add
+#' Methods for customising the plot. See documentation for details.
 #' @param envir Environment in which to evaluate the plot code. May be useful when calling this function inside another function.
 #'
 #' @return A list:
@@ -107,10 +103,9 @@ shape_plot <- function(data,
                        quiet         = FALSE,
                        printplot     = !quiet,
                        showcode      = !quiet,
-                       addcode       = NULL,
                        addaes        = NULL,
                        addarg        = NULL,
-                       addlayer      = NULL,
+                       add           = NULL,
                        envir         = NULL){
 
   # Check arguments ----
@@ -348,10 +343,10 @@ shape_plot <- function(data,
 
     indent(2,
 
-           # addlayer$start
-           if (!is.null(addlayer$start)){
+           # add$start
+           if (!is.null(add$start)){
              c("# Additional layer",
-               paste(c(deparse(substitute(addlayer)$start), " +"), collapse = ""),
+               paste(c(deparse(substitute(add)$start), " +"), collapse = ""),
                "")
            },
 
@@ -435,24 +430,17 @@ shape_plot <- function(data,
                                plotcolour)),
 
     # theme
-    indent(2, shape.theme(legend.position, addlayer)),
+    indent(2, shape.theme(legend.position, add)),
 
-    # addlayer$end
-    if (!is.null(addlayer$end)){
+    # add$end
+    if (!is.null(add$end)){
       c("# Additional layer",
-        paste(deparse(substitute(addlayer)$end), collapse = ""),
+        paste(deparse(substitute(add)$end), collapse = ""),
         "")
     }
 
   )
 
-
-  # add additional code
-  if (!is.null(addcode)){
-    plotcode <- append(plotcode,
-                       addcode[2:length(addcode)],
-                       grep(addcode[1], trimws(plotcode))[1]-1)
-  }
 
 
   # Show code in RStudio viewer.
