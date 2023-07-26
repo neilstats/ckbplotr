@@ -291,12 +291,12 @@ shape.plot.like.ckb <- function(xlims,
 
 #' code for theme
 #' @noRd
-shape.theme <- function(legend.position, addlayer) {
+shape.theme <- function(legend.position, add) {
   make_layer(
     '# Add theme',
     f = "theme",
     arg = 'legend.position = {deparse(legend.position)}',
-    plus = !is.null(addlayer$end)
+    plus = !is.null(add$end)
   )
 }
 
