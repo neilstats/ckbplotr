@@ -114,10 +114,9 @@
 <span>  quiet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  printplot <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
 <span>  showcode <span class="op">=</span> <span class="op">!</span><span class="va">quiet</span>,</span>
-<span>  addcode <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addaes <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  addarg <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  addlayer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  add <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  envir <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -292,22 +291,8 @@ estimates. (Default: 3)</p></dd>
 <dd><p>Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane. (Default: !quiet)</p></dd>
 
 
-<dt>addcode</dt>
-<dd><p>A character vector of code to add to the generated code.
-The first element should be a regular expression.
-The remaining elements are added to the generated code just before the first match of a line (trimmed of  whitespace) with the regular expression. (Default: NULL)</p></dd>
-
-
-<dt>addaes</dt>
-<dd><p>Specify additional aesthetics for some ggplot layers.</p></dd>
-
-
-<dt>addarg</dt>
-<dd><p>Specify additional arguments for some ggplot layers.</p></dd>
-
-
-<dt>addlayer</dt>
-<dd><p>Adding ggplot layers.</p></dd>
+<dt>addaes, addarg, add</dt>
+<dd><p>Methods for customising the plot. See documentation for details.</p></dd>
 
 
 <dt>envir</dt>
