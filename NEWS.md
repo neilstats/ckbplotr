@@ -1,3 +1,7 @@
+# ckbplotr 0.9.2
+
+* Fix incorrect argument name in shape_plot().
+
 # ckbplotr 0.9.1
 
 * Fix error when using col.lci and col.uci arguments in shape_plot() and forest_plot().
