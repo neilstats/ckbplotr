@@ -144,6 +144,7 @@ prepare_figure <- function(figure,
 #' @param ext Extensions to be added to file names for the main figure and cropped figure. (Default: c("pdf", "png"))
 #' @param args List of arguments passed to `ggplot2::ggsave()` for the main figure.
 #' @param args_cropped List of arguments passed to `ggplot2::ggsave()` for the cropped figure.
+#' @param preview Preview the output in the RStudio Viewer pane. (Default: False)
 #' @param ... Other arguments passed to \link{prepare_figure}.
 #'
 #' @details
@@ -161,6 +162,7 @@ save_figure <- function(figure,
                         ext = c("pdf", "png"),
                         args = NULL,
                         args_cropped = NULL,
+                        preview = FALSE,
                         ...){
 
   # Prepare figure
@@ -175,6 +177,12 @@ save_figure <- function(figure,
                   bg       = "transparent")
   if (ext[[1]] == "pdf"){figargs$title = name}
   if(!is.null(args)){figargs <- utils::modifyList(figargs, args)}
+
+  if (preview) {
+    do.call("ggpreview", figargs)
+    return(invisible(name))
+  }
+
   do.call("ggsave", figargs)
 
   ## Save cropped figure to PNG file
@@ -195,3 +203,58 @@ save_figure <- function(figure,
 
 
 
+
+
+
+#' Create a plot preview and display it in the Viewer pane.
+#'
+#' This function saves a ggplot2 plot to a temporary PNG file and then embeds it in an HTML
+#' page, which is opened in the Viewer pane.
+#'
+#' @details # Device
+#' The plot is saved using `ggsave` with the `png` device, regardless of what is specified in
+#' the call, so any arguments not used by `ggsave` or `png` are ignored.
+#'
+#' @param ... Arguments passed to `ggsave` and the PNG device function.
+#'
+#' @export
+#'
+ggpreview <- function(...) {
+  ## create temporary files
+  temp_img <- tempfile()
+  temp_html <- tempfile(fileext = ".html")
+
+  ## save using png device
+  call <- as.list(match.call())[-1]
+  call <- utils::modifyList(call,
+                            list(filename = temp_img,
+                                 device = "png"))
+  call <- call[names(call) %in% c(names(formals(ggsave)),
+                                  names(formals(grDevices::png)))]
+  do.call("ggsave", call)
+
+  ## create html file
+  html <- c("<!DOCTYPE html>",
+            "<html>",
+            "<title>Plot preview</title>",
+            "</head>",
+            "<body>",
+            glue::glue("<img src = '{knitr::image_uri(temp_img)}' ",
+                       "style='margin: auto; border: 1px lightgrey solid; ",
+                       "display: block; ",
+                       "background-color: white;",
+                       "box-shadow: rgba(100, 100, 111, 0.75) 0px 7px 29px 0px; ",
+                       "max-width: 94%; max-height:94vh; height: auto;'"),
+            "</body>",
+            "</html>")
+  con <- file(temp_html, open = "w", encoding = "UTF-8")
+  writeLines(
+    html,
+    con = con,
+    sep = "\n")
+  close(con)
+
+  ## show html file in Viewer pane
+  viewer <- getOption("viewer", default = function(url){})
+  viewer(temp_html)
+}

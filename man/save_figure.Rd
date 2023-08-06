@@ -11,6 +11,7 @@ save_figure(
   ext = c("pdf", "png"),
   args = NULL,
   args_cropped = NULL,
+  preview = FALSE,
   ...
 )
 }
@@ -27,6 +28,8 @@ Used to name the output file(s) and embedded in the PDF document properties Titl
 \item{args}{List of arguments passed to \code{ggplot2::ggsave()} for the main figure.}
 
 \item{args_cropped}{List of arguments passed to \code{ggplot2::ggsave()} for the cropped figure.}
+
+\item{preview}{Preview the output in the RStudio Viewer pane. (Default: False)}
 
 \item{...}{Other arguments passed to \link{prepare_figure}.}
 }

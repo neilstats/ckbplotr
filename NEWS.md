@@ -1,3 +1,5 @@
+# ckbplotr (development version)
+
 # ckbplotr 0.9.2
 
 * Fix incorrect argument name in shape_plot().
