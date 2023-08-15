@@ -138,10 +138,10 @@ prepare_figure <- function(figure,
 #' Output plots as files
 #'
 #' @inheritParams prepare_figure
+#' @param filename Name of file to create.
 #' @param name Name of figure.
-#'    Used to name the output file(s) and embedded in the PDF document properties Title field.
-#' @param cropped Create a second output of the figure without margins or title. (Default: False)
-#' @param ext Extensions to be added to file names for the main figure and cropped figure. (Default: c("pdf", "png"))
+#'    Embedded in the PDF document properties Title field.
+#' @param cropped Create a second output of the figure without margins or title. (Default: NULL)
 #' @param args List of arguments passed to `ggplot2::ggsave()` for the main figure.
 #' @param args_cropped List of arguments passed to `ggplot2::ggsave()` for the cropped figure.
 #' @param preview Preview the output in the RStudio Viewer pane. (Default: False)
@@ -157,9 +157,9 @@ prepare_figure <- function(figure,
 #' @export
 #'
 save_figure <- function(figure,
-                        name,
-                        cropped = FALSE,
-                        ext = c("pdf", "png"),
+                        filename,
+                        name = "Figure",
+                        cropped = NULL,
                         args = NULL,
                         args_cropped = NULL,
                         preview = FALSE,
@@ -169,13 +169,13 @@ save_figure <- function(figure,
   figure <- prepare_figure(figure, ...)
 
   # Save to PDF file
-  figargs <- list(filename = paste0(name, ".", ext[[1]]),
+  figargs <- list(filename = filename,
                   plot     = figure$page,
                   width    = attr(figure$page, "width"),
                   height   = attr(figure$page, "height"),
                   units    = "mm",
                   bg       = "transparent")
-  if (ext[[1]] == "pdf"){figargs$title = name}
+  if (tools::file_ext(filename) == "pdf"){figargs$title = name}
   if(!is.null(args)){figargs <- utils::modifyList(figargs, args)}
 
   if (preview) {
@@ -186,14 +186,15 @@ save_figure <- function(figure,
   do.call("ggsave", figargs)
 
   ## Save cropped figure to PNG file
-  if (cropped){
-    figargs <- list(paste0(name, "_cropped.", ext[[2]]),
+  if (!is.null(cropped)){
+    if (!is.character(cropped)) {rlang::abort("cropped should be a file name.")}
+    figargs <- list(filename = cropped,
                     plot   = figure$figure,
                     width  = attr(figure$figure, "width"),
                     height = attr(figure$figure, "width"),
                     units = "mm",
                     bg = "transparent")
-    if (ext[[2]] == "pdf"){figargs$title = name}
+    if (tools::file_ext(cropped) == "pdf"){figargs$title = name}
     if(!is.null(args_cropped)){figargs <- utils::modifyList(figargs, args_cropped)}
     do.call("ggsave", figargs)
   }
@@ -239,7 +240,7 @@ ggpreview <- function(...) {
             "<title>Plot preview</title>",
             "</head>",
             "<body>",
-            glue::glue("<img src = '{knitr::image_uri(temp_img)}' ",
+            glue::glue("<img src = '{xfun::base64_uri(temp_img, type = 'image/png')}' ",
                        "style='margin: auto; border: 1px lightgrey solid; ",
                        "display: block; ",
                        "background-color: white;",

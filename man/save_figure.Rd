@@ -6,9 +6,9 @@
 \usage{
 save_figure(
   figure,
-  name,
-  cropped = FALSE,
-  ext = c("pdf", "png"),
+  filename,
+  name = "Figure",
+  cropped = NULL,
   args = NULL,
   args_cropped = NULL,
   preview = FALSE,
@@ -18,12 +18,12 @@ save_figure(
 \arguments{
 \item{figure}{Plot (or graphical object).}
 
+\item{filename}{Name of file to create.}
+
 \item{name}{Name of figure.
-Used to name the output file(s) and embedded in the PDF document properties Title field.}
+Embedded in the PDF document properties Title field.}
 
-\item{cropped}{Create a second output of the figure without margins or title. (Default: False)}
-
-\item{ext}{Extensions to be added to file names for the main figure and cropped figure. (Default: c("pdf", "png"))}
+\item{cropped}{Create a second output of the figure without margins or title. (Default: NULL)}
 
 \item{args}{List of arguments passed to \code{ggplot2::ggsave()} for the main figure.}
 
