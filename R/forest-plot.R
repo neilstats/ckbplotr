@@ -317,29 +317,33 @@ forest_plot <- function(
     fill_list <- list(aes = fill)
   }
   if (is.list(fill)){
-    fill_list <- list(aes = "fill",
-                      values = fill)
+    fill_aes <- c(
+      'dplyr::case_when(',
+      purrr::map_chr(1:length(fill),
+                     \(i) glue::glue('panel == {quote_string(panel.names[[{i}]])} ~ {quote_string(fill[[{i}]][1])}, ')
+      ),
+      'TRUE ~ "black")'
+    )
+    fill_list <- list(string_aes = paste(fill_aes, collapse = ""))
   }
-
-
-
 
   # Aesthetic adjustments for fixed panel width ----
   if (fixed_panel_width) {
     if (!inherits(panel.width, "unit")){
       panel.width <- grid::unit(panel.width, "mm")
     }
-    cicolour_list <- list(aes = "cicolour",
-                          values = c(quote_string(cicolour_list$arg),
-                                     column_name(cicolour_list$aes)))
+    cicolour_list <- list(string_aes = forest.cicolour(c(quote_string(cicolour_list$arg),
+                                                         column_name(cicolour_list$aes)),
+                                                       panel.names))
 
     if (missing(ciunder)) {
       ciunder <- c(TRUE, FALSE)
     }
 
     if (length(ciunder) > 1) {
-      ciunder_orig <- ciunder
-      ciunder <- "ciunder"
+      ciunder <- glue::glue('dplyr::if_else(narrowci, ',
+                            '{ciunder[length(ciunder)]}, ',
+                            '{ciunder[1]})')
     }
   }
 
@@ -405,11 +409,11 @@ forest_plot <- function(
   ## xfrom, xto, etc. are used by other code sections, so this must come first
   if (is.null(col.lci)) {
     allvalues <- unlist(lapply(panels_list, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
-                                                   tf(x[[col.estimate]] + 1.96 * x[[col.stderr]]))),
+                                                          tf(x[[col.estimate]] + 1.96 * x[[col.stderr]]))),
                         use.names = FALSE)
   } else {
     allvalues <- unlist(lapply(panels_list, function(x) c(tf(x[[col.lci]]),
-                                                   tf(x[[col.uci]]))),
+                                                          tf(x[[col.uci]]))),
                         use.names = FALSE)
   }
   allvalues_range <- range(pretty(allvalues))
@@ -468,7 +472,6 @@ forest_plot <- function(
 
 
 
-
   # Create the plot code ----
   plotcode <- c(
     'library(ggplot2)',
@@ -477,32 +480,24 @@ forest_plot <- function(
     # code to prepare data for plotting using forest_data()
     prep.data.code,
 
-    # fill may be a list
-    if (!is.null(fill_list$values)){forest.fillcode(fill_list$values, panel.names)},
-
-    # code for CI colours if using panel.width
+    # code for if using fixed panel width
     if (fixed_panel_width) {
-      forest.cicolourcode(axis_scale,
-                          axis_scale_fn,
-                          xto,
-                          xfrom,
-                          pointsize,
-                          scalepoints,
-                          stroke,
-                          panel.width,
-                          shape_list,
-                          cicolour_list,
-                          panel.names)
-    },
-
-    ## code for CI under - if using panel.width
-    if (exists("ciunder_orig")) {
-      forest.ciundercode(ciunder_orig)
+      forest.narrowci(axis_scale,
+                      axis_scale_fn,
+                      xto,
+                      xfrom,
+                      pointsize,
+                      scalepoints,
+                      stroke,
+                      panel.width,
+                      shape_list)
     },
 
     # code for user function on datatoplot
-    glue::glue_safe('datatoplot <- {data.function}(datatoplot)'),
-    '',
+    if (!is.null(data.function)){
+      c(glue::glue_safe('datatoplot <- {data.function}(datatoplot)'),
+        '')
+    },
 
     # code to initiate the ggplot
     forest.start.ggplot(),
@@ -567,12 +562,12 @@ forest_plot <- function(
            },
 
            # code for scales and coordinates
-           forest.scales.coords(xfrom,
-                                xto,
-                                shape_list,
-                                fill_list,
-                                colour_list,
-                                cicolour_list),
+           forest.scales(xfrom,
+                         xto,
+                         shape_list,
+                         fill_list,
+                         colour_list,
+                         cicolour_list),
 
            # code for columns to right of panel
            if (!is.null(col.right) | estcolumn) {

@@ -9,6 +9,12 @@ forest.axes <- function(axis_scale,
                         col.heading.space) {
   c(
     make_layer(
+      '# Set coordinate system',
+      f = 'coord_cartesian',
+      arg = c('clip = "off"',
+              'xlim = c({xfrom}, {xto})')
+    ),
+    make_layer(
       '# Set the scale for the x axis (the estimates and CIs)',
       f = "scale_x_continuous",
       arg = c('trans  = "{axis_scale}"',
@@ -34,52 +40,63 @@ forest.axes <- function(axis_scale,
   )
 }
 
-
-#' code for CI colours if using panel.width
+#' code to identify narrows CIs when using panel.width
 #' @noRd
-forest.cicolourcode <- function(axis_scale,
-                                axis_scale_fn,
-                                xto,
-                                xfrom,
-                                pointsize,
-                                scalepoints,
-                                stroke,
-                                panel.width,
-                                shape_list,
-                                cicolour_list,
-                                panel.names) {
-
+forest.narrowci <- function(axis_scale,
+                            axis_scale_fn,
+                            xto,
+                            xfrom,
+                            pointsize,
+                            scalepoints,
+                            stroke,
+                            panel.width,
+                            shape_list) {
   panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
   convert_pointsize <- (axis_scale_fn(xto) - axis_scale_fn(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm
   size <- if (scalepoints) "size" else "1"
 
   x <- c(
-    '# Create column for CI colour',
-    'datatoplot <- datatoplot %>%',
-    indent(2,
-           'dplyr::mutate(narrowci =  ({axis_scale}(uci_transformed) - {axis_scale}(lci_transformed)) <= ',
-           indent(26,
-                  '{size} * {convert_pointsize} * dplyr::case_match({c(quote_string(shape_list$arg), column_name(shape_list$aes))}, "22" ~ 0.6694, "filled square" ~ 0.6694, .default = 0.7553)) %>%'),
-           'dplyr::mutate(cicolour = dplyr::case_when('))
-
-  if(is.list(cicolour_list$values)){
-    for (i in 1:length(cicolour_list$values)){
-      x<- c(x,
-            indent(27,
-                   glue::glue('panel == {quote_string(panel.names[[{i}]])} & narrowci ~ {cicolour_list$values[[{i}]][length(cicolour_list$values[[{i}]])]},'),
-                   glue::glue('panel == {quote_string(panel.names[[{i}]])} & !narrowci ~ {cicolour_list$values[[{i}]][1]},')))
-    }
-    x <- c(x,
-           indent(27, 'TRUE ~ "black"))'),
+    '# Create column for narrow CIs',
+    'datatoplot <- dplyr::mutate(datatoplot,',
+    indent(28,
+           'narrowci = ({axis_scale}(uci_transformed) - {axis_scale}(lci_transformed)) <= ',
+           indent(12,
+                  '{size} * ',
+                  '{convert_pointsize} *',
+                  if (!is.null(shape_list$aes)){
+                    c('dplyr::case_match({column_name(shape_list$aes)},',
+                      indent(18,
+                             '"22" ~ 0.6694,',
+                             '"filled square" ~ 0.6694,',
+                             '.default = 0.7553))'))
+                  } else {
+                    switch(as.character(shape_list$arg),
+                           "22" = "0.6694)",
+                           "filled square" = "0.6694)",
+                           "0.7553)")
+                  }
+           ),
            '')
-  } else {
-    x <- c(x,
-           indent(27,
-                  'narrowci ~ {cicolour_list$values[length(cicolour_list$values)]},',
-                  'TRUE     ~ {cicolour_list$values[1]}))'),
-           '')
-  }
+  )
   purrr::map_chr(x, glue::glue, .envir = environment())
+}
+
+#' code for CI colours if using panel.width
+#' @noRd
+forest.cicolour <- function(vals,
+                            panel.names) {
+  x <- 'dplyr::case_when('
+  if (is.list(vals)){
+    for (i in 1:length(vals)){
+      x<- c(x,
+            glue::glue('panel == {quote_string(panel.names[[{i}]])} & narrowci ~ {vals[[{i}]][length(vals[[{i}]])]}, '),
+            glue::glue('panel == {quote_string(panel.names[[{i}]])} & !narrowci ~ {vals[[{i}]][1]}, '))
+    }
+    x <- c(x, 'TRUE ~ "black")')
+  } else {
+    x <- c(x, 'narrowci ~ {vals[length(vals)]}, TRUE ~ {vals[1]})')
+  }
+  paste(purrr::map_chr(x, glue::glue, .envir = environment()), collapse = "")
 }
 
 #' code for preparing data when fill is a list
@@ -98,21 +115,6 @@ forest.fillcode <- function(fill_values,
          '')
   purrr::map_chr(x, glue::glue, .envir = environment())
 }
-
-#' code for preparing data for ciunder when using panel.width
-#' @noRd
-forest.ciundercode <- function(ciunder) {
-  x <- c('# Create column for CI under',
-         'datatoplot <- datatoplot %>%',
-         indent(2,
-                paste0('dplyr::mutate(ciunder = ',
-                       'dplyr::if_else(narrowci, ',
-                       '{ciunder[length(ciunder)]}, ',
-                       '{ciunder[1]}))')),
-         '')
-  purrr::map_chr(x, glue::glue, .envir = environment())
-}
-
 
 #' code for plotting diamonds
 #' @noRd
@@ -195,7 +197,7 @@ forest.plot.points <- function(addaes,
               },
               'shape  = {column_name(shape_list$aes)}',
               'colour = {column_name(colour_list$aes)}',
-              'fill   = {column_name(fill_list$aes)}'),
+              'fill   = {c(column_name(fill_list$aes), fill_list$string_aes)}'),
       arg = c(addarg$point,
               'data   = ~ dplyr::filter(.x',
               indent(25, c('estimate_transformed > {xfrom}',
@@ -242,7 +244,7 @@ forest.cis <- function(addaes,
     aes = c(addaes$ci,
             'xmin = pmin(pmax(lci_transformed, {xfrom}), {xto})',
             'xmax = pmin(pmax(uci_transformed, {xfrom}), {xto})',
-            'colour = {column_name(cicolour_list$aes[1])}'),
+            'colour = {c(column_name(cicolour_list$aes[1]), cicolour_list$string_aes)}'),
     arg = c(addarg$ci,
             switch(type,
                    "all"    = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), !as_diamond)',
@@ -256,37 +258,32 @@ forest.cis <- function(addaes,
 }
 
 
-#' code for scales and coordinates
+#' code for scales
 #' @noRd
-forest.scales.coords <- function(xfrom,
-                                 xto,
-                                 shape_list,
-                                 fill_list,
-                                 colour_list,
-                                 cicolour_list) {
+forest.scales <- function(xfrom,
+                          xto,
+                          shape_list,
+                          fill_list,
+                          colour_list,
+                          cicolour_list) {
 
   shape_scale_needed <- !is.null(shape_list$aes)
-  fill_scale_needed <- !is.null(fill_list$aes)
+  fill_scale_needed <- !is.null(fill_list$aes) | !is.null(fill_list$string_aes)
   colour_scale_needed <- any(!is.null(colour_list$aes),
-                             !is.null(cicolour_list$aes))
-  x <- c(
-    if (any(shape_scale_needed,
-            fill_scale_needed,
-            colour_scale_needed)){
-      c(
-        '# Use identity for aesthetic scales',
-        if (shape_scale_needed) {'scale_shape_identity() +'},
-        if (fill_scale_needed) {'scale_fill_identity() +'},
-        if (colour_scale_needed) {'scale_colour_identity() +'},
-        '')
-    },
-    make_layer(
-      '# Set coordinate system',
-      f = 'coord_cartesian',
-      arg = c('clip = "off"',
-              'xlim = c({xfrom}, {xto})')
-    )
-  )
+                             !is.null(cicolour_list$aes),
+                             !is.null(cicolour_list$string_aes))
+  if (any(shape_scale_needed,
+          fill_scale_needed,
+          colour_scale_needed)){
+    x <- c(
+      '# Use identity for aesthetic scales',
+      if (shape_scale_needed) {'scale_shape_identity() +'},
+      if (fill_scale_needed) {'scale_fill_identity() +'},
+      if (colour_scale_needed) {'scale_colour_identity() +'},
+      '')
+    return(x)
+  }
+  return(NULL)
 }
 
 
