@@ -147,18 +147,11 @@ prepare_figure <- function(figure,
 #' @param preview Preview the output in the RStudio Viewer pane. (Default: False)
 #' @param ... Other arguments passed to \link{prepare_figure}.
 #'
-#' @details
-#'
-#' # Using cairo_pdf
-#' Note that if you use a PDF device that does not have a `title`
-#' argument (such as cairo_pdf), then the `title` argument should be set to
-#' NULL, e.g. `args = list(device = cairo_pdf, title = NULL)`
 #'
 #' @export
 #'
 save_figure <- function(figure,
                         filename,
-                        name = "Figure",
                         cropped = NULL,
                         args = NULL,
                         args_cropped = NULL,
@@ -175,12 +168,11 @@ save_figure <- function(figure,
                   height   = attr(figure$page, "height"),
                   units    = "mm",
                   bg       = "transparent")
-  if (tools::file_ext(filename) == "pdf"){figargs$title = name}
   if(!is.null(args)){figargs <- utils::modifyList(figargs, args)}
 
   if (preview) {
     do.call("ggpreview", figargs)
-    return(invisible(name))
+    return(invisible(filename))
   }
 
   do.call("ggsave", figargs)
@@ -194,12 +186,11 @@ save_figure <- function(figure,
                     height = attr(figure$figure, "width"),
                     units = "mm",
                     bg = "transparent")
-    if (tools::file_ext(cropped) == "pdf"){figargs$title = name}
     if(!is.null(args_cropped)){figargs <- utils::modifyList(figargs, args_cropped)}
     do.call("ggsave", figargs)
   }
 
-  invisible(name)
+  return(invisible(filename))
 }
 
 
