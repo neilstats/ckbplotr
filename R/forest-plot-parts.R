@@ -361,8 +361,8 @@ forest.col.code <- function(column,
               'size     = {text_size}',
               'colour   = {quote_string(plotcolour)}',
               'fontface = "bold"',
-              'data = dplyr::tibble(panel = sort(unique(datatoplot$panel))',
-              indent(21, 'title = {ds(unlist(heading))})'))
+              'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
+              indent(23, 'title = {ds(unlist(heading))})'))
     )
   )
 }
