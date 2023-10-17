@@ -137,7 +137,7 @@ In `forest_plot()` the following names will add aesthetics and arguments to laye
 | col.right  | col.right columns    |
 | col.left   | col.left columns     |
 | xlab       | x-axis label         |
-| panel.name | names above panels   |
+| panel.headings (or panel.name) | headings above panels   |
 | nullline   | line at null         |
 
 Where duplicate aesthetics/arguments might be defined and created, they are kept with the priority:
@@ -180,10 +180,10 @@ forest_plot(list("a) Observational" = my_resultsA,
                  "b) Genetic"       = my_resultsB),
             col.key    = "subgroup",
             row.labels = row_labels,
-            addaes = list(panel.name = "x = 0.5"),
-            addarg = list(panel.name = c("size = 4.5",
-                                         "colour = 'navyblue'",
-                                         "hjust = 0")))
+            addaes = list(panel.headings = "x = 0.5"),
+            addarg = list(panel.headings = c("size = 4.5",
+                                             "colour = 'navyblue'",
+                                             "hjust = 0")))
 ```
 
 Changing the appearance of the line at the 'null':
