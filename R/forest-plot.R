@@ -676,9 +676,7 @@ forest_plot <- function(
 
   # Create plot and print ----
   plot <- eval(parse(text = plotcode), envir = envir)
-  if (printplot){
-    print(plot)
-  }
+  if (printplot){ print(plot) }
 
   # Return invisible ----
   return(invisible(list(plot = plot,
@@ -750,12 +748,12 @@ get_horizontal_spacing <- function(right.space,
   column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
   if (is.null(right.space)){
     right.space <- unit(column_spacing[length(column_spacing)], "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- right.space   = ", printunit(right.space)))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`right.space   = {printunit(right.space)}`<br>"))
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
   if (is.null(col.right.pos)){
     col.right.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- col.right.pos = ", printunit(col.right.pos)))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`col.right.pos = {printunit(col.right.pos)}`<br>"))
   }
 
   ## calculate automatic col.left.pos and col.left.space
@@ -775,12 +773,12 @@ get_horizontal_spacing <- function(right.space,
   column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
   if (is.null(left.space)){
     left.space <- unit(column_spacing[length(column_spacing)], "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- left.space    = ", printunit(left.space)))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.space    = {printunit(left.space)}`<br>"))
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
   if (is.null(col.left.pos)){
     col.left.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- col.left.pos  = ", printunit(col.left.pos)))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`col.left.pos  = {printunit(col.left.pos)}`<br>"))
   }
 
   return(list(text_about_auto_spacing = text_about_auto_spacing,

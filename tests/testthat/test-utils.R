@@ -43,10 +43,10 @@ test_that("printunit", {
 
 test_that("makeunit", {
   expect_equal(makeunit(unit(1, "cm")),
-               "cm")
+               "\"cm\"")
   expect_equal(makeunit(unit(1, "in")),
-               "inches")
+               "\"inches\"")
   expect_equal(makeunit(unit(1, "null")),
-               "null")
+               "\"null\"")
 })
 
