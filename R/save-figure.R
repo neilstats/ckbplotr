@@ -139,8 +139,6 @@ prepare_figure <- function(figure,
 #'
 #' @inheritParams prepare_figure
 #' @param filename Name of file to create.
-#' @param name Name of figure.
-#'    Embedded in the PDF document properties Title field.
 #' @param cropped Create a second output of the figure without margins or title. (Default: NULL)
 #' @param args List of arguments passed to `ggplot2::ggsave()` for the main figure.
 #' @param args_cropped List of arguments passed to `ggplot2::ggsave()` for the cropped figure.

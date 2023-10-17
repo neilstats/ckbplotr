@@ -7,7 +7,6 @@
 save_figure(
   figure,
   filename,
-  name = "Figure",
   cropped = NULL,
   args = NULL,
   args_cropped = NULL,
@@ -19,9 +18,6 @@ save_figure(
 \item{figure}{Plot (or graphical object).}
 
 \item{filename}{Name of file to create.}
-
-\item{name}{Name of figure.
-Embedded in the PDF document properties Title field.}
 
 \item{cropped}{Create a second output of the figure without margins or title. (Default: NULL)}
 
@@ -36,9 +32,3 @@ Embedded in the PDF document properties Title field.}
 \description{
 Output plots as files
 }
-\section{Using cairo_pdf}{
-Note that if you use a PDF device that does not have a \code{title}
-argument (such as cairo_pdf), then the \code{title} argument should be set to
-NULL, e.g. \code{args = list(device = cairo_pdf, title = NULL)}
-}
-
