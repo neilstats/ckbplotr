@@ -55,7 +55,7 @@ In `forest_plot()` use:
 
 Note that `col.bold`, and `col.diamond` must be column names in the supplied data frames, while the others can be fixed values or column names. For diamonds, alternatively provide a character vector of keys in the `diamond` argument.
 
-
+For `fill` to have any effect, the shape will need to be a shape with fill e.g. `"square filled"`.
 
 
 ## Adding to the ggplot

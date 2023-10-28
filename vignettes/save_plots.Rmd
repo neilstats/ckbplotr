@@ -42,13 +42,12 @@ ggsave("myplot.png",
        width = 14, height = 14, units = "cm")
 ```
 
-Plots created with this package have transparent backgrounds, so if you're saving to a png file and want a solid white background (or generally want to change the background colour of a plot) use `theme()`:
+Plots created with this package have transparent backgrounds. For a png file output, you can use the `bg` argument to set the background colour:
 ```{r, eval = FALSE}
-my_plot_with_bg <- my_plot$plot + 
-  theme(plot.background = element_rect(fill = "white", colour = NA))
 ggsave("myplot.png",
-       plot = my_plot_with_bg,
-       width = 14, height = 14, units = "cm")
+       plot = my_plot$plot,
+       width = 14, height = 14, units = "cm",
+       bg = "white")
 ```
 
 The ckbplotr function `ggpreview()` can be used in place of `ggsave()` to preview the output.
