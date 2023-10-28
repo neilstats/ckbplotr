@@ -250,35 +250,24 @@ forest_plot(split(my_resultsAB, ~ analysis),
 
 ## Different limits on panels
 
-`forest_plot()` uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales applied, so it's not directly possible to have different limits and ticks on each forest plot.
+`forest_plot()` uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales applied, but you can use `forest_plot()` for each panel then arrange them side-by-side.
 
-However, one approach to work around this is to use `forest_plot()` for each plot you need, remove the row labels from all but the first, then arrange them side-by-side:
+If `xlim`, `xticks` and `panels` are lists of the same length, then `forest_plot()` will do this automatically. The function will return a list containing "figure" (a graphic object of the whole figure) and "plots" (a list of ggplots, one for each panel).
 
 ```{r, fig.width=6, out.width='75%'}
-p1 <- forest_plot(my_results,
-                  col.key = "subgroup",
-                  row.labels = row_labels,
-                  xlim = c(0.5, 3 + 1e-10),
-                  xticks = c(0.5, 1, 2),
-                  quiet = TRUE)
-
-p2 <- forest_plot(my_resultsB,
-                  col.key = "subgroup",
-                  row.labels = row_labels,
-                  plot.margin = margin(8, 8, 8, 0, unit = "mm"),
-                  xlim = c(0.1, 4),
-                  xticks = c(0.1, 1, 2, 4),
-                  quiet = TRUE)
-
-panel1 <- p1$plot
-panel2 <- p2$plot + theme(axis.text.y = element_blank()) ## remove row labels
-
-figure <- gridExtra::gtable_cbind(ggplotGrob(panel1),
-                                  ggplotGrob(panel2))
-grid::grid.draw(figure)
+forest <- forest_plot(split(my_resultsAB, ~ analysis),
+                      col.key = "subgroup",
+                      row.labels = row_labels,
+                      xlim = list(c(0.5, 3 + 1e-10),
+                                  c(0.1, 4)),
+                      xticks = list(c(0.5, 1, 2, 3),
+                                    c(0.1, 1, 2, 4)))
+grid::grid.draw(forest$figure)
 ```
 
-Note that if `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots.
+Use `grid::grid.draw()` to draw the figure (use `grid::grid.newpage()` to clear), and `ggsave()` or `save_figure()` to save to a file.
+
+Warnings: If `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling will be on a panel-by-panel basis so box sizes are not comparable between panels.
 
 
 

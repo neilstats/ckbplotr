@@ -174,6 +174,11 @@ forest_plot <- function(
 ){
 
 
+  if (is.list(xlim)){
+    call <- as.list(match.call())[-1]
+    return(forest_plot_list_xlim(call))
+  }
+
   # Check arguments ----
   panels_list <- panels
   if (is.data.frame(panels)) {
