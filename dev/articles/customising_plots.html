@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.6/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.6/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.7/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.7/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Customising plots">
@@ -36,7 +36,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.8.2.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.9.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -208,16 +208,18 @@ These can be names of columns in your data or single values. In
 column names in the supplied data frames, while the others can be fixed
 values or column names. For diamonds, alternatively provide a character
 vector of keys in the <code>diamond</code> argument.</p>
+<p>For <code>fill</code> to have any effect, the shape will need to be a
+shape with fill e.g. <code>"square filled"</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="adding-to-the-ggplot">Adding to the ggplot<a class="anchor" aria-label="anchor" href="#adding-to-the-ggplot"></a>
 </h2>
-<p>In <code><a href="../reference/forest_plot.html">forest_plot()</a></code> you can add additional ggplot objects
-to the plot with the <code>add</code> argument. The argument should be a
-named list, where the name <code>start</code> is an object to be
-included in the ggplot immediately after <code>ggplot()</code>
-(i.e. before anything else is added to the ggplot) and the name
-<code>end</code> will add to the end.</p>
+<p>In <code><a href="../reference/forest_plot.html">forest_plot()</a></code> and <code><a href="../reference/shape_plot.html">shape_plot()</a></code> you can
+add additional ggplot objects to the plot with the <code>add</code>
+argument. The argument should be a named list, where the name
+<code>start</code> is an object to be included in the ggplot immediately
+after <code>ggplot()</code> (i.e. before anything else is added to the
+ggplot) and the name <code>end</code> will add to the end.</p>
 <p>This argument can be used, for example, to add additional geoms to
 the plot:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -334,8 +336,8 @@ and arguments to layers:</p>
 <td>x-axis label</td>
 </tr>
 <tr class="even">
-<td>panel.name</td>
-<td>names above panels</td>
+<td>panel.headings (or panel.name)</td>
+<td>headings above panels</td>
 </tr>
 <tr class="odd">
 <td>nullline</td>
@@ -361,10 +363,10 @@ headings:</p>
 <span>                 <span class="st">"b) Genetic"</span>       <span class="op">=</span> <span class="va">my_resultsB</span><span class="op">)</span>,</span>
 <span>            col.key    <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels <span class="op">=</span> <span class="va">row_labels</span>,</span>
-<span>            addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.name <span class="op">=</span> <span class="st">"x = 0.5"</span><span class="op">)</span>,</span>
-<span>            addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"size = 4.5"</span>,</span>
-<span>                                         <span class="st">"colour = 'navyblue'"</span>,</span>
-<span>                                         <span class="st">"hjust = 0"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>            addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.headings <span class="op">=</span> <span class="st">"x = 0.5"</span><span class="op">)</span>,</span>
+<span>            addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"size = 4.5"</span>,</span>
+<span>                                             <span class="st">"colour = 'navyblue'"</span>,</span>
+<span>                                             <span class="st">"hjust = 0"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="customising_plots_files/figure-html/unnamed-chunk-7-1.png" width="75%" style="display: block; margin: auto;"></p>
 <p>Changing the appearance of the line at the ‘null’:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
