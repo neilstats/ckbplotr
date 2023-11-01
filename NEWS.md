@@ -1,5 +1,10 @@
 # ckbplotr (development version)
 
+* Added ggpreview() and preview argument in save_figure().
+* forest_plot() can handle lists for xlim (axis limits).
+* Improved generated code.
+* Fixes.
+
 # ckbplotr 0.9.2
 
 * Fix incorrect argument name in shape_plot().
