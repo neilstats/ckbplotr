@@ -29,6 +29,8 @@ forest_plot(
   col.right.pos = NULL,
   col.left.hjust = 1,
   col.right.hjust = 0,
+  col.left.gap = c("I", "W"),
+  col.right.gap = c("I", "W"),
   col.heading.space = 0,
   estcolumn = TRUE,
   col.keep = NULL,
@@ -121,6 +123,10 @@ Should the contents of the columns be parsed into expressions. (Default: FALSE)}
 
 \item{col.left.hjust, col.right.hjust}{A numeric vector. The horizontal justification of
 col.left/col.right columns. (Default: 1)}
+
+\item{col.left.gap, col.right.gap}{A character vector of length two. The two characters control the gaps between
+the first text column and the panel, and successive text columns.
+(Default: c("I", "W"))}
 
 \item{col.heading.space}{Position of the titles given by col.left.heading and
 col.right.heading. Increase to move them up. (Default: 0)}

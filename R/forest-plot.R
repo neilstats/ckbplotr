@@ -25,6 +25,10 @@
 #' @param col.left.hjust,col.right.hjust
 #' A numeric vector. The horizontal justification of
 #' col.left/col.right columns. (Default: 1)
+#' @param col.left.gap,col.right.gap
+#' A character vector of length two. The two characters control the gaps between
+#' the first text column and the panel, and successive text columns.
+#' (Default: c("I", "W"))
 #' @param col.left.heading,col.right.heading
 #' Headings for columns.
 #' @param col.heading.space
@@ -127,6 +131,8 @@ forest_plot <- function(
     col.right.pos      = NULL,
     col.left.hjust     = 1,
     col.right.hjust    = 0,
+    col.left.gap       = c("I", "W"),
+    col.right.gap      = c("I", "W"),
     col.heading.space  = 0,
     estcolumn          = TRUE,
     col.keep           = NULL,
@@ -400,7 +406,9 @@ forest_plot <- function(
     base_size,
     col.left,
     col.left.heading,
-    col.left.hjust)
+    col.left.hjust,
+    col.left.gap,
+    col.right.gap)
   text_about_auto_spacing <- horizontal_spacing$text_about_auto_spacing
   col.right.pos <- horizontal_spacing$col.right.pos
   col.left.pos <- horizontal_spacing$col.left.pos
@@ -718,7 +726,9 @@ get_horizontal_spacing <- function(right.space,
                                    base_size,
                                    col.left,
                                    col.left.heading,
-                                   col.left.hjust) {
+                                   col.left.hjust,
+                                   col.left.gap,
+                                   col.right.gap) {
   if((is.null(right.space) & !is.null(col.right.pos)) |
      is.null(left.space) & !is.null(col.left.pos) ){
     message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
@@ -742,13 +752,13 @@ get_horizontal_spacing <- function(right.space,
   widths_of_column_headings <- gettextwidths(col.right.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, then space for autoestcolumn, and gap between each column
-  column_spacing <- cumsum(c(gettextwidths("I"),
-                             widths_of_columns + gettextwidths("W")))
+  column_spacing <- cumsum(c(gettextwidths(col.right.gap[[1]]),
+                             widths_of_columns + gettextwidths(col.right.gap[[2]])))
   ## adjust for hjust
   column_spacing <- column_spacing + c(widths_of_columns*col.right.hjust, 0)
   ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
   if (length(column_spacing) == 1){column_spacing <- 0}
-  if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths("W")}
+  if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths(col.right.gap[[2]])}
   ### text on plot is 0.8 size, and adjust for base_size
   column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
   if (is.null(right.space)){
@@ -767,13 +777,12 @@ get_horizontal_spacing <- function(right.space,
   widths_of_column_headings <- gettextwidths(col.left.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, and gap between each column
-  column_spacing <- cumsum(c(gettextwidths("I"),
-                             widths_of_columns + gettextwidths("W")))
+  column_spacing <- cumsum(c(gettextwidths(col.left.gap[[1]]),
+                             widths_of_columns + gettextwidths(col.left.gap[[2]])))
   ## adjust for hjust
   column_spacing <- column_spacing + c(widths_of_columns*(1 - col.left.hjust), 0)
   ### if no column to plot (i.e. length 1) then width of W, if longer keep extra space on last element
-  if (length(column_spacing) == 1){column_spacing <- gettextwidths("W")}
-  # if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths("W")}
+  if (length(column_spacing) == 1){column_spacing <- gettextwidths(col.left.gap[[2]])}
   ### text on plot is 0.8 size, and adjust for base_size
   column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
   if (is.null(left.space)){
