@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -207,6 +207,8 @@ These can be names of columns in your data or single values. In
 column names in the supplied data frames, while the others can be fixed
 values or column names. For diamonds, alternatively provide a character
 vector of keys in the <code>diamond</code> argument.</p>
+<p>For <code>fill</code> to have any effect, the shape will need to be a
+shape with fill e.g. <code>"square filled"</code>.</p>
 </div>
 <div class="section level2">
 <h2 id="adding-to-the-ggplot">Adding to the ggplot<a class="anchor" aria-label="anchor" href="#adding-to-the-ggplot"></a>
@@ -333,8 +335,8 @@ and arguments to layers:</p>
 <td>x-axis label</td>
 </tr>
 <tr class="even">
-<td>panel.name</td>
-<td>names above panels</td>
+<td>panel.headings (or panel.name)</td>
+<td>headings above panels</td>
 </tr>
 <tr class="odd">
 <td>nullline</td>
@@ -360,10 +362,10 @@ headings:</p>
 <span>                 <span class="st">"b) Genetic"</span>       <span class="op">=</span> <span class="va">my_resultsB</span><span class="op">)</span>,</span>
 <span>            col.key    <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels <span class="op">=</span> <span class="va">row_labels</span>,</span>
-<span>            addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.name <span class="op">=</span> <span class="st">"x = 0.5"</span><span class="op">)</span>,</span>
-<span>            addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"size = 4.5"</span>,</span>
-<span>                                         <span class="st">"colour = 'navyblue'"</span>,</span>
-<span>                                         <span class="st">"hjust = 0"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>            addaes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.headings <span class="op">=</span> <span class="st">"x = 0.5"</span><span class="op">)</span>,</span>
+<span>            addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"size = 4.5"</span>,</span>
+<span>                                             <span class="st">"colour = 'navyblue'"</span>,</span>
+<span>                                             <span class="st">"hjust = 0"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="customising_plots_files/figure-html/unnamed-chunk-7-1.png" width="75%" style="display: block; margin: auto;"></p>
 <p>Changing the appearance of the line at the ‘null’:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">

@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.9.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.10.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -203,7 +203,6 @@ RStudio Viewer pane is:</p>
 <span>                                    col.estimate <span class="op">=</span> <span class="st">"est"</span>,</span>
 <span>                                    col.stderr <span class="op">=</span> <span class="st">"se"</span><span class="op">)</span></span>
 <span></span>
-<span></span>
 <span><span class="co"># Create the ggplot</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">datatoplot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">row</span>, x <span class="op">=</span> <span class="va">estimate_transformed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span></span>
@@ -240,10 +239,6 @@ RStudio Viewer pane is:</p>
 <span>                linewidth <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                na.rm     <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  </span>
-<span>  <span class="co"># Set coordinate system</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>clip <span class="op">=</span> <span class="st">"off"</span>,</span>
-<span>                  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">2.2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  </span>
 <span>  <span class="co"># Add columns to right side of panels</span></span>
 <span>  <span class="co">## column auto_estcolumn</span></span>
 <span>  <span class="fu">ckbplotr</span><span class="fu">::</span><span class="fu"><a href="../../reference/geom_text_move.html">geom_text_move</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">row</span>,</span>
@@ -263,8 +258,8 @@ RStudio Viewer pane is:</p>
 <span>                           size     <span class="op">=</span> <span class="fl">3.092846</span>,</span>
 <span>                           colour   <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>                           fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
-<span>                           data <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">datatoplot</span><span class="op">$</span><span class="va">panel</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                                                title <span class="op">=</span> <span class="st">"HR (95% CI)"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                           data <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">.</span><span class="op">[[</span><span class="st">"panel"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                                  title <span class="op">=</span> <span class="st">"HR (95% CI)"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  </span>
 <span>  <span class="co"># Add xlab below each axis</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="cn">Inf</span>,</span>
@@ -277,6 +272,10 @@ RStudio Viewer pane is:</p>
 <span>            fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
 <span>            data <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">.</span><span class="op">[[</span><span class="st">"panel"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                                   xlab <span class="op">=</span> <span class="st">"HR (95% CI)"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  </span>
+<span>  <span class="co"># Set coordinate system</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>clip <span class="op">=</span> <span class="st">"off"</span>,</span>
+<span>                  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">2.2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  </span>
 <span>  <span class="co"># Set the scale for the x axis (the estimates and CIs)</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>trans  <span class="op">=</span> <span class="st">"log"</span>,</span>
