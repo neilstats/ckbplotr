@@ -280,6 +280,9 @@ forest_data <- function(
     out <- dplyr::slice(out, 1:(dplyr::n() - 1))
   }
 
+  # handle row.labels that start with "+"
+  out$row.label <- gsub("^\\+", "&plus;", out$row.label)
+
   # create row number and select only needed rows and columns
   out <- out %>%
     dplyr::mutate(row = cumsum(dplyr::coalesce(.data$row.height, 1))) %>%

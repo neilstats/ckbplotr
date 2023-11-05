@@ -163,7 +163,7 @@ ds <- function(x){
 #' @noRd
 printunit <- function(x){
   if(is.null(x)){return(NULL)}
-  paste0('unit(', gsub('"', '', ds(as.numeric(x))), ', "', makeunit(x), '")')
+  glue::glue('unit({deparse(as.numeric(x))}, {makeunit(x)})')
 }
 
 
@@ -176,9 +176,9 @@ makeunit <- function(x){
   if(is.null(x)){return(NULL)}
   ## handle different unit object types (for grid>=4.0)
   if (compareVersion(as.character(packageVersion("grid")), "4.0") >= 0){
-    grid::unitType(x)
+    ds(grid::unitType(x))
   } else {
-    attr(x, "unit")
+    ds(attr(x, "unit"))
   }
 
 }

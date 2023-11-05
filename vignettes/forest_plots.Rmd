@@ -220,6 +220,7 @@ forest_plot(split(my_resultsAB, ~ analysis),
             scalepoints = TRUE,
             pointsize   = 8,
             xlim        = c(0.5, 3),
+            xticks      = c(0.5, 1, 2, 3),
             panel.width = unit(28, "mm"))
 ```
 
@@ -249,35 +250,24 @@ forest_plot(split(my_resultsAB, ~ analysis),
 
 ## Different limits on panels
 
-`forest_plot()` uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales applied, so it's not directly possible to have different limits and ticks on each forest plot.
+`forest_plot()` uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales applied, but you can use `forest_plot()` for each panel then arrange them side-by-side.
 
-However, one approach to work around this is to use `forest_plot()` for each plot you need, remove the row labels from all but the first, then arrange them side-by-side:
+If `xlim`, `xticks` and `panels` are lists of the same length, then `forest_plot()` will do this automatically. The function will return a list containing "figure" (a graphic object of the whole figure) and "plots" (a list of ggplots, one for each panel).
 
 ```{r, fig.width=6, out.width='75%'}
-p1 <- forest_plot(my_results,
-                  col.key = "subgroup",
-                  row.labels = row_labels,
-                  xlim = c(0.5, 3 + 1e-10),
-                  xticks = c(0.5, 1, 2),
-                  quiet = TRUE)
-
-p2 <- forest_plot(my_resultsB,
-                  col.key = "subgroup",
-                  row.labels = row_labels,
-                  plot.margin = margin(8, 8, 8, 0, unit = "mm"),
-                  xlim = c(0.1, 4),
-                  xticks = c(0.1, 1, 2, 4),
-                  quiet = TRUE)
-
-panel1 <- p1$plot
-panel2 <- p2$plot + theme(axis.text.y = element_blank()) ## remove row labels
-
-figure <- gridExtra::gtable_cbind(ggplot_gtable(ggplot_build(panel1)),
-                                  ggplot_gtable(ggplot_build(panel2)))
-grid::grid.draw(figure)
+forest <- forest_plot(split(my_resultsAB, ~ analysis),
+                      col.key = "subgroup",
+                      row.labels = row_labels,
+                      xlim = list(c(0.5, 3 + 1e-10),
+                                  c(0.1, 4)),
+                      xticks = list(c(0.5, 1, 2, 3),
+                                    c(0.1, 1, 2, 4)))
+grid::grid.draw(forest$figure)
 ```
 
-Note that if `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling is on a plot-by-plot basis so box sizes are not comparable between plots.
+Use `grid::grid.draw()` to draw the figure (use `grid::grid.newpage()` to clear), and `ggsave()` or `save_figure()` to save to a file.
+
+Warnings: If `scalepoints = TRUE` (and `minse` is not specified the same for each plot) then this scaling will be on a panel-by-panel basis so box sizes are not comparable between panels.
 
 
 
@@ -285,20 +275,42 @@ Note that if `scalepoints = TRUE` (and `minse` is not specified the same for eac
 
 
 ## Adding heterogeneity and trend test results
-The `addtext` argument can be used to add results of heterogeneity or trend tests, or some other text, in the text column of estimates and CIs.
+The `addtext` argument can be used to add results of heterogeneity or trend tests, or some other text, in the text column of estimates and CIs. It needs to be a list of data frames, the same length as panels. Data frames should contain a column with the name specified in col.key, and one or more of:
+
+- a column named 'text' containing character strings
+- columns named 'het_dof', 'het_stat', and 'het_p' containing character strings
+- columns names 'trend_stat' and 'trend_p' containing character strings
+
+```{r}
+het_trend_results <- data.frame(
+  analysis = factor(c("Observational", "Observational", "Genetic", "Genetic", "Genetic"),
+         levels = c("Observational", "Genetic")),
+  subgroup   = c(  "men",  "35_49",   "men",  "35_49", "35_49"),
+  het_dof    = c(    "1",       NA,     "1",       NA,      NA),
+  het_stat   = c( "1.99",       NA, "0.136",       NA,      NA),
+  het_p      = c("=0.16",       NA, "=0.71",       NA,      NA),
+  trend_stat = c(     NA,   "27.2",      NA,   "6.98",      NA),
+  trend_p    = c(     NA, "<0.001",      NA, "=0.008",      NA),
+  text       = c(     NA,       NA,      NA,       NA,  "Note")
+)
+```
+
+```{r, fig.width=7.2, fig.height = 4.5, out.width='75%'}
+forest_plot(split(my_resultsAB, ~ analysis),
+            col.key     = "subgroup",
+            row.labels  = row_labels,
+            scalepoints = TRUE,
+            pointsize   = 8,
+            xlim        = c(0.5, 3),
+            xticks      = c(0.5, 1, 2, 3),
+            panel.width = unit(28, "mm"),
+            right.space = unit(45, "mm"),
+            addtext     = split(het_trend_results, ~ analysis))
+```
+
+Note that values should all be character strings, and P-values should include the necessary "=" or "<".
 
 The automatic positioning of columns and spacing of panels does not take into account this additional text, so you may need to use the `right.space` and `col.right.pos` arguments for a satisfactory layout.
-
-```{r, echo = FALSE}
-
-```
-
-```{r}
-```
-
-```{r}
-```
-
 
 
 ## Customisation

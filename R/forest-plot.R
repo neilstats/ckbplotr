@@ -25,6 +25,10 @@
 #' @param col.left.hjust,col.right.hjust
 #' A numeric vector. The horizontal justification of
 #' col.left/col.right columns. (Default: 1)
+#' @param col.left.gap,col.right.gap
+#' A character vector of length two. The two characters control the gaps between
+#' the first text column and the panel, and successive text columns.
+#' (Default: c("I", "W"))
 #' @param col.left.heading,col.right.heading
 #' Headings for columns.
 #' @param col.heading.space
@@ -127,6 +131,8 @@ forest_plot <- function(
     col.right.pos      = NULL,
     col.left.hjust     = 1,
     col.right.hjust    = 0,
+    col.left.gap       = c("I", "W"),
+    col.right.gap      = c("I", "W"),
     col.heading.space  = 0,
     estcolumn          = TRUE,
     col.keep           = NULL,
@@ -173,6 +179,11 @@ forest_plot <- function(
     blankrows          = NULL
 ){
 
+
+  if (is.list(xlim)){
+    call <- as.list(match.call())[-1]
+    return(forest_plot_list_xlim(call))
+  }
 
   # Check arguments ----
   panels_list <- panels
@@ -317,29 +328,33 @@ forest_plot <- function(
     fill_list <- list(aes = fill)
   }
   if (is.list(fill)){
-    fill_list <- list(aes = "fill",
-                      values = fill)
+    fill_aes <- c(
+      'dplyr::case_when(',
+      purrr::map_chr(1:length(fill),
+                     \(i) glue::glue('panel == {quote_string(panel.names[[{i}]])} ~ {quote_string(fill[[{i}]][1])}, ')
+      ),
+      'TRUE ~ "black")'
+    )
+    fill_list <- list(string_aes = paste(fill_aes, collapse = ""))
   }
-
-
-
 
   # Aesthetic adjustments for fixed panel width ----
   if (fixed_panel_width) {
     if (!inherits(panel.width, "unit")){
       panel.width <- grid::unit(panel.width, "mm")
     }
-    cicolour_list <- list(aes = "cicolour",
-                          values = c(quote_string(cicolour_list$arg),
-                                     column_name(cicolour_list$aes)))
+    cicolour_list <- list(string_aes = forest.cicolour(c(quote_string(cicolour_list$arg),
+                                                         column_name(cicolour_list$aes)),
+                                                       panel.names))
 
     if (missing(ciunder)) {
       ciunder <- c(TRUE, FALSE)
     }
 
     if (length(ciunder) > 1) {
-      ciunder_orig <- ciunder
-      ciunder <- "ciunder"
+      ciunder <- glue::glue('dplyr::if_else(narrowci, ',
+                            '{ciunder[length(ciunder)]}, ',
+                            '{ciunder[1]})')
     }
   }
 
@@ -391,7 +406,9 @@ forest_plot <- function(
     base_size,
     col.left,
     col.left.heading,
-    col.left.hjust)
+    col.left.hjust,
+    col.left.gap,
+    col.right.gap)
   text_about_auto_spacing <- horizontal_spacing$text_about_auto_spacing
   col.right.pos <- horizontal_spacing$col.right.pos
   col.left.pos <- horizontal_spacing$col.left.pos
@@ -405,11 +422,11 @@ forest_plot <- function(
   ## xfrom, xto, etc. are used by other code sections, so this must come first
   if (is.null(col.lci)) {
     allvalues <- unlist(lapply(panels_list, function(x) c(tf(x[[col.estimate]] - 1.96 * x[[col.stderr]]),
-                                                   tf(x[[col.estimate]] + 1.96 * x[[col.stderr]]))),
+                                                          tf(x[[col.estimate]] + 1.96 * x[[col.stderr]]))),
                         use.names = FALSE)
   } else {
     allvalues <- unlist(lapply(panels_list, function(x) c(tf(x[[col.lci]]),
-                                                   tf(x[[col.uci]]))),
+                                                          tf(x[[col.uci]]))),
                         use.names = FALSE)
   }
   allvalues_range <- range(pretty(allvalues))
@@ -443,7 +460,7 @@ forest_plot <- function(
     f = 'datatoplot <- ckbplotr::forest_data',
     arg = c(
       'panels = {paste(deparse(substitute(panels)), collapse = "")}',
-      argset(row.labels),
+      if (!is.null(row.labels)){'row.labels = {paste(deparse(substitute(row.labels)), collapse = "")}'},
       argset(row.labels.levels),
       argset(rows),
       argset(row.labels.space),
@@ -468,7 +485,6 @@ forest_plot <- function(
 
 
 
-
   # Create the plot code ----
   plotcode <- c(
     'library(ggplot2)',
@@ -477,32 +493,24 @@ forest_plot <- function(
     # code to prepare data for plotting using forest_data()
     prep.data.code,
 
-    # fill may be a list
-    if (!is.null(fill_list$values)){forest.fillcode(fill_list$values, panel.names)},
-
-    # code for CI colours if using panel.width
+    # code for if using fixed panel width
     if (fixed_panel_width) {
-      forest.cicolourcode(axis_scale,
-                          axis_scale_fn,
-                          xto,
-                          xfrom,
-                          pointsize,
-                          scalepoints,
-                          stroke,
-                          panel.width,
-                          shape_list,
-                          cicolour_list,
-                          panel.names)
-    },
-
-    ## code for CI under - if using panel.width
-    if (exists("ciunder_orig")) {
-      forest.ciundercode(ciunder_orig)
+      forest.narrowci(axis_scale,
+                      axis_scale_fn,
+                      xto,
+                      xfrom,
+                      pointsize,
+                      scalepoints,
+                      stroke,
+                      panel.width,
+                      shape_list)
     },
 
     # code for user function on datatoplot
-    glue::glue_safe('datatoplot <- {data.function}(datatoplot)'),
-    '',
+    if (!is.null(data.function)){
+      c(glue::glue_safe('datatoplot <- {data.function}(datatoplot)'),
+        '')
+    },
 
     # code to initiate the ggplot
     forest.start.ggplot(),
@@ -567,12 +575,12 @@ forest_plot <- function(
            },
 
            # code for scales and coordinates
-           forest.scales.coords(xfrom,
-                                xto,
-                                shape_list,
-                                fill_list,
-                                colour_list,
-                                cicolour_list),
+           forest.scales(xfrom,
+                         xto,
+                         shape_list,
+                         fill_list,
+                         colour_list,
+                         cicolour_list),
 
            # code for columns to right of panel
            if (!is.null(col.right) | estcolumn) {
@@ -681,9 +689,7 @@ forest_plot <- function(
 
   # Create plot and print ----
   plot <- eval(parse(text = plotcode), envir = envir)
-  if (printplot){
-    print(plot)
-  }
+  if (printplot){ print(plot) }
 
   # Return invisible ----
   return(invisible(list(plot = plot,
@@ -720,7 +726,9 @@ get_horizontal_spacing <- function(right.space,
                                    base_size,
                                    col.left,
                                    col.left.heading,
-                                   col.left.hjust) {
+                                   col.left.hjust,
+                                   col.left.gap,
+                                   col.right.gap) {
   if((is.null(right.space) & !is.null(col.right.pos)) |
      is.null(left.space) & !is.null(col.left.pos) ){
     message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
@@ -744,23 +752,23 @@ get_horizontal_spacing <- function(right.space,
   widths_of_column_headings <- gettextwidths(col.right.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, then space for autoestcolumn, and gap between each column
-  column_spacing <- cumsum(c(gettextwidths("I"),
-                             widths_of_columns + gettextwidths("W")))
+  column_spacing <- cumsum(c(gettextwidths(col.right.gap[[1]]),
+                             widths_of_columns + gettextwidths(col.right.gap[[2]])))
   ## adjust for hjust
   column_spacing <- column_spacing + c(widths_of_columns*col.right.hjust, 0)
   ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
   if (length(column_spacing) == 1){column_spacing <- 0}
-  if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths("W")}
+  if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths(col.right.gap[[2]])}
   ### text on plot is 0.8 size, and adjust for base_size
   column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
   if (is.null(right.space)){
     right.space <- unit(column_spacing[length(column_spacing)], "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- right.space   = ", printunit(right.space)))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`right.space   = {printunit(right.space)}`<br>"))
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
   if (is.null(col.right.pos)){
     col.right.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- col.right.pos = ", printunit(col.right.pos)))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`col.right.pos = {printunit(col.right.pos)}`<br>"))
   }
 
   ## calculate automatic col.left.pos and col.left.space
@@ -769,23 +777,22 @@ get_horizontal_spacing <- function(right.space,
   widths_of_column_headings <- gettextwidths(col.left.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, and gap between each column
-  column_spacing <- cumsum(c(gettextwidths("I"),
-                             widths_of_columns + gettextwidths("W")))
+  column_spacing <- cumsum(c(gettextwidths(col.left.gap[[1]]),
+                             widths_of_columns + gettextwidths(col.left.gap[[2]])))
   ## adjust for hjust
   column_spacing <- column_spacing + c(widths_of_columns*(1 - col.left.hjust), 0)
   ### if no column to plot (i.e. length 1) then width of W, if longer keep extra space on last element
-  if (length(column_spacing) == 1){column_spacing <- gettextwidths("W")}
-  # if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths("W")}
+  if (length(column_spacing) == 1){column_spacing <- gettextwidths(col.left.gap[[2]])}
   ### text on plot is 0.8 size, and adjust for base_size
   column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
   if (is.null(left.space)){
     left.space <- unit(column_spacing[length(column_spacing)], "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- left.space    = ", printunit(left.space)))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.space    = {printunit(left.space)}`<br>"))
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
   if (is.null(col.left.pos)){
     col.left.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, paste0("- col.left.pos  = ", printunit(col.left.pos)))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`col.left.pos  = {printunit(col.left.pos)}`<br>"))
   }
 
   return(list(text_about_auto_spacing = text_about_auto_spacing,

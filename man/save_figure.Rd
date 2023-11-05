@@ -6,36 +6,29 @@
 \usage{
 save_figure(
   figure,
-  name,
-  cropped = FALSE,
-  ext = c("pdf", "png"),
+  filename,
+  cropped = NULL,
   args = NULL,
   args_cropped = NULL,
+  preview = FALSE,
   ...
 )
 }
 \arguments{
 \item{figure}{Plot (or graphical object).}
 
-\item{name}{Name of figure.
-Used to name the output file(s) and embedded in the PDF document properties Title field.}
+\item{filename}{Name of file to create.}
 
-\item{cropped}{Create a second output of the figure without margins or title. (Default: False)}
-
-\item{ext}{Extensions to be added to file names for the main figure and cropped figure. (Default: c("pdf", "png"))}
+\item{cropped}{Name of second output file of the figure without margins or title.}
 
 \item{args}{List of arguments passed to \code{ggplot2::ggsave()} for the main figure.}
 
 \item{args_cropped}{List of arguments passed to \code{ggplot2::ggsave()} for the cropped figure.}
+
+\item{preview}{Preview the output in the RStudio Viewer pane. (Default: False)}
 
 \item{...}{Other arguments passed to \link{prepare_figure}.}
 }
 \description{
 Output plots as files
 }
-\section{Using cairo_pdf}{
-Note that if you use a PDF device that does not have a \code{title}
-argument (such as cairo_pdf), then the \code{title} argument should be set to
-NULL, e.g. \code{args = list(device = cairo_pdf, title = NULL)}
-}
-

@@ -42,25 +42,26 @@ ggsave("myplot.png",
        width = 14, height = 14, units = "cm")
 ```
 
-Plots created with this package have transparent backgrounds, so if you're saving to a png file and want a solid white background (or generally want to change the background colour of a plot) use `theme()`:
+Plots created with this package have transparent backgrounds. For a png file output, you can use the `bg` argument to set the background colour:
 ```{r, eval = FALSE}
-my_plot_with_bg <- my_plot$plot + 
-  theme(plot.background = element_rect(fill = "white", colour = NA))
 ggsave("myplot.png",
-       plot = my_plot_with_bg,
-       width = 14, height = 14, units = "cm")
+       plot = my_plot$plot,
+       width = 14, height = 14, units = "cm",
+       bg = "white")
 ```
 
+The ckbplotr function `ggpreview()` can be used in place of `ggsave()` to preview the output.
 
 ## Save with title and footnote
 Use `save_figure()` to add a title and footer to a plot and save to a file. The following code will save the plot (sized to 14 by 14 cm) in an A4 sized PDF file, with title and footer.
 ```{r save-shape-plot, eval = FALSE}
 save_figure(my_plot$plot,
-            name   = "Figure 1",
-            title  = "Figure 1: My example shape plot",
-            footer = "An example footer text.",
-            size   = unit(c(14, 14), "cm"))
+            filename   = "Figure 1.pdf",
+            title      = "Figure 1: My example shape plot",
+            footer     = "An example footer text.",
+            size       = unit(c(14, 14), "cm"))
 ```
+
 ```{r, fig.width=8.27, fig.height=11.69, out.width='40%', out.extra='style="margin: auto; display: block; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;"', echo = FALSE}
 figure <- prepare_figure(my_plot$plot,
                          title  = "Figure 1: My example shape plot",
@@ -69,4 +70,17 @@ figure <- prepare_figure(my_plot$plot,
 grid::grid.draw(figure$page)
 ```
 
-The function has several arguments that allow for customization of appearance and layout. For example: use `ext` to set the file extension (and also format); set `landscape = TRUE` to create a landscape page; and set `cropped = TRUE` to also save a plot without additional margins, title or footer.
+The function has several arguments that allow for customization of appearance and layout. For example: `landscape = TRUE` to create a landscape page; and set `cropped` to be a file name to also save a plot without additional margins, title or footer.
+
+## Preview the output
+Set `preview = TRUE` to view a preview of the output in the RStudio Viewer pane. (Instead of creating a file, the figure is saved to a temporary PNG file and shown.)
+```{r preview-shape-plot, eval = FALSE}
+save_figure(my_plot$plot,
+            filename   = "Figure 1.pdf",
+            title      = "Figure 1: My example shape plot",
+            footer     = "An example footer text.",
+            size       = unit(c(14, 14), "cm"),
+            preview    = TRUE)
+```
+
+
