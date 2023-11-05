@@ -19,7 +19,7 @@ save_figure(
 
 \item{filename}{Name of file to create.}
 
-\item{cropped}{Create a second output of the figure without margins or title. (Default: NULL)}
+\item{cropped}{Name of second output file of the figure without margins or title.}
 
 \item{args}{List of arguments passed to \code{ggplot2::ggsave()} for the main figure.}
 

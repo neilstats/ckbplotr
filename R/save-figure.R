@@ -139,7 +139,7 @@ prepare_figure <- function(figure,
 #'
 #' @inheritParams prepare_figure
 #' @param filename Name of file to create.
-#' @param cropped Create a second output of the figure without margins or title. (Default: NULL)
+#' @param cropped Name of second output file of the figure without margins or title.
 #' @param args List of arguments passed to `ggplot2::ggsave()` for the main figure.
 #' @param args_cropped List of arguments passed to `ggplot2::ggsave()` for the cropped figure.
 #' @param preview Preview the output in the RStudio Viewer pane. (Default: False)
