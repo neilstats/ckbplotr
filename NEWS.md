@@ -1,7 +1,8 @@
-# ckbplotr (development version)
+# ckbplotr 0.10.0
 
 * Added ggpreview() and preview argument in save_figure().
 * forest_plot() can handle lists for xlim (axis limits).
+* Added arguments to forest_plot() to control column spacing.
 * Improved generated code.
 * Fixes.
 
