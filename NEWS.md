@@ -1,3 +1,7 @@
+# ckbplotr 0.10.1
+
+* Fix xlab and column headings when xlim is a list in forest_plot().
+
 # ckbplotr 0.10.0
 
 * Added ggpreview() and preview argument in save_figure().

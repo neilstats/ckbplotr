@@ -5,6 +5,9 @@ forest_plot_list_xlim <- function(call){
   xlim <- eval(call$xlim)
   xticks <- eval(call$xticks)
   panels <- eval(call$panels)
+  xlab <- eval(call$xlab)
+  col.left.heading <- eval(call$col.left.heading)
+  col.right.heading <- eval(call$col.right.heading)
 
   ## check arguments
   if (!is.list(xlim) | !is.list(xticks) | !is.list(panels)){
@@ -13,6 +16,19 @@ forest_plot_list_xlim <- function(call){
   if (length(unique(c(length(xlim), length(xticks), length(panels)))) != 1){
     rlang::abort("panels, xlim and xticks must be lists of the same length")
   }
+
+  ## make lists
+  xlab <- as.list(xlab)
+  if (length(xlab) < length(xlim)){
+    xlab <- rep(xlab, length(xlim))
+  }
+  if (!is.list(col.left.heading)){
+    col.left.heading <- rep(list(col.left.heading), length(xlim))
+  }
+  if (!is.list(col.right.heading)){
+    col.right.heading <- rep(list(col.right.heading), length(xlim))
+  }
+
 
   ## create arguments for plot.margin and mid.space
   plot.margin <- eval(call$plot.margin)
@@ -38,6 +54,16 @@ forest_plot_list_xlim <- function(call){
                         xticks = xticks[[i]],
                         plot.margin = plot_margin,
                         quiet = TRUE)
+
+    if (!is.null(xlab[i]) && length(xlab) > 0){
+      update_args$xlab <- xlab[[i]]
+    }
+    if (!is.null(col.left.heading[i])){
+      update_args$col.left.heading <- col.left.heading[[i]]
+    }
+    if (!is.null(col.right.heading[i])){
+      update_args$col.right.heading <- col.right.heading[[i]]
+    }
 
     forest <- do.call("forest_plot",
                       utils::modifyList(call, update_args))
