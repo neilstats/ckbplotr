@@ -126,7 +126,7 @@ forest_plot <- function(
     col.right          = NULL,
     col.right.parse    = FALSE,
     col.left.heading   = "",
-    col.right.heading  = xlab,
+    col.right.heading  = as.list(xlab),
     col.left.pos       = NULL,
     col.right.pos      = NULL,
     col.left.hjust     = 1,
