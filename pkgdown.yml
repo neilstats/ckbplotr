@@ -11,7 +11,7 @@ articles:
   save_plots: save_plots.html
   shape_plots: shape_plots.html
   generated_code: web-only/generated_code.html
-last_built: 2023-12-04T20:00Z
+last_built: 2023-12-04T20:02Z
 urls:
   reference: https://neilstats.github.io/ckbplotr/reference
   article: https://neilstats.github.io/ckbplotr/articles
