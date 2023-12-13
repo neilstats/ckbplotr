@@ -181,7 +181,7 @@ save_figure <- function(figure,
     figargs <- list(filename = cropped,
                     plot   = figure$figure,
                     width  = attr(figure$figure, "width"),
-                    height = attr(figure$figure, "width"),
+                    height = attr(figure$figure, "height"),
                     units = "mm",
                     bg = "transparent")
     if(!is.null(args_cropped)){figargs <- utils::modifyList(figargs, args_cropped)}
