@@ -1,3 +1,7 @@
+# ckbplotr 0.10.2
+
+* Fix dimensions for cropped figure in save_figure().
+
 # ckbplotr 0.10.1
 
 * Fix xlab and column headings when xlim is a list in forest_plot().
