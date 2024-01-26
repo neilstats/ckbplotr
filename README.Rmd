@@ -20,16 +20,15 @@ library(grid)
 library(gridExtra)
 ```
 # ckbplotr <img src="man/figures/logo.png" align="right" width = "120" />
-<!-- badges: start -->
-[![R build status](https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg)](https://github.com/neilstats/ckbplotr/actions)
-[![DOI](https://zenodo.org/badge/189028664.svg)](https://zenodo.org/badge/latestdoi/189028664)
-<!-- badges: end -->
 
-`ckbplotr` provides functions to help create and style plots in R. It is 
+[![R build status](https://github.com/neilstats/ckbplotr/workflows/R-CMD-check/badge.svg)](https://github.com/neilstats/ckbplotr/actions)
+[![runiverse-name](https://neilstats.r-universe.dev/badges/:name)](https://neilstats.r-universe.dev)
+[![runiverse-package](https://neilstats.r-universe.dev/badges/ckbplotr)](https://neilstats.r-universe.dev/ckbplotr)
+[![DOI](https://zenodo.org/badge/189028664.svg)](https://zenodo.org/badge/latestdoi/189028664)
+
+`ckbplotr` helps create and style plots in R. It is 
 developed by, and primarily for, [China Kadoorie Biobank](http://www.ckbiobank.org) 
 researchers.
-
-
 
 ## Key features
 
