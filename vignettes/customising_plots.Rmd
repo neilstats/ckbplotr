@@ -134,11 +134,12 @@ In `forest_plot()` the following names will add aesthetics and arguments to laye
 |------------|----------------------|
 | ci         | confidence intervals |
 | point      | point estimates      |
-| col.right  | col.right columns    |
-| col.left   | col.left columns     |
+| col.right/col.left | col.right/col.left columns |
+| heading.col.right/heading.col.left | col.right/col.left column headings |
 | xlab       | x-axis label         |
 | panel.headings (or panel.name) | headings above panels   |
 | nullline   | line at null         |
+| addtext    | 'addtext' text       |
 
 Where duplicate aesthetics/arguments might be defined and created, they are kept with the priority:
 

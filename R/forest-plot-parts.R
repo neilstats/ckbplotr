@@ -325,7 +325,9 @@ forest.col.code <- function(column,
                             addarg,
                             col.heading.space,
                             text_size,
-                            plotcolour){
+                            plotcolour,
+                            headingaddaes,
+                            headingaddarg){
   c(
     make_layer(
       glue::glue('## column {column}'),
@@ -353,10 +355,12 @@ forest.col.code <- function(column,
       br = FALSE),
     make_layer(
       f = 'ckbplotr::geom_text_move',
-      aes = c('y     = - {col.heading.space}',
+      aes = c(headingaddaes[headingaddaes!=""],
+              'y     = - {col.heading.space}',
               'x     = {xpos}',
               'label = title'),
-      arg = c('move_x  = {printunit(pos)}',
+      arg = c(headingaddarg[headingaddarg!=""],
+              'move_x  = {printunit(pos)}',
               'hjust    = {hjust}',
               'size     = {text_size}',
               'colour   = {quote_string(plotcolour)}',
@@ -396,7 +400,9 @@ forest.columns.right <- function(col.right.all,
          addarg     = if(is.null(addarg$col.right)){""} else{addarg$col.right},
          col.heading.space = col.heading.space,
          text_size  = text_size,
-         plotcolour = plotcolour),
+         plotcolour = plotcolour,
+         headingaddaes = if(is.null(addaes$heading.col.right)){""} else{addaes$heading.col.right},
+         headingaddarg = if(is.null(addarg$heading.col.right)){""} else{addarg$heading.col.right}),
     forest.col.code))
   c('# Add columns to right side of panels', x)
 }
@@ -429,7 +435,9 @@ forest.columns.left <- function(col.left,
          addarg     = if(is.null(addarg$col.left)){""} else{addarg$col.left},
          col.heading.space = col.heading.space,
          text_size  = text_size,
-         plotcolour = plotcolour),
+         plotcolour = plotcolour,
+         headingaddaes = if(is.null(addaes$heading.col.left.heading)){""} else{addaes$heading.col.left},
+         headingaddarg = if(is.null(addarg$heading.col.left.heading)){""} else{addarg$heading.col.left}),
     forest.col.code))
   c('# Add columns to left side of panel', x)
 }
@@ -443,14 +451,18 @@ forest.addtext <- function(xto,
                            text_size,
                            plotcolour,
                            axis_scale_fn,
-                           axis_scale_inverse_fn) {
+                           axis_scale_inverse_fn,
+                           addaes,
+                           addarg) {
   make_layer(
     '## addtext',
     f = 'ckbplotr::geom_text_move',
-    aes = c('y = row',
+    aes = c(addaes$addtext,
+            'y = row',
             'x = {xto}',
             'label = addtext'),
-    arg = c('move_x = {printunit(col.right.pos[[1]])}',
+    arg = c(addarg$addtext,
+            'move_x = {printunit(col.right.pos[[1]])}',
             'hjust  = {col.right.hjust[[1]]}',
             'size   = {text_size}',
             'colour = {quote_string(plotcolour)}',

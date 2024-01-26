@@ -629,7 +629,9 @@ forest_plot <- function(
                             text_size,
                             plotcolour,
                             axis_scale_fn,
-                            axis_scale_inverse_fn)
+                            axis_scale_inverse_fn,
+                            addaes,
+                            addarg)
            },
 
            # code for x-axis labels and panel headings
