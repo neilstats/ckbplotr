@@ -1,5 +1,10 @@
 # ckbplotr (development version)
 
+* addaes/addarg in forest_plot() can now also be used for column headings and diamonds.
+* addtext in forest_plot() can be used to display plotmath.
+* valign and halign arguments added to prepare_figure() and save_figure()
+* Fixes.
+
 # ckbplotr 0.10.2
 
 * Fix dimensions for cropped figure in save_figure().
