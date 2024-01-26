@@ -117,8 +117,8 @@ prepare_figure <- function(figure,
     maxwidth = pagedim[1] - 2 * footer.pos[1])
 
   ## Arrange page with title and footer
-  page <- grid::gList(titleGrob,
-                      figure_with_margins,
+  page <- grid::gList(figure_with_margins,
+                      titleGrob,
                       footerGrob)
 
   ## Dimensions
