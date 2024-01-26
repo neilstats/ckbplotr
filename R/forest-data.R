@@ -110,7 +110,7 @@ forest_data <- function(
 
   ## check columns in addtext are character
   for (addtextframe in addtext){
-    for (textcol in c("text", "het_dof", "het_stat", "het_p", "trend_stat", "trend_p")){
+    for (textcol in c("text", "expr", "het_dof", "het_stat", "het_p", "trend_stat", "trend_p")){
       if (!is.null(addtextframe[[textcol]]) && !is.character(addtextframe[[textcol]])){
         rlang::abort(glue::glue("'{textcol}' in addtext is not character"))
       }
@@ -170,6 +170,7 @@ forest_data <- function(
 
   # Make vector of keys after which extra rows are added for addtext
   addtextcols <- tibble::tibble(text = character(),
+                                expr = character(),
                                 het_dof = character(),
                                 het_stat = character(),
                                 het_p = character(),
@@ -181,6 +182,7 @@ forest_data <- function(
       addtext[[i]] <- dplyr::bind_rows(addtextcols, addtext[[i]]) %>%
         dplyr::mutate(addtext = dplyr::case_when(
           !is.na(text) ~ paste0("'", text, "'"),
+          !is.na(expr) ~ expr,
           !is.na(het_stat) ~ make_heterogeneity_string(het_dof, het_stat, het_p),
           !is.na(trend_stat) ~ make_trend_string(trend_stat, trend_p)
         )) %>%
