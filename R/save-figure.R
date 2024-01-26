@@ -19,6 +19,8 @@
 #'    Size of plot (a width/height larger than page weight/height minus margins will be
 #'    ignored), centred within margins.
 #'    By default, plot will fill the space within margins.
+#' @param valign If size is set, where to place figure within margins. 1 = top, 0.5 = middle, 0 = bottom. (Default: 0.5)
+#' @param halign If size is set, where to place figure within margins. 1 = right, 0.5 = middle, 0 = left (Default: 0.5)
 #' @param pagesize Page size of PDF output: "A4" or "A5". (Default: "A4")
 #' @param landscape Landscape page orientation? (Default: False)
 #' @param pagedim Dimensions (width, height) of PDF output. Overrides pagesize and landscape arguments if used.
@@ -40,6 +42,8 @@ prepare_figure <- function(figure,
                            footer.gpar = list(fontsize = 9),
                            margin      = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
                            size        = NULL,
+                           valign      = 0.5,
+                           halign      = 0.5,
                            pagesize    = c("A4", "A5"),
                            landscape   = FALSE,
                            pagedim     = NULL){
@@ -69,13 +73,13 @@ prepare_figure <- function(figure,
     add_to_width_margins <- pagedim[[1]] - size[[1]] - margin[[2]] - margin[[4]]
     add_to_width_margins <- grid::unit.pmax(unit(0, "mm"),
                                             grid::convertUnit(add_to_width_margins, "mm"))
-    margin[[2]] <- margin[[2]] + 0.5 * add_to_width_margins
-    margin[[4]] <- margin[[4]] + 0.5 * add_to_width_margins
+    margin[[2]] <- margin[[2]] + (1 - halign) * add_to_width_margins
+    margin[[4]] <- margin[[4]] + halign * add_to_width_margins
     add_to_height_margins <- pagedim[[2]] - size[[2]] - margin[[1]] - margin[[3]]
     add_to_height_margins <- grid::unit.pmax(unit(0, "mm"),
                                              grid::convertUnit(add_to_height_margins, "mm"))
-    margin[[1]] <- margin[[1]] + 0.5 * add_to_height_margins
-    margin[[3]] <- margin[[3]] + 0.5 * add_to_height_margins
+    margin[[1]] <- margin[[1]] + (1 - valign) * add_to_height_margins
+    margin[[3]] <- margin[[3]] + valign * add_to_height_margins
   }
 
 
