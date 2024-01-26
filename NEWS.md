@@ -1,3 +1,5 @@
+# ckbplotr (development version)
+
 # ckbplotr 0.10.2
 
 * Fix dimensions for cropped figure in save_figure().
