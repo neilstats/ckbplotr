@@ -120,14 +120,18 @@ forest.fillcode <- function(fill_values,
 #' @noRd
 forest.plotdiamondscode <- function(colour_list,
                                     fill_list,
-                                    diamonds.linewidth) {
+                                    diamonds.linewidth,
+                                    addaes,
+                                    addarg) {
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
-    aes = c('x = x, y = row + y, group = row',
+    aes = c(addaes$diamonds,
+            'x = x, y = row + y, group = row',
             'colour = {column_name(colour_list$aes)}',
             'fill = {column_name(fill_list$aes)}'),
-    arg = c('colour = {quote_string(colour_list$arg)}',
+    arg = c(addarg$diamonds,
+            'colour = {quote_string(colour_list$arg)}',
             'fill = {quote_string(fill_list$arg)}',
             'linewidth = {diamonds.linewidth}',
             'data = ~ tidyr::unnest(., diamond_polygon)')
