@@ -148,6 +148,7 @@ shape_plot(my_results,
            ylab         = "Hazard Ratio (95% CI)",
            scalepoints  = TRUE)
 ```
+To have consistent scaling across plots, set `minse` to the same value (it must be smaller than the smallest SE). This will ensure the same size scaling is used across the plots.
 
 ## Confidence intervals
 Narrow confidence interval lines can be hidden by points. Set the `height` argument to change the appearance of short confidence interval lines. The function will by default try to change the colour and plotting order of confidence intervals so that they are not hidden. You can also supply vectors and lists to the `cicolour` argument to have more control.

@@ -204,7 +204,7 @@ forest_plot(my_results,
             row.labels  = row_labels,
             scalepoints = TRUE)
 ```
-
+To have consistent scaling across plots, set `minse` to the same value (it must be smaller than the smallest SE). This will ensure the same size scaling is used across the plots.
 
 
 ## Confidence interval lines
