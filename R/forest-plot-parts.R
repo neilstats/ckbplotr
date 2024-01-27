@@ -66,14 +66,14 @@ forest.narrowci <- function(axis_scale,
                   if (!is.null(shape_list$aes)){
                     c('dplyr::case_match({column_name(shape_list$aes)},',
                       indent(18,
-                             '"22" ~ 0.6694,',
-                             '"filled square" ~ 0.6694,',
-                             '.default = 0.7553))'))
+                             '"22" ~ sqrt(pi / 4) * 0.7528125,',
+                             '"filled square" ~ sqrt(pi / 4) * 0.7528125,',
+                             '.default = 0.7528125))'))
                   } else {
                     switch(as.character(shape_list$arg),
-                           "22" = "0.6694)",
-                           "filled square" = "0.6694)",
-                           "0.7553)")
+                           "22" = "sqrt(pi / 4) * 0.7528125)",
+                           "filled square" = "sqrt(pi / 4) * 0.7528125)",
+                           "0.7528125)")
                   }
            ),
            '')
