@@ -1,4 +1,4 @@
-pandoc: 2.19.2
+pandoc: 3.1.11
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
@@ -11,7 +11,7 @@ articles:
   save_plots: save_plots.html
   shape_plots: shape_plots.html
   generated_code: web-only/generated_code.html
-last_built: 2024-01-26T20:04Z
+last_built: 2024-03-03T12:41Z
 urls:
   reference: https://neilstats.github.io/ckbplotr/reference
   article: https://neilstats.github.io/ckbplotr/articles

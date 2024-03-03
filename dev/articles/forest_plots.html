@@ -284,7 +284,10 @@ estimate.</p>
 <span>            col.key     <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels  <span class="op">=</span> <span class="va">row_labels</span>,</span>
 <span>            scalepoints <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;">
+To have consistent scaling across plots, set <code>minse</code> to the
+same value (it must be smaller than the smallest SE). This will ensure
+the same size scaling is used across the plots.</p>
 </div>
 <div class="section level2">
 <h2 id="confidence-interval-lines">Confidence interval lines<a class="anchor" aria-label="anchor" href="#confidence-interval-lines"></a>
@@ -296,10 +299,10 @@ the colour and plotting order of confidence intervals so that they are
 not hidden. You can also supply vectors and lists to the
 <code>cicolour</code> argument to have more control.</p>
 <p>Note that the calculations for identifying narrow confidence
-intervals has has been designed to work well for shapes 15 (the default)
-and 22, and for symmetric confidence intervals. These may not be
-completely accurate in all scenarios, so check your final output
-carefully.</p>
+intervals has has been designed to work for shapes 15/‘square’ (the
+default) and 22/‘square filled’, and for symmetric confidence intervals.
+These may not be completely accurate in all scenarios, so check your
+final output carefully.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">my_resultsAB</span>, <span class="op">~</span> <span class="va">analysis</span><span class="op">)</span>,</span>
 <span>            col.key     <span class="op">=</span> <span class="st">"subgroup"</span>,</span>

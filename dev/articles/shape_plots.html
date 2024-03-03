@@ -244,7 +244,10 @@ estimate.</p>
 <span>           xlab         <span class="op">=</span> <span class="st">"BMI (kg/m\u00B2)"</span>,</span>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;">
+To have consistent scaling across plots, set <code>minse</code> to the
+same value (it must be smaller than the smallest SE). This will ensure
+the same size scaling is used across the plots.</p>
 </div>
 <div class="section level2">
 <h2 id="confidence-intervals">Confidence intervals<a class="anchor" aria-label="anchor" href="#confidence-intervals"></a>
