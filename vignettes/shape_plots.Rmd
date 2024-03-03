@@ -153,7 +153,7 @@ To have consistent scaling across plots, set `minse` to the same value (it must 
 ## Confidence intervals
 Narrow confidence interval lines can be hidden by points. Set the `height` argument to change the appearance of short confidence interval lines. The function will by default try to change the colour and plotting order of confidence intervals so that they are not hidden. You can also supply vectors and lists to the `cicolour` argument to have more control.
 
-Note that the calculations for identifying narrow confidence intervals has has been designed to work well for shapes 15 (the default) and 22, and for symmetric confidence intervals. These may not be completely accurate in all scenarios, so check your final output carefully.
+Note that the calculations for identifying narrow confidence intervals has has been designed to work for shapes 15/'square' (the default) and 22/'square filled', and for symmetric confidence intervals. These may not be completely accurate in all scenarios, so check your final output carefully.
 
 
 
