@@ -1,4 +1,4 @@
-# ckbplotr (development version)
+# ckbplotr 0.11.0
 
 * addaes/addarg in forest_plot() can now also be used for column headings and diamonds.
 * addtext in forest_plot() can be used to display plotmath.
