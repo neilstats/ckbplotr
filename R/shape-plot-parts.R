@@ -36,7 +36,7 @@ shape.cicolourcode <- function(scale,
     indent(2,
            glue::glue('dplyr::mutate(narrowci = (({uci_string}) - ({lci_string})) <= '),
            indent(26,
-                  glue::glue('({size})/max({size}) * {adjust_size} * dplyr::recode({c(shape$arg, column_name(shape$aes))}, `22` = 0.6694, .default = 0.7553)) %>%')),
+                  glue::glue('({size})/max({size}) * {adjust_size} * dplyr::recode({c(shape$arg, column_name(shape$aes))}, `22` = sqrt(pi / 4) * 0.7528125, .default = 0.7528125)) %>%')),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(!is.null(col.group)){

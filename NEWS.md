@@ -1,3 +1,10 @@
+# ckbplotr 0.11.0
+
+* addaes/addarg in forest_plot() can now also be used for column headings and diamonds.
+* addtext in forest_plot() can be used to display plotmath.
+* valign and halign arguments added to prepare_figure() and save_figure()
+* Fixes: use lineheight=1 for column headings; panel.headings in forest_plot_list_xlim(); add title after plot in prepare_figure(); automatic CI colour when using white fill in forest_plot(); improve calculations for narrow confidence interval lines; remove unneeded spacing for y axis tick marks.
+
 # ckbplotr 0.10.2
 
 * Fix dimensions for cropped figure in save_figure().

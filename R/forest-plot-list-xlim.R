@@ -8,6 +8,7 @@ forest_plot_list_xlim <- function(call){
   xlab <- eval(call$xlab)
   col.left.heading <- eval(call$col.left.heading)
   col.right.heading <- eval(call$col.right.heading)
+  panel.headings <- eval(call$panel.headings)
 
   ## check arguments
   if (!is.list(xlim) | !is.list(xticks) | !is.list(panels)){
@@ -15,6 +16,9 @@ forest_plot_list_xlim <- function(call){
   }
   if (length(unique(c(length(xlim), length(xticks), length(panels)))) != 1){
     rlang::abort("panels, xlim and xticks must be lists of the same length")
+  }
+  if (!is.null(panel.headings) && length(panel.headings) != length(panels)){
+    rlang::abort("panel.headings must be same length as panels")
   }
 
   ## make lists
@@ -63,6 +67,9 @@ forest_plot_list_xlim <- function(call){
     }
     if (!is.null(col.right.heading[i])){
       update_args$col.right.heading <- col.right.heading[[i]]
+    }
+    if (!is.null(panel.headings)){
+      update_args$panel.headings <- panel.headings[[i]]
     }
 
     forest <- do.call("forest_plot",

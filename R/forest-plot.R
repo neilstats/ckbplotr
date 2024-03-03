@@ -306,10 +306,10 @@ forest_plot <- function(
   } else {
     if (missing(cicolour)) {
       if (!is.list(fill)) {
-        cicolour <- c(cicolour, if (fill == "white") cicolour else "white")
+        cicolour <- c(cicolour, if (fill == "white" & !shape %in% c(15, "square", "circle")) cicolour else "white")
       } else {
         cicolour <- lapply(fill,
-                           \(x) c(cicolour, if (x == "white") cicolour else "white") )
+                           \(x) c(cicolour, if (x == "white" & !shape %in% c(15, "square", "circle")) cicolour else "white") )
       }
     }
     cicolour_list <- list(arg = cicolour)
@@ -571,7 +571,9 @@ forest_plot <- function(
            if(!is.null(col.diamond) || !is.null(diamond)){
              forest.plotdiamondscode(colour_list,
                                      fill_list,
-                                     diamonds.linewidth)
+                                     diamonds.linewidth,
+                                     addaes,
+                                     addarg)
            },
 
            # code for scales and coordinates
@@ -629,7 +631,9 @@ forest_plot <- function(
                             text_size,
                             plotcolour,
                             axis_scale_fn,
-                            axis_scale_inverse_fn)
+                            axis_scale_inverse_fn,
+                            addaes,
+                            addarg)
            },
 
            # code for x-axis labels and panel headings

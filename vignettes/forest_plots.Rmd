@@ -204,14 +204,14 @@ forest_plot(my_results,
             row.labels  = row_labels,
             scalepoints = TRUE)
 ```
-
+To have consistent scaling across plots, set `minse` to the same value (it must be smaller than the smallest SE). This will ensure the same size scaling is used across the plots.
 
 
 ## Confidence interval lines
 
 Narrow confidence interval lines can be hidden by points. Set the `panel.width` argument to change the appearance of narrow confidence interval lines. The function will by default try to change the colour and plotting order of confidence intervals so that they are not hidden. You can also supply vectors and lists to the `cicolour` argument to have more control.
 
-Note that the calculations for identifying narrow confidence intervals has has been designed to work well for shapes 15 (the default) and 22, and for symmetric confidence intervals. These may not be completely accurate in all scenarios, so check your final output carefully.
+Note that the calculations for identifying narrow confidence intervals has has been designed to work for shapes 15/'square' (the default) and 22/'square filled', and for symmetric confidence intervals. These may not be completely accurate in all scenarios, so check your final output carefully.
 
 ```{r, fig.width=6, fig.height = 5, out.width='75%'}
 forest_plot(split(my_resultsAB, ~ analysis),
@@ -281,20 +281,22 @@ Warnings: If `scalepoints = TRUE` (and `minse` is not specified the same for eac
 The `addtext` argument can be used to add results of heterogeneity or trend tests, or some other text, in the text column of estimates and CIs. It needs to be a list of data frames, the same length as panels. Data frames should contain a column with the name specified in col.key, and one or more of:
 
 - a column named 'text' containing character strings
+- a column named 'expr' containing character strings that will be parsed into expressions and displayed as described in ?plotmath
 - columns named 'het_dof', 'het_stat', and 'het_p' containing character strings
 - columns names 'trend_stat' and 'trend_p' containing character strings
 
 ```{r}
 het_trend_results <- data.frame(
-  analysis = factor(c("Observational", "Observational", "Genetic", "Genetic", "Genetic"),
-         levels = c("Observational", "Genetic")),
-  subgroup   = c(  "men",  "35_49",   "men",  "35_49", "35_49"),
-  het_dof    = c(    "1",       NA,     "1",       NA,      NA),
-  het_stat   = c( "1.99",       NA, "0.136",       NA,      NA),
-  het_p      = c("=0.16",       NA, "=0.71",       NA,      NA),
-  trend_stat = c(     NA,   "27.2",      NA,   "6.98",      NA),
-  trend_p    = c(     NA, "<0.001",      NA, "=0.008",      NA),
-  text       = c(     NA,       NA,      NA,       NA,  "Note")
+ analysis   = factor(c("Observational", "Observational", "Observational", "Genetic", "Genetic", "Genetic"),
+ levels     = c("Observational", "Genetic")),
+ subgroup   = c( "men", "35_49", "35_49", "men", "35_49", "35_49"),
+ het_dof    = c( "1", NA, NA, "1", NA, NA),
+ het_stat   = c( "1.99", NA, NA, "0.136", NA, NA),
+ het_p      = c("=0.16", NA, NA, "=0.71", NA, NA),
+ trend_stat = c( NA, "27.2", NA, NA, "6.98", NA),
+ trend_p    = c( NA, "<0.001", NA, NA, "=0.008", NA),
+ text       = c( NA, NA, NA, NA, NA, "Note"),
+ expr       = c(NA, NA, "frac(-b %+-% sqrt(b^2 - 4*a*c), 2*a)", NA, NA, NA)
 )
 ```
 

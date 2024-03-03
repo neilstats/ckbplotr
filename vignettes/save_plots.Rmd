@@ -70,7 +70,7 @@ figure <- prepare_figure(my_plot$plot,
 grid::grid.draw(figure$page)
 ```
 
-The function has several arguments that allow for customization of appearance and layout. For example: `landscape = TRUE` to create a landscape page; and set `cropped` to be a file name to also save a plot without additional margins, title or footer.
+The function has several arguments that allow for customization of appearance and layout. For example: `valign` and `halign` to control the position of the plot (if `size` is set); `landscape = TRUE` to create a landscape page; and set `cropped` to be a file name to also save a plot without additional margins, title or footer.
 
 ## Preview the output
 Set `preview = TRUE` to view a preview of the output in the RStudio Viewer pane. (Instead of creating a file, the figure is saved to a temporary PNG file and shown.)

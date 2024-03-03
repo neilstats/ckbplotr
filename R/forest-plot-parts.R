@@ -66,14 +66,14 @@ forest.narrowci <- function(axis_scale,
                   if (!is.null(shape_list$aes)){
                     c('dplyr::case_match({column_name(shape_list$aes)},',
                       indent(18,
-                             '"22" ~ 0.6694,',
-                             '"filled square" ~ 0.6694,',
-                             '.default = 0.7553))'))
+                             '"22" ~ sqrt(pi / 4) * 0.7528125,',
+                             '"filled square" ~ sqrt(pi / 4) * 0.7528125,',
+                             '.default = 0.7528125))'))
                   } else {
                     switch(as.character(shape_list$arg),
-                           "22" = "0.6694)",
-                           "filled square" = "0.6694)",
-                           "0.7553)")
+                           "22" = "sqrt(pi / 4) * 0.7528125)",
+                           "filled square" = "sqrt(pi / 4) * 0.7528125)",
+                           "0.7528125)")
                   }
            ),
            '')
@@ -120,14 +120,18 @@ forest.fillcode <- function(fill_values,
 #' @noRd
 forest.plotdiamondscode <- function(colour_list,
                                     fill_list,
-                                    diamonds.linewidth) {
+                                    diamonds.linewidth,
+                                    addaes,
+                                    addarg) {
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
-    aes = c('x = x, y = row + y, group = row',
+    aes = c(addaes$diamonds,
+            'x = x, y = row + y, group = row',
             'colour = {column_name(colour_list$aes)}',
             'fill = {column_name(fill_list$aes)}'),
-    arg = c('colour = {quote_string(colour_list$arg)}',
+    arg = c(addarg$diamonds,
+            'colour = {quote_string(colour_list$arg)}',
             'fill = {quote_string(fill_list$arg)}',
             'linewidth = {diamonds.linewidth}',
             'data = ~ tidyr::unnest(., diamond_polygon)')
@@ -325,7 +329,9 @@ forest.col.code <- function(column,
                             addarg,
                             col.heading.space,
                             text_size,
-                            plotcolour){
+                            plotcolour,
+                            headingaddaes,
+                            headingaddarg){
   c(
     make_layer(
       glue::glue('## column {column}'),
@@ -353,14 +359,17 @@ forest.col.code <- function(column,
       br = FALSE),
     make_layer(
       f = 'ckbplotr::geom_text_move',
-      aes = c('y     = - {col.heading.space}',
+      aes = c(headingaddaes[headingaddaes!=""],
+              'y     = - {col.heading.space}',
               'x     = {xpos}',
               'label = title'),
-      arg = c('move_x  = {printunit(pos)}',
+      arg = c(headingaddarg[headingaddarg!=""],
+              'move_x  = {printunit(pos)}',
               'hjust    = {hjust}',
               'size     = {text_size}',
               'colour   = {quote_string(plotcolour)}',
               'fontface = "bold"',
+              'lineheight = 1',
               'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
               indent(23, 'title = {ds(unlist(heading))})'))
     )
@@ -396,7 +405,9 @@ forest.columns.right <- function(col.right.all,
          addarg     = if(is.null(addarg$col.right)){""} else{addarg$col.right},
          col.heading.space = col.heading.space,
          text_size  = text_size,
-         plotcolour = plotcolour),
+         plotcolour = plotcolour,
+         headingaddaes = if(is.null(addaes$heading.col.right)){""} else{addaes$heading.col.right},
+         headingaddarg = if(is.null(addarg$heading.col.right)){""} else{addarg$heading.col.right}),
     forest.col.code))
   c('# Add columns to right side of panels', x)
 }
@@ -429,7 +440,9 @@ forest.columns.left <- function(col.left,
          addarg     = if(is.null(addarg$col.left)){""} else{addarg$col.left},
          col.heading.space = col.heading.space,
          text_size  = text_size,
-         plotcolour = plotcolour),
+         plotcolour = plotcolour,
+         headingaddaes = if(is.null(addaes$heading.col.left.heading)){""} else{addaes$heading.col.left},
+         headingaddarg = if(is.null(addarg$heading.col.left.heading)){""} else{addarg$heading.col.left}),
     forest.col.code))
   c('# Add columns to left side of panel', x)
 }
@@ -443,14 +456,18 @@ forest.addtext <- function(xto,
                            text_size,
                            plotcolour,
                            axis_scale_fn,
-                           axis_scale_inverse_fn) {
+                           axis_scale_inverse_fn,
+                           addaes,
+                           addarg) {
   make_layer(
     '## addtext',
     f = 'ckbplotr::geom_text_move',
-    aes = c('y = row',
+    aes = c(addaes$addtext,
+            'y = row',
             'x = {xto}',
             'label = addtext'),
-    arg = c('move_x = {printunit(col.right.pos[[1]])}',
+    arg = c(addarg$addtext,
+            'move_x = {printunit(col.right.pos[[1]])}',
             'hjust  = {col.right.hjust[[1]]}',
             'size   = {text_size}',
             'colour = {quote_string(plotcolour)}',
@@ -555,6 +572,7 @@ forest.theme <- function(base_size,
                    'margin = margin(t = {base_size/(11/4.4)})',
                    'vjust  = 1)'),
             'axis.ticks.y     = element_blank()',
+            'axis.ticks.length.y = unit(0, "pt")',
             'axis.line.y      = element_blank()',
             'axis.text.y      = ggtext::element_markdown(hjust  = 0',
             indent(44,

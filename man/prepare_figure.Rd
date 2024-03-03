@@ -16,6 +16,8 @@ prepare_figure(
   footer.gpar = list(fontsize = 9),
   margin = unit(c(2.27, 1.27, 1.27, 1.27), units = "cm"),
   size = NULL,
+  valign = 0.5,
+  halign = 0.5,
   pagesize = c("A4", "A5"),
   landscape = FALSE,
   pagedim = NULL
@@ -51,6 +53,10 @@ Default is 2.27cm top, 1.27cm (1/2 inch) other sides.
 Size of plot (a width/height larger than page weight/height minus margins will be
 ignored), centred within margins.
 By default, plot will fill the space within margins.}
+
+\item{valign}{If size is set, where to place figure within margins. 1 = top, 0.5 = middle, 0 = bottom. (Default: 0.5)}
+
+\item{halign}{If size is set, where to place figure within margins. 1 = right, 0.5 = middle, 0 = left (Default: 0.5)}
 
 \item{pagesize}{Page size of PDF output: "A4" or "A5". (Default: "A4")}
 
