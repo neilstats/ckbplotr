@@ -507,7 +507,7 @@ forest.xlab.panel.headings <- function(addaes,
     if (!all(panel.headings == "")){
       make_layer(
         '# Add panel name above each panel',
-        f = 'geom_text',
+        f = 'geom_text_move',
         aes = c(c(addaes$panel.headings, addaes$panel.name),
                 'y     = - {col.heading.space + 1.5}',
                 'x     = {xmid}',
