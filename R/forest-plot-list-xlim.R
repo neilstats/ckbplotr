@@ -1,14 +1,21 @@
 #' forest plots when xlim is a list
 #' @noRd
-forest_plot_list_xlim <- function(call){
-
-  xlim <- eval(call$xlim)
-  xticks <- eval(call$xticks)
-  panels <- eval(call$panels)
-  xlab <- eval(call$xlab)
-  col.left.heading <- eval(call$col.left.heading)
-  col.right.heading <- eval(call$col.right.heading)
-  panel.headings <- eval(call$panel.headings)
+forest_plot_list_xlim <- function(
+  ## original arguments passed to
+  ## separate forest_plot() calls
+  original_arguments,
+  ## arguments that need to evaluated first
+  ## because they are used by
+  xlim,
+  xticks,
+  panels,
+  xlab,
+  col.left.heading,
+  col.right.heading,
+  panel.headings,
+  ## the new environment in which to evaluate forest_plot()
+  envir
+){
 
   ## check arguments
   if (!is.list(xlim) | !is.list(xticks) | !is.list(panels)){
@@ -35,11 +42,11 @@ forest_plot_list_xlim <- function(call){
 
 
   ## create arguments for plot.margin and mid.space
-  plot.margin <- eval(call$plot.margin)
+  plot.margin <- eval(original_arguments$plot.margin)
   if (is.null(plot.margin)){
     plot.margin <- eval(formals(forest_plot)$plot.margin)
   }
-  mid.space <- eval(call$mid.space)
+  mid.space <- eval(original_arguments$mid.space)
   if (is.null(mid.space)){
     mid.space <- eval(formals(forest_plot)$mid.space)
   }
@@ -73,7 +80,8 @@ forest_plot_list_xlim <- function(call){
     }
 
     forest <- do.call("forest_plot",
-                      utils::modifyList(call, update_args))
+                      utils::modifyList(original_arguments, update_args),
+                      envir = envir)
 
     ## adjust left plot.margin for all but first panel
     if (i != 1){
