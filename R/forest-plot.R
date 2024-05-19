@@ -179,10 +179,28 @@ forest_plot <- function(
     blankrows          = NULL
 ){
 
+  # If envir not provided, make new environment ----
+  # with parent frame same as function call
+  if(missing(envir)){envir <- new.env(parent = parent.frame())}
 
+  # When xlim is a list ----
   if (is.list(xlim)){
-    call <- as.list(match.call())[-1]
-    return(forest_plot_list_xlim(call))
+    original_arguments <- as.list(match.call())[-1]
+    return(forest_plot_list_xlim(
+      ## original arguments passed to
+      ## separate forest_plot() calls
+      original_arguments,
+      ## arguments that need to be evaluated first
+      ## because they are used by forest_plot_list_xlim()
+      xlim,
+      xticks,
+      panels,
+      xlab,
+      col.left.heading,
+      col.right.heading,
+      panel.headings,
+      ## the new environment in which to evaluate forest_plot()
+      envir))
   }
 
   # Check arguments ----
@@ -687,9 +705,6 @@ forest_plot <- function(
   # Show code in RStudio viewer ----
   if (showcode){ displaycode(plotcode, text_about_auto_spacing) }
 
-  # If envir not provided, make new environment ----
-  # with parent frame same as function call
-  if(missing(envir)){envir <- new.env(parent = parent.frame())}
 
   # Create plot and print ----
   plot <- eval(parse(text = plotcode), envir = envir)
