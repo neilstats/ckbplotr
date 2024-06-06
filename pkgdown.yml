@@ -1,17 +1,17 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   ckb_style: ckb_style.html
   ckbplotr: ckbplotr.html
   customising_plots: customising_plots.html
   forest_plots: forest_plots.html
+  generated_code: web-only/generated_code.html
   ggplot2: ggplot2.html
   page_layouts: page_layouts.html
   save_plots: save_plots.html
   shape_plots: shape_plots.html
-  generated_code: web-only/generated_code.html
-last_built: 2024-03-03T13:32Z
+last_built: 2024-06-06T22:08Z
 urls:
   reference: https://neilstats.github.io/ckbplotr/reference
   article: https://neilstats.github.io/ckbplotr/articles
