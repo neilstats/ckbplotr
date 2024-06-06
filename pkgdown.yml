@@ -11,7 +11,7 @@ articles:
   page_layouts: page_layouts.html
   save_plots: save_plots.html
   shape_plots: shape_plots.html
-last_built: 2024-06-06T22:35Z
+last_built: 2024-06-06T22:41Z
 urls:
   reference: https://neilstats.github.io/ckbplotr/reference
   article: https://neilstats.github.io/ckbplotr/articles
