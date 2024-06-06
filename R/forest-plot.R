@@ -739,6 +739,7 @@ get_horizontal_spacing <- function(right.space,
   }
 
   ## calculate automatic col.right.pos and col.right.space
+  text_about_auto_spacing <- NULL
   if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
     text_about_auto_spacing <- "Automatically calculated horizontal spacing and positioning:\n"
   }
