@@ -28,13 +28,13 @@ forest.axes <- function(axis_scale,
       arg = c(
         'trans = "reverse"',
         if (!is.null(row.labels.heading)){
-          c('breaks = c(-{col.heading.space}, attr(datatoplot, "rowlabels")$row)',
+          c('breaks = c({-col.heading.space}, attr(datatoplot, "rowlabels")$row)',
             'labels = c({quote_string(glue::glue("**{row.labels.heading}**"))}, attr(datatoplot, "rowlabels")$row.label)')
         } else {
           c('breaks = attr(datatoplot, "rowlabels")$row',
             'labels = attr(datatoplot, "rowlabels")$row.label')
         },
-        'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse(bottom.space)}, NA)',
+        'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse(bottom.space)}, {if (!is.null(row.labels.heading)) -{col.heading.space} else "NA"})',
         'expand = c(0,0)')
     )
   )
