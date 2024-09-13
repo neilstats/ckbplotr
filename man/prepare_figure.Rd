@@ -58,11 +58,11 @@ By default, plot will fill the space within margins.}
 
 \item{halign}{If size is set, where to place figure within margins. 1 = right, 0.5 = middle, 0 = left (Default: 0.5)}
 
-\item{pagesize}{Page size of PDF output: "A4" or "A5". (Default: "A4")}
+\item{pagesize}{Page size of output: "A4" or "A5". (Default: "A4")}
 
 \item{landscape}{Landscape page orientation? (Default: False)}
 
-\item{pagedim}{Dimensions (width, height) of PDF output. Overrides pagesize and landscape arguments if used.}
+\item{pagedim}{Dimensions (width, height) of output. Overrides pagesize and landscape arguments if used.}
 }
 \description{
 Prepare figure for saving
