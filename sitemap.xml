@@ -1,90 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/404.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/ckb_style.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/ckbplotr.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/customising_plots.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/forest_plots.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/ggplot2.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/page_layouts.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/save_plots.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/shape_plots.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/articles/web-only/generated_code.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/index.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/ckb_style.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/ckbplotr-package.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/fix_panel.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/forest_data.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/forest_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/geom_text_move.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/ggpreview.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/plot_like_ckb.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/prepare_figure.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/save_figure.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/shape_plot.html</loc>
-  </url>
-  <url>
-    <loc>https://neilstats.github.io/ckbplotr/reference/theme_ckb.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://neilstats.github.io/ckbplotr/404.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/LICENSE.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/ckb_style.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/ckbplotr.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/customising_plots.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/forest_plots.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/ggplot2.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/index.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/page_layouts.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/save_plots.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/shape_plots.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/articles/web-only/generated_code.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/authors.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/index.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/news/index.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/ckb_style.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/ckbplotr-package.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/fix_panel.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/forest_data.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/forest_plot.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/geom_text_move.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/ggpreview.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/index.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/pipe.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/plot_like_ckb.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/prepare_figure.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/save_figure.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/shape_plot.html</loc></url>
+<url><loc>https://neilstats.github.io/ckbplotr/reference/theme_ckb.html</loc></url>
 </urlset>
+
