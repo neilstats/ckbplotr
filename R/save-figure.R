@@ -21,9 +21,9 @@
 #'    By default, plot will fill the space within margins.
 #' @param valign If size is set, where to place figure within margins. 1 = top, 0.5 = middle, 0 = bottom. (Default: 0.5)
 #' @param halign If size is set, where to place figure within margins. 1 = right, 0.5 = middle, 0 = left (Default: 0.5)
-#' @param pagesize Page size of PDF output: "A4" or "A5". (Default: "A4")
+#' @param pagesize Page size of output: "A4" or "A5". (Default: "A4")
 #' @param landscape Landscape page orientation? (Default: False)
-#' @param pagedim Dimensions (width, height) of PDF output. Overrides pagesize and landscape arguments if used.
+#' @param pagedim Dimensions (width, height) of output. Overrides pagesize and landscape arguments if used.
 #'
 #' @export
 #'
@@ -163,7 +163,7 @@ save_figure <- function(figure,
   # Prepare figure
   figure <- prepare_figure(figure, ...)
 
-  # Save to PDF file
+  # Save to file
   figargs <- list(filename = filename,
                   plot     = figure$page,
                   width    = attr(figure$page, "width"),
