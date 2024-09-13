@@ -1,4 +1,4 @@
-# ckbplotr 0.11.0
+# ckbplotr 0.11.1
 
 * fix error from get_horizontal_spacing() when right.space, left.space, col.right.pos and col.left.pos arguments are all specified.
 
