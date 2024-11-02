@@ -15,6 +15,7 @@ forest_plot(
   logscale = exponentiate,
   panel.names = NULL,
   panel.headings = NULL,
+  panel.headings.align = c("panel", "plot"),
   col.key = "key",
   col.estimate = c("estimate", "est", "beta", "loghr"),
   col.stderr = c("stderr", "std.err", "se"),
@@ -59,7 +60,7 @@ forest_plot(
   left.space = NULL,
   right.space = NULL,
   mid.space = unit(5, "mm"),
-  plot.margin = margin(8, 8, 8, 8, "mm"),
+  plot.margin = margin(2, 8, 8, 8, "mm"),
   panel.width = NULL,
   panel.height = NULL,
   base_size = 11,
@@ -104,6 +105,9 @@ after a row label heading, at the end of a row label heading 'section'. (Default
 If none provided, then they will be numbered 1, 2, 3 ...}
 
 \item{panel.headings}{Titles to be placed above each forest plot.}
+
+\item{panel.headings.align}{Panel headings are by default centred over the plotting area ("panel").
+Set to "plot" to centre over plotting area and text columns.}
 
 \item{col.key}{Name of column that links the results given in each data frame
 provided in panels and the labels given in row.labels.

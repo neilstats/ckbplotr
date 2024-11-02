@@ -1,3 +1,8 @@
+# dev
+
+* Modified the default vertical positioning of column and panel headings in forest_plot()
+* Added argument panel.headings.align to forest_plot() to control centring of panel headings.
+
 # ckbplotr 0.11.2
 
 * Fixes.

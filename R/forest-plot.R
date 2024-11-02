@@ -12,6 +12,9 @@
 #' Use log scale on the axis, and add a line at null effect. (Default: exponentiate)
 #' @param panel.headings
 #' Titles to be placed above each forest plot.
+#' @param panel.headings.align
+#' Panel headings are by default centred over the plotting area ("panel").
+#' Set to "plot" to centre over plotting area and text columns.
 #' @param row.labels.heading
 #' Title to be placed above row labels.
 #' @param estcolumn
@@ -117,6 +120,7 @@ forest_plot <- function(
     logscale           = exponentiate,
     panel.names        = NULL,
     panel.headings     = NULL,
+    panel.headings.align  = c("panel", "plot"),
     col.key            = "key",
     col.estimate       = c("estimate", "est", "beta", "loghr"),
     col.stderr         = c("stderr", "std.err", "se"),
@@ -161,7 +165,7 @@ forest_plot <- function(
     left.space         = NULL,
     right.space        = NULL,
     mid.space          = unit(5, "mm"),
-    plot.margin        = margin(8, 8, 8, 8, "mm"),
+    plot.margin        = margin(2, 8, 8, 8, "mm"),
     panel.width        = NULL,
     panel.height       = NULL,
     base_size          = 11,
@@ -307,7 +311,7 @@ forest_plot <- function(
 
   # Panel headings ----
   if (is.null(panel.headings)) { panel.headings <- names(panels_list) }
-
+  panel.headings.align <- match.arg(panel.headings.align)
 
   # Create lists for aesthetics/arguments ----
   ## match column name, or use argument itself
@@ -432,7 +436,14 @@ forest_plot <- function(
   col.left.pos <- horizontal_spacing$col.left.pos
   right.space <- horizontal_spacing$right.space
   left.space <- horizontal_spacing$left.space
+  right.space.inner <- horizontal_spacing$right.space.inner
+  left.space.inner <- horizontal_spacing$left.space.inner
 
+  ## vertical space for panel headings
+  space_for_panel_headings <- 1 * text_size
+  if (!all(panel.headings == "")){
+    space_for_panel_headings <- 4 * text_size
+  }
 
 
 
@@ -662,7 +673,10 @@ forest_plot <- function(
                                       plotcolour,
                                       xlab,
                                       panel.headings,
-                                      col.heading.space),
+                                      panel.headings.align,
+                                      col.heading.space,
+                                      left.space.inner,
+                                      right.space.inner),
 
            # code for the axes
            forest.axes(axis_scale,
@@ -687,6 +701,7 @@ forest_plot <- function(
                         plotcolour,
                         base_line_size,
                         title,
+                        space_for_panel_headings,
                         left.space,
                         right.space,
                         substitute(mid.space),
