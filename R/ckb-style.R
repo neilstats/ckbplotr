@@ -5,6 +5,7 @@
 #' @param base_size base font size, given in pts.
 #' @param base_line_size base size for line elements
 #' @param colour Colour for non-data aspects of the plot. (Default: "black")
+#' @param axis.title.margin Margin between axis titles and plot. (Default: 1)
 #' @param plot.margin Margin around entire plot (Default: margin(0.5, 0, 0.5, 0, "lines"))
 #'
 #' @export
@@ -12,6 +13,7 @@
 theme_ckb <- function(base_size      = 11,
                       base_line_size = base_size/22,
                       colour         = "black",
+                      axis.title.margin = 1,
                       plot.margin    = margin(0.5, 1.5, 0.5, 0.5, "lines")){
   theme_bw(base_size = base_size,
            base_line_size = base_line_size) %+replace%
@@ -25,8 +27,8 @@ theme_ckb <- function(base_size      = 11,
           axis.text.y       = element_text(margin = margin(r = base_size/(11/4.4)), hjust = 1),
           axis.text.y.right = element_text(margin = margin(l = base_size/(11/4.4)), hjust = 0),
           axis.title        = element_text(face = "bold", colour = colour),
-          axis.title.x      = element_text(margin = unit(c(1,0,0,0), "lines")),
-          axis.title.y      = element_text(margin = unit(c(0,1,0,0), "lines"), angle = 90),
+          axis.title.x      = element_text(margin = unit(c(axis.title.margin,0,0,0), "lines")),
+          axis.title.y      = element_text(margin = unit(c(0,axis.title.margin,0,0), "lines"), angle = 90),
           legend.background = element_blank(),
           strip.background  = element_blank(),
           strip.text        = element_text(face = "bold", colour = colour),
@@ -69,6 +71,7 @@ ckb_style <- function(
     base_size      = 11,
     base_line_size = base_size/22,
     colour         = "black",
+    axis.title.margin = 1,
     plot.margin    = margin(0.5, 1.5, 0.5, 0.5, "lines"),
     axes           = "both"
 ){
@@ -113,6 +116,7 @@ ckb_style <- function(
                         base_line_size = base_line_size,
                         base_size = base_size,
                         colour = colour,
+                        axis.title.margin = axis.title.margin,
                         plot.margin = plot.margin,
                         axes = axes),
                    class = "ckbplot"))
@@ -186,6 +190,7 @@ ggplot_add.ckbplot <- function(object, plot, object_name) {
     theme_ckb(base_size = object$base_size,
               base_line_size = object$base_line_size,
               colour = object$colour,
+              axis.title.margin = object$axis.title.margin,
               plot.margin = object$plot.margin)
 
   # add axis lines to plot

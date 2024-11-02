@@ -271,7 +271,8 @@ shape.plot.like.ckb <- function(xlims,
                                 height,
                                 base_size,
                                 base_line_size,
-                                plotcolour) {
+                                plotcolour,
+                                axis.title.margin) {
   make_layer(
     '# Plot like a CKB plot',
     f = "ckbplotr::ckb_style",
@@ -284,7 +285,8 @@ shape.plot.like.ckb <- function(xlims,
             'height         = {printunit(height)}',
             'base_size      = {base_size}',
             'base_line_size = {base_line_size}',
-            'colour         = {quote_string(plotcolour)}'),
+            'colour         = {quote_string(plotcolour)}',
+            'axis.title.margin = {axis.title.margin}'),
     plus = TRUE
   )
 }

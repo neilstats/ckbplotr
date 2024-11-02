@@ -36,6 +36,7 @@ shape_plot(
   base_size = 11,
   base_line_size = base_size/22,
   stroke = base_size/22,
+  axis.title.margin = 1,
   xbreaks = NULL,
   ybreaks = NULL,
   xlab = "Risk factor",
@@ -118,6 +119,8 @@ estimates. (Default: 3)}
 \item{base_line_size}{base size for line elements}
 
 \item{stroke}{Size of outline of shapes. (Default: base_size/22)}
+
+\item{axis.title.margin}{Margin between axis titles and plot. (Default: 1)}
 
 \item{xbreaks}{Breaks for the x axis. Passed to ggplots::scale_x_continuous. (Default: NULL)}
 

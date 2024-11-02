@@ -3,6 +3,7 @@
 * Modified the default vertical positioning of column and panel headings in forest_plot()
 * Added argument panel.headings.align to forest_plot() to control centring of panel headings.
 * Added argument col.heading.rule to forest_plot() to add a horizontal rule below column headings.
+* Added argument axis.title.margin to theme_ckb() and ckb_style().
 
 # ckbplotr 0.11.2
 
