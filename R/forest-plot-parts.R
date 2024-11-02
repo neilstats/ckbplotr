@@ -477,6 +477,30 @@ forest.addtext <- function(xto,
   )
 }
 
+#' code for horizontal rule under panel headings
+#' @noRd
+forest.column.headings.rule <- function(col.heading.space,
+                                        left.space.inner,
+                                        right.space.inner,
+                                        base_size,
+                                        base_line_size,
+                                        addarg){
+  make_layer(
+    '# Add horizontal rule under column headings',
+    f = 'annotation_custom',
+    arg = c(
+      make_layer(f = 'grob = grid::linesGrob',
+                 arg = c('x = unit(c(0, 1), "npc") + c(-1, 0)*{printunit(left.space.inner)} + c(0, 1)*{printunit(right.space.inner)}',
+                         'y = unit(c(-{base_size}/8, -{base_size}/8), "mm")',
+                         'gp = grid::gpar(lwd = {round(base_line_size * .stroke / 2, 6)})'),
+                 plus = FALSE,
+                 br = FALSE),
+      'ymin = {col.heading.space}',
+      'ymax = {col.heading.space}'
+    )
+  )
+}
+
 
 #' code for x-axis labels and panel headings
 #' @noRd

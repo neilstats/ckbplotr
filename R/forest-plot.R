@@ -37,6 +37,8 @@
 #' @param col.heading.space
 #' Position of the titles given by col.left.heading and
 #' col.right.heading. Increase to move them up. (Default: 0)
+#' @param col.heading.rule
+#' Include a horizontal rule below column headings? (Default: FALSE)
 #' @param title
 #' Title to appear at the top of the plot.
 #' @param xlab
@@ -138,6 +140,7 @@ forest_plot <- function(
     col.left.gap       = c("I", "W"),
     col.right.gap      = c("I", "W"),
     col.heading.space  = 0,
+    col.heading.rule   = FALSE,
     estcolumn          = TRUE,
     col.keep           = NULL,
     ci.delim           = ", ",
@@ -665,6 +668,15 @@ forest_plot <- function(
                             addarg)
            },
 
+           if (col.heading.rule){
+           forest.column.headings.rule(col.heading.space,
+                                       left.space.inner,
+                                       right.space.inner,
+                                       base_size,
+                                       base_line_size,
+                                       addarg)
+           },
+
            # code for x-axis labels and panel headings
            forest.xlab.panel.headings(addaes,
                                       xmid,
@@ -768,6 +780,8 @@ get_horizontal_spacing <- function(right.space,
     message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
   }
 
+  text_size_scaling <- 0.8 * base_size/grid::get.gpar()$fontsize
+
   ## calculate automatic col.right.pos and col.right.space
   text_about_auto_spacing <- NULL
   if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
@@ -788,17 +802,23 @@ get_horizontal_spacing <- function(right.space,
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, then space for autoestcolumn, and gap between each column
   column_spacing <- cumsum(c(gettextwidths(col.right.gap[[1]]),
-                             widths_of_columns + gettextwidths(col.right.gap[[2]])))
+                             widths_of_columns[-length(widths_of_columns)] + gettextwidths(col.right.gap[[2]]),
+                             widths_of_columns[length(widths_of_columns)]))
+  ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
+  if (length(widths_of_columns) == 0){column_spacing <- 0}
   ## adjust for hjust
   column_spacing <- column_spacing + c(widths_of_columns*col.right.hjust, 0)
-  ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
-  if (length(column_spacing) == 1){column_spacing <- 0}
-  if (length(column_spacing) > 1){column_spacing[length(column_spacing)] <- column_spacing[length(column_spacing)] - gettextwidths(col.right.gap[[2]])}
+  column_spacing_half_outer_gap <- column_spacing
+  column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] <- column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] + 0.5 * gettextwidths(col.right.gap[[2]])
   ### text on plot is 0.8 size, and adjust for base_size
-  column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
+  column_spacing <-  round(text_size_scaling * column_spacing, 1)
+  column_spacing_half_outer_gap <-  round(text_size_scaling * column_spacing_half_outer_gap, 1)
   if (is.null(right.space)){
+    right.space.inner <- unit(column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)], "mm")
     right.space <- unit(column_spacing[length(column_spacing)], "mm")
     text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`right.space   = {printunit(right.space)}`<br>"))
+  } else {
+    right.space.inner <- right.space - unit(0.5 * 0.8 * base_size/grid::get.gpar()$fontsize * gettextwidths(col.right.gap[[2]]), "mm")
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
   if (is.null(col.right.pos)){
@@ -814,15 +834,21 @@ get_horizontal_spacing <- function(right.space,
   ### initial gap, and gap between each column
   column_spacing <- cumsum(c(gettextwidths(col.left.gap[[1]]),
                              widths_of_columns + gettextwidths(col.left.gap[[2]])))
+  ### but if no column to plot (i.e. length 1) then just col.left.gap[[2]]
+  if (length(widths_of_columns) == 0){column_spacing <- gettextwidths(col.left.gap[[2]])}
   ## adjust for hjust
   column_spacing <- column_spacing + c(widths_of_columns*(1 - col.left.hjust), 0)
-  ### if no column to plot (i.e. length 1) then width of W, if longer keep extra space on last element
-  if (length(column_spacing) == 1){column_spacing <- gettextwidths(col.left.gap[[2]])}
+  column_spacing_half_outer_gap <- column_spacing
+  column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] <- column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] - 0.5 * gettextwidths(col.left.gap[[2]])
   ### text on plot is 0.8 size, and adjust for base_size
-  column_spacing <-  round(0.8 * base_size/grid::get.gpar()$fontsize * column_spacing, 1)
+  column_spacing <- round(text_size_scaling * column_spacing, 1)
+  column_spacing_half_outer_gap <- round(text_size_scaling * column_spacing_half_outer_gap, 1)
   if (is.null(left.space)){
+    left.space.inner <- unit(column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)], "mm")
     left.space <- unit(column_spacing[length(column_spacing)], "mm")
     text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.space    = {printunit(left.space)}`<br>"))
+  } else {
+    left.space.inner <- left.space - unit(0.5 * 0.8 * base_size/grid::get.gpar()$fontsize * gettextwidths(col.left.gap[[2]]), "mm")
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
   if (is.null(col.left.pos)){
@@ -834,5 +860,7 @@ get_horizontal_spacing <- function(right.space,
               col.right.pos = col.right.pos,
               col.left.pos = col.left.pos,
               right.space = right.space,
-              left.space = left.space))
+              right.space.inner = right.space.inner,
+              left.space = left.space,
+              left.space.inner = left.space.inner))
 }

@@ -33,6 +33,7 @@ forest_plot(
   col.left.gap = c("I", "W"),
   col.right.gap = c("I", "W"),
   col.heading.space = 0,
+  col.heading.rule = FALSE,
   estcolumn = TRUE,
   col.keep = NULL,
   ci.delim = ", ",
@@ -134,6 +135,8 @@ the first text column and the panel, and successive text columns.
 
 \item{col.heading.space}{Position of the titles given by col.left.heading and
 col.right.heading. Increase to move them up. (Default: 0)}
+
+\item{col.heading.rule}{Include a horizontal rule below column headings? (Default: FALSE)}
 
 \item{estcolumn}{Include column of estimates and confidence intervals to the
 right of each plot. (Default: TRUE)}
