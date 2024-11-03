@@ -44,7 +44,7 @@ Read `vignette("ckbplotr")` to get started.
 
 If you find this package useful, please consider citing as:
 
-Wright N (2023). ckbplotr: Create CKB Plots.
+Wright N (2024). ckbplotr: Create CKB Plots.
 <https://neilstats.github.io/ckbplotr/>,
 <https://doi.org/10.5281/zenodo.6382217>.
 
