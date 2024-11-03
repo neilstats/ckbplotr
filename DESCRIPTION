@@ -30,6 +30,7 @@ Imports:
     knitr,
     rmarkdown,
     ggh4x,
+    legendry,
     lifecycle,
     glue,
     cli

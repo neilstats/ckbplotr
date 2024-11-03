@@ -44,9 +44,9 @@ Use `+ ckb_style()` to apply a CKB theme, add separated axis lines and fix the a
 plot + ckb_style()
 ```
 
-Or apply just a CKB theme and use axis lines.
+Or apply just a CKB theme.
 ```{r theme}
-plot + theme_ckb() + theme(axis.line = element_line())
+plot + theme_ckb()
 ```
 
 
@@ -103,13 +103,8 @@ plot + ckb_style(xlims = c(0, 8),
 ```
 
 
-### Warning about axis limits
-If any data points you are plotting fall outside the axes, then they will still
-be drawn and may show up in places such as the axes, the legend, the plot title, 
-or the plot margins. There is also no warning if data points fall outside the whole plot area.
-
-So it is best to check that your `xlim` and `ylim` values are suitable for your 
-data before using the function.
+### Data points outside axis limits
+There is no warning if data points fall outside the axis limits. So check that your `xlim` and `ylim` values are suitable for your data before using the function.
 ```{r plot_like_ckb-example-4}
 # The xlim and ylim ranges are too narrow
 plot + ckb_style(xlims = c(0, 4), ylims = c(20, 50))

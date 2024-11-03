@@ -21,6 +21,7 @@ theme_ckb <- function(base_size      = 11,
           panel.border      = element_blank(),
           panel.background  = element_blank(),
           axis.ticks        = element_line(colour = colour),
+          axis.line         = element_line(colour = colour, lineend = "round"),
           axis.text         = element_text(colour = colour),
           axis.text.x       = element_text(margin = margin(t = base_size/(11/4.4)), vjust = 1),
           axis.text.x.top   = element_text(margin = margin(b = base_size/(11/4.4)), vjust = 0),
@@ -54,7 +55,7 @@ theme_ckb <- function(base_size      = 11,
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. Ignored if both width and height are set. (Default: 1.5)
 #' @param width A `grid::unit` object to set the width of the plot (not including the gap or extension).
 #' @param height A `grid::unit` object to set the height of the plot (not including the gap or extension).
-#' @param axes Choice of axis lines to add to the plot, one of "both", "x" or "y". (Default: "both")
+#' @param clip Passed to clip argument of `ggplot2::coord_cartesian()`. (Default: "on")
 #'
 #'
 #' @import ggplot2
@@ -73,14 +74,10 @@ ckb_style <- function(
     colour         = "black",
     axis.title.margin = 1,
     plot.margin    = margin(0.5, 1.5, 0.5, 0.5, "lines"),
-    axes           = "both"
+    clip = "on"
 ){
 
   # check arguments
-  if (!axes %in% c("both", "x", "y", "none")){
-    rlang::abort("axes should be one of 'both', 'x', 'y' or 'none'.")
-  }
-
   if (length(gap) != 2){
     rlang::abort("gap must be a vector of length 2")
   }
@@ -118,7 +115,7 @@ ckb_style <- function(
                         colour = colour,
                         axis.title.margin = axis.title.margin,
                         plot.margin = plot.margin,
-                        axes = axes),
+                        clip = clip),
                    class = "ckbplot"))
 }
 
@@ -183,40 +180,17 @@ ggplot_add.ckbplot <- function(object, plot, ...) {
     coord_cartesian(xlim   = limits[["x"]],
                     ylim   = limits[["y"]],
                     expand = FALSE,
-                    clip = "off") +
+                    clip = object$clip) +
     ggh4x::force_panelsizes(rows = object$full_height,
                             cols = object$full_width,
                             respect = TRUE) +
+    guides(x = legendry::guide_axis_base(cap = tf_x(limits[["xaxis"]])),
+           y = legendry::guide_axis_base(cap = tf_y(limits[["yaxis"]]))) +
     theme_ckb(base_size = object$base_size,
               base_line_size = object$base_line_size,
               colour = object$colour,
               axis.title.margin = object$axis.title.margin,
               plot.margin = object$plot.margin)
-
-  # add axis lines to plot
-  if (object$axes %in% c("both", "y")){
-    plot <- plot +
-      annotate(geom = "segment",
-               x    = limits[["x"]][[1]],
-               xend = limits[["x"]][[1]],
-               y    = limits[["yaxis"]][[1]],
-               yend = limits[["yaxis"]][[2]],
-               linewidth  = object$base_line_size,
-               lineend = "round",
-               colour = object$colour)
-  }
-
-  if (object$axes %in% c("both", "x")){
-    plot <- plot +
-      annotate(geom = "segment",
-               x    = limits[["xaxis"]][[1]],
-               xend = limits[["xaxis"]][[2]],
-               y    = limits[["y"]][[1]],
-               yend = limits[["y"]][[1]],
-               linewidth  = object$base_line_size,
-               lineend = "round",
-               colour = object$colour)
-  }
 
   return(plot)
 }

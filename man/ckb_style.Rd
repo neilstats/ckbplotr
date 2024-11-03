@@ -17,7 +17,7 @@ ckb_style(
   colour = "black",
   axis.title.margin = 1,
   plot.margin = margin(0.5, 1.5, 0.5, 0.5, "lines"),
-  axes = "both"
+  clip = "on"
 )
 }
 \arguments{
@@ -45,7 +45,7 @@ ckb_style(
 
 \item{plot.margin}{Margin around entire plot (Default: margin(0.5, 0, 0.5, 0, "lines"))}
 
-\item{axes}{Choice of axis lines to add to the plot, one of "both", "x" or "y". (Default: "both")}
+\item{clip}{Passed to clip argument of \code{ggplot2::coord_cartesian()}. (Default: "on")}
 }
 \description{
 Make a ggplot into CKB style
