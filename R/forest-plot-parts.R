@@ -1,25 +1,19 @@
 #' code for the axes
 #' @noRd
-forest.axes <- function(axis_scale,
-                        xfrom,
-                        xto,
-                        xticks,
-                        row.labels.heading,
-                        bottom.space,
-                        col.heading.space) {
+forest.axes <- function(x) {
   c(
     make_layer(
       '# Set coordinate system',
       f = 'coord_cartesian',
       arg = c('clip = "off"',
-              'xlim = c({xfrom}, {xto})')
+              'xlim = c({x$xfrom}, {x$xto})')
     ),
     make_layer(
       '# Set the scale for the x axis (the estimates and CIs)',
       f = "scale_x_continuous",
-      arg = c('trans  = "{axis_scale}"',
-              "limits = c({xfrom}, {xto})",
-              "breaks = {paste(deparse(xticks), collapse = '')}",
+      arg = c('trans  = "{x$axis_scale}"',
+              "limits = c({x$xfrom}, {x$xto})",
+              "breaks = {paste(deparse(x$xticks), collapse = '')}",
               'expand = c(0,0)')
     ),
     make_layer(
@@ -27,14 +21,14 @@ forest.axes <- function(axis_scale,
       f = "scale_y_continuous",
       arg = c(
         'trans = "reverse"',
-        if (!is.null(row.labels.heading)){
-          c('breaks = c({-col.heading.space}, attr(datatoplot, "rowlabels")$row)',
-            'labels = c({quote_string(glue::glue("**{row.labels.heading}**"))}, attr(datatoplot, "rowlabels")$row.label)')
+        if (!is.null(x$row.labels.heading)){
+          c('breaks = c({-x$col.heading.space}, attr(datatoplot, "rowlabels")$row)',
+            'labels = c({quote_string(glue::glue("**{x$row.labels.heading}**"))}, attr(datatoplot, "rowlabels")$row.label)')
         } else {
           c('breaks = attr(datatoplot, "rowlabels")$row',
             'labels = attr(datatoplot, "rowlabels")$row.label')
         },
-        'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse(bottom.space)}, {if (!is.null(row.labels.heading)) -{col.heading.space} else "NA"})',
+        'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse(x$bottom.space)}, {if (!is.null(x$row.labels.heading)) -{x$col.heading.space} else "NA"})',
         'expand = c(0,0)')
     )
   )
@@ -42,35 +36,29 @@ forest.axes <- function(axis_scale,
 
 #' code to identify narrows CIs when using panel.width
 #' @noRd
-forest.narrowci <- function(axis_scale,
-                            axis_scale_fn,
-                            xto,
-                            xfrom,
-                            pointsize,
-                            scalepoints,
-                            stroke,
-                            panel.width,
-                            shape_list) {
-  panel.width.mm <- as.numeric(grid::convertUnit(panel.width, "mm"))
-  convert_pointsize <- (axis_scale_fn(xto) - axis_scale_fn(xfrom)) * (pointsize + 2 * stroke) / panel.width.mm
-  size <- if (scalepoints) "size" else "1"
+forest.narrowci <- function(x) {
+  if (!x$fixed_panel_width){return(NULL)}
 
-  x <- c(
+  panel.width.mm <- as.numeric(grid::convertUnit(x$panel.width, "mm"))
+  convert_pointsize <- (x$axis_scale_fn(x$xto) - x$axis_scale_fn(x$xfrom)) * (x$pointsize + 2 * x$stroke) / panel.width.mm
+  size <- if (x$scalepoints) "size" else "1"
+
+  code <- c(
     '# Create column for narrow CIs',
     'datatoplot <- dplyr::mutate(datatoplot,',
     indent(28,
-           'narrowci = ({axis_scale}(uci_transformed) - {axis_scale}(lci_transformed)) <= ',
+           'narrowci = ({x$axis_scale}(uci_transformed) - {x$axis_scale}(lci_transformed)) <= ',
            indent(12,
                   '{size} * ',
                   '{convert_pointsize} *',
-                  if (!is.null(shape_list$aes)){
-                    c('dplyr::case_match({column_name(shape_list$aes)},',
+                  if (!is.null(x$shape_list$aes)){
+                    c('dplyr::case_match({column_name(x$shape_list$aes)},',
                       indent(18,
                              '"22" ~ sqrt(pi / 4) * 0.7528125,',
                              '"filled square" ~ sqrt(pi / 4) * 0.7528125,',
                              '.default = 0.7528125))'))
                   } else {
-                    switch(as.character(shape_list$arg),
+                    switch(as.character(x$shape_list$arg),
                            "22" = "sqrt(pi / 4) * 0.7528125)",
                            "filled square" = "sqrt(pi / 4) * 0.7528125)",
                            "0.7528125)")
@@ -78,7 +66,7 @@ forest.narrowci <- function(axis_scale,
            ),
            '')
   )
-  purrr::map_chr(x, glue::glue, .envir = environment())
+  purrr::map_chr(code, glue::glue, .envir = environment())
 }
 
 #' code for CI colours if using panel.width
@@ -99,41 +87,21 @@ forest.cicolour <- function(vals,
   paste(purrr::map_chr(x, glue::glue, .envir = environment()), collapse = "")
 }
 
-#' code for preparing data when fill is a list
-#' @noRd
-forest.fillcode <- function(fill_values,
-                            panel.names) {
-  x <- c(
-    '# Create column for fill colour',
-    'datatoplot <- datatoplot %>%',
-    indent(2,'dplyr::mutate(fill = dplyr::case_when('))
-  for (i in 1:length(fill_values)){
-    x <- c(x, indent(25, glue::glue('panel == {quote_string(panel.names[[{i}]])} ~ {quote_string(fill_values[[{i}]][1])},')))
-  }
-  x <- c(x,
-         indent(25, 'TRUE ~ "black"))'),
-         '')
-  purrr::map_chr(x, glue::glue, .envir = environment())
-}
-
 #' code for plotting diamonds
 #' @noRd
-forest.plotdiamondscode <- function(colour_list,
-                                    fill_list,
-                                    diamonds.linewidth,
-                                    addaes,
-                                    addarg) {
+forest.plotdiamondscode <- function(x) {
+  if (is.null(x$col.diamond) && is.null(x$diamond)){return(NULL)}
   make_layer(
     '# Add diamonds',
     f = 'geom_polygon',
-    aes = c(addaes$diamonds,
+    aes = c(x$addaes$diamonds,
             'x = x, y = row + y, group = row',
-            'colour = {column_name(colour_list$aes)}',
-            'fill = {column_name(fill_list$aes)}'),
-    arg = c(addarg$diamonds,
-            'colour = {quote_string(colour_list$arg)}',
-            'fill = {quote_string(fill_list$arg)}',
-            'linewidth = {diamonds.linewidth}',
+            'colour = {column_name(x$colour_list$aes)}',
+            'fill = {column_name(x$fill_list$aes)}'),
+    arg = c(x$addarg$diamonds,
+            'colour = {quote_string(x$colour_list$arg)}',
+            'fill = {quote_string(x$fill_list$arg)}',
+            'linewidth = {x$diamonds.linewidth}',
             'data = ~ tidyr::unnest(., diamond_polygon)')
   )
 }
@@ -160,69 +128,58 @@ forest.facet <- function() {
 
 #' code for line at null
 #' @noRd
-forest.nullline <- function(nullval,
-                            base_line_size,
-                            plotcolour,
-                            addarg) {
+forest.nullline <- function(x) {
+  if (is.null(x$nullval)){return(NULL)}
   make_layer(
     '# Add a line at null effect',
     f = "annotate",
-    arg = c(addarg$nullline,
+    arg = c(x$addarg$nullline,
             'geom      = "segment"',
             'y         = 0.7',
             'yend      = Inf',
-            'x         = {nullval}',
-            'xend      = {nullval}',
-            'linewidth = {base_line_size}',
-            'colour    = {quote_string(plotcolour)}')
+            'x         = {x$nullval}',
+            'xend      = {x$nullval}',
+            'linewidth = {x$base_line_size}',
+            'colour    = {quote_string(x$plotcolour)}')
   )
 }
 
 
 #' code to plot points
 #' @noRd
-forest.plot.points <- function(addaes,
-                               shape_list,
-                               colour_list,
-                               fill_list,
-                               addarg,
-                               xfrom,
-                               xto,
-                               stroke,
-                               pointsize,
-                               scalepoints) {
+forest.plot.points <- function(x) {
   c(
     make_layer(
       '# Plot points at the transformed estimates',
       f = 'geom_point',
-      aes = c(addaes$point,
-              if (scalepoints){
+      aes = c(x$addaes$point,
+              if (x$scalepoints){
                 'size = size'
               },
-              'shape  = {column_name(shape_list$aes)}',
-              'colour = {column_name(colour_list$aes)}',
-              'fill   = {c(column_name(fill_list$aes), fill_list$string_aes)}'),
-      arg = c(addarg$point,
+              'shape  = {column_name(x$shape_list$aes)}',
+              'colour = {column_name(x$colour_list$aes)}',
+              'fill   = {c(column_name(x$fill_list$aes), x$fill_list$string_aes)}'),
+      arg = c(x$addarg$point,
               'data   = ~ dplyr::filter(.x',
-              indent(25, c('estimate_transformed > {xfrom}',
-                           'estimate_transformed < {xto}',
+              indent(25, c('estimate_transformed > {x$xfrom}',
+                           'estimate_transformed < {x$xto}',
                            '!as_diamond)')),
-              'shape  = {if (is.numeric(shape_list$arg)) shape_list$arg else quote_string(shape_list$arg)}',
-              if (!scalepoints){
-                'size   = {pointsize}'
+              'shape  = {if (is.numeric(x$shape_list$arg)) x$shape_list$arg else quote_string(x$shape_list$arg)}',
+              if (!x$scalepoints){
+                'size   = {x$pointsize}'
               },
-              'colour = {quote_string(colour_list$arg)}',
-              'fill   = {quote_string(fill_list$arg)}',
-              'stroke = {stroke}',
+              'colour = {quote_string(x$colour_list$arg)}',
+              'fill   = {quote_string(x$fill_list$arg)}',
+              'stroke = {x$stroke}',
               'na.rm  = TRUE')
     ),
-    if (scalepoints){
+    if (x$scalepoints){
       make_layer(
         c('# Scale the size of points by their side length',
           '# and make the scale range from zero upwards'),
         f = 'scale_radius',
         arg = c('limits = c(0, 1)',
-                'range  = c(0, {pointsize})')
+                'range  = c(0, {x$pointsize})')
       )
     }
   )
@@ -230,14 +187,7 @@ forest.plot.points <- function(addaes,
 
 #' code for plotting confidence interval lines
 #' @noRd
-forest.cis <- function(addaes,
-                       cicolour_list,
-                       addarg,
-                       ciunder,
-                       base_line_size,
-                       xfrom,
-                       xto,
-                       type = c("all", "before", "after", "null")) {
+forest.cis <- function(x, type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
   make_layer(
     switch(type,
@@ -245,18 +195,18 @@ forest.cis <- function(addaes,
            "before" = '# Plot the CIs - before plotting points',
            "after"  = '# Plot the CIs - after plotting points'),
     f = 'geom_errorbar',
-    aes = c(addaes$ci,
-            'xmin = pmin(pmax(lci_transformed, {xfrom}), {xto})',
-            'xmax = pmin(pmax(uci_transformed, {xfrom}), {xto})',
-            'colour = {c(column_name(cicolour_list$aes[1]), cicolour_list$string_aes)}'),
-    arg = c(addarg$ci,
+    aes = c(x$addaes$ci,
+            'xmin = pmin(pmax(lci_transformed, {x$xfrom}), {x$xto})',
+            'xmax = pmin(pmax(uci_transformed, {x$xfrom}), {x$xto})',
+            'colour = {c(column_name(x$cicolour_list$aes[1]), x$cicolour_list$string_aes)}'),
+    arg = c(x$addarg$ci,
             switch(type,
                    "all"    = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), !as_diamond)',
-                   "before" = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), {ciunder}, !as_diamond)',
-                   "after"  = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), !{ciunder}, !as_diamond)'),
-            'colour    = {quote_string(cicolour_list$arg[1])}',
+                   "before" = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), {x$ciunder}, !as_diamond)',
+                   "after"  = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), !{x$ciunder}, !as_diamond)'),
+            'colour    = {quote_string(x$cicolour_list$arg[1])}',
             'width     = 0',
-            'linewidth = {base_line_size}',
+            'linewidth = {x$base_line_size}',
             'na.rm     = TRUE')
   )
 }
@@ -264,28 +214,23 @@ forest.cis <- function(addaes,
 
 #' code for scales
 #' @noRd
-forest.scales <- function(xfrom,
-                          xto,
-                          shape_list,
-                          fill_list,
-                          colour_list,
-                          cicolour_list) {
+forest.scales <- function(x) {
 
-  shape_scale_needed <- !is.null(shape_list$aes)
-  fill_scale_needed <- !is.null(fill_list$aes) | !is.null(fill_list$string_aes)
-  colour_scale_needed <- any(!is.null(colour_list$aes),
-                             !is.null(cicolour_list$aes),
-                             !is.null(cicolour_list$string_aes))
+  shape_scale_needed <- !is.null(x$shape_list$aes)
+  fill_scale_needed <- !is.null(x$fill_list$aes) | !is.null(x$fill_list$string_aes)
+  colour_scale_needed <- any(!is.null(x$colour_list$aes),
+                             !is.null(x$cicolour_list$aes),
+                             !is.null(x$cicolour_list$string_aes))
   if (any(shape_scale_needed,
           fill_scale_needed,
           colour_scale_needed)){
-    x <- c(
+    code <- c(
       '# Use identity for aesthetic scales',
       if (shape_scale_needed) {'scale_shape_identity() +'},
       if (fill_scale_needed) {'scale_fill_identity() +'},
       if (colour_scale_needed) {'scale_colour_identity() +'},
       '')
-    return(x)
+    return(code)
   }
   return(NULL)
 }
@@ -293,27 +238,23 @@ forest.scales <- function(xfrom,
 
 #' code to add arrows to CIs
 #' @noRd
-forest.arrows <- function(addaes,
-                          cicolour_list,
-                          addarg,
-                          base_line_size,
-                          xfrom,
-                          xto) {
+forest.arrows <- function(x) {
+  if (!x$values_outside_xlim){return(NULL)}
   make_layer(
     '# Add tiny segments with arrows when the CIs go outside axis limits',
     f = 'geom_segment',
-    aes = c(addaes$ci,
+    aes = c(x$addaes$ci,
             'y      = row',
             'yend   = row',
             'x      = x',
             'xend   = xend',
-            'colour = {c(column_name(cicolour_list$aes[1]), cicolour_list$string_aes)}'),
-    arg = c(addarg$ci,
-            'data      = ~ dplyr::bind_rows(dplyr::filter(.x, uci_transformed > {xto}) %>% dplyr::mutate(x = {xto} - 1e-6, xend = {xto})',
-            indent(31, 'dplyr::filter(.x, lci_transformed < {xfrom}) %>% dplyr::mutate(x = {xfrom} + 1e-6, xend = {xfrom}))'),
-            'colour    = {quote_string(cicolour_list$arg[1])}',
-            'linewidth = {base_line_size}',
-            'arrow     = arrow(type = "closed", length = unit({8 * base_line_size}, "pt"))',
+            'colour = {c(column_name(x$cicolour_list$aes[1]), x$cicolour_list$string_aes)}'),
+    arg = c(x$addarg$ci,
+            'data      = ~ dplyr::bind_rows(dplyr::filter(.x, uci_transformed > {x$xto}) %>% dplyr::mutate(x = {x$xto} - 1e-6, xend = {x$xto})',
+            indent(31, 'dplyr::filter(.x, lci_transformed < {x$xfrom}) %>% dplyr::mutate(x = {x$xfrom} + 1e-6, xend = {x$xfrom}))'),
+            'colour    = {quote_string(x$cicolour_list$arg[1])}',
+            'linewidth = {x$base_line_size}',
+            'arrow     = arrow(type = "closed", length = unit({8 * x$base_line_size}, "pt"))',
             'na.rm     = TRUE')
   )
 }
@@ -379,99 +320,66 @@ forest.col.code <- function(column,
 
 #' code for columns to right of panel
 #' @noRd
-forest.columns.right <- function(col.right.all,
-                                 col.right.pos,
-                                 col.right.heading,
-                                 col.right.hjust,
-                                 col.bold,
-                                 col.right.parse,
-                                 addaes,
-                                 addarg,
-                                 xto,
-                                 xfrom,
-                                 text_size,
-                                 plotcolour,
-                                 col.heading.space,
-                                 axis_scale_fn,
-                                 axis_scale_inverse_fn) {
-  x <- unlist(purrr::pmap(
-    list(column     = col.right.all,
-         pos        = col.right.pos ,
-         heading    = col.right.heading,
-         hjust      = col.right.hjust,
-         bold       = if (is.null(col.bold)) FALSE else col.bold,
-         parse      = col.right.parse,
-         xpos       = xto,
-         addaes     = if(is.null(addaes$col.right)){""} else{addaes$col.right},
-         addarg     = if(is.null(addarg$col.right)){""} else{addarg$col.right},
-         col.heading.space = col.heading.space,
-         text_size  = text_size,
-         plotcolour = plotcolour,
-         headingaddaes = if(is.null(addaes$heading.col.right)){""} else{addaes$heading.col.right},
-         headingaddarg = if(is.null(addarg$heading.col.right)){""} else{addarg$heading.col.right}),
+forest.columns.right <- function(x) {
+  if (is.null(x$col.right.all)){return(NULL)}
+  code <- unlist(purrr::pmap(
+    list(column     = x$col.right.all,
+         pos        = x$col.right.pos ,
+         heading    = x$col.right.heading,
+         hjust      = x$col.right.hjust,
+         bold       = if (is.null(x$col.bold)) FALSE else x$col.bold,
+         parse      = x$col.right.parse,
+         xpos       = x$xto,
+         addaes     = if(is.null(x$addaes$col.right)){""} else{x$addaes$col.right},
+         addarg     = if(is.null(x$addarg$col.right)){""} else{x$addarg$col.right},
+         col.heading.space = x$col.heading.space,
+         text_size  = x$text_size,
+         plotcolour = x$plotcolour,
+         headingaddaes = if(is.null(x$addaes$heading.col.right)){""} else{x$addaes$heading.col.right},
+         headingaddarg = if(is.null(x$addarg$heading.col.right)){""} else{x$addarg$heading.col.right}),
     forest.col.code))
-  c('# Add columns to right side of panels', x)
+  c('# Add columns to right side of panels', code)
 }
 
 #' code for columns to left of panels
 #' @noRd
-forest.columns.left <- function(col.left,
-                                col.left.pos,
-                                col.left.heading,
-                                col.left.hjust,
-                                col.bold,
-                                addaes,
-                                addarg,
-                                xfrom,
-                                xto,
-                                text_size,
-                                plotcolour,
-                                col.heading.space,
-                                axis_scale_fn,
-                                axis_scale_inverse_fn) {
-  x <- unlist(purrr::pmap(
-    list(column     = col.left,
-         pos        = - col.left.pos,
-         heading    = col.left.heading,
-         hjust      = col.left.hjust,
-         bold       = if (is.null(col.bold)) FALSE else col.bold,
+forest.columns.left <- function(x) {
+  if (is.null(x$col.left)){return(NULL)}
+  code <- unlist(purrr::pmap(
+    list(column     = x$col.left,
+         pos        = - x$col.left.pos,
+         heading    = x$col.left.heading,
+         hjust      = x$col.left.hjust,
+         bold       = if (is.null(x$col.bold)) FALSE else x$col.bold,
          parse      = FALSE,
-         xpos       = xfrom,
-         addaes     = if(is.null(addaes$col.left)){""} else{addaes$col.left},
-         addarg     = if(is.null(addarg$col.left)){""} else{addarg$col.left},
-         col.heading.space = col.heading.space,
-         text_size  = text_size,
-         plotcolour = plotcolour,
-         headingaddaes = if(is.null(addaes$heading.col.left.heading)){""} else{addaes$heading.col.left},
-         headingaddarg = if(is.null(addarg$heading.col.left.heading)){""} else{addarg$heading.col.left}),
+         xpos       = x$xfrom,
+         addaes     = if(is.null(x$addaes$col.left)){""} else{x$addaes$col.left},
+         addarg     = if(is.null(x$addarg$col.left)){""} else{x$addarg$col.left},
+         col.heading.space = x$col.heading.space,
+         text_size  = x$text_size,
+         plotcolour = x$plotcolour,
+         headingaddaes = if(is.null(x$addaes$heading.col.left.heading)){""} else{x$addaes$heading.col.left},
+         headingaddarg = if(is.null(x$addarg$heading.col.left.heading)){""} else{x$addarg$heading.col.left}),
     forest.col.code))
-  c('# Add columns to left side of panel', x)
+  c('# Add columns to left side of panel', code)
 }
 
 #' code for addtext
 #' @noRd
-forest.addtext <- function(xto,
-                           xfrom,
-                           col.right.pos,
-                           col.right.hjust,
-                           text_size,
-                           plotcolour,
-                           axis_scale_fn,
-                           axis_scale_inverse_fn,
-                           addaes,
-                           addarg) {
+forest.addtext <- function(x) {
+  if (is.null(x$addtext)){return(NULL)}
   make_layer(
     '## addtext',
     f = 'ckbplotr::geom_text_move',
-    aes = c(addaes$addtext,
+    aes = c(x$addaes$addtext,
             'y = row',
-            'x = {xto}',
+            'x = {x$xto}',
             'label = addtext'),
-    arg = c(addarg$addtext,
-            'move_x = {printunit(col.right.pos[[1]])}',
-            'hjust  = {col.right.hjust[[1]]}',
-            'size   = {text_size}',
-            'colour = {quote_string(plotcolour)}',
+    arg = c(x$addarg$addtext,
+            'move_x = {printunit(x$col.right.pos[[1]])}',
+            'hjust  = {x$col.right.hjust[[1]]}',
+            'size   = {x$text_size}',
+            'colour = {quote_string(x$plotcolour)}',
             'na.rm  = TRUE',
             'parse  = TRUE')
   )
@@ -479,24 +387,20 @@ forest.addtext <- function(xto,
 
 #' code for horizontal rule under panel headings
 #' @noRd
-forest.column.headings.rule <- function(col.heading.space,
-                                        left.space.inner,
-                                        right.space.inner,
-                                        base_size,
-                                        base_line_size,
-                                        addarg){
+forest.column.headings.rule <- function(x){
+  if (!x$col.heading.rule){return(NULL)}
   make_layer(
     '# Add horizontal rule under column headings',
     f = 'annotation_custom',
     arg = c(
       make_layer(f = 'grob = grid::linesGrob',
-                 arg = c('x = unit(c(0, 1), "npc") + c(-1, 0)*{printunit(left.space.inner)} + c(0, 1)*{printunit(right.space.inner)}',
-                         'y = unit(c(-{base_size}/8, -{base_size}/8), "mm")',
-                         'gp = grid::gpar(lwd = {round(base_line_size * .stroke / 2, 6)})'),
+                 arg = c('x = unit(c(0, 1), "npc") + c(-1, 0)*{printunit(x$left.space.inner)} + c(0, 1)*{printunit(x$right.space.inner)}',
+                         'y = unit(c(-{x$base_size}/8, -{x$base_size}/8), "mm")',
+                         'gp = grid::gpar(lwd = {round(x$base_line_size * .stroke / 2, 6)})'),
                  plus = FALSE,
                  br = FALSE),
-      'ymin = {col.heading.space}',
-      'ymax = {col.heading.space}'
+      'ymin = {x$col.heading.space}',
+      'ymax = {x$col.heading.space}'
     )
   )
 }
@@ -504,55 +408,45 @@ forest.column.headings.rule <- function(col.heading.space,
 
 #' code for x-axis labels and panel headings
 #' @noRd
-forest.xlab.panel.headings <- function(addaes,
-                                       xmid,
-                                       addarg,
-                                       text_size,
-                                       plotcolour,
-                                       xlab,
-                                       panel.headings,
-                                       panel.headings.align,
-                                       col.heading.space,
-                                       left.space.inner,
-                                       right.space.inner) {
+forest.xlab.panel.headings <- function(x) {
   c(
     make_layer(
       '# Add xlab below each axis',
       f = 'ckbplotr::geom_text_move',
-      aes = c(addaes$xlab,
+      aes = c(x$addaes$xlab,
               'y = Inf',
-              'x = {xmid}',
+              'x = {x$xmid}',
               'label = xlab'),
-      arg = c(addarg$xlab,
+      arg = c(x$addarg$xlab,
               'hjust    = 0.5',
-              'size     = {text_size}',
-              'colour   = {quote_string(plotcolour)}',
+              'size     = {x$text_size}',
+              'colour   = {quote_string(x$plotcolour)}',
               'vjust    = 1',
-              'move_y   = unit(-{text_size*2.4}, "mm")',
+              'move_y   = unit(-{x$text_size*2.4}, "mm")',
               'fontface = "bold"',
               'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
-              indent(23, 'xlab = {ds(xlab)})'))
+              indent(23, 'xlab = {ds(x$xlab)})'))
     ),
-    if (!all(panel.headings == "")){
+    if (!all(x$panel.headings == "")){
       make_layer(
         '# Add panel name above each panel',
         f = 'ckbplotr::geom_text_move',
-        aes = c(c(addaes$panel.headings, addaes$panel.name),
-                'y     = {- col.heading.space}',
-                'x     = {xmid}',
+        aes = c(c(x$addaes$panel.headings, x$addaes$panel.name),
+                'y     = {- x$col.heading.space}',
+                'x     = {x$xmid}',
                 'label = title'),
-        arg = c(c(addarg$panel.headings, addarg$panel.name),
+        arg = c(c(x$addarg$panel.headings, x$addarg$panel.name),
                 'hjust    = 0.5',
                 'vjust    = 0',
-                if (panel.headings.align == "plot"){
-                  'move_x   = ({printunit(right.space.inner)} - {printunit(left.space.inner)})/2'
+                if (x$panel.headings.align == "plot"){
+                  'move_x   = ({printunit(x$right.space.inner)} - {printunit(x$left.space.inner)})/2'
                 },
-                'move_y   = unit({text_size*3}, "mm")',
-                'size     = {text_size}',
-                'colour   = {quote_string(plotcolour)}',
+                'move_y   = unit({x$text_size*3}, "mm")',
+                'size     = {x$text_size}',
+                'colour   = {quote_string(x$plotcolour)}',
                 'fontface = "bold"',
                 'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
-                indent(23, 'title = {ds(panel.headings)})'))
+                indent(23, 'title = {ds(x$panel.headings)})'))
       )
     }
   )
@@ -561,13 +455,13 @@ forest.xlab.panel.headings <- function(addaes,
 
 #' code to set panel width and/or height
 #' @noRd
-forest.panel.size <- function(panel.width = NULL,
-                              panel.height = NULL) {
+forest.panel.size <- function(x) {
+  if (!x$fixed_panel_width & !x$fixed_panel_height){return(NULL)}
   make_layer(
     '# Fix panel size',
     f = 'ggh4x::force_panelsizes',
-    arg = c('cols = {printunit(panel.width)}',
-            'rows = {printunit(panel.height)}'),
+    arg = c('cols = {printunit(x$panel.width)}',
+            'rows = {printunit(x$panel.height)}'),
     plus = TRUE
   )
 }
@@ -576,65 +470,84 @@ forest.panel.size <- function(panel.width = NULL,
 
 #' code for the theme
 #' @noRd
-forest.theme <- function(base_size,
-                         plotcolour,
-                         base_line_size,
-                         text_size,
-                         title,
-                         space_for_panel_headings,
-                         left.space,
-                         right.space,
-                         mid.space,
-                         plot.margin,
-                         add) {
+forest.theme <- function(x) {
   make_layer(
     '# Control the overall look of the plot',
     f = 'theme',
-    arg = c('text             = element_text(size = {base_size}, colour = {quote_string(plotcolour)})',
-            'line             = element_line(linewidth = {base_line_size})',
+    arg = c('text             = element_text(size = {x$base_size}, colour = {quote_string(x$plotcolour)})',
+            'line             = element_line(linewidth = {x$base_line_size})',
             'panel.background = element_blank()',
             'panel.grid.major = element_blank()',
             'panel.grid.minor = element_blank()',
-            if (title == ""){
+            if (x$title == ""){
               'plot.title       = element_blank()'
             } else {
               'plot.title.position = "plot"'
             },
-            'axis.line.x      = element_line(colour = {quote_string(plotcolour)}, linewidth = {base_line_size}, lineend = "round")',
+            'axis.line.x      = element_line(colour = {quote_string(x$plotcolour)}, linewidth = {x$base_line_size}, lineend = "round")',
             'axis.title       = element_blank()',
-            'axis.ticks.x     = element_line(colour = {quote_string(plotcolour)})',
-            'axis.ticks.length.x = unit({base_size/4},  "pt")',
-            'axis.text.x      = element_text(colour = {quote_string(plotcolour)}',
+            'axis.ticks.x     = element_line(colour = {quote_string(x$plotcolour)})',
+            'axis.ticks.length.x = unit({x$base_size/4},  "pt")',
+            'axis.text.x      = element_text(colour = {quote_string(x$plotcolour)}',
             indent(32,
-                   'margin = margin(t = {base_size/(11/4.4)})',
+                   'margin = margin(t = {x$base_size/(11/4.4)})',
                    'vjust  = 1)'),
             'axis.ticks.y     = element_blank()',
             'axis.ticks.length.y = unit(0, "pt")',
             'axis.line.y      = element_blank()',
             'axis.text.y      = ggtext::element_markdown(hjust  = 0',
             indent(44,
-                   'colour = {quote_string(plotcolour)}',
-                   'margin = margin(r = {as.numeric(left.space)}, unit = {makeunit(left.space)}))'),
+                   'colour = {quote_string(x$plotcolour)}',
+                   'margin = margin(r = {as.numeric(x$left.space)}, unit = {makeunit(x$left.space)}))'),
             'panel.border     = element_blank()',
-            'panel.spacing    = {printunit(right.space)} + {paste(deparse(mid.space), collapse = "")} + {printunit(left.space)}',
+            'panel.spacing    = {printunit(x$right.space)} + {paste(deparse(x$mid.space), collapse = "")} + {printunit(x$left.space)}',
             'strip.background = element_blank()',
             'strip.placement  = "outside"',
             'strip.text       = element_blank()',
             'legend.position  = "none"',
             'plot.background  = element_blank()',
-            'plot.margin      = {paste(deparse(plot.margin), collapse = "")} + unit(c({space_for_panel_headings}, 0, {2*text_size}, 0), "mm") + unit(c(0, {as.numeric(right.space)}, 0, 0), {makeunit(right.space)})'
+            'plot.margin      = {paste(deparse(x$plot.margin), collapse = "")} + unit(c({x$space_for_panel_headings}, 0, {2*x$text_size}, 0), "mm") + unit(c(0, {as.numeric(x$right.space)}, 0, 0), {makeunit(x$right.space)})'
     ),
-    plus = !is.null(add$end),
+    plus = !is.null(x$add$end),
     duplicates = TRUE,
   )
 }
 
 #' code for title
 #' @noRd
-forest.title <- function(title) {
+forest.title <- function(x) {
+  if (x$title == ""){return(NULL)}
   make_layer(
     '# Add the title',
     f = 'labs',
-    arg = 'title = "{title}"'
+    arg = 'title = "{x$title}"'
   )
 }
+
+
+#' code to add object at start of ggplot
+#' @noRd
+forest.add.start <- function(x) {
+  if (is.null(x$add$start)){return(NULL)}
+  c("# Additional layer",
+    paste(c(x$add$start, " +"), collapse = ""),
+    "")
+}
+
+#' code to add object at end of ggplot
+#' @noRd
+forest.add.end <- function(x) {
+  if (is.null(x$add$end)){return(NULL)}
+  c("# Additional layer",
+    x$add$end,
+    "")
+}
+
+#' code for user function on datatoplot
+#' @noRd
+function.data.function <- function(x){
+  if (is.null(x$data.function)){return(NULL)}
+  c(glue::glue('datatoplot <- {x$data.function}(datatoplot)'),
+    '')
+}
+

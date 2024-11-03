@@ -516,217 +516,132 @@ forest_plot <- function(
       argset(addtext)))
 
 
+  # Include automatic est column ----
+  col.right.all <- c(if (estcolumn){"auto_estcolumn"}, col.right)
+
+
+  # Plot margin and space between panels
+  mid.space <- substitute(mid.space)
+  plot.margin <- substitute(plot.margin)
+
+  # Deparse add objects ----
+  if (!is.null(add$start)){
+    add$start <- deparse1(substitute(add)$start)
+  }
+  if (!is.null(add$end)){
+    add$end <- deparse1(substitute(add)$end)
+  }
+
+  # Create plot specification list ----
+  spec <- tibble::lst(
+    add,
+    addaes,
+    addarg,
+    addtext,
+    axis_scale,
+    axis_scale_fn,
+    axis_scale_inverse_fn,
+    base_line_size,
+    base_size,
+    bold.labels,
+    bottom.space,
+    ci_order,
+    ci.delim,
+    cicolour_list,
+    ciunder,
+    col.bold,
+    col.diamond,
+    col.estimate,
+    col.heading.rule,
+    col.heading.space,
+    col.keep,
+    col.key,
+    col.lci,
+    col.left,
+    col.left.heading,
+    col.left.hjust,
+    col.left.pos,
+    col.right,
+    col.right.all,
+    col.right.heading,
+    col.right.hjust,
+    col.right.parse,
+    col.right.pos,
+    col.stderr,
+    col.uci,
+    colour_list,
+    data.function,
+    diamond,
+    diamonds.linewidth,
+    digits,
+    estcolumn,
+    exponentiate,
+    fill_list,
+    fixed_panel_height,
+    fixed_panel_width,
+    left.space,
+    left.space.inner,
+    mid.space,
+    minse,
+    nullval,
+    panel.headings,
+    panel.headings.align,
+    panel.height,
+    panel.names,
+    panel.width,
+    panels,
+    plot.margin,
+    plotcolour,
+    pointsize,
+    right.space,
+    right.space.inner,
+    row.labels,
+    row.labels.heading,
+    row.labels.levels,
+    row.labels.space,
+    rows,
+    scalepoints,
+    shape_list,
+    space_for_panel_headings,
+    stroke,
+    text_size,
+    title,
+    values_outside_xlim,
+    xfrom,
+    xlab,
+    xmid,
+    xticks,
+    xto
+  )
 
   # Create the plot code ----
   plotcode <- c(
     'library(ggplot2)',
     '',
-
-    # code to prepare data for plotting using forest_data()
-    prep.data.code,
-
-    # code for if using fixed panel width
-    if (fixed_panel_width) {
-      forest.narrowci(axis_scale,
-                      axis_scale_fn,
-                      xto,
-                      xfrom,
-                      pointsize,
-                      scalepoints,
-                      stroke,
-                      panel.width,
-                      shape_list)
-    },
-
-    # code for user function on datatoplot
-    if (!is.null(data.function)){
-      c(glue::glue_safe('datatoplot <- {data.function}(datatoplot)'),
-        '')
-    },
-
-    # code to initiate the ggplot
-    forest.start.ggplot(),
-
+    prep.data.code,               # prepare data for plotting using forest_data()
+    forest.narrowci(spec),        # identify narrows CIs when using panel.width
+    function.data.function(spec), # user function on datatoplot
+    forest.start.ggplot(),        # initiate the ggplot
     indent(2,
-
-           # add$start
-           if (!is.null(add$start)){
-             c("# Additional layer",
-               paste(c(deparse(substitute(add)$start), " +"), collapse = ""),
-               "")
-           },
-
-           # the code to put panels in facets
-           forest.facet(),
-
-           # code for line at null
-           if (!is.null(nullval)) { forest.nullline(nullval, base_line_size, plotcolour, addarg) },
-
-           # code for CI lines plotted before points
-           forest.cis(addaes,
-                      cicolour_list,
-                      addarg,
-                      ciunder,
-                      base_line_size,
-                      xfrom,
-                      xto,
-                      type = ci_order[[1]]),
-
-           # code to plot points
-           forest.plot.points(addaes,
-                              shape_list,
-                              colour_list,
-                              fill_list,
-                              addarg,
-                              xfrom,
-                              xto,
-                              stroke,
-                              pointsize,
-                              scalepoints),
-
-           # code for CI lines plotted after points
-           forest.cis(addaes,
-                      cicolour_list,
-                      addarg,
-                      ciunder,
-                      base_line_size,
-                      xfrom,
-                      xto,
-                      type = ci_order[[2]]),
-
-           # code to add arrows to CIs
-           if (values_outside_xlim) {
-             forest.arrows(addaes, cicolour_list, addarg, base_line_size, xfrom, xto)
-           },
-
-           # code for plotting diamonds
-           if(!is.null(col.diamond) || !is.null(diamond)){
-             forest.plotdiamondscode(colour_list,
-                                     fill_list,
-                                     diamonds.linewidth,
-                                     addaes,
-                                     addarg)
-           },
-
-           # code for scales and coordinates
-           forest.scales(xfrom,
-                         xto,
-                         shape_list,
-                         fill_list,
-                         colour_list,
-                         cicolour_list),
-
-           # code for columns to right of panel
-           if (!is.null(col.right) | estcolumn) {
-             col.right.all <- c(if (estcolumn){"auto_estcolumn"}, col.right)
-             forest.columns.right(col.right.all,
-                                  col.right.pos,
-                                  col.right.heading,
-                                  col.right.hjust,
-                                  col.bold,
-                                  col.right.parse,
-                                  addaes,
-                                  addarg,
-                                  xto,
-                                  xfrom,
-                                  text_size,
-                                  plotcolour,
-                                  col.heading.space,
-                                  axis_scale_fn,
-                                  axis_scale_inverse_fn)
-           },
-
-           # code for columns to left of panel
-           if (!is.null(col.left)) {
-             forest.columns.left(col.left,
-                                 col.left.pos,
-                                 col.left.heading,
-                                 col.left.hjust,
-                                 col.bold,
-                                 addaes,
-                                 addarg,
-                                 xfrom,
-                                 xto,
-                                 text_size,
-                                 plotcolour,
-                                 col.heading.space,
-                                 axis_scale_fn,
-                                 axis_scale_inverse_fn)
-           },
-
-           # code for addtext
-           if (!is.null(addtext)){
-             forest.addtext(xto,
-                            xfrom,
-                            col.right.pos,
-                            col.right.hjust,
-                            text_size,
-                            plotcolour,
-                            axis_scale_fn,
-                            axis_scale_inverse_fn,
-                            addaes,
-                            addarg)
-           },
-
-           if (col.heading.rule){
-           forest.column.headings.rule(col.heading.space,
-                                       left.space.inner,
-                                       right.space.inner,
-                                       base_size,
-                                       base_line_size,
-                                       addarg)
-           },
-
-           # code for x-axis labels and panel headings
-           forest.xlab.panel.headings(addaes,
-                                      xmid,
-                                      addarg,
-                                      text_size,
-                                      plotcolour,
-                                      xlab,
-                                      panel.headings,
-                                      panel.headings.align,
-                                      col.heading.space,
-                                      left.space.inner,
-                                      right.space.inner),
-
-           # code for the axes
-           forest.axes(axis_scale,
-                       xfrom,
-                       xto,
-                       xticks,
-                       row.labels.heading,
-                       bottom.space,
-                       col.heading.space),
-
-           # code for panel size
-           if (fixed_panel_width | fixed_panel_height){
-             forest.panel.size(panel.width,
-                               panel.height)
-           },
-
-           # code for the plot title
-           if (title != ""){forest.title(title)},
-
-           # Write code for the theme
-           forest.theme(base_size,
-                        plotcolour,
-                        base_line_size,
-                        text_size,
-                        title,
-                        space_for_panel_headings,
-                        left.space,
-                        right.space,
-                        substitute(mid.space),
-                        substitute(plot.margin),
-                        add),
-
-           # add$end
-           if (!is.null(add$end)){
-             c("# Additional layer",
-               paste(deparse(substitute(add)$end), collapse = ""),
-               "")
-           }
+           forest.add.start(spec),                      # add$start
+           forest.facet(),                              # facets
+           forest.nullline(spec),                       # line at null
+           forest.cis(spec, type = spec$ci_order[[1]]), # CI lines plotted before points
+           forest.plot.points(spec),                    # points
+           forest.cis(spec, type = spec$ci_order[[2]]), # CI lines plotted after points
+           forest.arrows(spec),                         # arrows for CIs
+           forest.plotdiamondscode(spec),               # diamonds
+           forest.scales(spec),                         # scales and coordinates
+           forest.columns.right(spec),                  # columns to right of panel
+           forest.columns.left(spec),                   # columns to left of panel
+           forest.addtext(spec),                        # addtext
+           forest.column.headings.rule(spec),
+           forest.xlab.panel.headings(spec),            # x-axis labels and panel headings
+           forest.axes(spec),                           # axes
+           forest.panel.size(spec),                     # panel size
+           forest.title(spec),                          # plot title
+           forest.theme(spec),                          # theme
+           forest.add.end(spec)                         # add$end
     )
   )
 

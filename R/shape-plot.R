@@ -258,6 +258,7 @@ shape_plot <- function(data,
 
 
   # Aesthetic adjustments when using height ----
+  cicolours <- NULL
   if (!missing(height)) {
     if (!inherits(height, "unit")){
       height <- grid::unit(height, "mm")
@@ -270,6 +271,9 @@ shape_plot <- function(data,
     if (!missing(ciunder)) warning("ciunder ignored when using height")
     ciunder <- "ciunder"
   }
+
+  ymin <- ylims[[1]]
+  ymax <- ylims[[2]]
 
 
   # Width ----
@@ -309,138 +313,102 @@ shape_plot <- function(data,
   }
 
 
+  # Deparsing ----
+  one_over_minse <- deparse(1/minse)
+  xlims <- deparse(xlims)
+  xbreaks <- deparse(xbreaks)
+  ylims <- deparse(ylims)
+  ybreaks <- deparse(ybreaks)
+  legend.position <- deparse(legend.position)
+  gap <- deparse(gap)
+  ext <- deparse(ext)
+  ratio <- deparse(ratio)
+  axis.title.margin <- deparse(axis.title.margin)
+
+  if (!is.null(add$start)){
+    add$start <- deparse1(substitute(add)$start)
+  }
+  if (!is.null(add$end)){
+    add$end <- deparse1(substitute(add)$end)
+  }
+
+  # Create plot specification list ----
+  spec <- tibble::lst(
+    add,
+    addaes,
+    addarg,
+    axis.title.margin,
+    base_line_size,
+    base_size,
+    ci_order,
+    cicolour,
+    cicolours,
+    ciunder,
+    col.estimate,
+    col.group,
+    col.lci,
+    col.n,
+    col.stderr,
+    col.x,
+    colour,
+    digits,
+    est_string,
+    ext,
+    fill_string,
+    gap,
+    group_string,
+    height,
+    lci_string,
+    legend.position,
+    lines,
+    minse,
+    one_over_minse,
+    plotcolour,
+    pointsize,
+    ratio,
+    scale,
+    scale_fill_string,
+    shape,
+    size,
+    stroke,
+    text_size,
+    title,
+    uci_string,
+    width,
+    xbreaks,
+    xlab,
+    xlims,
+    ybreaks,
+    ylab,
+    ylims,
+    ymax,
+    ymin
+  )
+
   # Create the plot code ----
   plotcode <- c(
     'library(ggplot2)',
     '',
-
-    # start with data
-    paste0('datatoplot <- ', deparse(substitute(data))),
+    paste0('datatoplot <- ', deparse(substitute(data))), # start with data
     '',
-
-    # code for CI colours if using height
-    shape.cicolourcode(scale,
-                       ylims,
-                       lci_string,
-                       uci_string,
-                       pointsize,
-                       size,
-                       stroke,
-                       height,
-                       ratio,
-                       gap,
-                       ext,
-                       shape,
-                       cicolours,
-                       col.group),
-
-    ## code for CI under - if using height
-    shape.ciundercode(height),
-
-    ## start ggplot
-    shape.start.ggplot(column_name(col.x),
-                       est_string,
-                       group_string),
-
+    shape.cicolourcode(spec),                          # CI colours if using height
+    shape.ciundercode(spec),                           # CI under - if using height
+    shape.start.ggplot(spec),                          # start ggplot
     indent(2,
-
-           # add$start
-           if (!is.null(add$start)){
-             c("# Additional layer",
-               paste(c(deparse(substitute(add)$start), " +"), collapse = ""),
-               "")
-           },
-
-           ## add lines
-           if(lines){
-             shape.lines(addaes,
-                         col.lci,
-                         col.estimate,
-                         col.stderr,
-                         addarg,
-                         plotcolour)
-           },
-
-           # CI lines plotted before points
-           shape.cis(addaes,
-                     lci_string,
-                     uci_string,
-                     cicolour,
-                     addarg,
-                     ciunder,
-                     base_line_size,
-                     type = ci_order[[1]]),
-
-           # points for estimates
-           shape.estimates.points(addaes,
-                                  size,
-                                  shape,
-                                  fill_string,
-                                  colour,
-                                  addarg,
-                                  stroke),
-
-           # text above points
-           shape.estimates.text(addaes,
-                                uci_string,
-                                est_string,
-                                addarg,
-                                text_size,
-                                plotcolour,
-                                digits),
-
-           # number below points
-           if (!is.null(col.n)){
-             shape.n.events.text(addaes,
-                                 lci_string,
-                                 col.n,
-                                 addarg,
-                                 text_size,
-                                 plotcolour)
-           },
-
-           # CI lines plotted after points
-           shape.cis(addaes,
-                     lci_string,
-                     uci_string,
-                     cicolour,
-                     addarg,
-                     ciunder,
-                     base_line_size,
-                     type = ci_order[[2]]),
-
-           # scales
-           shape.scales(deparse(1/minse), pointsize, scale_fill_string),
-
-           # axes
-           shape.axes(deparse(xbreaks), scale, deparse(ybreaks)),
-
-           # titles
-           shape.titles(xlab, title, ylab),
-
-           # ckb_style()
-           shape.plot.like.ckb(deparse(xlims),
-                               deparse(ylims),
-                               deparse(gap),
-                               deparse(ext),
-                               deparse(ratio),
-                               width,
-                               height,
-                               base_size,
-                               base_line_size,
-                               plotcolour,
-                               axis.title.margin)),
-
-    # theme
-    indent(2, shape.theme(legend.position, add)),
-
-    # add$end
-    if (!is.null(add$end)){
-      c("# Additional layer",
-        paste(deparse(substitute(add)$end), collapse = ""),
-        "")
-    }
-
+           shape.add.start(spec),                      # add$start
+           shape.lines(spec),                          # lines
+           shape.cis(spec, type = spec$ci_order[[1]]), # CI lines plotted before points
+           shape.estimates.points(spec),               # points for estimates
+           shape.estimates.text(spec),                 # text above points
+           shape.n.events.text(spec),                  # number below points
+           shape.cis(spec, type = spec$ci_order[[2]]), # CI lines plotted after points
+           shape.scales(spec),                         # scales
+           shape.axes(spec),                           # axes
+           shape.titles(spec),                         # titles
+           shape.ckb.style(spec),                      # ckb_style()
+           shape.theme(spec),                          # theme
+           shape.add.end(spec)                         # add$end
+    )
   )
 
 
