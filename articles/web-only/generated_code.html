@@ -16,8 +16,8 @@
 <link href="../../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../../deps/Source_Sans_Pro-0.4.9/font.css" rel="stylesheet">
 <link href="../../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
-<link href="../../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<link href="../../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../../deps/headroom-0.11.0/headroom.min.js"></script><script src="../../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../../deps/search-1.0.0/fuse.min.js"></script><script src="../../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../../pkgdown.js"></script><meta property="og:title" content="Generated code">
 </head>
 <body>
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
       <img src="../../logo.png" class="logo" alt=""><h1>Generated code</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.11.2/vignettes/web-only/generated_code.Rmd" class="external-link"><code>vignettes/web-only/generated_code.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/main/vignettes/web-only/generated_code.Rmd" class="external-link"><code>vignettes/web-only/generated_code.Rmd</code></a></small>
       <div class="d-none name"><code>generated_code.Rmd</code></div>
     </div>
 
@@ -159,7 +159,8 @@ RStudio Viewer pane is:</p>
 <span>                      ratio          <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>                      base_size      <span class="op">=</span> <span class="fl">11</span>,</span>
 <span>                      base_line_size <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>                      colour         <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                      colour         <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>                      axis.title.margin <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  </span>
 <span>  <span class="co"># Add theme</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span>
@@ -238,6 +239,7 @@ RStudio Viewer pane is:</p>
 <span>                               label <span class="op">=</span> <span class="va">title</span><span class="op">)</span>,</span>
 <span>                           move_x  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>                           hjust    <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                           vjust    <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                           size     <span class="op">=</span> <span class="fl">3.092846</span>,</span>
 <span>                           colour   <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>                           fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
@@ -246,16 +248,17 @@ RStudio Viewer pane is:</p>
 <span>                                                  title <span class="op">=</span> <span class="st">"HR (95% CI)"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  </span>
 <span>  <span class="co"># Add xlab below each axis</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="cn">Inf</span>,</span>
-<span>                x <span class="op">=</span> <span class="fl">1.32665</span>,,</span>
-<span>                label <span class="op">=</span> <span class="va">xlab</span><span class="op">)</span>,</span>
-<span>            hjust    <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>            size     <span class="op">=</span> <span class="fl">3.092846</span>,</span>
-<span>            colour   <span class="op">=</span> <span class="st">"black"</span>,</span>
-<span>            vjust    <span class="op">=</span> <span class="fl">4.4</span>,</span>
-<span>            fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
-<span>            data <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">.</span><span class="op">[[</span><span class="st">"panel"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                                   xlab <span class="op">=</span> <span class="st">"HR (95% CI)"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../../reference/geom_text_move.html">geom_text_move</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="cn">Inf</span>,</span>
+<span>                     x <span class="op">=</span> <span class="fl">1.32665</span>,</span>
+<span>                     label <span class="op">=</span> <span class="va">xlab</span><span class="op">)</span>,</span>
+<span>                 hjust    <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                 size     <span class="op">=</span> <span class="fl">3.092846</span>,</span>
+<span>                 colour   <span class="op">=</span> <span class="st">"black"</span>,</span>
+<span>                 vjust    <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                 move_y   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="op">-</span><span class="fl">7.4228304</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
+<span>                 fontface <span class="op">=</span> <span class="st">"bold"</span>,</span>
+<span>                 data <span class="op">=</span> <span class="op">~</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">.</span><span class="op">[[</span><span class="st">"panel"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                        xlab <span class="op">=</span> <span class="st">"HR (95% CI)"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  </span>
 <span>  <span class="co"># Set coordinate system</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html" class="external-link">coord_cartesian</a></span><span class="op">(</span>clip <span class="op">=</span> <span class="st">"off"</span>,</span>
@@ -285,7 +288,7 @@ RStudio Viewer pane is:</p>
 <span>        axis.title       <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        axis.ticks.x     <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_line</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>,</span>
 <span>        axis.ticks.length.x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">2.75</span>,  <span class="st">"pt"</span><span class="op">)</span>,</span>
-<span>        axis.text.x      <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span>,,</span>
+<span>        axis.text.x      <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>                                        margin <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span>t <span class="op">=</span> <span class="fl">4.4</span><span class="op">)</span>,</span>
 <span>                                        vjust  <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
 <span>        axis.ticks.y     <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -301,7 +304,7 @@ RStudio Viewer pane is:</p>
 <span>        strip.text       <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        legend.position  <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>        plot.background  <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>        plot.margin      <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="fl">8</span>, <span class="st">"mm"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">24.5</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
+<span>        plot.margin      <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">margin</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">8</span>, <span class="fl">2</span>, <span class="fl">8</span>, <span class="st">"mm"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3.092846</span>, <span class="fl">0</span>, <span class="fl">6.185692</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">24.5</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  </span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -315,7 +318,7 @@ RStudio Viewer pane is:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
