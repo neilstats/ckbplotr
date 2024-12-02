@@ -61,7 +61,7 @@ forest_plot(
   left.space = NULL,
   right.space = NULL,
   mid.space = unit(5, "mm"),
-  plot.margin = margin(2, 8, 8, 8, "mm"),
+  plot.margin = margin(2, 8, 2, 8, "mm"),
   panel.width = NULL,
   panel.height = NULL,
   base_size = 11,
