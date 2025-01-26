@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Forest plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.11.3/vignettes/forest_plots.Rmd" class="external-link"><code>vignettes/forest_plots.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.11.4/vignettes/forest_plots.Rmd" class="external-link"><code>vignettes/forest_plots.Rmd</code></a></small>
       <div class="d-none name"><code>forest_plots.Rmd</code></div>
     </div>
 
@@ -126,6 +126,8 @@ stderr/std.err/se. If you want to supply confidence interval limits, set
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>, col.key <span class="op">=</span> <span class="st">"subgroup"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plots_files/figure-html/unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p>To add row labels, create a data frame with your row labels and one
+column that matches the <code>col.key</code> column.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_row_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  subgroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"men"</span>, <span class="st">"women"</span>, <span class="st">"35_49"</span>, <span class="st">"50_64"</span>, <span class="st">"65_79"</span><span class="op">)</span>,</span>
@@ -191,19 +193,44 @@ frame.</p>
 <span>            col.key           <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels        <span class="op">=</span> <span class="va">row_labels</span><span class="op">)</span></span></code></pre></div>
 <p><img src="forest_plots_files/figure-html/unnamed-chunk-9-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p>To exclude a subheading add “<span class="citation">@nolabel</span>”
+to the end.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">row_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  subgroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"men"</span>, <span class="st">"women"</span>,</span>
+<span>               <span class="st">"35_49"</span>, <span class="st">"50_64"</span>, <span class="st">"65_79"</span><span class="op">)</span>,</span>
+<span>  group    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex @nolabel"</span>, <span class="st">"Sex @nolabel"</span>,</span>
+<span>               <span class="st">"Age (years)"</span>, <span class="st">"Age (years)"</span>, <span class="st">"Age (years)"</span><span class="op">)</span>,</span>
+<span>  label    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Men"</span>, <span class="st">"Women"</span>,</span>
+<span>               <span class="st">"35 - 49"</span>, <span class="st">"50 - 64"</span>, <span class="st">"65 - 79"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
+<span>            col.key           <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
+<span>            row.labels        <span class="op">=</span> <span class="va">row_labels</span><span class="op">)</span></span></code></pre></div>
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;"></p>
 <p>Add a heading above the row labels with
 <code>row.labels.heading</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">row_labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  subgroup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"men"</span>, <span class="st">"women"</span>,</span>
+<span>               <span class="st">"35_49"</span>, <span class="st">"50_64"</span>, <span class="st">"65_79"</span><span class="op">)</span>,</span>
+<span>  group    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"Sex"</span>,</span>
+<span>               <span class="st">"Age (years)"</span>, <span class="st">"Age (years)"</span>, <span class="st">"Age (years)"</span><span class="op">)</span>,</span>
+<span>  label    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Men"</span>, <span class="st">"Women"</span>,</span>
+<span>               <span class="st">"35 - 49"</span>, <span class="st">"50 - 64"</span>, <span class="st">"65 - 79"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>            col.key            <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels         <span class="op">=</span> <span class="va">row_labels</span>,</span>
 <span>            row.labels.heading <span class="op">=</span> <span class="st">"Subgroup"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-10-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-11-1.png" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="multiple-panels">Multiple panels<a class="anchor" aria-label="anchor" href="#multiple-panels"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_resultsA</span> <span class="op">&lt;-</span> <span class="va">my_results</span></span>
 <span></span>
 <span><span class="va">my_resultsB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -216,10 +243,10 @@ frame.</p>
 <span>                 <span class="st">"Genetic"</span>       <span class="op">=</span> <span class="va">my_resultsB</span><span class="op">)</span>,</span>
 <span>            col.key    <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels <span class="op">=</span> <span class="va">row_labels</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-11-1.png" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-12-1.png" width="75%" style="display: block; margin: auto;"></p>
 <p>You can use <code><a href="https://rdrr.io/r/base/split.html" class="external-link">split()</a></code> to create a list of data frames from
 a single data frame:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_resultsAB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  analysis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Observational"</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Genetic"</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>                    levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Observational"</span>, <span class="st">"Genetic"</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -234,7 +261,7 @@ a single data frame:</p>
 <span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">my_resultsAB</span>, <span class="op">~</span> <span class="va">analysis</span><span class="op">)</span>,</span>
 <span>            col.key    <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels <span class="op">=</span> <span class="va">row_labels</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-12-1.png" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-13-1.png" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="adding-columns-of-text">Adding columns of text<a class="anchor" aria-label="anchor" href="#adding-columns-of-text"></a>
@@ -242,7 +269,7 @@ a single data frame:</p>
 <p>Use <code>col.left</code> and <code>col.right</code> to add columns
 of text either side of each panel. Use <code>col.left.heading</code> and
 <code>col.right.heading</code> to customise the column headings.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_results</span><span class="op">$</span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">834</span>, <span class="fl">923</span>, <span class="fl">587</span>, <span class="fl">694</span>, <span class="fl">476</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
@@ -261,12 +288,12 @@ right).</p>
 <p>Set <code>scalepoints = TRUE</code> to have point size (area)
 proportional to the inverse of the variance (SE<sup>2</sup>) of the
 estimate.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>            col.key     <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels  <span class="op">=</span> <span class="va">row_labels</span>,</span>
 <span>            scalepoints <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-13-1.png" width="60%" style="display: block; margin: auto;">
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-14-1.png" width="60%" style="display: block; margin: auto;">
 To have consistent scaling across plots, set <code>minse</code> to the
 same value (it must be smaller than the smallest SE). This will ensure
 the same size scaling is used across the plots.</p>
@@ -285,7 +312,7 @@ intervals has has been designed to work for shapes 15/‘square’ (the
 default) and 22/‘square filled’, and for symmetric confidence intervals.
 These may not be completely accurate in all scenarios, so check your
 final output carefully.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">my_resultsAB</span>, <span class="op">~</span> <span class="va">analysis</span><span class="op">)</span>,</span>
 <span>            col.key     <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels  <span class="op">=</span> <span class="va">row_labels</span>,</span>
@@ -294,8 +321,8 @@ final output carefully.</p>
 <span>            xlim        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>            xticks      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>            panel.width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">28</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-14-1.png" width="75%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-15-1.png" width="75%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">my_resultsAB</span>, <span class="op">~</span> <span class="va">analysis</span><span class="op">)</span>,</span>
 <span>            col.key     <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels  <span class="op">=</span> <span class="va">row_labels</span>,</span>
@@ -307,7 +334,7 @@ final output carefully.</p>
 <span>            stroke      <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>            fill        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span>,</span>
 <span>            panel.width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">28</span>, <span class="st">"mm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-15-1.png" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-16-1.png" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="different-limits-on-panels">Different limits on panels<a class="anchor" aria-label="anchor" href="#different-limits-on-panels"></a>
@@ -321,7 +348,7 @@ lists of the same length, then <code><a href="../reference/forest_plot.html">for
 automatically. The function will return a list containing “figure” (a
 graphic object of the whole figure) and “plots” (a list of ggplots, one
 for each panel).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">forest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">my_resultsAB</span>, <span class="op">~</span> <span class="va">analysis</span><span class="op">)</span>,</span>
 <span>                      col.key <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>                      row.labels <span class="op">=</span> <span class="va">row_labels</span>,</span>
@@ -333,7 +360,7 @@ for each panel).</p>
 <span>                      col.right.heading <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"HR (95% CI)"</span>, <span class="st">"OR (95% CI)"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.newpage.html" class="external-link">grid.newpage</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="va">forest</span><span class="op">$</span><span class="va">figure</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-16-1.png" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-17-1.png" width="75%" style="display: block; margin: auto;"></p>
 <p>Use <code><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid::grid.draw()</a></code> to draw the figure (use
 <code><a href="https://rdrr.io/r/grid/grid.newpage.html" class="external-link">grid::grid.newpage()</a></code> to clear), and <code>ggsave()</code>
 or <code><a href="../reference/save_figure.html">save_figure()</a></code> to save to a file.</p>
@@ -358,7 +385,7 @@ character strings</li>
 <li>columns names ‘trend_stat’ and ‘trend_p’ containing character
 strings</li>
 </ul>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">het_trend_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span> analysis   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Observational"</span>, <span class="st">"Observational"</span>, <span class="st">"Observational"</span>, <span class="st">"Genetic"</span>, <span class="st">"Genetic"</span>, <span class="st">"Genetic"</span><span class="op">)</span>,</span>
 <span> levels     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Observational"</span>, <span class="st">"Genetic"</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -371,7 +398,7 @@ strings</li>
 <span> text       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span> <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"Note"</span><span class="op">)</span>,</span>
 <span> expr       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span>, <span class="st">"frac(-b %+-% sqrt(b^2 - 4*a*c), 2*a)"</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">my_resultsAB</span>, <span class="op">~</span> <span class="va">analysis</span><span class="op">)</span>,</span>
 <span>            col.key     <span class="op">=</span> <span class="st">"subgroup"</span>,</span>
 <span>            row.labels  <span class="op">=</span> <span class="va">row_labels</span>,</span>
@@ -382,7 +409,7 @@ strings</li>
 <span>            panel.width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">28</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>            right.space <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">45</span>, <span class="st">"mm"</span><span class="op">)</span>,</span>
 <span>            addtext     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">het_trend_results</span>, <span class="op">~</span> <span class="va">analysis</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="forest_plots_files/figure-html/unnamed-chunk-18-1.png" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="forest_plots_files/figure-html/unnamed-chunk-19-1.png" width="75%" style="display: block; margin: auto;"></p>
 <p>Note that values should all be character strings, and P-values should
 include the necessary “=” or “&lt;”.</p>
 <p>The automatic positioning of columns and spacing of panels does not
