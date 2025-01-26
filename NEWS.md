@@ -1,3 +1,8 @@
+# ckbplotr 0.11.4
+
+* Subheadings in forest_plot() row labels can be excluded by appending "@nolabel".
+* Minor fix to generated code.
+
 # ckbplotr 0.11.3
 
 * Modified the default vertical positioning of column and panel headings, and x-axis label, in forest_plot()
