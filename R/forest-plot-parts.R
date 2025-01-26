@@ -518,7 +518,7 @@ forest.xlab.panel.headings <- function(addaes,
   c(
     make_layer(
       '# Add xlab below each axis',
-      f = 'geom_text_move',
+      f = 'ckbplotr::geom_text_move',
       aes = c(addaes$xlab,
               'y = Inf',
               'x = {xmid}',
@@ -536,7 +536,7 @@ forest.xlab.panel.headings <- function(addaes,
     if (!all(panel.headings == "")){
       make_layer(
         '# Add panel name above each panel',
-        f = 'geom_text_move',
+        f = 'ckbplotr::geom_text_move',
         aes = c(c(addaes$panel.headings, addaes$panel.name),
                 'y     = {- col.heading.space}',
                 'x     = {xmid}',
