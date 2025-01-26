@@ -67,6 +67,7 @@ Set `col.key` to identify the rows of the forest plot.
 forest_plot(my_results, col.key = "subgroup")
 ```
 
+To add row labels, create a data frame with your row labels and one column that matches the `col.key` column.
 ```{r}
 my_row_labels <- data.frame(
   subgroup = c("men", "women", "35_49", "50_64", "65_79"),
@@ -132,8 +133,33 @@ forest_plot(my_results,
             row.labels        = row_labels)
 ```
 
+To exclude a subheading add "@nolabel" to the end.
+```{r}
+row_labels <- data.frame(
+  subgroup = c("men", "women",
+               "35_49", "50_64", "65_79"),
+  group    = c("Sex @nolabel", "Sex @nolabel",
+               "Age (years)", "Age (years)", "Age (years)"),
+  label    = c("Men", "Women",
+               "35 - 49", "50 - 64", "65 - 79")
+)
+
+forest_plot(my_results,
+            col.key           = "subgroup",
+            row.labels        = row_labels)
+```
+
 Add a heading above the row labels with `row.labels.heading`:
 ```{r}
+row_labels <- data.frame(
+  subgroup = c("men", "women",
+               "35_49", "50_64", "65_79"),
+  group    = c("Sex", "Sex",
+               "Age (years)", "Age (years)", "Age (years)"),
+  label    = c("Men", "Women",
+               "35 - 49", "50 - 64", "65 - 79")
+)
+
 forest_plot(my_results,
             col.key            = "subgroup",
             row.labels         = row_labels,
