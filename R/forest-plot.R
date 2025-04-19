@@ -125,7 +125,7 @@ forest_plot <- function(
     panel.headings.align  = c("panel", "plot"),
     col.key            = "key",
     col.estimate       = c("estimate", "est", "beta", "loghr"),
-    col.stderr         = c("stderr", "std.err", "se"),
+    col.stderr         = c("stderr", "std.error", "std.err", "se"),
     col.lci            = NULL,
     col.uci            = NULL,
     col.left           = NULL,

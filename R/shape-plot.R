@@ -65,7 +65,7 @@
 shape_plot <- function(data,
                        col.x         = "x",
                        col.estimate  = c("estimate", "est", "beta", "loghr"),
-                       col.stderr    = c("stderr", "std.err", "se"),
+                       col.stderr    = c("stderr", "std.error", "std.err", "se"),
                        col.lci       = NULL,
                        col.uci       = NULL,
                        col.n         = NULL,

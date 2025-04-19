@@ -40,7 +40,7 @@ my_results <- data.frame(
 
 forest_plot(my_results)
 ```
-Use `col.est` and `col.stderr` to set the columns that contain estimates and standard errors. By default, the function will look for columns with names estimate/est/beta/loghr and stderr/std.err/se. If you want to supply confidence interval limits, set `col.lci` and `col.uci`.
+Use `col.est` and `col.stderr` to set the columns that contain estimates and standard errors. By default, the function will look for columns with names estimate/est/beta/loghr and stderr/std.error/std.err/se. If you want to supply confidence interval limits, set `col.lci` and `col.uci`.
 ```{r, include = FALSE}
 my_results2 <- data.frame(
   subgroup   = c("men", "women", "35_49", "50_64", "65_79"),
