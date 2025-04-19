@@ -52,6 +52,9 @@ prepare_figure <- function(figure,
   if (inherits(figure, "patchwork")){
     figure <- patchwork::patchworkGrob(figure)
   }
+  if (inherits(figure, "ggplot")) {
+    figure <- ggplotGrob(figure)
+  }
 
   ## Set page dimensions
   pagesize <- match.arg(pagesize)
@@ -84,21 +87,19 @@ prepare_figure <- function(figure,
 
 
   ## Arrange figure with page margins
-  ### Layout matrix
-  layout <- rbind(c(NA, NA, NA),
-                  c(NA, 1, NA),
-                  c(NA, NA, NA))
+  figure_vp <- grid::viewport(
+    x = margin[4],
+    y = margin[3],
+    width = pagedim[1] - margin[4] - margin[2],
+    height = pagedim[2] - margin[1] - margin[3],
+    just = c("left", "bottom"),
+    name = "figure_area"
+  )
 
-  ## Figure with page margins
-  figure_with_margins <- gridExtra::arrangeGrob(
-    figure,
-    layout_matrix = layout,
-    widths = grid::unit.c(margin[4],
-                          pagedim[1] - margin[4] - margin[2],
-                          margin[2]),
-    heights = grid::unit.c(margin[1],
-                           pagedim[2] - margin[1] - margin[3],
-                           margin[3]))
+  figure_with_margins <- grid::gTree(
+    children = grid::gList(figure),
+    vp = figure_vp
+  )
 
   ## Create title grob
   titleGrob <- gridtext::textbox_grob(
