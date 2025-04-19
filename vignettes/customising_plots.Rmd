@@ -136,7 +136,7 @@ In `forest_plot()` the following names will add aesthetics and arguments to laye
 | point      | point estimates      |
 | diamonds   | diamonds             |
 | col.right/col.left | col.right/col.left columns |
-| heading.col.right/heading.col.left | col.right/col.left column headings |
+| heading.right/heading.left | col.right/col.left column headings |
 | xlab       | x-axis label         |
 | panel.headings (or panel.name) | headings above panels   |
 | nullline   | line at null         |

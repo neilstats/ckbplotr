@@ -10,8 +10,8 @@ forest_plot_list_xlim <- function(
   xticks,
   panels,
   xlab,
-  col.left.heading,
-  col.right.heading,
+  left.heading,
+  right.heading,
   panel.headings,
   ## the new environment in which to evaluate forest_plot()
   envir
@@ -33,11 +33,11 @@ forest_plot_list_xlim <- function(
   if (length(xlab) < length(xlim)){
     xlab <- rep(xlab, length(xlim))
   }
-  if (!is.list(col.left.heading)){
-    col.left.heading <- rep(list(col.left.heading), length(xlim))
+  if (!is.list(left.heading)){
+    left.heading <- rep(list(left.heading), length(xlim))
   }
-  if (!is.list(col.right.heading)){
-    col.right.heading <- rep(list(col.right.heading), length(xlim))
+  if (!is.list(right.heading)){
+    right.heading <- rep(list(right.heading), length(xlim))
   }
 
 
@@ -62,11 +62,11 @@ forest_plot_list_xlim <- function(
     if (!is.null(xlab[i]) && length(xlab) > 0){
       update_args$xlab <- xlab[[i]]
     }
-    if (!is.null(col.left.heading[i])){
-      update_args$col.left.heading <- col.left.heading[[i]]
+    if (!is.null(left.heading[i])){
+      update_args$left.heading <- left.heading[[i]]
     }
-    if (!is.null(col.right.heading[i])){
-      update_args$col.right.heading <- col.right.heading[[i]]
+    if (!is.null(right.heading[i])){
+      update_args$right.heading <- right.heading[[i]]
     }
     if (!is.null(panel.headings)){
       update_args$panel.headings <- panel.headings[[i]]

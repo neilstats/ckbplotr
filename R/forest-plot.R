@@ -20,24 +20,24 @@
 #' @param estcolumn
 #' Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
-#' @param col.right.parse
+#' @param right.parse
 #' A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
 #' Should the contents of the columns be parsed into expressions. (Default: FALSE)
-#' @param col.left.pos,col.right.pos
+#' @param left.pos,right.pos
 #' A unit vector to position col.left/col.right columns.
-#' @param col.left.hjust,col.right.hjust
+#' @param left.hjust,right.hjust
 #' A numeric vector. The horizontal justification of
 #' col.left/col.right columns. (Default: 1)
-#' @param col.left.gap,col.right.gap
+#' @param left.gap,right.gap
 #' A character vector of length two. The two characters control the gaps between
 #' the first text column and the panel, and successive text columns.
 #' (Default: c("I", "W"))
-#' @param col.left.heading,col.right.heading
+#' @param left.heading,right.heading
 #' Headings for columns.
-#' @param col.heading.space
-#' Position of the titles given by col.left.heading and
-#' col.right.heading. Increase to move them up. (Default: 0)
-#' @param col.heading.rule
+#' @param heading.space
+#' Position of the titles given by left.heading and
+#' right.heading. Increase to move them up. (Default: 0)
+#' @param heading.rule
 #' Include a horizontal rule below column headings? (Default: FALSE)
 #' @param title
 #' Title to appear at the top of the plot.
@@ -98,6 +98,17 @@
 #' May be useful when calling this function inside another function.
 #' @param blankrows
 #' DEPRECATED
+#' @param col.right.parse Deprecated. Use `right.parse` instead.
+#' @param col.left.heading Deprecated. Use `left.heading` instead.
+#' @param col.right.heading Deprecated. Use `right.heading` instead.
+#' @param col.left.pos Deprecated. Use `left.pos` instead.
+#' @param col.right.pos Deprecated. Use `right.pos` instead.
+#' @param col.left.hjust Deprecated. Use `left.hjust` instead.
+#' @param col.right.hjust Deprecated. Use `right.hjust` instead.
+#' @param col.left.gap Deprecated. Use `left.gap` instead.
+#' @param col.right.gap Deprecated. Use `right.gap` instead.
+#' @param col.heading.space Deprecated. Use `heading.space` instead.
+#' @param col.heading.rule Deprecated. Use `heading.rule` instead.
 #'
 #' @return A list:
 #' \describe{
@@ -130,17 +141,17 @@ forest_plot <- function(
     col.uci            = NULL,
     col.left           = NULL,
     col.right          = NULL,
-    col.right.parse    = FALSE,
-    col.left.heading   = "",
-    col.right.heading  = as.list(xlab),
-    col.left.pos       = NULL,
-    col.right.pos      = NULL,
-    col.left.hjust     = 1,
-    col.right.hjust    = 0,
-    col.left.gap       = c("I", "W"),
-    col.right.gap      = c("I", "W"),
-    col.heading.space  = 0,
-    col.heading.rule   = FALSE,
+    right.parse        = FALSE,
+    left.heading       = "",
+    right.heading      = as.list(xlab),
+    left.pos           = NULL,
+    right.pos          = NULL,
+    left.hjust         = 1,
+    right.hjust        = 0,
+    left.gap           = c("I", "W"),
+    right.gap          = c("I", "W"),
+    heading.space      = 0,
+    heading.rule       = FALSE,
     estcolumn          = TRUE,
     col.keep           = NULL,
     ci.delim           = ", ",
@@ -183,8 +194,75 @@ forest_plot <- function(
     addarg             = NULL,
     add                = NULL,
     envir              = NULL,
-    blankrows          = NULL
+    blankrows          = NULL,
+
+    # Deprecated arguments
+    col.right.parse   = NULL,
+    col.left.heading  = NULL,
+    col.right.heading = NULL,
+    col.left.pos      = NULL,
+    col.right.pos     = NULL,
+    col.left.hjust    = NULL,
+    col.right.hjust   = NULL,
+    col.left.gap      = NULL,
+    col.right.gap     = NULL,
+    col.heading.space = NULL,
+    col.heading.rule  = NULL
 ){
+
+  # Helper for consistent deprecation messaging
+  deprecate_arg <- function(old, new) {
+    cli::cli_warn(c(
+      "x" = sprintf("`%s` is deprecated.", old),
+      ">" = sprintf("Please use {.arg %s} instead.", new)
+    ))
+  }
+
+  if (!is.null(col.right.parse)) {
+    deprecate_arg("col.right.parse", "right.parse")
+    right.parse <- col.right.parse
+  }
+  if (!is.null(col.left.heading)) {
+    deprecate_arg("col.left.heading", "left.heading")
+    left.heading <- col.left.heading
+  }
+  if (!is.null(col.right.heading)) {
+    deprecate_arg("col.right.heading", "right.heading")
+    right.heading <- col.right.heading
+  }
+  if (!is.null(col.left.pos)) {
+    deprecate_arg("col.left.pos", "left.pos")
+    left.pos <- col.left.pos
+  }
+  if (!is.null(col.right.pos)) {
+    deprecate_arg("col.right.pos", "right.pos")
+    right.pos <- col.right.pos
+  }
+  if (!is.null(col.left.hjust)) {
+    deprecate_arg("col.left.hjust", "left.hjust")
+    left.hjust <- col.left.hjust
+  }
+  if (!is.null(col.right.hjust)) {
+    deprecate_arg("col.right.hjust", "right.hjust")
+    right.hjust <- col.right.hjust
+  }
+  if (!is.null(col.left.gap)) {
+    deprecate_arg("col.left.gap", "left.gap")
+    left.gap <- col.left.gap
+  }
+  if (!is.null(col.right.gap)) {
+    deprecate_arg("col.right.gap", "right.gap")
+    right.gap <- col.right.gap
+  }
+  if (!is.null(col.heading.space)) {
+    deprecate_arg("col.heading.space", "heading.space")
+    heading.space <- col.heading.space
+  }
+  if (!is.null(col.heading.rule)) {
+    deprecate_arg("col.heading.rule", "heading.rule")
+    heading.rule <- col.heading.rule
+  }
+
 
   # If envir not provided, make new environment ----
   # with parent frame same as function call
@@ -203,8 +281,8 @@ forest_plot <- function(
       xticks,
       panels,
       xlab,
-      col.left.heading,
-      col.right.heading,
+      left.heading,
+      right.heading,
       panel.headings,
       ## the new environment in which to evaluate forest_plot()
       envir))
@@ -291,8 +369,8 @@ forest_plot <- function(
 
 
   # Transpose column headings if a list ----
-  if (purrr::is_list(col.right.heading)){ col.right.heading <- purrr::transpose(col.right.heading)}
-  if (purrr::is_list(col.left.heading)){ col.left.heading <- purrr::transpose(col.left.heading)}
+  if (purrr::is_list(right.heading)){ right.heading <- purrr::transpose(right.heading)}
+  if (purrr::is_list(left.heading)){ left.heading <- purrr::transpose(left.heading)}
 
 
 
@@ -418,25 +496,25 @@ forest_plot <- function(
   # Spacing ----
   horizontal_spacing <- get_horizontal_spacing(
     right.space,
-    col.right.pos,
+    right.pos,
     left.space,
-    col.left.pos,
+    left.pos,
     col.right,
     panels_list,
     digits,
     ci.delim,
     estcolumn,
-    col.right.heading,
-    col.right.hjust,
+    right.heading,
+    right.hjust,
     base_size,
     col.left,
-    col.left.heading,
-    col.left.hjust,
-    col.left.gap,
-    col.right.gap)
+    left.heading,
+    left.hjust,
+    left.gap,
+    right.gap)
   text_about_auto_spacing <- horizontal_spacing$text_about_auto_spacing
-  col.right.pos <- horizontal_spacing$col.right.pos
-  col.left.pos <- horizontal_spacing$col.left.pos
+  right.pos <- horizontal_spacing$right.pos
+  left.pos <- horizontal_spacing$left.pos
   right.space <- horizontal_spacing$right.space
   left.space <- horizontal_spacing$left.space
   right.space.inner <- horizontal_spacing$right.space.inner
@@ -552,21 +630,21 @@ forest_plot <- function(
     col.bold,
     col.diamond,
     col.estimate,
-    col.heading.rule,
-    col.heading.space,
+    heading.rule,
+    heading.space,
     col.keep,
     col.key,
     col.lci,
     col.left,
-    col.left.heading,
-    col.left.hjust,
-    col.left.pos,
+    left.heading,
+    left.hjust,
+    left.pos,
     col.right,
     col.right.all,
-    col.right.heading,
-    col.right.hjust,
-    col.right.parse,
-    col.right.pos,
+    right.heading,
+    right.hjust,
+    right.parse,
+    right.pos,
     col.stderr,
     col.uci,
     colour_list,
@@ -675,32 +753,32 @@ gettextwidths <- function(x){
 #' @keywords internal
 #' @noRd
 get_horizontal_spacing <- function(right.space,
-                                   col.right.pos,
+                                   right.pos,
                                    left.space,
-                                   col.left.pos,
+                                   left.pos,
                                    col.right,
                                    panels_list,
                                    digits,
                                    ci.delim,
                                    estcolumn,
-                                   col.right.heading,
-                                   col.right.hjust,
+                                   right.heading,
+                                   right.hjust,
                                    base_size,
                                    col.left,
-                                   col.left.heading,
-                                   col.left.hjust,
-                                   col.left.gap,
-                                   col.right.gap) {
-  if((is.null(right.space) & !is.null(col.right.pos)) |
-     is.null(left.space) & !is.null(col.left.pos) ){
-    message("Note: Automatic spacing does not account for specified col.left.pos and col.right.pos. Use left.space and right.space to set spacing manually.")
+                                   left.heading,
+                                   left.hjust,
+                                   left.gap,
+                                   right.gap) {
+  if((is.null(right.space) & !is.null(right.pos)) |
+     is.null(left.space) & !is.null(left.pos) ){
+    message("Note: Automatic spacing does not account for specified left.pos and right.pos. Use left.space and right.space to set spacing manually.")
   }
 
   text_size_scaling <- 0.8 * base_size/grid::get.gpar()$fontsize
 
-  ## calculate automatic col.right.pos and col.right.space
+  ## calculate automatic right.pos and right.space
   text_about_auto_spacing <- NULL
-  if (is.null(right.space) | is.null(col.right.pos) | is.null(left.space) | is.null(col.left.pos)){
+  if (is.null(right.space) | is.null(right.pos) | is.null(left.space) | is.null(left.pos)){
     text_about_auto_spacing <- "Automatically calculated horizontal spacing and positioning:\n"
   }
   ### get maximum width of each columns (incl. heading)
@@ -714,18 +792,18 @@ get_horizontal_spacing <- function(right.space,
                                           paste0(rep(9, digits), collapse = ""),
                                           ")"))
   widths_of_columns <- c(if(estcolumn){estcolumn_width}, widths_of_columns)
-  widths_of_column_headings <- gettextwidths(col.right.heading)
+  widths_of_column_headings <- gettextwidths(right.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, then space for autoestcolumn, and gap between each column
-  column_spacing <- cumsum(c(gettextwidths(col.right.gap[[1]]),
-                             widths_of_columns[-length(widths_of_columns)] + gettextwidths(col.right.gap[[2]]),
+  column_spacing <- cumsum(c(gettextwidths(right.gap[[1]]),
+                             widths_of_columns[-length(widths_of_columns)] + gettextwidths(right.gap[[2]]),
                              widths_of_columns[length(widths_of_columns)]))
   ### if no column to plot (i.e. length 1) then zero, if longer don't need extra space on last element
   if (length(widths_of_columns) == 0){column_spacing <- 0}
   ## adjust for hjust
-  column_spacing <- column_spacing + c(widths_of_columns*col.right.hjust, 0)
+  column_spacing <- column_spacing + c(widths_of_columns*right.hjust, 0)
   column_spacing_half_outer_gap <- column_spacing
-  column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] <- column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] + 0.5 * gettextwidths(col.right.gap[[2]])
+  column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] <- column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] + 0.5 * gettextwidths(right.gap[[2]])
   ### text on plot is 0.8 size, and adjust for base_size
   column_spacing <-  round(text_size_scaling * column_spacing, 1)
   column_spacing_half_outer_gap <-  round(text_size_scaling * column_spacing_half_outer_gap, 1)
@@ -734,28 +812,28 @@ get_horizontal_spacing <- function(right.space,
     right.space <- unit(column_spacing[length(column_spacing)], "mm")
     text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`right.space   = {printunit(right.space)}`<br>"))
   } else {
-    right.space.inner <- right.space - unit(0.5 * 0.8 * base_size/grid::get.gpar()$fontsize * gettextwidths(col.right.gap[[2]]), "mm")
+    right.space.inner <- right.space - unit(0.5 * 0.8 * base_size/grid::get.gpar()$fontsize * gettextwidths(right.gap[[2]]), "mm")
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
-  if (is.null(col.right.pos)){
-    col.right.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`col.right.pos = {printunit(col.right.pos)}`<br>"))
+  if (is.null(right.pos)){
+    right.pos <- unit(column_spacing, "mm")
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`right.pos = {printunit(right.pos)}`<br>"))
   }
 
-  ## calculate automatic col.left.pos and col.left.space
+  ## calculate automatic left.pos and left.space
   ### get maximum width of each columns (incl. heading)
   widths_of_columns <- gettextwidths(lapply(col.left, function(y) unlist(lapply(panels_list, function(x) x[[y]]), use.names = FALSE)))
-  widths_of_column_headings <- gettextwidths(col.left.heading)
+  widths_of_column_headings <- gettextwidths(left.heading)
   widths_of_columns <- pmax(widths_of_columns, widths_of_column_headings)
   ### initial gap, and gap between each column
-  column_spacing <- cumsum(c(gettextwidths(col.left.gap[[1]]),
-                             widths_of_columns + gettextwidths(col.left.gap[[2]])))
-  ### but if no column to plot (i.e. length 1) then just col.left.gap[[2]]
-  if (length(widths_of_columns) == 0){column_spacing <- gettextwidths(col.left.gap[[2]])}
+  column_spacing <- cumsum(c(gettextwidths(left.gap[[1]]),
+                             widths_of_columns + gettextwidths(left.gap[[2]])))
+  ### but if no column to plot (i.e. length 1) then just left.gap[[2]]
+  if (length(widths_of_columns) == 0){column_spacing <- gettextwidths(left.gap[[2]])}
   ## adjust for hjust
-  column_spacing <- column_spacing + c(widths_of_columns*(1 - col.left.hjust), 0)
+  column_spacing <- column_spacing + c(widths_of_columns*(1 - left.hjust), 0)
   column_spacing_half_outer_gap <- column_spacing
-  column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] <- column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] - 0.5 * gettextwidths(col.left.gap[[2]])
+  column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] <- column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)] - 0.5 * gettextwidths(left.gap[[2]])
   ### text on plot is 0.8 size, and adjust for base_size
   column_spacing <- round(text_size_scaling * column_spacing, 1)
   column_spacing_half_outer_gap <- round(text_size_scaling * column_spacing_half_outer_gap, 1)
@@ -764,17 +842,17 @@ get_horizontal_spacing <- function(right.space,
     left.space <- unit(column_spacing[length(column_spacing)], "mm")
     text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.space    = {printunit(left.space)}`<br>"))
   } else {
-    left.space.inner <- left.space - unit(0.5 * 0.8 * base_size/grid::get.gpar()$fontsize * gettextwidths(col.left.gap[[2]]), "mm")
+    left.space.inner <- left.space - unit(0.5 * 0.8 * base_size/grid::get.gpar()$fontsize * gettextwidths(left.gap[[2]]), "mm")
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
-  if (is.null(col.left.pos)){
-    col.left.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`col.left.pos  = {printunit(col.left.pos)}`<br>"))
+  if (is.null(left.pos)){
+    left.pos <- unit(column_spacing, "mm")
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.pos  = {printunit(left.pos)}`<br>"))
   }
 
   return(list(text_about_auto_spacing = text_about_auto_spacing,
-              col.right.pos = col.right.pos,
-              col.left.pos = col.left.pos,
+              right.pos = right.pos,
+              left.pos = left.pos,
               right.space = right.space,
               right.space.inner = right.space.inner,
               left.space = left.space,

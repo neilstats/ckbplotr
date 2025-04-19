@@ -23,17 +23,17 @@ forest_plot(
   col.uci = NULL,
   col.left = NULL,
   col.right = NULL,
-  col.right.parse = FALSE,
-  col.left.heading = "",
-  col.right.heading = as.list(xlab),
-  col.left.pos = NULL,
-  col.right.pos = NULL,
-  col.left.hjust = 1,
-  col.right.hjust = 0,
-  col.left.gap = c("I", "W"),
-  col.right.gap = c("I", "W"),
-  col.heading.space = 0,
-  col.heading.rule = FALSE,
+  right.parse = FALSE,
+  left.heading = "",
+  right.heading = as.list(xlab),
+  left.pos = NULL,
+  right.pos = NULL,
+  left.hjust = 1,
+  right.hjust = 0,
+  left.gap = c("I", "W"),
+  right.gap = c("I", "W"),
+  heading.space = 0,
+  heading.rule = FALSE,
   estcolumn = TRUE,
   col.keep = NULL,
   ci.delim = ", ",
@@ -76,7 +76,18 @@ forest_plot(
   addarg = NULL,
   add = NULL,
   envir = NULL,
-  blankrows = NULL
+  blankrows = NULL,
+  col.right.parse = NULL,
+  col.left.heading = NULL,
+  col.right.heading = NULL,
+  col.left.pos = NULL,
+  col.right.pos = NULL,
+  col.left.hjust = NULL,
+  col.right.hjust = NULL,
+  col.left.gap = NULL,
+  col.right.gap = NULL,
+  col.heading.space = NULL,
+  col.heading.rule = NULL
 )
 }
 \arguments{
@@ -119,24 +130,24 @@ If row.labels data frame is not given, then this column will be used as row labe
 
 \item{col.left, col.right}{Names of columns to be printed to the left/right of the plot.}
 
-\item{col.right.parse}{A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
+\item{right.parse}{A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
 Should the contents of the columns be parsed into expressions. (Default: FALSE)}
 
-\item{col.left.heading, col.right.heading}{Headings for columns.}
+\item{left.heading, right.heading}{Headings for columns.}
 
-\item{col.left.pos, col.right.pos}{A unit vector to position col.left/col.right columns.}
+\item{left.pos, right.pos}{A unit vector to position col.left/col.right columns.}
 
-\item{col.left.hjust, col.right.hjust}{A numeric vector. The horizontal justification of
+\item{left.hjust, right.hjust}{A numeric vector. The horizontal justification of
 col.left/col.right columns. (Default: 1)}
 
-\item{col.left.gap, col.right.gap}{A character vector of length two. The two characters control the gaps between
+\item{left.gap, right.gap}{A character vector of length two. The two characters control the gaps between
 the first text column and the panel, and successive text columns.
 (Default: c("I", "W"))}
 
-\item{col.heading.space}{Position of the titles given by col.left.heading and
-col.right.heading. Increase to move them up. (Default: 0)}
+\item{heading.space}{Position of the titles given by left.heading and
+right.heading. Increase to move them up. (Default: 0)}
 
-\item{col.heading.rule}{Include a horizontal rule below column headings? (Default: FALSE)}
+\item{heading.rule}{Include a horizontal rule below column headings? (Default: FALSE)}
 
 \item{estcolumn}{Include column of estimates and confidence intervals to the
 right of each plot. (Default: TRUE)}
@@ -229,6 +240,28 @@ If panel.width is used, will alsovapply different formatting to narrow CIs.}
 May be useful when calling this function inside another function.}
 
 \item{blankrows}{DEPRECATED}
+
+\item{col.right.parse}{Deprecated. Use \code{right.parse} instead.}
+
+\item{col.left.heading}{Deprecated. Use \code{left.heading} instead.}
+
+\item{col.right.heading}{Deprecated. Use \code{right.heading} instead.}
+
+\item{col.left.pos}{Deprecated. Use \code{left.pos} instead.}
+
+\item{col.right.pos}{Deprecated. Use \code{right.pos} instead.}
+
+\item{col.left.hjust}{Deprecated. Use \code{left.hjust} instead.}
+
+\item{col.right.hjust}{Deprecated. Use \code{right.hjust} instead.}
+
+\item{col.left.gap}{Deprecated. Use \code{left.gap} instead.}
+
+\item{col.right.gap}{Deprecated. Use \code{right.gap} instead.}
+
+\item{col.heading.space}{Deprecated. Use \code{heading.space} instead.}
+
+\item{col.heading.rule}{Deprecated. Use \code{heading.rule} instead.}
 }
 \value{
 A list:

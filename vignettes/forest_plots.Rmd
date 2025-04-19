@@ -208,17 +208,17 @@ forest_plot(split(my_resultsAB, ~ analysis),
 
 ## Adding columns of text
 
-Use `col.left` and `col.right` to add columns of text either side of each panel. Use `col.left.heading` and `col.right.heading` to customise the column headings.
+Use `col.left` and `col.right` to add columns of text either side of each panel. Use `left.heading` and `right.heading` to customise the column headings.
 ```{r adding-columns-of-text}
 my_results$n <- c(834, 923, 587, 694, 476)
 
 forest_plot(my_results,
-            col.key          = "subgroup",
-            row.labels       = row_labels,
-            col.left         = "n",
-            col.left.heading = "No. of events")
+            col.key      = "subgroup",
+            row.labels   = row_labels,
+            col.left     = "n",
+            left.heading = "No. of events")
 ```
-Use `col.left.hjust` and `col.right.hjust` to set the horizontal justification of the columns (0 = left, 0.5 = center, 1 = right).
+Use `left.hjust` and `right.hjust` to set the horizontal justification of the columns (0 = left, 0.5 = center, 1 = right).
 
 
 
@@ -289,7 +289,7 @@ forest <- forest_plot(split(my_resultsAB, ~ analysis),
                       xticks = list(c(0.5, 1, 2, 3),
                                     c(0.1, 1, 2, 4)),
                       xlab = c("Hazard Ratio (95% CI)", "Odds Ratio (95% CI)"),
-                      col.right.heading = list("HR (95% CI)", "OR (95% CI)"))
+                      right.heading = list("HR (95% CI)", "OR (95% CI)"))
 grid::grid.newpage()
 grid::grid.draw(forest$figure)
 ```
@@ -341,7 +341,7 @@ forest_plot(split(my_resultsAB, ~ analysis),
 
 Note that values should all be character strings, and P-values should include the necessary "=" or "<".
 
-The automatic positioning of columns and spacing of panels does not take into account this additional text, so you may need to use the `right.space` and `col.right.pos` arguments for a satisfactory layout.
+The automatic positioning of columns and spacing of panels does not take into account this additional text, so you may need to use the `right.space` and `right.pos` arguments for a satisfactory layout.
 
 
 ## Customisation
@@ -351,7 +351,7 @@ See  [Customising plots](customising_plots.html) for more ways to customise fore
 ## Notes
 
 #### Spacing
-The function attempts to set the positions of columns of text and spacing automatically. Where this does not produce a satisfactory layout, you can use the arguments `col.left.pos`, `col.right.pos`, `left.space`, `right.space`, and `mid.space` to control positions and spacing manually.
+The function attempts to set the positions of columns of text and spacing automatically. Where this does not produce a satisfactory layout, you can use the arguments `left.pos`, `right.pos`, `left.space`, `right.space`, and `mid.space` to control positions and spacing manually.
 
 The plot will fill the vertical space available. Use `plot.margin` to change the top and bottom margins as needed.
 

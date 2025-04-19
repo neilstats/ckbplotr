@@ -22,13 +22,13 @@ forest.axes <- function(x) {
       arg = c(
         'trans = "reverse"',
         if (!is.null(x$row.labels.heading)){
-          c('breaks = c({-x$col.heading.space}, attr(datatoplot, "rowlabels")$row)',
+          c('breaks = c({-x$heading.space}, attr(datatoplot, "rowlabels")$row)',
             'labels = c({quote_string(glue::glue("**{x$row.labels.heading}**"))}, attr(datatoplot, "rowlabels")$row.label)')
         } else {
           c('breaks = attr(datatoplot, "rowlabels")$row',
             'labels = attr(datatoplot, "rowlabels")$row.label')
         },
-        'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse(x$bottom.space)}, {if (!is.null(x$row.labels.heading)) -{x$col.heading.space} else "NA"})',
+        'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse(x$bottom.space)}, {if (!is.null(x$row.labels.heading)) -{x$heading.space} else "NA"})',
         'expand = c(0,0)')
     )
   )
@@ -259,20 +259,20 @@ forest.arrows <- function(x) {
   )
 }
 
-forest.col.code <- function(column,
-                            pos,
-                            heading,
-                            hjust,
-                            bold,
-                            parse,
-                            xpos,
-                            addaes,
-                            addarg,
-                            col.heading.space,
-                            text_size,
-                            plotcolour,
-                            headingaddaes,
-                            headingaddarg){
+forest.columns.code <- function(column,
+                                pos,
+                                heading,
+                                hjust,
+                                bold,
+                                parse,
+                                xpos,
+                                addaes,
+                                addarg,
+                                heading.space,
+                                text_size,
+                                plotcolour,
+                                headingaddaes,
+                                headingaddarg){
   c(
     make_layer(
       glue::glue('## column {column}'),
@@ -301,7 +301,7 @@ forest.col.code <- function(column,
     make_layer(
       f = 'ckbplotr::geom_text_move',
       aes = c(headingaddaes[headingaddaes!=""],
-              'y     = - {col.heading.space}',
+              'y     = - {heading.space}',
               'x     = {xpos}',
               'label = title'),
       arg = c(headingaddarg[headingaddarg!=""],
@@ -324,20 +324,20 @@ forest.columns.right <- function(x) {
   if (is.null(x$col.right.all)){return(NULL)}
   code <- unlist(purrr::pmap(
     list(column     = x$col.right.all,
-         pos        = x$col.right.pos ,
-         heading    = x$col.right.heading,
-         hjust      = x$col.right.hjust,
+         pos        = x$right.pos,
+         heading    = x$right.heading,
+         hjust      = x$right.hjust,
          bold       = if (is.null(x$col.bold)) FALSE else x$col.bold,
-         parse      = x$col.right.parse,
+         parse      = x$right.parse,
          xpos       = x$xto,
          addaes     = if(is.null(x$addaes$col.right)){""} else{x$addaes$col.right},
          addarg     = if(is.null(x$addarg$col.right)){""} else{x$addarg$col.right},
-         col.heading.space = x$col.heading.space,
+         heading.space = x$heading.space,
          text_size  = x$text_size,
          plotcolour = x$plotcolour,
-         headingaddaes = if(is.null(x$addaes$heading.col.right)){""} else{x$addaes$heading.col.right},
-         headingaddarg = if(is.null(x$addarg$heading.col.right)){""} else{x$addarg$heading.col.right}),
-    forest.col.code))
+         headingaddaes = if(is.null(x$addaes$heading.right)){""} else{x$addaes$heading.right},
+         headingaddarg = if(is.null(x$addarg$heading.right)){""} else{x$addarg$heading.right}),
+    forest.columns.code))
   c('# Add columns to right side of panels', code)
 }
 
@@ -347,20 +347,20 @@ forest.columns.left <- function(x) {
   if (is.null(x$col.left)){return(NULL)}
   code <- unlist(purrr::pmap(
     list(column     = x$col.left,
-         pos        = - x$col.left.pos,
-         heading    = x$col.left.heading,
-         hjust      = x$col.left.hjust,
+         pos        = - x$left.pos,
+         heading    = x$left.heading,
+         hjust      = x$left.hjust,
          bold       = if (is.null(x$col.bold)) FALSE else x$col.bold,
          parse      = FALSE,
          xpos       = x$xfrom,
          addaes     = if(is.null(x$addaes$col.left)){""} else{x$addaes$col.left},
          addarg     = if(is.null(x$addarg$col.left)){""} else{x$addarg$col.left},
-         col.heading.space = x$col.heading.space,
+         heading.space = x$heading.space,
          text_size  = x$text_size,
          plotcolour = x$plotcolour,
-         headingaddaes = if(is.null(x$addaes$heading.col.left.heading)){""} else{x$addaes$heading.col.left},
-         headingaddarg = if(is.null(x$addarg$heading.col.left.heading)){""} else{x$addarg$heading.col.left}),
-    forest.col.code))
+         headingaddaes = if(is.null(x$addaes$heading.left)){""} else{x$addaes$heading.left},
+         headingaddarg = if(is.null(x$addarg$heading.left)){""} else{x$addarg$heading.left}),
+    forest.columns.code))
   c('# Add columns to left side of panel', code)
 }
 
@@ -376,8 +376,8 @@ forest.addtext <- function(x) {
             'x = {x$xto}',
             'label = addtext'),
     arg = c(x$addarg$addtext,
-            'move_x = {printunit(x$col.right.pos[[1]])}',
-            'hjust  = {x$col.right.hjust[[1]]}',
+            'move_x = {printunit(x$right.pos[[1]])}',
+            'hjust  = {x$right.hjust[[1]]}',
             'size   = {x$text_size}',
             'colour = {quote_string(x$plotcolour)}',
             'na.rm  = TRUE',
@@ -388,7 +388,7 @@ forest.addtext <- function(x) {
 #' code for horizontal rule under panel headings
 #' @noRd
 forest.column.headings.rule <- function(x){
-  if (!x$col.heading.rule){return(NULL)}
+  if (!x$heading.rule){return(NULL)}
   make_layer(
     '# Add horizontal rule under column headings',
     f = 'annotation_custom',
@@ -399,8 +399,8 @@ forest.column.headings.rule <- function(x){
                          'gp = grid::gpar(lwd = {round(x$base_line_size * .stroke / 2, 6)})'),
                  plus = FALSE,
                  br = FALSE),
-      'ymin = {x$col.heading.space}',
-      'ymax = {x$col.heading.space}'
+      'ymin = {x$heading.space}',
+      'ymax = {x$heading.space}'
     )
   )
 }
@@ -432,7 +432,7 @@ forest.xlab.panel.headings <- function(x) {
         '# Add panel name above each panel',
         f = 'ckbplotr::geom_text_move',
         aes = c(c(x$addaes$panel.headings, x$addaes$panel.name),
-                'y     = {- x$col.heading.space}',
+                'y     = {- x$heading.space}',
                 'x     = {x$xmid}',
                 'label = title'),
         arg = c(c(x$addarg$panel.headings, x$addarg$panel.name),
