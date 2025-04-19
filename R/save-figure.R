@@ -222,9 +222,9 @@ ggpreview <- function(...) {
   call <- as.list(match.call())[-1]
   call <- utils::modifyList(call,
                             list(filename = temp_img,
-                                 device = "png"))
+                                 device = ragg::agg_png))
   call <- call[names(call) %in% c(names(formals(ggsave)),
-                                  names(formals(grDevices::png)))]
+                                  names(formals(ragg::agg_png)))]
   do.call("ggsave", call)
 
   ## create html file

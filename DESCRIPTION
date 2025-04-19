@@ -29,6 +29,7 @@ Imports:
     gridtext (>= 0.1.5),
     knitr,
     rmarkdown,
+    ragg,
     ggh4x,
     legendry,
     lifecycle,
