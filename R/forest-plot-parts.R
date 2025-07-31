@@ -298,7 +298,7 @@ forest.columns.code <- function(column,
               'y = row',
               'x = {xpos}',
               if(is.character(bold)){
-                if(parse){
+                if(parse %in% c("col", "both")){
                   'label = dplyr::if_else({column_name(bold)} & !is.na({column_name(bold)}), paste0("bold(", {column_name(column)},")"), {column_name(column)})'
                 } else {
                   c('label = {column_name(column)}',
@@ -313,7 +313,7 @@ forest.columns.code <- function(column,
               'size    = {text_size}',
               'colour  = {quote_string(plotcolour)}',
               'na.rm   = TRUE',
-              'parse   = {parse}'),
+              'parse   = {parse %in% c("col", "both")}'),
       br = FALSE),
     make_layer(
       f = 'ckbplotr::geom_text_move',
@@ -329,6 +329,7 @@ forest.columns.code <- function(column,
               'colour   = {quote_string(plotcolour)}',
               'fontface = "bold"',
               'lineheight = 1',
+              'parse    = {parse %in% c("heading", "both")}',
               'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
               indent(23, 'title = {ds(unlist(heading))})'))
     )
@@ -368,7 +369,7 @@ forest.columns.left <- function(x) {
          heading    = x$left.heading,
          hjust      = x$left.hjust,
          bold       = if (is.null(x$col.bold)) FALSE else x$col.bold,
-         parse      = FALSE,
+         parse      = x$left.parse,
          xpos       = x$xfrom,
          addaes     = if(is.null(x$addaes$col.left)){""} else{x$addaes$col.left},
          addarg     = if(is.null(x$addarg$col.left)){""} else{x$addarg$col.left},

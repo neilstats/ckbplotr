@@ -141,6 +141,7 @@ forest_plot <- function(
     col.uci            = NULL,
     col.left           = NULL,
     col.right          = NULL,
+    left.parse        = FALSE,
     right.parse        = FALSE,
     left.heading       = "",
     right.heading      = as.list(xlab),
@@ -381,6 +382,14 @@ forest_plot <- function(
     if (x %in% column_names_in_data){ col.keep <- append(col.keep, x) }
   }
 
+
+  # Make right.parse and left.parse character vectors ----
+  if (is.logical(right.parse)) {
+    right.parse <- ifelse(right.parse, "col", "none")
+  }
+  if (is.logical(left.parse)) {
+    left.parse <- ifelse(left.parse, "col", "none")
+  }
 
 
   # Take first element if diamond is a list ----
@@ -639,6 +648,7 @@ forest_plot <- function(
     col.left,
     left.heading,
     left.hjust,
+    left.parse,
     left.pos,
     col.right,
     col.right.all,

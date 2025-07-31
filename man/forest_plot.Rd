@@ -23,6 +23,7 @@ forest_plot(
   col.uci = NULL,
   col.left = NULL,
   col.right = NULL,
+  left.parse = FALSE,
   right.parse = FALSE,
   left.heading = "",
   right.heading = as.list(xlab),
@@ -130,8 +131,9 @@ If row.labels data frame is not given, then this column will be used as row labe
 
 \item{col.left, col.right}{Names of columns to be printed to the left/right of the plot.}
 
-\item{right.parse}{A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
-Should the contents of the columns be parsed into expressions. (Default: FALSE)}
+\item{left.parse, right.parse}{A character vector, the same length as col.left/col.right (+ 1 if estcolumn = TRUE).
+Should the contents of the columns be parsed into expressions.
+Use "col", "heading" or "both" to parse the column content only, heading or both.}
 
 \item{left.heading, right.heading}{Headings for columns.}
 
@@ -213,7 +215,7 @@ given in the col.key column.}
 \item{left.space, right.space, mid.space}{Space to the left/right/between panels.
 (Default mid.space: unit(5, "mm"))}
 
-\item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))}
+\item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(2, 8, 2, 8, "mm"))}
 
 \item{panel.width, panel.height}{Set width/height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
 If panel.width is used, will alsovapply different formatting to narrow CIs.}
