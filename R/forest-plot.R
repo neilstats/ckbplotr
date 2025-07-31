@@ -281,6 +281,7 @@ forest_plot <- function(
       xticks,
       panels,
       xlab,
+      nullval,
       left.heading,
       right.heading,
       panel.headings,

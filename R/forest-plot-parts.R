@@ -130,6 +130,7 @@ forest.facet <- function() {
 #' @noRd
 forest.nullline <- function(x) {
   if (is.null(x$nullval)){return(NULL)}
+  if (length(x$nullval) == 1) {
   make_layer(
     '# Add a line at null effect',
     f = "annotate",
@@ -142,6 +143,22 @@ forest.nullline <- function(x) {
             'linewidth = {x$base_line_size}',
             'colour    = {quote_string(x$plotcolour)}')
   )
+  } else {
+    make_layer(
+      '# Add a line at null effect',
+      f = 'geom_segment',
+      aes = c(x$addaes$nullline,
+              'y = 0.7',
+              'yend = Inf',
+              'x = nullval',
+              'y = nullval'),
+      arg = c(x$addarg$nullline,
+              'linewidth = {x$base_line_size}',
+              'colour    = {quote_string(x$plotcolour)}',
+              'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
+              indent(23, 'nullval = {deparse(x$nullval)})'))
+    )
+  }
 }
 
 

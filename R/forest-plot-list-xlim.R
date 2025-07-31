@@ -10,6 +10,7 @@ forest_plot_list_xlim <- function(
   xticks,
   panels,
   xlab,
+  nullval,
   left.heading,
   right.heading,
   panel.headings,
@@ -39,7 +40,10 @@ forest_plot_list_xlim <- function(
   if (!is.list(right.heading)){
     right.heading <- rep(list(right.heading), length(xlim))
   }
-
+  nullval <- as.list(nullval)
+  if (length(nullval) < length(xlim)){
+    nullval <- rep(nullval, length(xlim))
+  }
 
   ## create arguments for plot.margin and mid.space
   plot.margin <- eval(original_arguments$plot.margin)
@@ -61,6 +65,9 @@ forest_plot_list_xlim <- function(
 
     if (!is.null(xlab[i]) && length(xlab) > 0){
       update_args$xlab <- xlab[[i]]
+    }
+    if (!is.null(nullval[i]) && length(nullval) > 0){
+      update_args$nullval <- nullval[[i]]
     }
     if (!is.null(left.heading[i])){
       update_args$left.heading <- left.heading[[i]]
