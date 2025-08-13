@@ -1,3 +1,7 @@
+# ckbplotr 0.11.5
+
+* Fixes for ggplot2 4.0.0
+
 # ckbplotr 0.11.4
 
 * Subheadings in forest_plot() row labels can be excluded by appending "@nolabel".

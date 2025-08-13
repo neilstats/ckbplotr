@@ -54,16 +54,9 @@ forest_plot_list_xlim <- function(
   ## create list of plots (one for each panel)
   plots_list <- lapply(1:length(xlim), \(i) {
 
-    ## adjust right plot.margin for all but last panel
-    plot_margin <- plot.margin
-    if (i != length(xlim)){
-      plot_margin[[2]] <- mid.space
-    }
-
     update_args <- list(panels = panels[i],
                         xlim = xlim[[i]],
                         xticks = xticks[[i]],
-                        plot.margin = plot_margin,
                         quiet = TRUE)
 
     if (!is.null(xlab[i]) && length(xlab) > 0){
@@ -82,19 +75,33 @@ forest_plot_list_xlim <- function(
     forest <- do.call("forest_plot",
                       utils::modifyList(original_arguments, update_args),
                       envir = envir)
+    return(forest)
+  })
+
+  ## function to adjust margins of plot for each panel
+  adjust_margins <- function(i, plots_list){
+
+    panel <- plots_list[[i]]$plot
+
+    ## adjust right plot.margin for all but last panel
+    if (i != length(plots_list)){
+      panel$theme$plot.margin[[2]] <- panel$theme$panel.spacing - panel$theme$axis.text.y$margin[[2]]
+    }
 
     ## adjust left plot.margin for all but first panel
     if (i != 1){
-      forest$plot$theme$plot.margin[[4]] <- forest$plot$theme$axis.text.y$margin[[2]]
-      forest$plot <- forest$plot + theme(axis.text.y = element_blank())
+      panel$theme$plot.margin[[4]] <- panel$theme$axis.text.y$margin[[2]]
+      panel <- panel + theme(axis.text.y = element_blank())
     }
 
-    return(forest$plot)
-  })
+    return(panel)
+  }
 
   ## create figure by combining plots
   figure <- do.call(gridExtra::gtable_cbind,
-                    lapply(plots_list, ggplotGrob))
+                    lapply(lapply(seq_along(plots_list),
+                                  function(x) adjust_margins(x, plots_list)),
+                           ggplotGrob))
 
   return(invisible(list(figure = figure,
                         plots = plots_list)))

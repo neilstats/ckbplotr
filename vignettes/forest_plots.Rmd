@@ -278,7 +278,7 @@ forest_plot(split(my_resultsAB, ~ analysis),
 
 `forest_plot()` uses ggplot facets to place forest plots side-by-side. Facets cannot easily have different scales applied, but you can use `forest_plot()` for each panel then arrange them side-by-side.
 
-If `xlim`, `xticks` and `panels` are lists of the same length, then `forest_plot()` will do this automatically. The function will return a list containing "figure" (a graphic object of the whole figure) and "plots" (a list of ggplots, one for each panel).
+If `xlim`, `xticks` and `panels` are lists of the same length, then `forest_plot()` will do this automatically. The function will return a list containing "figure" (a graphic object of the whole figure) and "plots" (the result of calls to `forest_plot()` for each panel).
 
 ```{r, fig.width=6, out.width='75%'}
 forest <- forest_plot(split(my_resultsAB, ~ analysis),

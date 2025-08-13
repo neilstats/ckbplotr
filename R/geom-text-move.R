@@ -12,11 +12,9 @@
 #' @export
 
 geom_text_move <- function(mapping = NULL, data = NULL,
-                           stat = "identity", position = "identity",
+                           stat = "identity", position = "nudge",
                            ...,
                            parse = FALSE,
-                           nudge_x = 0,
-                           nudge_y = 0,
                            move_x = unit(0, "pt"),
                            move_y = unit(0, "pt"),
                            check_overlap = FALSE,
@@ -24,13 +22,6 @@ geom_text_move <- function(mapping = NULL, data = NULL,
                            show.legend = NA,
                            inherit.aes = TRUE)
 {
-  if (!missing(nudge_x) || !missing(nudge_y)) {
-    if (!missing(position)) {
-      rlang::abort("You must specify either `position` or `nudge_x`/`nudge_y`.")
-    }
-
-    position <- position_nudge(nudge_x, nudge_y)
-  }
 
   layer(
     data = data,

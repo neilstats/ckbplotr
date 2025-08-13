@@ -27,8 +27,8 @@ theme_ckb <- function(base_size      = 11,
           axis.text.y       = element_text(margin = margin(r = base_size/(11/4.4)), hjust = 1),
           axis.text.y.right = element_text(margin = margin(l = base_size/(11/4.4)), hjust = 0),
           axis.title        = element_text(face = "bold", colour = colour),
-          axis.title.x      = element_text(margin = unit(c(axis.title.margin,0,0,0), "lines")),
-          axis.title.y      = element_text(margin = unit(c(0,axis.title.margin,0,0), "lines"), angle = 90),
+          axis.title.x      = element_text(margin = margin(axis.title.margin, 0, 0, 0, "lines")),
+          axis.title.y      = element_text(margin = margin(0, axis.title.margin, 0, 0, "lines"), angle = 90),
           legend.background = element_blank(),
           strip.background  = element_blank(),
           strip.text        = element_text(face = "bold", colour = colour),
@@ -125,7 +125,7 @@ ckb_style <- function(
 #' @noRd
 #' @export
 #' @keywords internal
-ggplot_add.ckbplot <- function(object, plot, object_name) {
+ggplot_add.ckbplot <- function(object, plot, ...) {
   # get plot axis transformations
   tf_x    <- ggplot_build(plot)$layout$panel_scales_x[[1]]$trans$transform
   invtf_x <- ggplot_build(plot)$layout$panel_scales_x[[1]]$trans$inverse
