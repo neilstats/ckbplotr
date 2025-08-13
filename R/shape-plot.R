@@ -83,8 +83,8 @@ shape_plot <- function(data,
                        fill          = colour,
                        ciunder       = NULL,
                        lines         = FALSE,
-                       xlims,
-                       ylims,
+                       xlims         = NULL,
+                       ylims         = NULL,
                        height        = NULL,
                        width         = NULL,
                        gap           = c(0.025, 0.025),
@@ -113,8 +113,6 @@ shape_plot <- function(data,
   if (!is.null(col.lci) &&  is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
   if (!is.null(col.group) && !missing(fill)) rlang::abort("col.group and fill both control fill, so do not specify both")
-  if (missing(xlims)) rlang::abort("xlims must be specified")
-  if (missing(ylims)) rlang::abort("ylims must be specified")
 
   ## check if confidence intervals may be hidden
   if (missing(height)){
@@ -127,6 +125,10 @@ shape_plot <- function(data,
 
   if(!missing(height) && !missing(col.group) && !missing(cicolour)){
     warning("cicolour is ignored if using height and col.group")
+  }
+
+  if (!missing(height) && is.null(ylims)){
+    rlang::abort("ylims must be specified when setting height")
   }
 
 

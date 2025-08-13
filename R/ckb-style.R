@@ -140,7 +140,7 @@ ggplot_add.ckbplot <- function(object, plot, ...) {
     } else {
       xlims <- ggplot_build(plot)$layout$panel_scales_x[[1]]$range$range
     }
-    xlims <- range(pretty(xlims))
+    xlims <- range(pretty(invtf_x(xlims)))
   } else {
     xlims <- object$xlims
   }
@@ -151,7 +151,7 @@ ggplot_add.ckbplot <- function(object, plot, ...) {
     } else {
       ylims <- ggplot_build(plot)$layout$panel_scales_y[[1]]$range$range
     }
-    ylims <- range(pretty(ylims))
+    ylims <- range(pretty(invtf_y(ylims)))
   } else {
     ylims <- object$ylims
   }

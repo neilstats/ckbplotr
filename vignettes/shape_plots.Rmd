@@ -37,21 +37,17 @@ my_results <- data.frame(
 )
 
 shape_plot(my_results,
-           col.x = "risk_factor",
-           xlims = c(15, 30),
-           ylims = c(-0.25, 0.5))
+           col.x = "risk_factor")
 ```
 
 If your estimates and standard errors are on the log scale (e.g. log hazard ratios), then set `exponentiate` to true. This will plot exp(estimates) and use a log scale for the axis.
 ```{r}
 shape_plot(my_results,
            col.x        = "risk_factor",
-           xlims        = c(15, 30),
-           ylims        = c(0.8, 1.6),
            exponentiate = TRUE)
 ```
 
-Set axis titles using `xlab` and `ylab`.
+Set axis limits using `xlims` and `ylims`, and axis titles using `xlab` and `ylab`.
 ```{r}
 shape_plot(my_results,
            col.x        = "risk_factor",
