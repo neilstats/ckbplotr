@@ -294,3 +294,46 @@ Creates a forest plot with ggplot
 The function returns the plot and ggplot2 code to create the plot.
 In RStudio, the ggplot2 code will be shown in the viewer.
 }
+\section{Notes}{
+
+\subsection{Saving forest plots and row labels}{
+
+From version 0.12.0, the row labels in forest plots are drawn using
+\code{marquee::theme_element_marquee} to allow for styling using markdown. When
+saving it is best to use a graphics device that supports 'glyph' features
+(see \url{https://marquee.r-lib.org/reference/marquee_grob.html#rendering}). For
+example \code{pdf()} or the devices supplied by the ragg package, which are used
+as default by \code{ggsave()} and \code{save_figure()}.
+
+To return to the old method which used the ggtext package, set
+\code{row.labels.element = "ggtext::element_markdown"}.
+}
+
+\subsection{Spacing}{
+
+The function attempts to set the positions of columns of text and spacing
+automatically. Where this does not produce a satisfactory layout, you can use
+the arguments \code{left.pos}, \code{right.pos}, \code{left.space}, \code{right.space}, and
+\code{mid.space} to control positions and spacing manually.
+
+The plot will fill the vertical space available. Use \code{plot.margin} to change
+the top and bottom margins as needed.
+}
+
+\subsection{Confidence intervals}{
+
+When standard errors are supplied to the \code{shape_plot()} and \code{forest_plot()}
+functions, confidence intervals are calculated as 95\\% confidence intervals
+using the Normal approximation method (with critical value 1.96).
+\subsection{Stroke}{
+
+The \code{stroke} argument sets the stroke aesthetic for plotted shapes. See
+\url{https://ggplot2.tidyverse.org/articles/ggplot2-specs.html} for more details.
+The stroke size adds to the total size of a shape, so unless \code{stroke = 0} the
+scaling of size by inverse variance will be very slightly inaccurate (but
+there are probably more important things to worry about).
+}
+
+}
+}
+

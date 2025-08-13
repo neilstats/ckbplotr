@@ -64,6 +64,20 @@
 #'   \item{code}{ggplot2 code to generate the plot}
 #'}
 #'
+#'
+#' @section Notes:
+#' ## Confidence intervals
+#' When standard errors are supplied to the `shape_plot()` and `forest_plot()`
+#' functions, confidence intervals are calculated as 95\% confidence intervals
+#' using the Normal approximation method (with critical value 1.96).
+#'
+#' ## Stroke
+#' The `stroke` argument sets the stroke aesthetic for plotted shapes. See
+#' <https://ggplot2.tidyverse.org/articles/ggplot2-specs.html> for more details.
+#' The stroke size adds to total size of a shape, so unless `stroke = 0` the
+#' scaling of size by inverse variance will be slightly inaccurate (but there
+#' are probably more important things to worry about).
+#'
 #' @import ggplot2
 #' @export
 
@@ -160,18 +174,23 @@ shape_plot <- function(data,
 
   # Match estimate and stderr column names ----
   column_names_in_data <- names(data)
+
+  if (!col.x %in% column_names_in_data) {
+    cli::cli_abort("Column {.var {col.x}} does not exist in data frame.")
+  }
+
   if (length(col.estimate[col.estimate %in% column_names_in_data]) == 0) {
     if (missing(col.estimate)) {
       cli::cli_abort("Specify the name of the column with point estimates using {.arg col.estimate} or use one of the following column names: {.var {col.estimate}}.")
     }
-    cli::cli_abort("Column {.var {col.estimate}} does not exist in panels data frame.")
+    cli::cli_abort("Column {.var {col.estimate}} does not exist in data frame.")
   }
   col.estimate <- col.estimate[col.estimate %in% column_names_in_data][[1]]
 
   if (!is.null(col.lci) | !is.null(col.uci)) {
     for (x in c(col.lci, col.uci)){
       if (!x %in% column_names_in_data){
-        cli::cli_abort("Column {.var {x}} does not exist in panels data frame.")
+        cli::cli_abort("Column {.var {x}} does not exist in data frame.")
       }
     }
   } else {
@@ -179,7 +198,7 @@ shape_plot <- function(data,
       if (missing(col.stderr)) {
         cli::cli_abort("Specify the name of the column with standard errors using {.arg col.stderr} or use one of the following column names: {.var {col.stderr}}.")
       }
-      cli::cli_abort("Column {.var {col.stderr}} does not exist in panels data frame.")
+      cli::cli_abort("Column {.var {col.stderr}} does not exist in data frame.")
     }
     col.stderr <- col.stderr[col.stderr %in% column_names_in_data][[1]]
   }
@@ -328,13 +347,11 @@ shape_plot <- function(data,
 
     if(!is.factor(data[[col.group]])) cli::cli_abort("{.arg col.group} must be factor")
     group_string <- glue::glue(', group = {column_name(col.group)}')
-    scale_fill_string <- c('',
-                           make_layer('# Set the scale for fill colours',
-                                      f = "scale_fill_grey",
-                                      arg = c("start = 0",
-                                              "end   = 1",
-                                              'name  = "{legend.name}"'),
-                                      br = FALSE))
+    scale_fill_string <- make_layer(f = "scale_fill_grey",
+                                    arg = c("start = 0",
+                                            "end   = 1",
+                                            'name  = "{legend.name}"'),
+                                    br = FALSE)
     fill_string <- list(aes = glue::glue('fill = {column_name(col.group)}'))
   } else {
     group_string <- ''

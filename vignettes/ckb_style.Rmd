@@ -39,7 +39,7 @@ plot <- ggplot(data = mpg, aes(x = displ, y = hwy)) + geom_point(size = 1)
 plot
 ```
 
-Use `+ ckb_style()` to apply a CKB theme, add separated axis lines and fix the aspect ratio.
+Use `+ ckb_style()` to apply a CKB theme, cap axis lines and fix the aspect ratio.
 ```{r plot_like_ckb-example-0}
 plot + ckb_style()
 ```

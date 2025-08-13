@@ -4,11 +4,11 @@
 \name{ckbplotr-package}
 \alias{ckbplotr}
 \alias{ckbplotr-package}
-\title{ckbplotr: Create CKB Plots}
+\title{ckbplotr: Create Plots}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-ckbplotr provides functions to help create and style plots in R. It is being developed by, and primarily for, China Kadoorie Biobank researchers.
+Create publication-quality plots for epidemiology.
 }
 \seealso{
 Useful links:

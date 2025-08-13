@@ -20,9 +20,10 @@
 #' @param estcolumn
 #' Include column of estimates and confidence intervals to the
 #' right of each plot. (Default: TRUE)
-#' @param right.parse
-#' A logical vector, the same length as col.right (+ 1 if estcolumn = TRUE).
-#' Should the contents of the columns be parsed into expressions. (Default: FALSE)
+#' @param left.parse,right.parse
+#' A character vector, the same length as col.left/col.right (+ 1 if estcolumn = TRUE).
+#' Should the contents of the columns be parsed into expressions.
+#' Use "col", "heading" or "both" to parse the column content only, heading or both.
 #' @param left.pos,right.pos
 #' A unit vector to position col.left/col.right columns.
 #' @param left.hjust,right.hjust
@@ -87,7 +88,7 @@
 #' Space to the left/right/between panels.
 #' (Default mid.space: unit(5, "mm"))
 #' @param plot.margin
-#' Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
+#' Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(2, 8, 2, 8, "mm"))
 #' @param panel.width,panel.height
 #' Set width/height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
 #' If panel.width is used, will also apply different formatting to narrow CIs.
@@ -134,6 +135,41 @@
 #'   \item{plot}{the plot}
 #'   \item{code}{ggplot2 code to generate the plot}
 #'}
+#'
+#'
+#' @section Notes:
+#'
+#' ## Saving forest plots and row labels
+#' From version 0.12.0, the row labels in forest plots are drawn using
+#' `marquee::theme_element_marquee` to allow for styling using markdown. When
+#' saving it is best to use a graphics device that supports 'glyph' features
+#' (see <https://marquee.r-lib.org/reference/marquee_grob.html#rendering>). For
+#' example `pdf()` or the devices supplied by the ragg package, which are used
+#' as default by `ggsave()` and `save_figure()`.
+#'
+#' To return to the old method which used the ggtext package, set
+#' `row.labels.element = "ggtext::element_markdown"`.
+#'
+#' ## Spacing
+#' The function attempts to set the positions of columns of text and spacing
+#' automatically. Where this does not produce a satisfactory layout, you can use
+#' the arguments `left.pos`, `right.pos`, `left.space`, `right.space`, and
+#' `mid.space` to control positions and spacing manually.
+#'
+#' The plot will fill the vertical space available. Use `plot.margin` to change
+#' the top and bottom margins as needed.
+#'
+#' ## Confidence intervals
+#' When standard errors are supplied to the `shape_plot()` and `forest_plot()`
+#' functions, confidence intervals are calculated as 95\% confidence intervals
+#' using the Normal approximation method (with critical value 1.96).
+#'
+#' ### Stroke
+#' The `stroke` argument sets the stroke aesthetic for plotted shapes. See
+#' <https://ggplot2.tidyverse.org/articles/ggplot2-specs.html> for more details.
+#' The stroke size adds to the total size of a shape, so unless `stroke = 0` the
+#' scaling of size by inverse variance will be very slightly inaccurate (but
+#' there are probably more important things to worry about).
 #'
 #' @import ggplot2
 #' @export

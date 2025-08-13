@@ -5,15 +5,14 @@ development:
 
 template:
   bootstrap: 5
-  bootswatch: cosmo
   bslib:
-    primary: "#011e41"
+    primary: "#002147"
     base_font: {google: {family: "Source Sans Pro", wght: [400, 600], ital: [0, 1]}}
     code_font: {google: "Source Code Pro"}
     font_scale: 1
     border-radius: 0
-    pkgdown-nav-height: 78px
     line-height-base: 1.6
+    code-bg: "#ffffff"
 
 articles:
 - title: Introduction
@@ -23,9 +22,9 @@ articles:
 - title: Plots
   navbar: ~
   contents:
-  - ckb_style
-  - forest_plots
   - shape_plots
+  - forest_plots
+  - ckb_style
   - customising_plots
 - title: Saving plots
   navbar: ~
@@ -34,7 +33,6 @@ articles:
 - title: Related packages
   contents:
   - ggplot2
-  - page_layouts
 - title: Generated code
   contents:
   - web-only/generated_code

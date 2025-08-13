@@ -169,3 +169,22 @@ A list:
 \description{
 Make a shape plot with ggplot2
 }
+\section{Notes}{
+
+\subsection{Confidence intervals}{
+
+When standard errors are supplied to the \code{shape_plot()} and \code{forest_plot()}
+functions, confidence intervals are calculated as 95\\% confidence intervals
+using the Normal approximation method (with critical value 1.96).
+}
+
+\subsection{Stroke}{
+
+The \code{stroke} argument sets the stroke aesthetic for plotted shapes. See
+\url{https://ggplot2.tidyverse.org/articles/ggplot2-specs.html} for more details.
+The stroke size adds to total size of a shape, so unless \code{stroke = 0} the
+scaling of size by inverse variance will be slightly inaccurate (but there
+are probably more important things to worry about).
+}
+}
+

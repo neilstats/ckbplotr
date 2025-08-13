@@ -22,7 +22,7 @@ library(ckbplotr)
 ```
 
 ## Introduction
-The `ckbplotr` R package provides functions to help create and style plots in R using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package
+The `ckbplotr` R package provides functions to help create and style plots in R using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package.
 
 ## CKB style
 Use `+ ckb_style()` to apply CKB style to a ggplot. See [CKB style ggplot](ckb_style.html) for details.
@@ -32,7 +32,9 @@ Create plots of estimates against risk factor levels using `shape_plot()`. See [
 
 Create forest plots using `forest_plot()`. See [Forest plots](forest_plots.html) for details.
 
-See [Page layouts](page_layouts.html) for tips and packages for combining separate plots.
-
 ## Saving
 See [Save plots to files](save_plots.html).
+
+## More
+
+Additional examples and tutorials for using the package can be found at <https://neilstats.github.io/ckbplotr-book>.
