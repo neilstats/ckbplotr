@@ -43,6 +43,8 @@
 #' @param gap A numeric vector of length two. The gap between plotting area and axis to the left and bottom of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ext A numeric vector of length two. The extensions to add to the right and top of the plot, as a proportion of the x-axis length. (Default: c(0.025, 0.025))
 #' @param ratio The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)
+#' @param plot.margin
+#' Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(0.5, 1.5, 0.5, 0.5, "lines"))
 #' @param stroke Size of outline of shapes. (Default: base_size/22)
 #' @param quiet Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
 #' @param printplot Print the plot. (Default: !quiet)
@@ -90,6 +92,7 @@ shape_plot <- function(data,
                        gap           = c(0.025, 0.025),
                        ext           = c(0.025, 0.025),
                        ratio         = 1.5,
+                       plot.margin   = margin(0.5, 1.5, 0.5, 0.5, "lines"),
                        base_size     = 11,
                        base_line_size = base_size/22,
                        stroke        = base_size/22,
@@ -334,6 +337,8 @@ shape_plot <- function(data,
     add$end <- deparse1(substitute(add)$end)
   }
 
+  plot.margin <- deparse1(substitute(plot.margin))
+
   # Create plot specification list ----
   spec <- tibble::lst(
     add,
@@ -365,6 +370,7 @@ shape_plot <- function(data,
     lines,
     minse,
     one_over_minse,
+    plot.margin,
     plotcolour,
     pointsize,
     ratio,
