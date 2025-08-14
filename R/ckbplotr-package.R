@@ -5,6 +5,6 @@
 #' @importFrom lifecycle deprecated
 ## usethis namespace: end
 #' @importFrom stats na.omit
-#' @importFrom ggtext element_markdown
+#' @importFrom marquee element_marquee
 #' @importFrom rlang :=
 NULL

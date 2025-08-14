@@ -26,7 +26,7 @@ library(ckbplotr)
 
 ## Introduction
 
-The `forest_plot()` function creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio, the code used to create the plot will be shown in the Viewer pane (see [Plot code example] for an example).
+The `forest_plot()` function creates a forest plot using the [ggplot2](https://ggplot2.tidyverse.org/) graphics package. The function returns both a plot and the ggplot2 code used to create the plot. In RStudio, the code used to create the plot will be shown in the Viewer pane.
 
 ## Basic usage
 
@@ -350,16 +350,21 @@ See  [Customising plots](customising_plots.html) for more ways to customise fore
 
 ## Notes
 
-#### Spacing
+### Saving forest plots and row labels
+From version 0.12.0, the row labels in forest plots are drawn using `marquee::theme_element_marquee` to allow for styling using markdown. When saving it is best to use a graphics device that supports 'glyph' features (see <https://marquee.r-lib.org/reference/marquee_grob.html#rendering>). For example `pdf()` or the devices supplied by the ragg package, which are used as default by `ggsave()` and `save_figure()`.
+
+To return to the old method which used the ggtext package, set `row.labels.element = "ggtext::element_markdown"`.
+
+### Spacing
 The function attempts to set the positions of columns of text and spacing automatically. Where this does not produce a satisfactory layout, you can use the arguments `left.pos`, `right.pos`, `left.space`, `right.space`, and `mid.space` to control positions and spacing manually.
 
 The plot will fill the vertical space available. Use `plot.margin` to change the top and bottom margins as needed.
 
-#### Confidence intervals
+### Confidence intervals
 When standard errors are supplied to the `shape_plot()` and `forest_plot()` functions, confidence intervals are calculated as 95\% confidence intervals using the Normal approximation method (with critical value 1.96).
 
 
-#### Stroke
+### Stroke
 The `stroke` argument sets the stroke aesthetic for plotted shapes. See https://ggplot2.tidyverse.org/articles/ggplot2-specs.html for more details. The stroke size adds to the total size of a shape, so unless `stroke = 0` the scaling of size by inverse variance will be very slightly inaccurate (but there are probably more important things to worry about).
 
 

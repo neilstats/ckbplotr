@@ -13,7 +13,7 @@ Encoding: UTF-8
 LazyData: true
 Depends: 
     ggplot2 (>= 3.4.0),
-    R (>= 4.1.0)
+    R (>= 4.3.0)
 Imports: 
     dplyr,
     tibble,
@@ -24,7 +24,7 @@ Imports:
     stringi,
     grid,
     gridExtra,
-    ggtext,
+    marquee,
     gridtext (>= 0.1.5),
     knitr,
     rmarkdown,
@@ -37,6 +37,7 @@ Imports:
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Suggests:
+    ggtext,
     patchwork,
     testthat
 VignetteBuilder: knitr

@@ -88,6 +88,9 @@
 #' Size of outline of shapes. (Default: 0)
 #' @param diamonds.linewidth
 #' Line width for diamonds. (Default: base_line_size)
+#' @param row.labels.element
+#' A character string giving the name of the theme element to use for the row labels (axis.text.y).
+#' (Default: "marquee::element_marquee")
 #' @param quiet
 #' Set to TRUE to not print the plot nor show generated code in the RStudio 'Viewer' pane. (Default: FALSE)
 #' @param printplot
@@ -192,6 +195,7 @@ forest_plot <- function(
     base_line_size     = base_size/22,
     stroke             = 0,
     diamonds.linewidth = base_line_size,
+    row.labels.element = "marquee::element_marquee",
     quiet              = FALSE,
     printplot          = !quiet,
     showcode           = !quiet,
@@ -693,6 +697,7 @@ forest_plot <- function(
     right.space,
     right.space.inner,
     row.labels,
+    row.labels.element,
     row.labels.heading,
     row.labels.levels,
     row.labels.space,

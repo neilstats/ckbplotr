@@ -644,7 +644,7 @@ forest.theme <- function(x) {
             'axis.ticks.y     = element_blank()',
             'axis.ticks.length.y = unit(0, "pt")',
             'axis.line.y      = element_blank()',
-            'axis.text.y      = ggtext::element_markdown(hjust  = 0',
+            'axis.text.y      = {x$row.labels.element}(hjust  = 0',
             indent(44,
                    'colour = {quote_string(x$plotcolour)}',
                    'margin = margin(r = {as.numeric(x$left.space)}, unit = {makeunit(x$left.space)}))'),
