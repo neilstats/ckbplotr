@@ -39,6 +39,11 @@
 #' right.heading. Increase to move them up. (Default: 0)
 #' @param heading.rule
 #' Include a horizontal rule below column headings? (Default: FALSE)
+#' Can be TRUE/FALSE, or a grid::unit() object specifying
+#' extension beyond the panel edges (length 1 for symmetric,
+#' or 2 for left and right).
+#' @param heading.rule
+#' Include a horizontal rule below column headings? (Default: FALSE)
 #' @param title
 #' Title to appear at the top of the plot.
 #' @param xlab

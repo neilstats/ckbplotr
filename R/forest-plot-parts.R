@@ -406,17 +406,36 @@ forest.addtext <- function(x) {
 #' code for horizontal rule under panel headings
 #' @noRd
 forest.column.headings.rule <- function(x){
-  if (!x$heading.rule){return(NULL)}
+
+  if (is.null(x$heading.rule) |
+      (is.logical(x$heading.rule) && !x$heading.rule)) {
+    return(NULL)
+  }
+
+  if (is.logical(x$heading.rule) && x$heading.rule) {
+    x_coords <- 'x = unit(c(0, 1), "npc") + c(-1, 0)*{printunit(x$left.space.inner)} + c(0, 1)*{printunit(x$right.space.inner)}'
+  } else if (inherits(x$heading.rule, "unit")) {
+    if (length(x$heading.rule) == 1) {
+      x_coords <- 'x = unit(c(0, 1), "npc") + c(-1, 1)*{printunit(x$heading.rule)}'
+    } else {
+      x_coords <- 'x = unit(c(0, 1), "npc") + c(-1, 0)*{printunit(x$heading.rule[1])} + c(0, 1)*{printunit(x$heading.rule[2])}'
+    }
+  } else {
+    cli::cli_abort("heading.rule must be logical or a grid::unit() object")
+  }
+
   make_layer(
     '# Add horizontal rule under column headings',
     f = 'annotation_custom',
     arg = c(
       make_layer(f = 'grob = grid::linesGrob',
-                 arg = c('x = unit(c(0, 1), "npc") + c(-1, 0)*{printunit(x$left.space.inner)} + c(0, 1)*{printunit(x$right.space.inner)}',
+                 arg = c(x_coords,
                          'y = unit(c(-{x$base_size}/8, -{x$base_size}/8), "mm")',
                          'gp = grid::gpar(lwd = {round(x$base_line_size * .stroke / 2, 6)})'),
                  plus = FALSE,
                  br = FALSE),
+      'xmin = I(0)',
+      'xmax = I(1)',
       'ymin = {x$heading.space}',
       'ymax = {x$heading.space}'
     )
