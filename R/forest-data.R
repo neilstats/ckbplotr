@@ -212,7 +212,7 @@ forest_data <- function(
       dplyr::select(dplyr::all_of(c("row.label", "key", "row.height", "spacing_row")))
   } else {
 
-    if (!col.key %in% names(row.labels)) rlang::abort(glue::glue("{col.key} must be a column in {deparse(substitute(row.labels))}"))
+    if (!col.key %in% names(row.labels)) rlang::abort(glue::glue("{col.key} must be a column in {deparse1(substitute(row.labels))}"))
 
     for (panel in panels) {
       if (!col.key %in% names(panel)) rlang::abort(glue::glue("{col.key} must be a column in every data frame given in panels"))

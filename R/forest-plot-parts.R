@@ -13,7 +13,7 @@ forest.axes <- function(x) {
       f = "scale_x_continuous",
       arg = c('trans  = "{x$axis_scale}"',
               "limits = c({x$xfrom}, {x$xto})",
-              "breaks = {paste(deparse(x$xticks), collapse = '')}",
+              "breaks = {deparse1(x$xticks, collapse = '')}",
               'expand = c(0,0)')
     ),
     make_layer(
@@ -28,7 +28,7 @@ forest.axes <- function(x) {
           c('breaks = attr(datatoplot, "rowlabels")$row',
             'labels = attr(datatoplot, "rowlabels")$row.label')
         },
-        'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse(x$bottom.space)}, {if (!is.null(x$row.labels.heading)) -{x$heading.space} else "NA"})',
+        'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse1(x$bottom.space)}, {if (!is.null(x$row.labels.heading)) -{x$heading.space} else "NA"})',
         'expand = c(0,0)')
     )
   )
@@ -156,7 +156,7 @@ forest.nullline <- function(x) {
               'linewidth = {x$base_line_size}',
               'colour    = {quote_string(x$plotcolour)}',
               'data = \\(x) dplyr::tibble(panel = sort(unique(x[["panel"]]))',
-              indent(23, 'nullval = {deparse(x$nullval)})'))
+              indent(23, 'nullval = {deparse1(x$nullval)})'))
     )
   }
 }
@@ -537,13 +537,13 @@ forest.theme <- function(x) {
                    'colour = {quote_string(x$plotcolour)}',
                    'margin = margin(r = {as.numeric(x$left.space)}, unit = {makeunit(x$left.space)}))'),
             'panel.border     = element_blank()',
-            'panel.spacing    = {printunit(x$right.space)} + {paste(deparse(x$mid.space), collapse = "")} + {printunit(x$left.space)}',
+            'panel.spacing    = {printunit(x$right.space)} + {deparse1(x$mid.space, collapse = "")} + {printunit(x$left.space)}',
             'strip.background = element_blank()',
             'strip.placement  = "outside"',
             'strip.text       = element_blank()',
             'legend.position  = "none"',
             'plot.background  = element_blank()',
-            'plot.margin      = {paste(deparse(x$plot.margin), collapse = "")} + unit(c({x$space_for_panel_headings}, 0, {2*x$text_size}, 0), "mm") + unit(c(0, {as.numeric(x$right.space)}, 0, 0), {makeunit(x$right.space)})'
+            'plot.margin      = {deparse1(x$plot.margin, collapse = "")} + unit(c({x$space_for_panel_headings}, 0, {2*x$text_size}, 0), "mm") + unit(c(0, {as.numeric(x$right.space)}, 0, 0), {makeunit(x$right.space)})'
     ),
     plus = !is.null(x$add$end),
     duplicates = TRUE,

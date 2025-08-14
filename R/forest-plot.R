@@ -584,8 +584,8 @@ forest_plot <- function(
     plus = FALSE,
     f = 'datatoplot <- ckbplotr::forest_data',
     arg = c(
-      'panels = {paste(deparse(substitute(panels)), collapse = "")}',
-      if (!is.null(row.labels)){'row.labels = {paste(deparse(substitute(row.labels)), collapse = "")}'},
+      'panels = {deparse1(substitute(panels), collapse = "")}',
+      if (!is.null(row.labels)){'row.labels = {deparse1(substitute(row.labels), collapse = "")}'},
       argset(row.labels.levels),
       argset(rows),
       argset(row.labels.space),

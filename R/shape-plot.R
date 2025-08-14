@@ -320,17 +320,17 @@ shape_plot <- function(data,
 
 
   # Deparsing ----
-  one_over_minse <- deparse(1/minse)
-  xlims <- deparse(xlims)
-  xbreaks <- deparse(xbreaks)
-  ylims <- deparse(ylims)
-  ybreaks <- deparse(ybreaks)
-  legend.position <- deparse(legend.position)
-  gap <- deparse(gap)
-  ext <- deparse(ext)
-  ratio <- deparse(ratio)
-  axis.title.margin <- deparse(axis.title.margin)
-  clip <- deparse(clip)
+  one_over_minse <- deparse1(1/minse)
+  xlims <- deparse1(xlims)
+  xbreaks <- deparse1(xbreaks)
+  ylims <- deparse1(ylims)
+  ybreaks <- deparse1(ybreaks)
+  legend.position <- deparse1(legend.position)
+  gap <- deparse1(gap)
+  ext <- deparse1(ext)
+  ratio <- deparse1(ratio)
+  axis.title.margin <- deparse1(axis.title.margin)
+  clip <- deparse1(clip)
 
   if (!is.null(add$start)){
     add$start <- deparse1(substitute(add)$start)
@@ -400,7 +400,7 @@ shape_plot <- function(data,
   plotcode <- c(
     'library(ggplot2)',
     '',
-    paste0('datatoplot <- ', deparse(substitute(data))), # start with data
+    paste0('datatoplot <- ', deparse1(substitute(data))), # start with data
     '',
     shape.cicolourcode(spec),                          # CI colours if using height
     shape.ciundercode(spec),                           # CI under - if using height

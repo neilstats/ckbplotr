@@ -46,8 +46,8 @@ quote_string <- function(x){
 #' @noRd
 #'
 argset <- function(x){
-  name <- paste(deparse(substitute(x)), collapse = '')
-  value <- paste(deparse(x), collapse = '')
+  name <- deparse1(substitute(x), collapse = '')
+  value <- deparse1(x, collapse = '')
   if (!identical(x, eval(formals(ckbplotr::forest_data)[[name]]))){
     glue::glue('{name} = {value}')
   }
@@ -149,7 +149,7 @@ displaycode <- function(plotcode, note = ""){
 ds <- function(x){
   paste(
     stringi::stri_unescape_unicode(
-      deparse(
+      deparse1(
         stringi::stri_escape_unicode(x)
       )
     ),
@@ -163,7 +163,7 @@ ds <- function(x){
 #' @noRd
 printunit <- function(x){
   if(is.null(x)){return(NULL)}
-  glue::glue('unit({deparse(as.numeric(x))}, {makeunit(x)})')
+  glue::glue('unit({deparse1(as.numeric(x))}, {makeunit(x)})')
 }
 
 
