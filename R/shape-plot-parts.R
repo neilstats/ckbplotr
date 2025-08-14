@@ -21,11 +21,11 @@ shape.cicolourcode <- function(x) {
 
   code <- c(
     '# Create column for CI colour',
-    'datatoplot <- datatoplot %>%',
+    'datatoplot <- datatoplot |>',
     indent(2,
            glue::glue('dplyr::mutate(narrowci = (({uci_string}) - ({lci_string})) <= '),
            indent(26,
-                  glue::glue('({x$size})/max({x$size}) * {adjust_size} * dplyr::recode({c(x$shape$arg, column_name(x$shape$aes))}, `22` = sqrt(pi / 4) * 0.7528125, .default = 0.7528125)) %>%')),
+                  glue::glue('({x$size})/max({x$size}) * {adjust_size} * dplyr::recode({c(x$shape$arg, column_name(x$shape$aes))}, `22` = sqrt(pi / 4) * 0.7528125, .default = 0.7528125)) |>')),
            'dplyr::mutate(cicolour = dplyr::case_when('))
 
   if(!is.null(x$col.group)){
@@ -53,7 +53,7 @@ shape.ciundercode <- function(x) {
   if(!inherits(x$height, "unit")){return(NULL)}
 
   c('# Create column for CI under',
-    'datatoplot <- datatoplot %>%',
+    'datatoplot <- datatoplot |>',
     indent(2,
            'dplyr::mutate(ciunder =  dplyr::if_else(narrowci, FALSE, TRUE))'),
     '')
@@ -205,8 +205,8 @@ shape.cis <- function(x, type = c("all", "before", "after", "null")) {
     arg = c(x$addarg$ci,
             switch(type,
                    "all" = NULL,
-                   "before" = 'data = ~ dplyr::filter(.x, {column_name(x$ciunder)})',
-                   "after" = 'data = ~ dplyr::filter(.x, !{column_name(x$ciunder)})'),
+                   "before" = 'data = \\(x) dplyr::filter(x, {column_name(x$ciunder)})',
+                   "after" = 'data = \\(x) dplyr::filter(x, !{column_name(x$ciunder)})'),
             'colour = {quote_string(x$cicolour$arg)}',
             'linewidth = {x$base_line_size}')
   )

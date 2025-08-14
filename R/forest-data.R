@@ -164,7 +164,7 @@ forest_data <- function(
 
   # filter row.labels according to rows argument
   if (!is.null(rows)) {
-    row.labels <- row.labels %>%
+    row.labels <- row.labels |>
       dplyr::filter(.data[[row.labels.levels[[1]]]] %in% rows)
   }
 
@@ -179,24 +179,24 @@ forest_data <- function(
   extrarowkeys <- c()
   if (!is.null(addtext)) {
     for (i in 1:length(addtext)) {
-      addtext[[i]] <- dplyr::bind_rows(addtextcols, addtext[[i]]) %>%
+      addtext[[i]] <- dplyr::bind_rows(addtextcols, addtext[[i]]) |>
         dplyr::mutate(addtext = dplyr::case_when(
           !is.na(text) ~ paste0("'", text, "'"),
           !is.na(expr) ~ expr,
           !is.na(het_stat) ~ make_heterogeneity_string(het_dof, het_stat, het_p),
           !is.na(trend_stat) ~ make_trend_string(trend_stat, trend_p)
-        )) %>%
+        )) |>
         dplyr::select(key = dplyr::all_of(col.key),
-                      dplyr::all_of("addtext")) %>%
-        dplyr::mutate(key = as.character(.data$key)) %>%
-        dplyr::group_by(.data$key) %>%
-        dplyr::mutate(addtextrow = 1:dplyr::n() - 1) %>%
+                      dplyr::all_of("addtext")) |>
+        dplyr::mutate(key = as.character(.data$key)) |>
+        dplyr::group_by(.data$key) |>
+        dplyr::mutate(addtextrow = 1:dplyr::n() - 1) |>
         dplyr::ungroup()
     }
     extrarowkeys <- purrr::reduce(purrr::map(addtext,
-                                             ~ dplyr::count(., .data$key)),
-                                  dplyr::bind_rows) %>%
-      dplyr::group_by(.data$key) %>%
+                                             \(x) dplyr::count(x, .data$key)),
+                                  dplyr::bind_rows) |>
+      dplyr::group_by(.data$key) |>
       dplyr::summarise(n = max(.data$n))
     extrarowkeys <- rep(extrarowkeys$key, extrarowkeys$n)
   }
@@ -208,7 +208,7 @@ forest_data <- function(
     out <- tibble::tibble(row.label = keys,
                           key = keys,
                           row.height = NA,
-                          spacing_row = FALSE) %>%
+                          spacing_row = FALSE) |>
       dplyr::select(dplyr::all_of(c("row.label", "key", "row.height", "spacing_row")))
   } else {
 
@@ -222,13 +222,13 @@ forest_data <- function(
     n_row_label_levels <- length(row.labels.levels)
 
     ## add key column
-    row.labels <- row.labels %>%
+    row.labels <- row.labels |>
       dplyr::mutate(key = !!sym(col.key))
 
     ## make sure levels with smaller indices are not NA
     for (i in 1:n_row_label_levels){
-      row.labels <- row.labels %>%
-        dplyr::rowwise() %>%
+      row.labels <- row.labels |>
+        dplyr::rowwise() |>
         dplyr::mutate(
           "row_label_level_{i}" := {
             non_missing_values <- na.omit(dplyr::c_across(dplyr::all_of(row.labels.levels)))
@@ -237,7 +237,7 @@ forest_data <- function(
     }
 
     ## create out data frame using last level of row labels
-    out <- row.labels %>%
+    out <- row.labels |>
       dplyr::mutate(row.label = .data[[paste0("row_label_level_", n_row_label_levels)]],
                     row.height = NA,
                     spacing_row = FALSE)
@@ -245,16 +245,16 @@ forest_data <- function(
     ## iterate over row_label_level_ columns to add headings
     if (n_row_label_levels > 1){
       for (i in (n_row_label_levels - 1):1) {
-        out <- out %>%
-          dplyr::group_by(!!!syms(paste0("row_label_level_", 1:i))) %>%
-          tidyr::nest() %>%
+        out <- out |>
+          dplyr::group_by(!!!syms(paste0("row_label_level_", 1:i))) |>
+          tidyr::nest() |>
           dplyr::mutate(res = purrr::map(.data$data,
-                                         ~ add_row_label_above(.,
-                                                               .data[[paste0("row_label_level_", i)]],
-                                                               row.labels.space[[i*2-1]],
-                                                               row.labels.space[[i*2]]))) %>%
-          dplyr::select(-dplyr::all_of("data")) %>%
-          tidyr::unnest(cols = "res") %>%
+                                         \(x) add_row_label_above(x,
+                                                                  .data[[paste0("row_label_level_", i)]],
+                                                                  row.labels.space[[i*2-1]],
+                                                                  row.labels.space[[i*2]]))) |>
+          dplyr::select(-dplyr::all_of("data")) |>
+          tidyr::unnest(cols = "res") |>
           dplyr::ungroup()
       }
     }
@@ -264,7 +264,7 @@ forest_data <- function(
   out <- dplyr::mutate(out, extrarowkey = NA_character_)
   if (!is.null(addtext)) {
     for (k in 1:length(extrarowkeys)) {
-      out <- out %>%
+      out <- out |>
         dplyr::add_row(row.label = "",
                        extrarowkey = paste0(extrarowkeys[[k]]),
                        spacing_row = FALSE,
@@ -272,9 +272,9 @@ forest_data <- function(
     }
   }
 
-  out <- out %>%
-    dplyr::group_by(.data$extrarowkey) %>%
-    dplyr::mutate(addtextrow = 1:dplyr::n() - 1) %>%
+  out <- out |>
+    dplyr::group_by(.data$extrarowkey) |>
+    dplyr::mutate(addtextrow = 1:dplyr::n() - 1) |>
     dplyr::ungroup()
 
   # remove any blank rows at bottom if needed
@@ -286,9 +286,9 @@ forest_data <- function(
   out$row.label <- gsub("^\\+", "&plus;", out$row.label)
 
   # create row number and select only needed rows and columns
-  out <- out %>%
-    dplyr::mutate(row = cumsum(dplyr::coalesce(.data$row.height, 1))) %>%
-    dplyr::filter(!.data$spacing_row) %>%
+  out <- out |>
+    dplyr::mutate(row = cumsum(dplyr::coalesce(.data$row.height, 1))) |>
+    dplyr::filter(!.data$spacing_row) |>
     dplyr::select(dplyr::all_of(c("row", "row.label", "key", "extrarowkey", "addtextrow")))
 
   # make datatoplot
@@ -296,7 +296,7 @@ forest_data <- function(
 
   for (i in 1:length(panels)) {
     if (!is.null(col.lci)) {
-      panels[[i]] <- panels[[i]] %>%
+      panels[[i]] <- panels[[i]] |>
         dplyr::select(key = dplyr::all_of(col.key),
                       dplyr::all_of(col.left),
                       estimate = dplyr::all_of(col.estimate),
@@ -305,7 +305,7 @@ forest_data <- function(
                       dplyr::all_of(col.right),
                       dplyr::all_of(col.keep))
     } else {
-      panels[[i]] <- panels[[i]] %>%
+      panels[[i]] <- panels[[i]] |>
         dplyr::select(key = dplyr::all_of(col.key),
                       dplyr::all_of(col.left),
                       estimate = dplyr::all_of(col.estimate),
@@ -314,7 +314,7 @@ forest_data <- function(
                       dplyr::all_of(col.keep))
     }
 
-    out1 <- merge(out, panels[[i]], by = "key", all.x = TRUE) %>%
+    out1 <- merge(out, panels[[i]], by = "key", all.x = TRUE) |>
       dplyr::mutate(panel = panel.names[[i]])
 
     if (!is.null(addtext)){
@@ -339,7 +339,7 @@ forest_data <- function(
   }
 
   # Make 'panel' a factor, so that facet panels will be in the correct order
-  datatoplot <- datatoplot %>%
+  datatoplot <- datatoplot |>
     dplyr::mutate(panel = factor(panel,
                                  levels = panel.names,
                                  labels = panel.names,
@@ -348,7 +348,7 @@ forest_data <- function(
 
   # Calculate transformed estimates, confidence intervals, and point size
   if (!is.null(col.lci)) {
-    datatoplot <- datatoplot %>%
+    datatoplot <- datatoplot |>
       dplyr::mutate(estimate_transformed = tf(.data$estimate),
                     lci_transformed = tf(.data$lci),
                     uci_transformed = tf(.data$uci)
@@ -362,7 +362,7 @@ forest_data <- function(
       datatoplot$size <- 2*1.96*minse/(datatoplot$uci - datatoplot$lci)
     }
   } else {
-    datatoplot <- datatoplot %>%
+    datatoplot <- datatoplot |>
       dplyr::mutate(estimate_transformed = tf(.data$estimate),
                     lci_transformed = tf(.data$estimate - 1.96*.data$stderr),
                     uci_transformed = tf(.data$estimate + 1.96*.data$stderr)
@@ -378,7 +378,7 @@ forest_data <- function(
   }
 
   # Create auto_estcolumn column (text of estimates and CIs)
-  datatoplot <- datatoplot %>%
+  datatoplot <- datatoplot |>
     dplyr::mutate(auto_estcolumn = dplyr::if_else(
       !is.na(.data$estimate),
       make_auto_estcolumn_text(.data$estimate_transformed,
@@ -386,28 +386,28 @@ forest_data <- function(
                                .data$uci_transformed,
                                digits,
                                ci.delim),
-      NA_character_)) %>%
-    dplyr::select(-dplyr::any_of(c("extrarowkey", "addtextrow"))) %>%
+      NA_character_)) |>
+    dplyr::select(-dplyr::any_of(c("extrarowkey", "addtextrow"))) |>
     dplyr::arrange(panel, row)
 
   # Create diamonds_polygon column
   datatoplot$as_diamond <- FALSE
   if (!is.null(diamond) | !is.null(col.diamond)){
-    datatoplot <- datatoplot %>%
-      dplyr::rowwise() %>%
+    datatoplot <- datatoplot |>
+      dplyr::rowwise() |>
       dplyr::mutate(
         diamond_polygon = list(data.frame(x = c(.data$lci_transformed,
                                                 .data$estimate_transformed,
                                                 .data$uci_transformed,
                                                 .data$estimate_transformed),
-                                          y = c(0, -0.25, 0, 0.25)))) %>%
+                                          y = c(0, -0.25, 0, 0.25)))) |>
       dplyr::ungroup()
 
     if (!is.null(col.diamond)){
-      datatoplot <- datatoplot %>%
+      datatoplot <- datatoplot |>
         dplyr::mutate(diamond_polygon = dplyr::if_else(.data$key %in% diamond | .data[[col.diamond]], .data$diamond_polygon, NA))
     } else {
-      datatoplot <- datatoplot %>%
+      datatoplot <- datatoplot |>
         dplyr::mutate(diamond_polygon = dplyr::if_else(.data$key %in% diamond, .data$diamond_polygon, NA))
     }
     datatoplot$as_diamond <- !sapply(datatoplot$diamond_polygon, is.null)
@@ -416,15 +416,15 @@ forest_data <- function(
 
   # Create rowlabels data frame and add as attribute to datatoplot data frame
   ## Add bold formatting to row labels (if there is no estimate, or key is in bold.labels)
-  rowlabels <- datatoplot %>%
-    dplyr::group_by(.data$row) %>%
+  rowlabels <- datatoplot |>
+    dplyr::group_by(.data$row) |>
     dplyr::summarise(row.label = dplyr::first(.data$row.label),
                      bold = all(is.na(.data$estimate_transformed) | all(.data$key %in% bold.labels)),
-                     .groups = "drop") %>%
+                     .groups = "drop") |>
     dplyr::mutate(row.label = dplyr::if_else(.data$bold & .data$row.label != "",
                                              paste0("**", .data$row.label, "**"),
-                                             as.character(.data$row.label))) %>%
-    dplyr::arrange(.data$row) %>%
+                                             as.character(.data$row.label))) |>
+    dplyr::arrange(.data$row) |>
     dplyr::select(dplyr::all_of(c("row", "row.label")))
 
   attr(datatoplot, "rowlabels") <- rowlabels
@@ -481,7 +481,7 @@ add_row_label_above <- function(data,
     out <- tibble::add_row(data,
                            row.label = !!heading,
                            spacing_row = FALSE,
-                           .before = 1) %>%
+                           .before = 1) |>
       tibble::add_row(row.label = "",
                       row.height = blank_after_heading,
                       spacing_row = TRUE,

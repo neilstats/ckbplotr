@@ -758,9 +758,9 @@ forest_plot <- function(
 #' @keywords internal
 #' @noRd
 gettextwidths <- function(x){
-  purrr::map_dbl(x, ~ max(purrr::map_dbl(., ~ grid::convertWidth(unit(1, "strwidth", data = as.character(.)),
-                                                                 "mm",
-                                                                 valueOnly = T))))
+  purrr::map_dbl(x, \(i) max(purrr::map_dbl(i, \(j) grid::convertWidth(unit(1, "strwidth", data = as.character(j)),
+                                                                       "mm",
+                                                                       valueOnly = T))))
 }
 
 

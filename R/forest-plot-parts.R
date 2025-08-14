@@ -102,7 +102,7 @@ forest.plotdiamondscode <- function(x) {
             'colour = {quote_string(x$colour_list$arg)}',
             'fill = {quote_string(x$fill_list$arg)}',
             'linewidth = {x$diamonds.linewidth}',
-            'data = ~ tidyr::unnest(., diamond_polygon)')
+            'data = \\(x) tidyr::unnest(x, diamond_polygon)')
   )
 }
 
@@ -155,7 +155,7 @@ forest.nullline <- function(x) {
       arg = c(x$addarg$nullline,
               'linewidth = {x$base_line_size}',
               'colour    = {quote_string(x$plotcolour)}',
-              'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
+              'data = \\(x) dplyr::tibble(panel = sort(unique(x[["panel"]]))',
               indent(23, 'nullval = {deparse(x$nullval)})'))
     )
   }
@@ -177,7 +177,7 @@ forest.plot.points <- function(x) {
               'colour = {column_name(x$colour_list$aes)}',
               'fill   = {c(column_name(x$fill_list$aes), x$fill_list$string_aes)}'),
       arg = c(x$addarg$point,
-              'data   = ~ dplyr::filter(.x',
+              'data   = \\(x) dplyr::filter(x',
               indent(25, c('estimate_transformed > {x$xfrom}',
                            'estimate_transformed < {x$xto}',
                            '!as_diamond)')),
@@ -218,9 +218,9 @@ forest.cis <- function(x, type = c("all", "before", "after", "null")) {
             'colour = {c(column_name(x$cicolour_list$aes[1]), x$cicolour_list$string_aes)}'),
     arg = c(x$addarg$ci,
             switch(type,
-                   "all"    = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), !as_diamond)',
-                   "before" = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), {x$ciunder}, !as_diamond)',
-                   "after"  = 'data = ~ dplyr::filter(.x, !is.na(estimate_transformed), !{x$ciunder}, !as_diamond)'),
+                   "all"    = 'data = \\(x) dplyr::filter(x, !is.na(estimate_transformed), !as_diamond)',
+                   "before" = 'data = \\(x) dplyr::filter(x, !is.na(estimate_transformed), {x$ciunder}, !as_diamond)',
+                   "after"  = 'data = \\(x) dplyr::filter(x, !is.na(estimate_transformed), !{x$ciunder}, !as_diamond)'),
             'colour    = {quote_string(x$cicolour_list$arg[1])}',
             'width     = 0',
             'linewidth = {x$base_line_size}',
@@ -267,8 +267,8 @@ forest.arrows <- function(x) {
             'xend   = xend',
             'colour = {c(column_name(x$cicolour_list$aes[1]), x$cicolour_list$string_aes)}'),
     arg = c(x$addarg$ci,
-            'data      = ~ dplyr::bind_rows(dplyr::filter(.x, uci_transformed > {x$xto}) %>% dplyr::mutate(x = {x$xto} - 1e-6, xend = {x$xto})',
-            indent(31, 'dplyr::filter(.x, lci_transformed < {x$xfrom}) %>% dplyr::mutate(x = {x$xfrom} + 1e-6, xend = {x$xfrom}))'),
+            'data      = \\(d) dplyr::bind_rows(dplyr::filter(d, uci_transformed > {x$xto}) |> dplyr::mutate(x = {x$xto} - 1e-6, xend = {x$xto})',
+            indent(31, 'dplyr::filter(d, lci_transformed < {x$xfrom}) |> dplyr::mutate(x = {x$xfrom} + 1e-6, xend = {x$xfrom}))'),
             'colour    = {quote_string(x$cicolour_list$arg[1])}',
             'linewidth = {x$base_line_size}',
             'arrow     = arrow(type = "closed", length = unit({8 * x$base_line_size}, "pt"))',
@@ -330,7 +330,7 @@ forest.columns.code <- function(column,
               'fontface = "bold"',
               'lineheight = 1',
               'parse    = {parse %in% c("heading", "both")}',
-              'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
+              'data = \\(x) dplyr::tibble(panel = sort(unique(x[["panel"]]))',
               indent(23, 'title = {ds(unlist(heading))})'))
     )
   )
@@ -461,7 +461,7 @@ forest.xlab.panel.headings <- function(x) {
               'vjust    = 1',
               'move_y   = unit(-{x$text_size*2.4}, "mm")',
               'fontface = "bold"',
-              'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
+              'data = \\(x) dplyr::tibble(panel = sort(unique(x[["panel"]]))',
               indent(23, 'xlab = {ds(x$xlab)})'))
     ),
     if (!all(x$panel.headings == "")){
@@ -482,7 +482,7 @@ forest.xlab.panel.headings <- function(x) {
                 'size     = {x$text_size}',
                 'colour   = {quote_string(x$plotcolour)}',
                 'fontface = "bold"',
-                'data = ~ dplyr::tibble(panel = sort(unique(.[["panel"]]))',
+                'data = \\(x) dplyr::tibble(panel = sort(unique(x[["panel"]]))',
                 indent(23, 'title = {ds(x$panel.headings)})'))
       )
     }
