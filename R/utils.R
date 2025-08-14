@@ -81,14 +81,14 @@ make_layer <- function(name       = NULL,
   }
 
   if (length(aes) > 0){
-    aes <- indent(4, paste0(aes, ","))
+    aes <- indent(4, ifelse(endsWith(aes, ","), aes, paste0(aes, ",")))
     aes[[1]] <- paste0("aes(", trimws(aes[[1]]))
     aes[[length(aes)]] <- sub(",$", "),", aes[[length(aes)]])
   } else {
     aes <- NULL
   }
   if (length(arg) > 0){
-    arg <- paste0(arg, ",")
+    arg <- ifelse(endsWith(arg, ","), arg, paste0(arg, ","))
   } else {
     arg <- NULL
   }
