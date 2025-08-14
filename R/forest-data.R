@@ -186,8 +186,8 @@ forest_data <- function(
           !is.na(het_stat) ~ make_heterogeneity_string(het_dof, het_stat, het_p),
           !is.na(trend_stat) ~ make_trend_string(trend_stat, trend_p)
         )) %>%
-        dplyr::select(key = !!rlang::sym(col.key),
-                      .data$addtext) %>%
+        dplyr::select(key = dplyr::all_of(col.key),
+                      dplyr::all_of("addtext")) %>%
         dplyr::mutate(key = as.character(.data$key)) %>%
         dplyr::group_by(.data$key) %>%
         dplyr::mutate(addtextrow = 1:dplyr::n() - 1) %>%
@@ -209,7 +209,7 @@ forest_data <- function(
                           key = keys,
                           row.height = NA,
                           spacing_row = FALSE) %>%
-      dplyr::select(.data$row.label, .data$key, .data$row.height, .data$spacing_row)
+      dplyr::select(dplyr::all_of(c("row.label", "key", "row.height", "spacing_row")))
   } else {
 
     if (!col.key %in% names(row.labels)) rlang::abort(glue::glue("{col.key} must be a column in {deparse(substitute(row.labels))}"))
@@ -253,7 +253,7 @@ forest_data <- function(
                                                                .data[[paste0("row_label_level_", i)]],
                                                                row.labels.space[[i*2-1]],
                                                                row.labels.space[[i*2]]))) %>%
-          dplyr::select(-.data$data) %>%
+          dplyr::select(-dplyr::all_of("data")) %>%
           tidyr::unnest(cols = "res") %>%
           dplyr::ungroup()
       }
@@ -289,7 +289,7 @@ forest_data <- function(
   out <- out %>%
     dplyr::mutate(row = cumsum(dplyr::coalesce(.data$row.height, 1))) %>%
     dplyr::filter(!.data$spacing_row) %>%
-    dplyr::select(.data$row, .data$row.label, .data$key, .data$extrarowkey, .data$addtextrow)
+    dplyr::select(dplyr::all_of(c("row", "row.label", "key", "extrarowkey", "addtextrow")))
 
   # make datatoplot
   datatoplot <- tibble::tibble()
@@ -297,21 +297,21 @@ forest_data <- function(
   for (i in 1:length(panels)) {
     if (!is.null(col.lci)) {
       panels[[i]] <- panels[[i]] %>%
-        dplyr::select(key = !!rlang::sym(col.key),
-                      !!!rlang::syms(col.left),
-                      estimate = !!rlang::sym(col.estimate),
-                      lci      = !!rlang::sym(col.lci),
-                      uci      = !!rlang::sym(col.uci),
-                      !!!rlang::syms(col.right),
-                      !!!rlang::syms(col.keep))
+        dplyr::select(key = dplyr::all_of(col.key),
+                      dplyr::all_of(col.left),
+                      estimate = dplyr::all_of(col.estimate),
+                      lci      = dplyr::all_of(col.lci),
+                      uci      = dplyr::all_of(col.uci),
+                      dplyr::all_of(col.right),
+                      dplyr::all_of(col.keep))
     } else {
       panels[[i]] <- panels[[i]] %>%
-        dplyr::select(key = !!rlang::sym(col.key),
-                      !!!rlang::syms(col.left),
-                      estimate = !!rlang::sym(col.estimate),
-                      stderr   = !!rlang::sym(col.stderr),
-                      !!!rlang::syms(col.right),
-                      !!!rlang::syms(col.keep))
+        dplyr::select(key = dplyr::all_of(col.key),
+                      dplyr::all_of(col.left),
+                      estimate = dplyr::all_of(col.estimate),
+                      stderr   = dplyr::all_of(col.stderr),
+                      dplyr::all_of(col.right),
+                      dplyr::all_of(col.keep))
     }
 
     out1 <- merge(out, panels[[i]], by = "key", all.x = TRUE) %>%
@@ -387,7 +387,7 @@ forest_data <- function(
                                digits,
                                ci.delim),
       NA_character_)) %>%
-    dplyr::select(-.data$extrarowkey, -.data$addtextrow) %>%
+    dplyr::select(-dplyr::any_of(c("extrarowkey", "addtextrow"))) %>%
     dplyr::arrange(panel, row)
 
   # Create diamonds_polygon column
@@ -425,7 +425,7 @@ forest_data <- function(
                                              paste0("**", .data$row.label, "**"),
                                              as.character(.data$row.label))) %>%
     dplyr::arrange(.data$row) %>%
-    dplyr::select(.data$row, .data$row.label)
+    dplyr::select(dplyr::all_of(c("row", "row.label")))
 
   attr(datatoplot, "rowlabels") <- rowlabels
 
