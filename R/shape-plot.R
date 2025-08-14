@@ -93,6 +93,7 @@ shape_plot <- function(data,
                        ext           = c(0.025, 0.025),
                        ratio         = 1.5,
                        plot.margin   = margin(0.5, 1.5, 0.5, 0.5, "lines"),
+                       clip          = "off",
                        base_size     = 11,
                        base_line_size = base_size/22,
                        stroke        = base_size/22,
@@ -329,6 +330,7 @@ shape_plot <- function(data,
   ext <- deparse(ext)
   ratio <- deparse(ratio)
   axis.title.margin <- deparse(axis.title.margin)
+  clip <- deparse(clip)
 
   if (!is.null(add$start)){
     add$start <- deparse1(substitute(add)$start)
@@ -351,6 +353,7 @@ shape_plot <- function(data,
     cicolour,
     cicolours,
     ciunder,
+    clip,
     col.estimate,
     col.group,
     col.lci,

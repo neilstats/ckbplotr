@@ -34,6 +34,7 @@ shape_plot(
   ext = c(0.025, 0.025),
   ratio = 1.5,
   plot.margin = margin(0.5, 1.5, 0.5, 0.5, "lines"),
+  clip = "off",
   base_size = 11,
   base_line_size = base_size/22,
   stroke = base_size/22,
@@ -116,6 +117,8 @@ estimates. (Default: 3)}
 \item{ratio}{The ratio (y-axis:x-axis) to use for the plot. (Default: 1.5)}
 
 \item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(0.5, 1.5, 0.5, 0.5, "lines"))}
+
+\item{clip}{Passed to clip argument of \code{ggplot2::coord_cartesian()}. (Default: "on")}
 
 \item{base_size}{base font size, given in pts.}
 

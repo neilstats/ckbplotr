@@ -246,7 +246,8 @@ shape.ckb.style <- function(x) {
             'base_line_size = {x$base_line_size}',
             'colour         = {quote_string(x$plotcolour)}',
             'axis.title.margin = {x$axis.title.margin}',
-            'plot.margin    = {x$plot.margin}')
+            'plot.margin    = {x$plot.margin}',
+            'clip           = {x$clip}')
   )
 }
 
