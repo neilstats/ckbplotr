@@ -413,6 +413,7 @@ shape_plot <- function(data,
            shape.estimates.text(spec),                 # text above points
            shape.n.events.text(spec),                  # number below points
            shape.cis(spec, type = spec$ci_order[[2]]), # CI lines plotted after points
+           shape.arrows(spec),                         # arrows for CIs
            shape.scales(spec),                         # scales
            shape.axes(spec),                           # axes
            shape.titles(spec),                         # titles

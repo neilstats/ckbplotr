@@ -159,6 +159,11 @@ shape.estimates.points <- function(x) {
 #' code for text above points
 #' @noRd
 shape.estimates.text <- function(x) {
+
+  if (x$ylims != "NULL") {
+    x$uci_string <- glue::glue("pmax({x$ymin}, pmin({x$ymax}, {x$uci_string}))")
+  }
+
   make_layer(
     '# Plot point estimates text',
     f = "geom_text",
@@ -176,6 +181,11 @@ shape.estimates.text <- function(x) {
 #' @noRd
 shape.n.events.text <- function(x) {
   if (is.null(x$col.n)){return(NULL)}
+
+  if (x$ylims != "NULL") {
+    x$lci_string <- glue::glue("pmin({x$ymax}, pmax({x$ymin}, {x$lci_string}))")
+  }
+
   make_layer(
     '# Plot n events text',
     f = "geom_text",
@@ -195,6 +205,12 @@ shape.n.events.text <- function(x) {
 #' @noRd
 shape.cis <- function(x, type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
+
+  if (x$ylims != "NULL") {
+    x$lci_string <- glue::glue("pmin({x$ymax}, pmax({x$ymin}, {x$lci_string}))")
+    x$uci_string <- glue::glue("pmax({x$ymin}, pmin({x$ymax}, {x$uci_string}))")
+  }
+
   make_layer(
     '# Plot the CIs',
     f = "geom_linerange",
@@ -212,6 +228,29 @@ shape.cis <- function(x, type = c("all", "before", "after", "null")) {
   )
 }
 
+
+
+#' code to add arrows to CIs
+#' @noRd
+shape.arrows <- function(x) {
+  if (x$ylims == "NULL"){return(NULL)}
+
+  make_layer(
+    '# Add tiny segments with arrows when the CIs go outside axis limits',
+    f = 'geom_segment',
+    aes = c(x$addaes$ci,
+            'y = y',
+            'yend = yend',
+            'colour = {column_name(x$cicolour$aes)}'),
+    arg = c(x$addarg$ci,
+            'data      = \\(d) dplyr::bind_rows(dplyr::filter(d, {x$uci_string} > {x$ymax}) |> dplyr::mutate(y = {x$ymax} - 1e-6, yend = {x$ymax})',
+            indent(31, 'dplyr::filter(d, {x$lci_string} < {x$ymin}) |> dplyr::mutate(y = {x$ymin} + 1e-6, yend = {x$ymin}))'),
+            'colour = {quote_string(x$cicolour$arg)}',
+            'linewidth = {x$base_line_size}',
+            'arrow     = arrow(type = "closed", length = unit({8 * x$base_line_size}, "pt"))',
+            'na.rm     = TRUE')
+  )
+}
 
 
 #' code for titles

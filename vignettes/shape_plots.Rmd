@@ -59,6 +59,18 @@ shape_plot(my_results,
 ```
 
 
+Setting `ylims` will also make the function add code to show arrows where confidence interval lines exceed the limits.
+```{r}
+shape_plot(my_results,
+           col.x        = "risk_factor",
+           xlims        = c(15, 30),
+           ylims        = c(0.95, 1.4),
+           exponentiate = TRUE,
+           xlab         = "BMI (kg/m\u00B2)",
+           ylab         = "Hazard Ratio (95% CI)")
+```
+
+
 ## Using groups
 Use `col.group` to plot results for different groups (using shades of grey for the fill colour).
 ```{r}
