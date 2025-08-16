@@ -25,7 +25,7 @@ shape_plot(
   cicolour = colour,
   fill = colour,
   ciunder = NULL,
-  lines = FALSE,
+  lines = c("none", "lmw", "lm", "connect"),
   xlims = NULL,
   ylims = NULL,
   height = NULL,
@@ -100,7 +100,11 @@ estimates. (Default: 3)}
 
 \item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 
-\item{lines}{Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)}
+\item{lines}{Add lines to the plot.
+"lmw" = Linear fit through estimates, weighted by inverse variance.
+"lm" = Unweighted linear fit through estimates.
+"connect" = Lines connecting each estimate.
+(Default: "none")}
 
 \item{xlims}{A numeric vector of length two. The limits of the x-axis.}
 

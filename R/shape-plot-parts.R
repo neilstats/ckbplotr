@@ -116,24 +116,50 @@ shape.scales <- function(x) {
 #' code for lines
 #' @noRd
 shape.lines <- function(x) {
-  if (isFALSE(x$lines)){return(NULL)}
-  make_layer(
-    '# Plot lines (linear fit through estimates, weighted by inverse variance)',
-    f = "stat_smooth",
-    aes = c(x$addaes$lines,
-            if (!is.null(x$col.lci)) {
-              'weight = 1/(({column_name(x$col.estimate)} - {column_name(x$col.lci)})^2)'
-            } else {
-              'weight = 1/({column_name(x$col.stderr)}^2)'
-            }),
-    arg = c(x$addarg$lines,
-            'method    = "glm"',
-            'formula   = y ~ x',
-            'se        = FALSE',
-            'colour    = {quote_string(x$plotcolour)}',
-            'linetype  = "dashed"',
-            'linewidth = 0.25')
-  )
+  if (x$lines == "none"){return(NULL)}
+
+  if (x$lines == "lmw") {
+    make_layer(
+      '# Plot lines (linear fit through estimates, weighted by inverse variance)',
+      f = "stat_smooth",
+      aes = c(x$addaes$lines,
+              if (!is.null(x$col.lci)) {
+                'weight = 1/(({column_name(x$col.estimate)} - {column_name(x$col.lci)})^2)'
+              } else {
+                'weight = 1/({column_name(x$col.stderr)}^2)'
+              }),
+      arg = c(x$addarg$lines,
+              'method    = "glm"',
+              'formula   = y ~ x',
+              'se        = FALSE',
+              'colour    = {quote_string(x$plotcolour)}',
+              'linetype  = "dashed"',
+              'linewidth = 0.25')
+    )
+  } else if (x$lines == "lm") {
+    make_layer(
+      '# Plot lines (linear fit through estimates, unweighted)',
+      f = "stat_smooth",
+      aes = c(x$addaes$lines),
+      arg = c(x$addarg$lines,
+              'method    = "glm"',
+              'formula   = y ~ x',
+              'se        = FALSE',
+              'colour    = {quote_string(x$plotcolour)}',
+              'linetype  = "dashed"',
+              'linewidth = 0.25')
+    )
+  } else if (x$lines == "connect") {
+    make_layer(
+      '# Plot lines (connect points)',
+      f = "geom_line",
+      aes = c(x$addaes$lines),
+      arg = c(x$addarg$lines,
+              'colour    = {quote_string(x$plotcolour)}',
+              'linetype  = "solid"',
+              'linewidth = 0.25')
+    )
+  }
 }
 
 

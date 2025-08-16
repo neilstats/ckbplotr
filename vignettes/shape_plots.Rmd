@@ -100,7 +100,11 @@ shape_plot(my_results,
 
 
 ## Adding lines
-Use `lines` to add lines (linear fit through estimates on plotted scale, weighted by inverse variance) for each group.
+Use `lines` to add lines for each group:
+
+1. "lmw" = Linear fit through estimates, weighted by inverse variance.
+2. "lm" = Unweighted linear fit through estimates.
+3. "connect" = Lines connecting each estimate.
 ```{r}
 shape_plot(my_results,
            col.x        = "risk_factor",
@@ -111,7 +115,7 @@ shape_plot(my_results,
            ylab         = "Hazard Ratio (95% CI)",
            col.group    = "group",
            ciunder      = TRUE,
-           lines        = TRUE)
+           lines        = "lmw")
 ```
 
 

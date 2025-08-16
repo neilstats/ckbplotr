@@ -19,7 +19,11 @@
 #' @param cicolour Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
 #' @param fill Fill colour of points. Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour)
 #' @param ciunder Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
-#' @param lines Plot lines (linear fit through estimates, weighted by inverse variance). (Default: FALSE)
+#' @param lines Add lines to the plot.
+#' "lmw" = Linear fit through estimates, weighted by inverse variance.
+#' "lm" = Unweighted linear fit through estimates.
+#' "connect" = Lines connecting each estimate.
+#' (Default: "none")
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
 #'   use log scale on the axis. (Default: FALSE)
 #' @param logscale Use log scale for vertical axis. (Default: exponentiate)
@@ -84,7 +88,7 @@ shape_plot <- function(data,
                        cicolour      = colour,
                        fill          = colour,
                        ciunder       = NULL,
-                       lines         = FALSE,
+                       lines         = c("none", "lmw", "lm", "connect"),
                        xlims         = NULL,
                        ylims         = NULL,
                        height        = NULL,
@@ -117,6 +121,13 @@ shape_plot <- function(data,
   if (!is.null(col.lci) &&  is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
   if ( is.null(col.lci) && !is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
   if (!is.null(col.group) && !missing(fill)) rlang::abort("col.group and fill both control fill, so do not specify both")
+
+
+  if (is.logical(lines)) {
+    lines <- ifelse(lines, "lmw", "none")
+  }
+  lines <- match.arg(lines)
+
 
   ## check if confidence intervals may be hidden
   if (missing(height)){
