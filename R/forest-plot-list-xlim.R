@@ -39,6 +39,8 @@ forest_plot_list_xlim <- function(
   }
   if (!is.list(right.heading)){
     right.heading <- rep(list(right.heading), length(xlim))
+  } else if (length(right.heading) < length(xlim)) {
+    right.heading <- rep(right.heading, length(xlim))
   }
   nullval <- as.list(nullval)
   if (length(nullval) < length(xlim)){
