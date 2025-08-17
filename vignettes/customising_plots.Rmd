@@ -95,52 +95,34 @@ forest_plot(my_results,
 
 
 
-
-## The data.function argument
-Use the `data.function` argument in `forest_plot()` to change the plot data immediately before plotting. 
-
-For example, you can tweak the text in the generated estimates column:
-```{r}
-my_func <- function(dfr){
-  dfr$auto_estcolumn <- sub("\\(", "[", dfr$auto_estcolumn)
-  dfr$auto_estcolumn <- sub("\\)", "]", dfr$auto_estcolumn)
-  return(dfr)
-}
-
-forest_plot(my_results,
-            data.function = "my_func")
-```
-
-
-
-
-
 ## Adding aesthetics and arguments
 The addaes and addarg arguments in `shape_plot()` and `forest_plot()` can be used to add additional aesthetics and arguments code to the ggplot layers created by the functions. These arguments must be named lists of character strings, and the names of elements defines where the aesthetics/arguments code is added.
 
-In `shape_plot()`  the following names will add aesthetics and arguments to layers:
+In `shape_plot()` the following names will add aesthetics and arguments to layers:
 
 | name      | layer that plots                      |
 |-----------|---------------------------------------|
 | lines     | lines of linear fit through estimates |
-| point     | point estimates                       |
-| estimates | text of estimates                     |
-| n         | text of number of events (n)          |
+| estimates.points | point estimates |
+| estimates.text | text of estimates |
+| n.text         | text of number of events (n)          |
 | ci        | confidence intervals                  |
+| theme | theme |
 
 In `forest_plot()` the following names will add aesthetics and arguments to layers:
 
 | name       | layer that plots     |
 |------------|----------------------|
 | ci         | confidence intervals |
-| point      | point estimates      |
+| points     | point estimates      |
 | diamonds   | diamonds             |
 | col.right/col.left | col.right/col.left columns |
 | heading.right/heading.left | col.right/col.left column headings |
 | xlab       | x-axis label         |
-| panel.headings (or panel.name) | headings above panels   |
+| panel.headings | headings above panels   |
 | nullline   | line at null         |
 | addtext    | 'addtext' text       |
+| theme | theme |
 
 Where duplicate aesthetics/arguments might be defined and created, they are kept with the priority:
 
@@ -197,3 +179,70 @@ forest_plot(list("a) Observational" = my_resultsA,
             addarg = list(nullline = c("linetype = 'dashed'",
                                        "colour = 'darkorange'")))
 ```
+
+
+
+
+## Replacing parts of the plot
+The `add` argument can also be used to replace parts of the plot.
+
+In `shape_plot()` the following names will replace parts of the plot:
+
+| name      | what code is replaced                 |
+|-----------|---------------------------------------|
+| scale.x | x-axis scale |
+| scale.y | y-axis scale |
+| scale.radius | scale for point size |
+| scale.shape | scale for shape |
+| scale.colour | scale for colour |
+| scale.fill | scale for fill |
+| estimates.points | point estimates |
+| estimates.text | estimates text |
+| n.text | text below points |
+| ci.before | confidence interval lines (before the point estimates) |
+| ci.after | confidence interval lines (after the point estimates) |
+| arrows | arrows |
+| ckb.style | CKB plot style |
+| theme | plot theme |
+
+In `forest_plot()` the following names will replace parts of the plot:
+
+| name      | what code is replaced                 |
+|-----------|---------------------------------------|
+| coord | the coordinate system |
+| facet | the facetting (facet_wrap()) |
+| scale.x | x-axis scale |
+| scale.y | y-axis scale |
+| scale.radius | scale for point size |
+| scale.shape | scale for shape |
+| scale.colour | scale for colour |
+| scale.fill | scale for fill |
+| points | point estimates |
+| nullline | line a null value |
+| diamonds | diamonds |
+| ci.before | confidence interval lines (before the point estimates) |
+| ci.after | confidence interval lines (after the point estimates) |
+| arrows | arrows |
+| xlab | x-axis label |
+| panel.headings | panel headings |
+| panel.size | panel sizing |
+| theme | plot theme |
+
+
+
+
+## The data.function argument
+Use the `data.function` argument in `forest_plot()` to change the plot data immediately before plotting. 
+
+For example, you can tweak the text in the generated estimates column:
+```{r}
+my_func <- function(dfr){
+  dfr$auto_estcolumn <- sub("\\(", "[", dfr$auto_estcolumn)
+  dfr$auto_estcolumn <- sub("\\)", "]", dfr$auto_estcolumn)
+  return(dfr)
+}
+
+forest_plot(my_results,
+            data.function = "my_func")
+```
+

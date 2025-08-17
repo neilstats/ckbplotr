@@ -269,6 +269,11 @@ forest_plot <- function(
     heading.rule <- col.heading.rule
   }
 
+  # Handle old names ----
+  addaes$points <- c(addaes$points, addaes$point)
+  addarg$points <- c(addarg$points, addarg$point)
+  addaes$panel.headings <- c(addaes$panel.headings, addaes$panel.name)
+  addarg$panel.headings <- c(addarg$panel.headings, addarg$panel.name)
 
   # If envir not provided, make new environment ----
   # with parent frame same as function call
@@ -618,11 +623,10 @@ forest_plot <- function(
   plot.margin <- substitute(plot.margin)
 
   # Deparse add objects ----
-  if (!is.null(add$start)){
-    add$start <- deparse1(substitute(add)$start)
-  }
-  if (!is.null(add$end)){
-    add$end <- deparse1(substitute(add)$end)
+  for (i in names(add)) {
+    if (!is.null(add[[i]])){
+      add[[i]] <- deparse1(substitute(add)[[i]])
+    }
   }
 
   # Create plot specification list ----
@@ -683,7 +687,6 @@ forest_plot <- function(
     panel.height,
     panel.names,
     panel.width,
-    panels,
     plot.margin,
     plotcolour,
     pointsize,
@@ -718,20 +721,26 @@ forest_plot <- function(
     forest.start.ggplot(),        # initiate the ggplot
     indent(2,
            forest.add.start(spec),                      # add$start
-           forest.facet(),                              # facets
+           forest.facet(spec),                          # facets
            forest.nullline(spec),                       # line at null
-           forest.cis(spec, type = spec$ci_order[[1]]), # CI lines plotted before points
-           forest.plot.points(spec),                    # points
-           forest.cis(spec, type = spec$ci_order[[2]]), # CI lines plotted after points
+           forest.ci.before(spec),                      # CI lines plotted before points
+           forest.points(spec),                         # points
+           forest.ci.after(spec),                       # CI lines plotted after points
            forest.arrows(spec),                         # arrows for CIs
            forest.plotdiamondscode(spec),               # diamonds
-           forest.scales(spec),                         # scales and coordinates
+           forest.scale.shape(spec),                    # shape scale
+           forest.scale.fill(spec),                     # fill scale
+           forest.scale.colour(spec),                   # colour scale
            forest.columns.right(spec),                  # columns to right of panel
            forest.columns.left(spec),                   # columns to left of panel
            forest.addtext(spec),                        # addtext
-           forest.column.headings.rule(spec),
-           forest.xlab.panel.headings(spec),            # x-axis labels and panel headings
-           forest.axes(spec),                           # axes
+           forest.column.headings.rule(spec),           # rule under column headings
+           forest.xlab(spec),                           # x-axis labels
+           forest.panel.headings(spec),                 # panel headings
+           forest.coord(spec),                          # coordinate system
+           forest.scale.x(spec),                        # x-axis scale
+           forest.scale.y(spec),                        # y-axis scale
+           forest.scale.radius(spec),                   # radius scale
            forest.panel.size(spec),                     # panel size
            forest.title(spec),                          # plot title
            forest.theme(spec),                          # theme

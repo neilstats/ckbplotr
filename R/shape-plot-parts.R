@@ -72,6 +72,10 @@ shape.start.ggplot <- function(x) {
 #' code for x axis scale
 #' @noRd
 shape.scale.x <- function(x) {
+  if (!is.null(x$add$scale.x)) {
+    return(c('# Set the x-axis scale', paste(x$add$scale.x, " +"), ''))
+  }
+
   if (x$xscale == "discrete") {
     return(
       c('# Set the x-axis scale [scale.x]',
@@ -99,6 +103,10 @@ shape.scale.x <- function(x) {
 #' code for y axis scale
 #' @noRd
 shape.scale.y <- function(x) {
+  if (!is.null(x$add$scale.y)) {
+    return(c('# Set the y-axis scale', paste(x$add$scale.y, " +"), ''))
+  }
+
   if (x$ybreaks == "NULL" & x$yscale == "identity") {
     return(NULL)
   }
@@ -116,23 +124,58 @@ shape.scale.y <- function(x) {
 }
 
 
-#' code for scales
+#' code for radius scale
 #' @noRd
-shape.scales <- function(x) {
-  c(
-    make_layer(
-      '# Set the scale for the size of boxes',
-      f = "scale_radius",
-      arg = c('guide  = "none"',
-              'limits = c(0, {x$one_over_minse})',
-              'range  = c(0, {x$pointsize})')
-    ),
-    '# Use identity for aesthetic scales',
+shape.scale.radius <- function(x) {
+  if (!is.null(x$add$scale.radius)) {
+    return(c('# Set the scale for the size of boxes', paste(x$add$scale.radius, " +"), ''))
+  }
+
+  make_layer(
+    '# Set the scale for the size of boxes',
+    f = "scale_radius",
+    arg = c('guide  = "none"',
+            'limits = c(0, {x$one_over_minse})',
+            'range  = c(0, {x$pointsize})')
+  )
+}
+
+#' code for shape scale
+#' @noRd
+shape.scale.shape <- function(x) {
+  if (!is.null(x$add$scale.shape)) {
+    return(c('# Set the scale for shape', paste(x$add$scale.shape, " +"), ''))
+  }
+
+  c('# Set the scale for shape',
     'scale_shape_identity() +',
+    '')
+}
+
+#' code for colour scale
+#' @noRd
+shape.scale.colour <- function(x) {
+  if (!is.null(x$add$scale.colour)) {
+    return(c('# Set the scale for colour', paste(x$add$scale.colour, " +"), ''))
+  }
+
+  c('# Set the scale for colour',
     'scale_colour_identity() +',
+    '')
+}
+
+#' code for fill scale
+#' @noRd
+shape.scale.fill <- function(x) {
+  if (!is.null(x$add$scale.fill)) {
+    return(c('# Set the scale for fill', paste(x$add$scale.fill, " +"), ''))
+  }
+
+  c('# Set the scale for fill',
     x$scale_fill_string,
     '')
 }
+
 
 #' code for lines
 #' @noRd
@@ -187,15 +230,19 @@ shape.lines <- function(x) {
 #' code for points at estimates
 #' @noRd
 shape.estimates.points <- function(x) {
+  if (!is.null(x$add$estimates.points)) {
+    return(c('# Plot the point estimates', paste(x$add$estimates.points, " +"), ''))
+  }
+
   make_layer(
     '# Plot the point estimates',
     f = "geom_point",
-    aes = c(x$addaes$point,
+    aes = c(x$addaes$estimates.points,
             'size   = {x$size}',
             'shape  = {column_name(x$shape$aes)}',
             '{x$fill_string$aes}',
             'colour = {column_name(x$colour$aes)}'),
-    arg = c(x$addarg$point,
+    arg = c(x$addarg$estimates.points,
             'shape  = {x$shape$arg}',
             'colour = {quote_string(x$colour$arg)}',
             '{x$fill_string$arg}',
@@ -206,6 +253,9 @@ shape.estimates.points <- function(x) {
 #' code for text above points
 #' @noRd
 shape.estimates.text <- function(x) {
+  if (!is.null(x$add$estimates.text)) {
+    return(c('# Plot point estimates text', paste(x$add$estimates.text, " +"), ''))
+  }
 
   if (x$ylims != "NULL") {
     x$uci_string <- glue::glue("pmax({x$ymin}, pmin({x$ymax}, {x$uci_string}))")
@@ -214,10 +264,10 @@ shape.estimates.text <- function(x) {
   make_layer(
     '# Plot point estimates text',
     f = "geom_text",
-    aes = c(x$addaes$estimates,
+    aes = c(x$addaes$estimates.text,
             'y     = {x$uci_string}',
             'label = format(round({x$est_string}, {x$digits}), nsmall = {x$digits})'),
-    arg = c(x$addarg$estimates,
+    arg = c(x$addarg$estimates.text,
             'vjust = -0.8',
             'size  = {x$text_size}',
             'colour = {quote_string(x$plotcolour)}')
@@ -226,20 +276,24 @@ shape.estimates.text <- function(x) {
 
 #' code for text below points
 #' @noRd
-shape.n.events.text <- function(x) {
+shape.n.text <- function(x) {
   if (is.null(x$col.n)){return(NULL)}
+
+  if (!is.null(x$add$n.text)) {
+    return(c('# Plot n text', paste(x$add$n.text, " +"), ''))
+  }
 
   if (x$ylims != "NULL") {
     x$lci_string <- glue::glue("pmin({x$ymax}, pmax({x$ymin}, {x$lci_string}))")
   }
 
   make_layer(
-    '# Plot n events text',
+    '# Plot n text',
     f = "geom_text",
-    aes = c(x$addaes$n,
+    aes = c(x$addaes$n.text,
             'y     = {x$lci_string}',
             'label = {x$col.n}'),
-    arg = c(x$addarg$n,
+    arg = c(x$addarg$n.text,
             'vjust  = 1.8',
             'size   = {x$text_size}',
             'colour = {quote_string(x$plotcolour)}')
@@ -250,7 +304,7 @@ shape.n.events.text <- function(x) {
 
 #' code for confidence interval lines
 #' @noRd
-shape.cis <- function(x, type = c("all", "before", "after", "null")) {
+shape.ci <- function(x, type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
 
   if (x$ylims != "NULL") {
@@ -275,12 +329,35 @@ shape.cis <- function(x, type = c("all", "before", "after", "null")) {
   )
 }
 
+shape.ci.before <- function(x){
+  if (!is.null(x$add$ci.before)) {
+    return(c('# Plot the CIs',
+             paste(x$add$ci.before, " +"),
+             ''))
+  }
+  shape.ci(x, type = x$ci_order[[1]])
+}
+
+shape.ci.after <- function(x){
+  if (!is.null(x$add$ci.after)) {
+    return(c('# Plot the CIs',
+             paste(x$add$ci.after, " +"),
+             ''))
+  }
+  shape.ci(x, type = x$ci_order[[2]])
+}
 
 
 #' code to add arrows to CIs
 #' @noRd
 shape.arrows <- function(x) {
   if (x$ylims == "NULL"){return(NULL)}
+
+  if (!is.null(x$add$arrows)) {
+    return(c('# Add tiny segments with arrows when the CIs go outside axis limits',
+             paste(x$add$arrows, " +"),
+             ''))
+  }
 
   make_layer(
     '# Add tiny segments with arrows when the CIs go outside axis limits',
@@ -318,6 +395,10 @@ shape.titles <- function(x) {
 #' @noRd
 
 shape.ckb.style <- function(x) {
+  if (!is.null(x$add$ckb.style)) {
+    return(c('# Plot like a CKB plot', paste(x$add$ckb.style, " +"), ''))
+  }
+
   make_layer(
     '# Plot like a CKB plot',
     f = "ckbplotr::ckb_style",
@@ -340,10 +421,18 @@ shape.ckb.style <- function(x) {
 #' code for theme
 #' @noRd
 shape.theme <- function(x) {
+  if (!is.null(x$add$theme)) {
+    if (!is.null(x$add$end)) {
+      x$add$theme <- paste(x$add$theme, " +")
+    }
+    return(c('# Add theme', x$add$theme, ''))
+  }
+
   make_layer(
     '# Add theme',
     f = "theme",
-    arg = 'legend.position = {x$legend.position}',
+    arg = c(x$addarg$theme,
+            'legend.position = {x$legend.position}'),
     plus = !is.null(x$add$end)
   )
 }
@@ -353,9 +442,7 @@ shape.theme <- function(x) {
 #' @noRd
 shape.add.start <- function(x) {
   if (is.null(x$add$start)){return(NULL)}
-  c("# Additional layer",
-    paste(c(x$add$start, " +"), collapse = ""),
-    "")
+  c("# Additional layer", paste(x$add$start, " +"))
 }
 
 #' code to add object at end of ggplot

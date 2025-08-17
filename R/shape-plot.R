@@ -131,7 +131,15 @@ shape_plot <- function(data,
   lines <- match.arg(lines)
 
 
-  ## check if confidence intervals may be hidden
+  # Handle old names ----
+  addaes$estimates.points <- addaes$point
+  addarg$estimates.points <- addarg$point
+  addaes$estimates.text <- addaes$estimates
+  addarg$estimates.text <- addarg$estimates
+  addaes$n.text <- addaes$n
+  addarg$n.text <- addarg$n
+
+  # Check if confidence intervals may be hidden ----
   if (missing(height)){
     rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the shape plot.',
                     'i' = 'Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.'),
@@ -352,15 +360,15 @@ shape_plot <- function(data,
   ratio <- deparse1(ratio)
   axis.title.margin <- deparse1(axis.title.margin)
   clip <- deparse1(clip)
-
-  if (!is.null(add$start)){
-    add$start <- deparse1(substitute(add)$start)
-  }
-  if (!is.null(add$end)){
-    add$end <- deparse1(substitute(add)$end)
-  }
-
   plot.margin <- deparse1(substitute(plot.margin))
+
+  add_new <- list()
+  for (i in names(add)) {
+    if (!is.null(add[[i]])){
+      add_new[[i]] <- deparse1(substitute(add)[[i]])
+    }
+  }
+  add <- add_new
 
   # Create plot specification list ----
   spec <- tibble::lst(
@@ -430,13 +438,16 @@ shape_plot <- function(data,
     indent(2,
            shape.add.start(spec),                      # add$start
            shape.lines(spec),                          # lines
-           shape.cis(spec, type = spec$ci_order[[1]]), # CI lines plotted before points
+           shape.ci.before(spec),                      # CI lines plotted before points
            shape.estimates.points(spec),               # points for estimates
            shape.estimates.text(spec),                 # text above points
-           shape.n.events.text(spec),                  # number below points
-           shape.cis(spec, type = spec$ci_order[[2]]), # CI lines plotted after points
+           shape.n.text(spec),                         # number below points
+           shape.ci.after(spec),                       # CI lines plotted after points
            shape.arrows(spec),                         # arrows for CIs
-           shape.scales(spec),                         # scales
+           shape.scale.radius(spec),                   # radius scale
+           shape.scale.shape(spec),                    # shape scale
+           shape.scale.colour(spec),                   # colour scale
+           shape.scale.fill(spec),                     # fill scale
            shape.scale.x(spec),                        # x scale
            shape.scale.y(spec),                        # y scale
            shape.titles(spec),                         # titles
@@ -448,15 +459,15 @@ shape_plot <- function(data,
 
 
 
-  # Show code in RStudio viewer.
+  # Show code in RStudio viewer ----
   if (showcode){ displaycode(plotcode) }
 
 
-  # If envir not provided, make new environment
+  # If envir not provided, make new environment ----
   # with parent frame same as function call
   if(missing(envir)){envir <- new.env(parent = parent.frame())}
 
-  # Create the plot
+  # Create the plot ----
   plot <- eval(parse(text = plotcode), envir = envir)
   if (printplot){
     print(plot)
