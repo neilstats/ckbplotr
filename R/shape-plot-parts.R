@@ -69,29 +69,50 @@ shape.start.ggplot <- function(x) {
     '')
 }
 
-#' code for axis scales
+#' code for x axis scale
 #' @noRd
-shape.axes <- function(x) {
-  c(if (!is.null(x$xbreaks) && x$xbreaks != "NULL"){
-    c('# Set the x-axis scale',
-      glue::glue('scale_x_continuous(breaks = {x$xbreaks}) +'),
-      '')
-  },
-  if (x$ybreaks == "NULL" & x$scale != "identity") {
-    c('# Set the y-axis scale',
-      glue::glue('scale_y_continuous(trans = "{x$scale}") +'),
-      '')
-  } else if (x$scale != "identity") {
-    c('# Set the y-axis scale',
-      glue::glue('scale_y_continuous(trans  = "{x$scale}",'),
-      glue::glue('                   breaks = {x$ybreaks}) +'),
-      '')
-  } else if (x$ybreaks != "NULL") {
-    c('# Set the y-axis scale',
-      glue::glue('scale_y_continuous(breaks = {x$ybreaks}) +'),
-      '')
+shape.scale.x <- function(x) {
+  if (x$xscale == "discrete") {
+    return(
+      c('# Set the x-axis scale [scale.x]',
+        glue::glue('scale_x_discrete(drop = FALSE) +'),
+        '')
+    )
   }
+
+  if (x$xbreaks == "NULL" & x$xscale == "identity") {
+    return(NULL)
+  }
+
+  args <- dplyr::case_when(
+    x$xbreaks == "NULL" & x$xscale != "identity" ~
+      glue::glue('transform = "{x$xscale}"'),
+    x$xbreaks != "NULL" & x$xscale != "identity" ~
+      glue::glue('transform = "{x$xscale}", breaks = {x$xbreaks}'),
+    x$xbreaks != "NULL" & x$xscale == "identity" ~
+      glue::glue('breaks = {x$xbreaks}')
   )
+
+  c('# Set the x-axis scale', glue::glue('scale_x_continuous({args}) +'), '')
+}
+
+#' code for y axis scale
+#' @noRd
+shape.scale.y <- function(x) {
+  if (x$ybreaks == "NULL" & x$yscale == "identity") {
+    return(NULL)
+  }
+
+  args <- dplyr::case_when(
+    x$ybreaks == "NULL" & x$yscale != "identity" ~
+      glue::glue('transform = "{x$yscale}"'),
+    x$ybreaks != "NULL" & x$yscale != "identity" ~
+      glue::glue('transform = "{x$yscale}", breaks = {x$ybreaks}'),
+    x$ybreaks != "NULL" & x$yscale == "identity" ~
+      glue::glue('breaks = {x$xbreaks}')
+  )
+
+  c('# Set the y-axis scale', glue::glue('scale_y_continuous({args}) +'), '')
 }
 
 

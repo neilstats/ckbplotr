@@ -14,6 +14,7 @@ shape_plot(
   col.n = NULL,
   exponentiate = FALSE,
   logscale = exponentiate,
+  xlogscale = FALSE,
   scalepoints = FALSE,
   digits = 2,
   minse = NA,
@@ -74,7 +75,9 @@ shape_plot(
 \item{exponentiate}{Exponentiate estimates (and CIs) before plotting,
 use log scale on the axis. (Default: FALSE)}
 
-\item{logscale}{Use log scale for vertical axis. (Default: exponentiate)}
+\item{logscale}{Use log scale for the y axis. (Default: exponentiate)}
+
+\item{xlogscale}{Use log scale for the x axis. (Default: FALSE)}
 
 \item{scalepoints}{Should the points be scaled by inverse of the standard
 error? (Default: FALSE)}

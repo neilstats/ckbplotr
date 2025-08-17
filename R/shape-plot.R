@@ -26,7 +26,8 @@
 #' (Default: "none")
 #' @param exponentiate Exponentiate estimates (and CIs) before plotting,
 #'   use log scale on the axis. (Default: FALSE)
-#' @param logscale Use log scale for vertical axis. (Default: exponentiate)
+#' @param logscale Use log scale for the y axis. (Default: exponentiate)
+#' @param xlogscale Use log scale for the x axis. (Default: FALSE)
 #' @param scalepoints Should the points be scaled by inverse of the standard
 #'   error? (Default: FALSE)
 #' @param digits Number of digits to use in text of estimates.
@@ -77,6 +78,7 @@ shape_plot <- function(data,
                        col.n         = NULL,
                        exponentiate  = FALSE,
                        logscale      = exponentiate,
+                       xlogscale     = FALSE,
                        scalepoints   = FALSE,
                        digits        = 2,
                        minse         = NA,
@@ -232,15 +234,23 @@ shape_plot <- function(data,
 
 
 
-
-
-
   # Log scale and exponentiate estimates ----
-  if (logscale == TRUE){
-    scale <- "log"
+  if (logscale == TRUE) {
+    yscale <- "log"
   } else {
-    scale <- "identity"
+    yscale <- "identity"
   }
+  if (is.factor(data[[col.x]]) | is.character(data[[col.x]])) {
+    xscale <- "discrete"
+    if (missing(xlims)) {
+      xlims <- c(0.5, 0.5 + length(levels(as.factor(data[[col.x]]))))
+    }
+  } else if (xlogscale == TRUE) {
+    xscale <- "log"
+  } else {
+    xscale <- "identity"
+  }
+
   if (exponentiate == TRUE) {
     est_string <- paste0('exp(', column_name(col.estimate), ')')
     if (!is.null(col.lci)) {
@@ -333,9 +343,9 @@ shape_plot <- function(data,
   # Deparsing ----
   one_over_minse <- deparse1(1/minse)
   xlims <- deparse1(xlims)
-  xbreaks <- deparse1(xbreaks)
+  xbreaks <- deparse1(substitute(xbreaks))
   ylims <- deparse1(ylims)
-  ybreaks <- deparse1(ybreaks)
+  ybreaks <- deparse1(substitute(ybreaks))
   legend.position <- deparse1(legend.position)
   gap <- deparse1(gap)
   ext <- deparse1(ext)
@@ -388,7 +398,6 @@ shape_plot <- function(data,
     plotcolour,
     pointsize,
     ratio,
-    scale,
     scale_fill_string,
     shape,
     size,
@@ -400,11 +409,13 @@ shape_plot <- function(data,
     xbreaks,
     xlab,
     xlims,
+    xscale,
     ybreaks,
     ylab,
     ylims,
     ymax,
-    ymin
+    ymin,
+    yscale
   )
 
   # Create the plot code ----
@@ -426,7 +437,8 @@ shape_plot <- function(data,
            shape.cis(spec, type = spec$ci_order[[2]]), # CI lines plotted after points
            shape.arrows(spec),                         # arrows for CIs
            shape.scales(spec),                         # scales
-           shape.axes(spec),                           # axes
+           shape.scale.x(spec),                        # x scale
+           shape.scale.y(spec),                        # y scale
            shape.titles(spec),                         # titles
            shape.ckb.style(spec),                      # ckb_style()
            shape.theme(spec),                          # theme
