@@ -112,29 +112,35 @@ displaycode <- function(plotcode, note = ""){
 
   text <- c("---",
             "title: 'Generated R code'",
-            "output:",
-            "  html_document:",
-            "    highlight: kate",
+            "mainfont: sans-serif",
             "---",
-            "```{css, echo=FALSE}",
-            ".no-border {border: 0px;}",
-            "```",
-            note,
-            "```{r plotcode, class.source='no-border', eval = FALSE}",
+            if (!identical(note, "")) {
+              c("<div style = 'border: solid 1px #959595; padding: 0.5em; margin-bottom: 4em;'>",
+              note,
+              "</div>")
+            },
+            "```r",
             plotcode,
-            "```")
+            "```"
+  )
 
-  temprmd <- tempfile(fileext = ".Rmd")
-  con <- file(temprmd, open = "w", encoding = "UTF-8")
+  tempmd <- tempfile(fileext = ".md")
+  con <- file(tempmd, open = "w", encoding = "UTF-8")
   writeLines(
     text,
     con = con,
     sep = "\n")
   close(con)
 
-  rmarkdown::render(temprmd,
-                    output_file = "plotcode.html",
-                    quiet = TRUE)
+  cmd <- paste0(rmarkdown::pandoc_exec(),
+                " ",
+                tempmd,
+                " -o ",
+                file.path(tempdir(), "plotcode.html"),
+                " --syntax-highlighting=kate",
+                " --standalone",
+                " --columns=82")
+  system(cmd)
 
   viewer <- getOption("viewer", default = function(url){})
   viewer(file.path(tempdir(), "plotcode.html"))
