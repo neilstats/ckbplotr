@@ -1,42 +1,79 @@
 #' CKB ggplot theme
 #'
-#' Based on theme_bw
+#' A ggplot2 theme, based on theme_bw.
 #'
-#' @param base_size base font size, given in pts.
-#' @param base_line_size base size for line elements
-#' @param colour Colour for non-data aspects of the plot. (Default: "black")
+#' @param base_size Base font size, given in pts. (Default: 11)
+#' @param base_line_size Base size for line elements. (Deault: base_size/22)
+#' @param ink,paper Colour for foreground and background elements. (Defaults: "black" and "white")
+#' @param colour Deprecated. Use `ink` instead.
 #' @param axis.title.margin Margin between axis titles and plot. (Default: 1)
 #' @param plot.margin Margin around entire plot (Default: margin(0.5, 0, 0.5, 0, "lines"))
+#' @param ... Arguments passed to `ggplot2::theme_bw()` if using ggplot2 4.0.0 or later.
 #'
 #' @export
 
-theme_ckb <- function(base_size      = 11,
-                      base_line_size = base_size/22,
-                      colour         = "black",
+theme_ckb <- function(base_size         = 11,
+                      base_line_size    = base_size/22,
+                      ink               = "black",
+                      paper             = "white",
+                      colour            = NULL,
                       axis.title.margin = 1,
-                      plot.margin    = margin(0.5, 1.5, 0.5, 0.5, "lines")){
-  theme_bw(base_size = base_size,
-           base_line_size = base_line_size) %+replace%
-    theme(panel.grid        = element_blank(),
-          panel.border      = element_blank(),
-          panel.background  = element_blank(),
-          axis.ticks        = element_line(colour = colour),
-          axis.line         = element_line(colour = colour, lineend = "round"),
-          axis.text         = element_text(colour = colour),
-          axis.text.x       = element_text(margin = margin(t = base_size/(11/4.4)), vjust = 1),
-          axis.text.x.top   = element_text(margin = margin(b = base_size/(11/4.4)), vjust = 0),
-          axis.text.y       = element_text(margin = margin(r = base_size/(11/4.4)), hjust = 1),
-          axis.text.y.right = element_text(margin = margin(l = base_size/(11/4.4)), hjust = 0),
-          axis.title        = element_text(face = "bold", colour = colour),
-          axis.title.x      = element_text(margin = margin(axis.title.margin, 0, 0, 0, "lines")),
-          axis.title.y      = element_text(margin = margin(0, axis.title.margin, 0, 0, "lines"), angle = 90),
-          legend.background = element_blank(),
-          strip.background  = element_blank(),
-          strip.text        = element_text(face = "bold", colour = colour),
-          plot.margin       = plot.margin,
-          plot.background   = element_blank(),
-          plot.title        = element_text(hjust = 0.5, face = "bold", colour = colour),
-          complete          = TRUE)
+                      plot.margin       = margin(0.5, 1.5, 0.5, 0.5, "lines"),
+                      ...){
+
+  if (!missing(colour)) {
+    ink <- colour
+  }
+
+  if (compareVersion(as.character(packageVersion("ggplot2")), "4.0.0") >= 0) {
+    theme_bw(...,
+             ink = ink,
+             paper = paper,
+             base_size = base_size,
+             base_line_size = base_line_size) %+replace%
+      theme(axis.line = element_line(lineend = "round"),
+            axis.text = element_text(colour = ink),
+            axis.ticks = element_line(colour = ink),
+            axis.text.x       = element_text(margin = margin(t = base_size/(11/4.4)), vjust = 1),
+            axis.text.x.top   = element_text(margin = margin(b = base_size/(11/4.4)), vjust = 0),
+            axis.text.y       = element_text(margin = margin(r = base_size/(11/4.4)), hjust = 1),
+            axis.text.y.right = element_text(margin = margin(l = base_size/(11/4.4)), hjust = 0),
+            axis.title        = element_text(face = "bold"),
+            axis.title.x      = element_text(margin = margin(axis.title.margin, 0, 0, 0, "lines")),
+            axis.title.y      = element_text(margin = margin(0, axis.title.margin, 0, 0, "lines"), angle = 90),
+
+            panel.grid = element_blank(),
+            panel.border = element_blank(),
+            legend.background = element_blank(),
+            strip.background  = element_blank(),
+            strip.text        = element_text(face = "bold", colour = ink),
+            plot.margin       = plot.margin,
+            plot.title        = element_text(hjust = 0.5, face = "bold"),
+            complete = TRUE)
+  } else {
+    theme_bw(base_size = base_size,
+             base_line_size = base_line_size) %+replace%
+      theme(panel.grid        = element_blank(),
+            panel.border      = element_blank(),
+            panel.background  = element_blank(),
+            axis.ticks        = element_line(colour = ink),
+            axis.line         = element_line(colour = ink, lineend = "round"),
+            axis.text         = element_text(colour = ink),
+            axis.text.x       = element_text(margin = margin(t = base_size/(11/4.4)), vjust = 1),
+            axis.text.x.top   = element_text(margin = margin(b = base_size/(11/4.4)), vjust = 0),
+            axis.text.y       = element_text(margin = margin(r = base_size/(11/4.4)), hjust = 1),
+            axis.text.y.right = element_text(margin = margin(l = base_size/(11/4.4)), hjust = 0),
+            axis.title        = element_text(face = "bold", colour = ink),
+            axis.title.x      = element_text(margin = margin(axis.title.margin, 0, 0, 0, "lines")),
+            axis.title.y      = element_text(margin = margin(0, axis.title.margin, 0, 0, "lines"), angle = 90),
+            legend.background = element_blank(),
+            strip.background  = element_blank(),
+            strip.text        = element_text(face = "bold", colour = ink),
+            plot.margin       = plot.margin,
+            plot.background   = element_rect(fill = paper, colour = paper),
+            plot.title        = element_text(hjust = 0.5, face = "bold", colour = ink),
+            complete          = TRUE)
+  }
 }
 
 
@@ -71,7 +108,9 @@ ckb_style <- function(
     height         = NULL,
     base_size      = 11,
     base_line_size = base_size/22,
-    colour         = "black",
+    ink            = "black",
+    paper          = "white",
+    colour         = NULL,
     axis.title.margin = 1,
     plot.margin    = margin(0.5, 1.5, 0.5, 0.5, "lines"),
     clip = "on"
@@ -84,6 +123,10 @@ ckb_style <- function(
 
   if (length(ext) != 2){
     rlang::abort("ext must be a vector of length 2")
+  }
+
+  if (!missing(colour)) {
+    ink <- colour
   }
 
   # panel sizes
@@ -112,7 +155,8 @@ ckb_style <- function(
                         full_width = full_width,
                         base_line_size = base_line_size,
                         base_size = base_size,
-                        colour = colour,
+                        ink = ink,
+                        paper = paper,
                         axis.title.margin = axis.title.margin,
                         plot.margin = plot.margin,
                         clip = clip),
@@ -188,7 +232,8 @@ ggplot_add.ckbplot <- function(object, plot, ...) {
            y = legendry::guide_axis_base(cap = tf_y(limits[["yaxis"]]))) +
     theme_ckb(base_size = object$base_size,
               base_line_size = object$base_line_size,
-              colour = object$colour,
+              ink = object$ink,
+              paper = object$paper,
               axis.title.margin = object$axis.title.margin,
               plot.margin = object$plot.margin)
 

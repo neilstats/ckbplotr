@@ -7,22 +7,29 @@
 theme_ckb(
   base_size = 11,
   base_line_size = base_size/22,
-  colour = "black",
+  ink = "black",
+  paper = "white",
+  colour = NULL,
   axis.title.margin = 1,
-  plot.margin = margin(0.5, 1.5, 0.5, 0.5, "lines")
+  plot.margin = margin(0.5, 1.5, 0.5, 0.5, "lines"),
+  ...
 )
 }
 \arguments{
-\item{base_size}{base font size, given in pts.}
+\item{base_size}{Base font size, given in pts. (Default: 11)}
 
-\item{base_line_size}{base size for line elements}
+\item{base_line_size}{Base size for line elements. (Deault: base_size/22)}
 
-\item{colour}{Colour for non-data aspects of the plot. (Default: "black")}
+\item{ink, paper}{Colour for foreground and background elements. (Defaults: "black" and "white")}
+
+\item{colour}{Deprecated. Use \code{ink} instead.}
 
 \item{axis.title.margin}{Margin between axis titles and plot. (Default: 1)}
 
 \item{plot.margin}{Margin around entire plot (Default: margin(0.5, 0, 0.5, 0, "lines"))}
+
+\item{...}{Arguments passed to \code{ggplot2::theme_bw()} if using ggplot2 4.0.0 or later.}
 }
 \description{
-Based on theme_bw
+A ggplot2 theme, based on theme_bw.
 }

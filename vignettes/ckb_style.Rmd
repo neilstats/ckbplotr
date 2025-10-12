@@ -29,7 +29,7 @@ library(ckbplotr)
 `+ ckb_style()` does three things to a ggplot2 plot:
 
 1. applies a CKB theme (i.e. change the overall appearance)
-2. extends the plotting area and manually adds axis lines (so that you can have a custom sized gap between the plotting area and the axes)
+2. extends the plotting area and caps the axis lines (so that you can have a custom sized gap between the plotting area and the axes)
 3. applies a fixed aspect ratio
 
 ## Examples with a scatter plot
@@ -80,11 +80,12 @@ plot + ckb_style(xlims = c(0, 8),
 
 
 ### Modifying the appearance of the plot
-The `colour` arguments of `theme_ckb()` and `ckb_style()` can be used to change the colour of the non-data components of the plot.
+The `ink` and `paper` arguments of `theme_ckb()` and `ckb_style()` can be used to change the colours of the plot.
 ```{r colour}
 plot + ckb_style(xlims = c(0, 8),
                  ylims = c(10, 50),
-                 colour = "darkred")
+                 ink = "darkred",
+                 paper = "cornsilk")
 ```
 
 The `plot.margin` arguments of `theme_ckb()` and `ckb_style()` can be used to adjust the margin around the plot.

@@ -411,7 +411,7 @@ shape.ckb.style <- function(x) {
             'height         = {printunit(x$height)}',
             'base_size      = {x$base_size}',
             'base_line_size = {x$base_line_size}',
-            'colour         = {quote_string(x$plotcolour)}',
+            'ink            = {quote_string(x$plotcolour)}',
             'axis.title.margin = {x$axis.title.margin}',
             'plot.margin    = {x$plot.margin}',
             'clip           = {x$clip}')
