@@ -18,7 +18,7 @@ shape_plot(
   scalepoints = FALSE,
   digits = 2,
   minse = NA,
-  pointsize = 3,
+  pointsize = 3 * base_size/11,
   col.group = NULL,
   shape = 15,
   plotcolour = "black",
@@ -87,7 +87,7 @@ error? (Default: FALSE)}
 \item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 
 \item{pointsize}{The (largest) size of box to use for plotting point
-estimates. (Default: 3)}
+estimates. (Default: 3 * base_size / 11)}
 
 \item{col.group}{Name of column that groups the estimates. (Default: NULL)}
 
@@ -127,9 +127,9 @@ estimates. (Default: 3)}
 
 \item{clip}{Passed to clip argument of \code{ggplot2::coord_cartesian()}. (Default: "on")}
 
-\item{base_size}{base font size, given in pts.}
+\item{base_size}{Base font size, given in pts. (Default: 11)}
 
-\item{base_line_size}{base size for line elements}
+\item{base_line_size}{Base size for line elements. (Deault: base_size/22)}
 
 \item{stroke}{Size of outline of shapes. (Default: base_size/22)}
 

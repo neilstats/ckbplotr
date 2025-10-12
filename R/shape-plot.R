@@ -33,7 +33,7 @@
 #' @param digits Number of digits to use in text of estimates.
 #' @param minse Minimum standard error to use when scaling point size. (Default will use minimum in the data.)
 #' @param pointsize The (largest) size of box to use for plotting point
-#'                  estimates. (Default: 3)
+#'                  estimates. (Default: 3 * base_size / 11)
 #' @param xlab Label for x-axis. (Default: "Risk factor")
 #' @param ylab Label for y-axis. (Default: "Estimate (95% CI)")
 #' @param legend.name The name of the colour scale/legend for groups. (Default: "")
@@ -82,7 +82,7 @@ shape_plot <- function(data,
                        scalepoints   = FALSE,
                        digits        = 2,
                        minse         = NA,
-                       pointsize     = 3,
+                       pointsize     = 3 * base_size / 11,
                        col.group     = NULL,
                        shape         = 15,
                        plotcolour    = "black",

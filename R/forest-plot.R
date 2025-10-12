@@ -55,7 +55,8 @@
 #' @param nullval
 #' Add a vertical reference line at this value. (If logscale == TRUE then by default it will be added at 1, but use NA not to plot this line.)
 #' @param pointsize
-#' The (largest) size of box to use for plotting point estimates. (Default: 3)
+#' The (largest) size of box to use for plotting point estimates.
+#' (Default: 3 * base_size / 11)
 #' @param shape
 #' Shape of points. An integer, or name of a column of integers. (Default: 15 (square))
 #' @param plotcolour
@@ -176,7 +177,7 @@ forest_plot <- function(
     bold.labels        = NULL,
     scalepoints        = FALSE,
     minse              = NULL,
-    pointsize          = 3,
+    pointsize          = 3 * base_size / 11,
     shape              = 15,
     plotcolour         = "black",
     colour             = plotcolour,

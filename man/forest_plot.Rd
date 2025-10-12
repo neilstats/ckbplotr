@@ -50,7 +50,7 @@ forest_plot(
   bold.labels = NULL,
   scalepoints = FALSE,
   minse = NULL,
-  pointsize = 3,
+  pointsize = 3 * base_size/11,
   shape = 15,
   plotcolour = "black",
   colour = plotcolour,
@@ -184,7 +184,8 @@ right of each plot. (Default: TRUE)}
 
 \item{minse}{Minimum standard error to use when scaling point size. (Default will use minimum in the data.)}
 
-\item{pointsize}{The (largest) size of box to use for plotting point estimates. (Default: 3)}
+\item{pointsize}{The (largest) size of box to use for plotting point estimates.
+(Default: 3 * base_size / 11)}
 
 \item{shape}{Shape of points. An integer, or name of a column of integers. (Default: 15 (square))}
 
