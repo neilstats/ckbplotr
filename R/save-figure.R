@@ -62,7 +62,7 @@ prepare_figure <- function(figure,
     pagedim <- switch(pagesize,
                       A4 = unit(c(210, 297), "mm"),
                       A5 = unit(c(148, 210), "mm"),
-                      rlang::abort("Invalid pagesize value."))
+                      cli::cli_abort("Invalid pagesize value."))
   }
 
   if (landscape){
@@ -182,7 +182,7 @@ save_figure <- function(figure,
 
   ## Save cropped figure to PNG file
   if (!is.null(cropped)){
-    if (!is.character(cropped)) {rlang::abort("cropped should be a file name.")}
+    if (!is.character(cropped)) {cli::cli_abort("{.arg cropped} should be a file name.")}
     figargs <- list(filename = cropped,
                     plot   = figure$figure,
                     width  = attr(figure$figure, "width"),

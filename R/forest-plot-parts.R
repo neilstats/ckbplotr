@@ -511,7 +511,7 @@ forest.column.headings.rule <- function(x){
       x_coords <- 'x = unit(c(0, 1), "npc") + c(-1, 0)*{printunit(x$heading.rule[1])} + c(0, 1)*{printunit(x$heading.rule[2])}'
     }
   } else {
-    cli::cli_abort("heading.rule must be logical or a grid::unit() object")
+    cli::cli_abort("{.arg heading.rule} must be logical or a grid::unit() object")
   }
 
   make_layer(

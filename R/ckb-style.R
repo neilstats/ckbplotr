@@ -118,11 +118,11 @@ ckb_style <- function(
 
   # check arguments
   if (length(gap) != 2){
-    rlang::abort("gap must be a vector of length 2")
+    cli::cli_abort("{.arg gap} must be a vector of length 2")
   }
 
   if (length(ext) != 2){
-    rlang::abort("ext must be a vector of length 2")
+    cli::cli_abort("{.arg ext} must be a vector of length 2")
   }
 
   if (!missing(colour)) {
@@ -205,10 +205,10 @@ ggplot_add.ckbplot <- function(object, plot, ...) {
 
   ## check for infinite values in transformed axis limits
   if (any(!is.finite(tf_x(limits[["xaxis"]])))) {
-    rlang::abort("Infinite or NaN values in x-axis. Provide axis limits and check transformation of x scale.")
+    cli::cli_abort("Infinite or NaN values in x-axis. Provide axis limits and check transformation of x scale.")
   }
   if (any(!is.finite(tf_y(limits[["yaxis"]])))) {
-    rlang::abort("Infinite or NaN values in y-axis. Provide axis limits and check transformation of y scale.")
+    cli::cli_abort("Infinite or NaN values in y-axis. Provide axis limits and check transformation of y scale.")
   }
 
   addtox <- c(object$gap[[1]]*diff(range(tf_x(limits[["xaxis"]]))),

@@ -112,7 +112,7 @@ forest_data <- function(
   for (addtextframe in addtext){
     for (textcol in c("text", "expr", "het_dof", "het_stat", "het_p", "trend_stat", "trend_p")){
       if (!is.null(addtextframe[[textcol]]) && !is.character(addtextframe[[textcol]])){
-        rlang::abort(glue::glue("'{textcol}' in addtext is not character"))
+        cli::cli_abort("{.var {textcol}} in {.arg addtext} is not character")
       }
     }
   }
@@ -123,7 +123,7 @@ forest_data <- function(
 
   if (!col.key %in% column_names_in_data) {
     if (col.key != "key") {
-      rlang::inform(glue::glue("col.key '{col.key}' not found, using row number as row labels."))
+      cli::cli_inform("col.key {.var col.key} not found, using row number as row labels.")
       col.key <- "key"
     }
     for (i in seq_along(panels)){
@@ -137,28 +137,28 @@ forest_data <- function(
   }
 
   if (!is.null(col.lci) && is.null(col.uci)) {
-    rlang::abort("col.lci and col.uci must both be specified")
+    cli::cli_abort("{.arg col.lci} and {.arg col.uci} must both be specified")
   }
   if (is.null(col.lci) && !is.null(col.uci)){
-    rlang::abort("col.lci and col.uci must both be specified")
+    cli::cli_abort("{.arg col.lci} and {.arg col.uci} must both be specified")
   }
   if (!is.character(panel.names)) {
-    rlang::abort("panel.names must be a character vector")
+    cli::cli_abort("{.arg panel.names} must be a character vector")
   }
   if (!all(!duplicated(panel.names))) {
-    rlang::abort("panel.names must be unique")
+    cli::cli_abort("{.arg panel.names} must be unique")
   }
   if (length(panels) != length(panel.names)) {
-    rlang::abort("panels and panel.names must be the same length")
+    cli::cli_abort("{.arg panels} and {.arg panel.names} must be the same length")
   }
   if (!(length(row.labels.space) >= 2*(length(row.labels.levels) - 1))) {
-    rlang::abort("row.labels.space must be at least 2*(length(row.labels.levels)-1)")
+    cli::cli_abort("{.arg row.labels.space} must be at least 2*(length(row.labels.levels)-1)")
   }
   if (!is.null(row.labels) && !all(row.labels.levels %in% names(row.labels))) {
-    rlang::abort("row.labels.levels must be columns in row.labels")
+    cli::cli_abort("{.arg row.labels.levels} must be columns in row.labels")
   }
   if(!is.null(row.labels) && !all(sapply(row.labels[row.labels.levels], is.character))) {
-    rlang::abort("row.labels.levels columns must be character")
+    cli::cli_abort("{.arg row.labels.levels} columns must be character")
   }
 
 
@@ -212,10 +212,10 @@ forest_data <- function(
       dplyr::select(dplyr::all_of(c("row.label", "key", "row.height", "spacing_row")))
   } else {
 
-    if (!col.key %in% names(row.labels)) rlang::abort(glue::glue("{col.key} must be a column in {deparse1(substitute(row.labels))}"))
+    if (!col.key %in% names(row.labels)) cli::cli_abort("{.var {col.key}} must be a column in {.arg {deparse1(substitute(row.labels))}}")
 
     for (panel in panels) {
-      if (!col.key %in% names(panel)) rlang::abort(glue::glue("{col.key} must be a column in every data frame given in panels"))
+      if (!col.key %in% names(panel)) cli::cli_abort("{.var {col.key}} must be a column in every data frame given in panels")
     }
 
     ## number of levels of row labels
@@ -356,7 +356,7 @@ forest_data <- function(
     if (is.null(minse)){
       minse <- min((datatoplot$uci - datatoplot$lci)/(2*1.96), na.rm = TRUE)
     } else {
-      if (minse > min((datatoplot$uci - datatoplot$lci)/(2*1.96), na.rm = TRUE)) rlang::abort("minse is larger than the minimum standard error in the data")
+      if (minse > min((datatoplot$uci - datatoplot$lci)/(2*1.96), na.rm = TRUE)) cli::cli_abort("{.arg minse} is larger than the minimum standard error in the data")
     }
     if (scalepoints){
       datatoplot$size <- 2*1.96*minse/(datatoplot$uci - datatoplot$lci)
@@ -370,7 +370,7 @@ forest_data <- function(
     if (is.null(minse)){
       minse <- min(datatoplot$stderr, na.rm = TRUE)
     } else {
-      if (minse > min(datatoplot$stderr, na.rm = TRUE)) rlang::abort("minse is larger than the minimum standard error in the data")
+      if (minse > min(datatoplot$stderr, na.rm = TRUE)) cli::cli_abort("{.arg minse} is larger than the minimum standard error in the data")
     }
     if (scalepoints) {
       datatoplot$size <- minse/datatoplot$stderr

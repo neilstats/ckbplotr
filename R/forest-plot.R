@@ -321,6 +321,13 @@ forest_plot <- function(
     panels_list <- list(panels)
   }
 
+  if (!is.null(col.lci) && is.null(col.uci)) {
+    cli::cli_abort("{.arg col.lci} and {.arg col.uci} must both be specified")
+  }
+  if (is.null(col.lci) && !is.null(col.uci)){
+    cli::cli_abort("{.arg col.lci} and {.arg col.uci} must both be specified")
+  }
+
   fixed_panel_width <- !missing(panel.width)
   fixed_panel_height <- !missing(panel.height)
   column_names_in_data <- purrr::reduce(lapply(panels_list, names), intersect)
@@ -335,28 +342,28 @@ forest_plot <- function(
   # blankrows no longer used
   if (!missing(blankrows)){
     row.labels.space <- blankrows
-    rlang::warn("Note: blankrows argument now called row.labels.space")
+    cli::cli_warn("Note: blankrows argument now called row.labels.space")
   }
 
   ## check col.left and col.right columns exist
   for (c in c(col.left, col.right)){
     if (!c %in% column_names_in_data){
-      rlang::abort(glue::glue("Column '{c}' does not exist in every panels data frame."))
+      cli::cli_abort("Column {.var {c}} does not exist in every panels data frame.")
     }
   }
 
   ## check if cicolour is a list (or longer than 1) but not using panel.width
   if ((is.list(cicolour) | length(cicolour) > 1) & !fixed_panel_width){
-    rlang::abort("cicolour should be a list (or longer than 1) only when using panel.width")
+    cli::cli_abort("cicolour should be a list (or longer than 1) only when using panel.width")
   }
 
   ## check if confidence intervals may be hidden
   if (!fixed_panel_width){
-    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
-                    'i' = 'Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.'),
-                  use_cli_format = TRUE,
-                  .frequency = "once",
-                  .frequency_id = "forest_narrow_cis")
+    cli::cli_inform(c('i' = 'Narrow confidence interval lines may become hidden in the forest plot.',
+                      'i' = 'Please check your final output carefully and see vignette("forest_confidence_intervals") for more details.'),
+                    use_cli_format = TRUE,
+                    .frequency = "once",
+                    .frequency_id = "forest_narrow_cis")
   }
 
 
@@ -364,19 +371,19 @@ forest_plot <- function(
 
   # Match estimate and stderr column names ----
   if (length(col.estimate[col.estimate %in% column_names_in_data]) == 0) {
-    rlang::abort(glue::glue("Column '{col.estimate}' does not exist in panels data frame."))
+    cli::cli_abort("Column {.var {col.estimate}} does not exist in panels data frame.")
   }
   col.estimate <- col.estimate[col.estimate %in% column_names_in_data][[1]]
 
   if (!is.null(col.lci) | !is.null(col.uci)) {
     for (x in c(col.lci, col.uci)){
       if (!x %in% column_names_in_data){
-        rlang::abort(glue::glue("Column '{x}' does not exist in panels data frame."))
+        cli::cli_abort("Column {.var {x}} does not exist in panels data frame.")
       }
     }
   } else {
     if (length(col.stderr[col.stderr %in% column_names_in_data]) == 0) {
-      rlang::abort(glue::glue("Column '{col.stderr}' does not exist in panels data frame."))
+      cli::cli_abort("Column {.var {col.stderr}} does not exist in panels data frame.")
     }
     col.stderr <- col.stderr[col.stderr %in% column_names_in_data][[1]]
   }
@@ -648,7 +655,7 @@ forest_plot <- function(
 
   ## check xfrom and xto for zero and logscale
   if (logscale & (isTRUE(all.equal(0, xfrom)) | isTRUE(all.equal(0, xfrom)))){
-    rlang::abort("Axis limit cannot be zero if plotting on a log scale.")
+    cli::cli_abort("Axis limit cannot be zero if plotting on a log scale.")
   }
 
   xmid  <- round(axis_scale_inverse_fn((axis_scale_fn(xfrom) + axis_scale_fn(xto)) / 2), 6)

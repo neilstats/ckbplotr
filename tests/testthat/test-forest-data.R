@@ -6,7 +6,7 @@ test_that("forest_data throws an error if col.lci is specified but col.uci is no
                            row.labels.space = NULL,
                            col.lci = "a",
                            col.uci = NULL),
-               "col.lci and col.uci must both be specified")
+               "`col.lci` and `col.uci` must both be specified")
 })
 
 test_that("forest_data throws an error if col.uci is specified but col.lci is not", {
@@ -17,7 +17,7 @@ test_that("forest_data throws an error if col.uci is specified but col.lci is no
                            row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = "a"),
-               "col.lci and col.uci must both be specified")
+               "`col.lci` and `col.uci` must both be specified")
 })
 
 test_that("forest_data throws an error if panel.names is not a character vector", {
@@ -28,7 +28,7 @@ test_that("forest_data throws an error if panel.names is not a character vector"
                            row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
-               "panel.names must be a character vector")
+               "`panel.names` must be a character vector")
 })
 
 test_that("forest_data throws an error if panel.names is not unique", {
@@ -39,7 +39,7 @@ test_that("forest_data throws an error if panel.names is not unique", {
                            row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
-               "panel.names must be unique")
+               "`panel.names` must be unique")
 })
 
 test_that("forest_data throws an error if panels and panel.names have different lengths", {
@@ -50,7 +50,7 @@ test_that("forest_data throws an error if panels and panel.names have different 
                            row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
-               "panels and panel.names must be the same length")
+               "`panels` and `panel.names` must be the same length")
 })
 
 test_that("forest_data throws an error if row.labels.space is less than 2*(length(row.labels.levels)-1)", {
@@ -72,7 +72,7 @@ test_that("forest_data throws an error if row.labels.levels is not a column in r
                            row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
-               "row.labels.levels must be columns in row.labels")
+               "`row.labels.levels` must be columns in row.labels")
 })
 
 test_that("forest_data throws an error if row.labels.levels columns are not character", {
@@ -83,7 +83,7 @@ test_that("forest_data throws an error if row.labels.levels columns are not char
                            row.labels.space = NULL,
                            col.lci = NULL,
                            col.uci = NULL),
-               "row.labels.levels columns must be character")
+               "`row.labels.levels` columns must be character")
 })
 
 

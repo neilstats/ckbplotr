@@ -4,8 +4,8 @@ forest_plot_list_xlim <- function(
   ## original arguments passed to
   ## separate forest_plot() calls
   original_arguments,
-  ## arguments that need to evaluated first
-  ## because they are used by
+  ## arguments that need to be evaluated first
+  ## because they are used by forest_plot_list_xlim()
   xlim,
   xticks,
   panels,
@@ -20,13 +20,13 @@ forest_plot_list_xlim <- function(
 
   ## check arguments
   if (!is.list(xlim) | !is.list(xticks) | !is.list(panels)){
-    rlang::abort("panels, xlim and xticks must be lists")
+    cli::cli_abort("{.arg panels}, {.arg xlim} and {.arg xticks} must be lists")
   }
   if (length(unique(c(length(xlim), length(xticks), length(panels)))) != 1){
-    rlang::abort("panels, xlim and xticks must be lists of the same length")
+    cli::cli_abort("{.arg panels}, {.arg xlim} and {.arg xticks} must be lists of the same length")
   }
   if (!is.null(panel.headings) && length(panel.headings) != length(panels)){
-    rlang::abort("panel.headings must be same length as panels")
+    cli::cli_abort("{.arg panel.headings} must be same length as {.arg panels}")
   }
 
   ## make lists

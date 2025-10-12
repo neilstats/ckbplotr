@@ -120,9 +120,9 @@ shape_plot <- function(data,
                        envir         = NULL){
 
   # Check arguments ----
-  if (!is.null(col.lci) &&  is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
-  if ( is.null(col.lci) && !is.null(col.uci)) rlang::abort("col.lci and col.uci must both be specified")
-  if (!is.null(col.group) && !missing(fill)) rlang::abort("col.group and fill both control fill, so do not specify both")
+  if (!is.null(col.lci) &&  is.null(col.uci)) cli::cli_abort("{.arg col.lci} and {.arg col.uci} must both be specified")
+  if ( is.null(col.lci) && !is.null(col.uci)) cli::cli_abort("{.arg col.lci} and {.arg col.uci} must both be specified")
+  if (!is.null(col.group) && !missing(fill)) cli::cli_abort("{.arg col.group} and {.arg fill} both control fill, so do not specify both")
 
 
   if (is.logical(lines)) {
@@ -141,11 +141,11 @@ shape_plot <- function(data,
 
   # Check if confidence intervals may be hidden ----
   if (missing(height)){
-    rlang::inform(c('i' = 'Narrow confidence interval lines may become hidden in the shape plot.',
-                    'i' = 'Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.'),
-                  use_cli_format = TRUE,
-                  .frequency = "once",
-                  .frequency_id = "shape_narrow_cis")
+    cli::cli_inform(c('i' = 'Narrow confidence interval lines may become hidden in the shape plot.',
+                      'i' = 'Please check your final output carefully and see vignette("shape_confidence_intervals") for more details.'),
+                    use_cli_format = TRUE,
+                    .frequency = "once",
+                    .frequency_id = "shape_narrow_cis")
   }
 
   if(!missing(height) && !missing(col.group) && !missing(cicolour)){
@@ -153,7 +153,7 @@ shape_plot <- function(data,
   }
 
   if (!missing(height) && is.null(ylims)){
-    rlang::abort("ylims must be specified when setting height")
+    cli::cli_abort("{.arg ylims} must be specified when setting height")
   }
 
 
@@ -161,19 +161,25 @@ shape_plot <- function(data,
   # Match estimate and stderr column names ----
   column_names_in_data <- names(data)
   if (length(col.estimate[col.estimate %in% column_names_in_data]) == 0) {
-    rlang::abort(glue::glue("Column '{col.estimate}' does not exist in panels data frame."))
+    if (missing(col.estimate)) {
+      cli::cli_abort("Specify the name of the column with point estimates using {.arg col.estimate} or use one of the following column names: {.var {col.estimate}}.")
+    }
+    cli::cli_abort("Column {.var {col.estimate}} does not exist in panels data frame.")
   }
   col.estimate <- col.estimate[col.estimate %in% column_names_in_data][[1]]
 
   if (!is.null(col.lci) | !is.null(col.uci)) {
     for (x in c(col.lci, col.uci)){
       if (!x %in% column_names_in_data){
-        rlang::abort(glue::glue("Column '{x}' does not exist in panels data frame."))
+        cli::cli_abort("Column {.var {x}} does not exist in panels data frame.")
       }
     }
   } else {
     if (length(col.stderr[col.stderr %in% column_names_in_data]) == 0) {
-      rlang::abort(glue::glue("Column '{col.stderr}' does not exist in panels data frame."))
+      if (missing(col.stderr)) {
+        cli::cli_abort("Specify the name of the column with standard errors using {.arg col.stderr} or use one of the following column names: {.var {col.stderr}}.")
+      }
+      cli::cli_abort("Column {.var {col.stderr}} does not exist in panels data frame.")
     }
     col.stderr <- col.stderr[col.stderr %in% column_names_in_data][[1]]
   }
@@ -320,7 +326,7 @@ shape_plot <- function(data,
   # Using groups ----
   if (!is.null(col.group)) {
 
-    if(!is.factor(data[[col.group]])) rlang::abort("col.group must be factor")
+    if(!is.factor(data[[col.group]])) cli::cli_abort("{.arg col.group} must be factor")
     group_string <- glue::glue(', group = {column_name(col.group)}')
     scale_fill_string <- c('',
                            make_layer('# Set the scale for fill colours',
