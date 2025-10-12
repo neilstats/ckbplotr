@@ -75,12 +75,12 @@ forest.narrowci <- function(x) {
                     c('dplyr::case_match({column_name(x$shape_list$aes)},',
                       indent(18,
                              '"22" ~ sqrt(pi / 4) * 0.7528125,',
-                             '"filled square" ~ sqrt(pi / 4) * 0.7528125,',
+                             '"square filled" ~ sqrt(pi / 4) * 0.7528125,',
                              '.default = 0.7528125))'))
                   } else {
                     switch(as.character(x$shape_list$arg),
                            "22" = "sqrt(pi / 4) * 0.7528125)",
-                           "filled square" = "sqrt(pi / 4) * 0.7528125)",
+                           "square filled" = "sqrt(pi / 4) * 0.7528125)",
                            "0.7528125)")
                   }
            ),
