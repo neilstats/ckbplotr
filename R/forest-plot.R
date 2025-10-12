@@ -62,11 +62,21 @@
 #' @param plotcolour
 #' Colour for all parts of the plot. (Default: "black")
 #' @param colour
-#' Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)
+#' Colour of points.
+#' Name of a colour, or name of a column of colour names.
+#' Use a list of colour names for different colours on each panel.
+#' (Default will use plotcolour.)
 #' @param cicolour
-#' Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use colour.)
+#' Colour of CI lines.
+#' Name of a colour, or name of a column of colour names.
+#' Use a list of colour names for different colours on each panel.
+#' Use a vector (or list of vectors) in conjunction with panel.width to set a different colour for narrow confidence interval lines.
+#' (Default will use colour.)
 #' @param fill
-#' Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)
+#' Fill colour of points.
+#' Name of a colour, or name of a column of colour names.
+#' Use a list of colour names for different colours on each panel.
+#' (Default will use colour.)
 #' @param ciunder
 #' Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)
 #' @param col.bold
@@ -80,7 +90,7 @@
 #' Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(8, 8, 8, 8, "mm"))
 #' @param panel.width,panel.height
 #' Set width/height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
-#' If panel.width is used, will alsovapply different formatting to narrow CIs.
+#' If panel.width is used, will also apply different formatting to narrow CIs.
 #' @param base_size
 #' base font size, given in pts.
 #' @param base_line_size
@@ -315,6 +325,13 @@ forest_plot <- function(
   fixed_panel_height <- !missing(panel.height)
   column_names_in_data <- purrr::reduce(lapply(panels_list, names), intersect)
 
+  if (!is.list(colour) && length(colour) > 1) {
+    colour <- as.list(colour)
+  }
+  if (!is.list(fill) && length(fill) > 1) {
+    fill <- as.list(fill)
+  }
+
   # blankrows no longer used
   if (!missing(blankrows)){
     row.labels.space <- blankrows
@@ -432,22 +449,76 @@ forest_plot <- function(
   if (all(cicolour %in% column_names_in_data)){
     cicolour_list <- list(aes = cicolour)
   } else {
-    if (missing(cicolour)) {
-      if (!is.list(fill)) {
-        cicolour <- c(cicolour, if (fill == "white" & !shape %in% c(15, "square", "circle")) cicolour else "white")
+    if (fixed_panel_width) {
+      if (is.list(cicolour)) {
+        if (length(cicolour) != length(panel.names)) {cli::cli_abort("If {.arg cicolour} is a list, it should be the same length as {.arg panels}.")}
+        if (missing(cicolour)) {
+          if (!is.list(fill)) {
+            cicolour <- lapply(cicolour, \(x) c(x, if (fill == "white" & !shape %in% c(15, "square", "circle")) x else "white"))
+          } else {
+            for (i in seq_along(fill)) {
+              if (fill[[i]] == "white" & !shape %in% c(15, "square", "circle")) {
+                cicolour[[i]] <- c(cicolour[[i]], cicolour[[i]])
+              } else {
+                cicolour[[i]] <- c(cicolour[[i]], "white")
+              }
+            }
+          }
+        }
+        cicolour_list <- list(string_aes = forest.cicolour(quote_string(cicolour),
+                                                           panel.names))
       } else {
-        cicolour <- lapply(fill,
-                           \(x) c(cicolour, if (x == "white" & !shape %in% c(15, "square", "circle")) cicolour else "white") )
+        if (missing(cicolour)) {
+          if (!is.list(fill)) {
+            cicolour <- c(cicolour, if (fill == "white" & !shape %in% c(15, "square", "circle")) cicolour else "white")
+          } else {
+            cicolour <- lapply(fill,
+                               \(x) c(cicolour, if (x == "white" & !shape %in% c(15, "square", "circle")) cicolour else "white") )
+          }
+        }
+        cicolour_list <- list(string_aes = forest.cicolour(quote_string(cicolour),
+                                                           panel.names))
       }
+    } else if (is.list(cicolour)) {
+      if (length(cicolour) != length(panel.names)) {cli::cli_abort("If {.arg cicolour} is a list, it should be the same length as {.arg panels}.")}
+
+      cicolour_aes <- c(
+        'dplyr::case_when(',
+        purrr::map_chr(1:length(cicolour),
+                       \(i) glue::glue('panel == {quote_string(panel.names[[{i}]])} ~ {quote_string(cicolour[[{i}]][1])}, ')
+        ),
+        'TRUE ~ "black")'
+      )
+      cicolour_list <- list(string_aes = paste(cicolour_aes, collapse = ""))
+    } else {
+      if (missing(cicolour)) {
+        if (!is.list(fill)) {
+          cicolour <- c(cicolour, if (fill == "white" & !shape %in% c(15, "square", "circle")) cicolour else "white")
+        } else {
+          cicolour <- lapply(fill,
+                             \(x) c(cicolour, if (x == "white" & !shape %in% c(15, "square", "circle")) cicolour else "white") )
+        }
+      }
+      cicolour_list <- list(arg = cicolour)
     }
-    cicolour_list <- list(arg = cicolour)
   }
-  if(is.list(cicolour)){cicolour_list <- list(arg = cicolour)}
+
 
   ### colour
   colour_list <- list(arg = colour)
-  if (!missing(colour) && all(colour %in% column_names_in_data)){
+  if (!is.list(colour) && colour %in% column_names_in_data){
     colour_list <- list(aes = colour)
+  }
+  if (is.list(colour)){
+    if (length(colour) != length(panel.names)) {cli::cli_abort("If {.arg colour} is a list, itshould be the same length as {.arg panels}.")}
+    colour_aes <- c(
+      'dplyr::case_when(',
+      purrr::map_chr(1:length(colour),
+                     \(i) glue::glue('panel == {quote_string(panel.names[[{i}]])} ~ {quote_string(colour[[{i}]][1])}, ')
+      ),
+      'TRUE ~ "black")'
+    )
+    colour_list <- list(string_aes = paste(colour_aes, collapse = ""))
   }
 
   ### fill
@@ -456,6 +527,7 @@ forest_plot <- function(
     fill_list <- list(aes = fill)
   }
   if (is.list(fill)){
+    if (length(fill) != length(panel.names)) {cli::cli_abort("If {.arg fill} is a list, it should be the same length as {.arg panels}.")}
     fill_aes <- c(
       'dplyr::case_when(',
       purrr::map_chr(1:length(fill),
@@ -471,9 +543,6 @@ forest_plot <- function(
     if (!inherits(panel.width, "unit")){
       panel.width <- grid::unit(panel.width, "mm")
     }
-    cicolour_list <- list(string_aes = forest.cicolour(c(quote_string(cicolour_list$arg),
-                                                         column_name(cicolour_list$aes)),
-                                                       panel.names))
 
     if (missing(ciunder)) {
       ciunder <- c(TRUE, FALSE)

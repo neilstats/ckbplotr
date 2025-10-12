@@ -191,11 +191,21 @@ right of each plot. (Default: TRUE)}
 
 \item{plotcolour}{Colour for all parts of the plot. (Default: "black")}
 
-\item{colour}{Colour of points. Name of a colour, or name of a column of colour names. (Default will use plotcolour.)}
+\item{colour}{Colour of points.
+Name of a colour, or name of a column of colour names.
+Use a list of colour names for different colours on each panel.
+(Default will use plotcolour.)}
 
-\item{cicolour}{Colour of CI lines. Colour of CI lines. Name of a colour, or name of a column of colour names. (Default will use colour.)}
+\item{cicolour}{Colour of CI lines.
+Name of a colour, or name of a column of colour names.
+Use a list of colour names for different colours on each panel.
+Use a vector (or list of vectors) in conjunction with panel.width to set a different colour for narrow confidence interval lines.
+(Default will use colour.)}
 
-\item{fill}{Fill colour of points. Name of a colour, or name of a column of colour names. (Default will use colour.)}
+\item{fill}{Fill colour of points.
+Name of a colour, or name of a column of colour names.
+Use a list of colour names for different colours on each panel.
+(Default will use colour.)}
 
 \item{ciunder}{Plot CI lines before points. A logical value, or name of a column of logical values. (Default will plot CI lines after points.)}
 
@@ -220,7 +230,7 @@ given in the col.key column.}
 \item{plot.margin}{Plot margin, given as margin(top, right, bottom, left, units). (Default: margin(2, 8, 2, 8, "mm"))}
 
 \item{panel.width, panel.height}{Set width/height of panels. A grid::unit object, if a numeric is given assumed to be in mm.
-If panel.width is used, will alsovapply different formatting to narrow CIs.}
+If panel.width is used, will also apply different formatting to narrow CIs.}
 
 \item{base_size}{base font size, given in pts.}
 

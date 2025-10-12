@@ -80,7 +80,15 @@ forest_plot_list_xlim <- function(
     if (!is.null(panel.headings)){
       update_args$panel.headings <- panel.headings[[i]]
     }
-
+    if (is.list(eval(original_arguments$fill))){
+      update_args$fill <- eval(original_arguments$fill)[[i]]
+    }
+    if (is.list(eval(original_arguments$cicolour))){
+      update_args$cicolour <- eval(original_arguments$cicolour)[[i]]
+    }
+    if (is.list(eval(original_arguments$colour))){
+      update_args$colour <- eval(original_arguments$colour)[[i]]
+    }
     forest <- do.call("forest_plot",
                       utils::modifyList(original_arguments, update_args),
                       envir = envir)

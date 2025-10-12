@@ -210,7 +210,7 @@ forest.points <- function(x) {
               'size = size'
             },
             'shape  = {column_name(x$shape_list$aes)}',
-            'colour = {column_name(x$colour_list$aes)}',
+            'colour = {c(column_name(x$colour_list$aes), x$colour_list$string_aes)}',
             'fill   = {c(column_name(x$fill_list$aes), x$fill_list$string_aes)}'),
     arg = c(x$addarg$points,
             'data   = \\(x) dplyr::filter(x',
@@ -327,6 +327,7 @@ forest.scale.colour <- function(x) {
   }
 
   colour_scale_needed <- any(!is.null(x$colour_list$aes),
+                             !is.null(x$colour_list$string_aes),
                              !is.null(x$cicolour_list$aes),
                              !is.null(x$cicolour_list$string_aes))
   if(!colour_scale_needed){return(NULL)}
