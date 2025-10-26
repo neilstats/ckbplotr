@@ -1,3 +1,45 @@
+# ckbplotr 0.12.0
+
+This update includes many changes both internal and external. Most existing code
+using this package should work OK, but some code may need to be modified to get 
+the same output or prevent errors.
+
+Updates to shape_plot():
+
+* If ylims is set then confidence interval lines that exceed 
+the axis limits will be truncated and arrows added to the plot.
+* The lines argument can be used to add  weight or unweighted
+linear regression lines, or lines connecting points.
+* xlogscale argument added to use a log scale for the x-axis.
+* clip and plot.margin arguments added.
+* The add argument can be used to replace parts of the generated code. Labels 
+are added to generated code comments to help identify parts of the plot.
+* The default point size scales with base_size.
+
+Updates to forest_plot():
+
+* Row labels use marquee::element_marquee() by default. 
+(The row.labels.element argument can be used to change this.)
+* The nullval argument can be a vector or list to use different 
+values for each panel.
+* The heading.rule argument can be a grid::unit() object to
+set how far the line extends beyond the plot area.
+* The left.parse and right.parse arguments can be used make the 
+columns or column headings be parsed.
+* The add argument can be used to replace parts of the generated code. Labels 
+are added to generated code comments to help identify parts of the plot.
+* The default point size scales with base_size.
+
+Other updates:
+
+* The legendry package is used to cap the axis lines in ckb_style() (and so
+also shape_plot()). This means axis lines can be modified using theme().
+* ckb_style() and theme_ckb() have ink and paper arguments.
+* Some changes to argument names.
+* Improved documentation.
+* Fixes and internal changes.
+
+
 # ckbplotr 0.11.5
 
 * Fixes for ggplot2 4.0.0
