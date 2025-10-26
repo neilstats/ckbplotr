@@ -73,7 +73,9 @@ shape.start.ggplot <- function(x) {
 #' @noRd
 shape.scale.x <- function(x) {
   if (!is.null(x$add$scale.x)) {
-    return(c('# Set the x-axis scale', paste(x$add$scale.x, " +"), ''))
+    return(c('# Set the x-axis scale [scale.x]',
+             paste(x$add$scale.x, " +"),
+             ''))
   }
 
   if (x$xscale == "discrete") {
@@ -97,14 +99,18 @@ shape.scale.x <- function(x) {
       glue::glue('breaks = {x$xbreaks}')
   )
 
-  c('# Set the x-axis scale', glue::glue('scale_x_continuous({args}) +'), '')
+  c('# Set the x-axis scale [scale.x]',
+    glue::glue('scale_x_continuous({args}) +'),
+    '')
 }
 
 #' code for y axis scale
 #' @noRd
 shape.scale.y <- function(x) {
   if (!is.null(x$add$scale.y)) {
-    return(c('# Set the y-axis scale', paste(x$add$scale.y, " +"), ''))
+    return(c('# Set the y-axis scale [scale.y]',
+             paste(x$add$scale.y, " +"),
+             ''))
   }
 
   if (x$ybreaks == "NULL" & x$yscale == "identity") {
@@ -120,7 +126,9 @@ shape.scale.y <- function(x) {
       glue::glue('breaks = {x$xbreaks}')
   )
 
-  c('# Set the y-axis scale', glue::glue('scale_y_continuous({args}) +'), '')
+  c('# Set the y-axis scale [scale.y]',
+    glue::glue('scale_y_continuous({args}) +'),
+    '')
 }
 
 
@@ -128,11 +136,13 @@ shape.scale.y <- function(x) {
 #' @noRd
 shape.scale.radius <- function(x) {
   if (!is.null(x$add$scale.radius)) {
-    return(c('# Set the scale for the size of boxes', paste(x$add$scale.radius, " +"), ''))
+    return(c('# Set the scale for the size of boxes [scale.radius]',
+             paste(x$add$scale.radius, " +"),
+             ''))
   }
 
   make_layer(
-    '# Set the scale for the size of boxes',
+    '# Set the scale for the size of boxes [scale.radius]',
     f = "scale_radius",
     arg = c('guide  = "none"',
             'limits = c(0, {x$one_over_minse})',
@@ -144,10 +154,12 @@ shape.scale.radius <- function(x) {
 #' @noRd
 shape.scale.shape <- function(x) {
   if (!is.null(x$add$scale.shape)) {
-    return(c('# Set the scale for shape', paste(x$add$scale.shape, " +"), ''))
+    return(c('# Set the scale for shape [scale.shape]',
+             paste(x$add$scale.shape, " +"),
+             ''))
   }
 
-  c('# Set the scale for shape',
+  c('# Set the scale for shape [scale.shape]',
     'scale_shape_identity() +',
     '')
 }
@@ -156,10 +168,12 @@ shape.scale.shape <- function(x) {
 #' @noRd
 shape.scale.colour <- function(x) {
   if (!is.null(x$add$scale.colour)) {
-    return(c('# Set the scale for colour', paste(x$add$scale.colour, " +"), ''))
+    return(c('# Set the scale for colour [scale.colour]',
+             paste(x$add$scale.colour, " +"),
+             ''))
   }
 
-  c('# Set the scale for colour',
+  c('# Set the scale for colour [scale.colour]',
     'scale_colour_identity() +',
     '')
 }
@@ -168,10 +182,12 @@ shape.scale.colour <- function(x) {
 #' @noRd
 shape.scale.fill <- function(x) {
   if (!is.null(x$add$scale.fill)) {
-    return(c('# Set the scale for fill', paste(x$add$scale.fill, " +"), ''))
+    return(c('# Set the scale for fill [scale.fill]',
+             paste(x$add$scale.fill, " +"),
+             ''))
   }
 
-  c('# Set the scale for fill',
+  c('# Set the scale for fill [scale.fill]',
     x$scale_fill_string,
     '')
 }
@@ -184,7 +200,7 @@ shape.lines <- function(x) {
 
   if (x$lines == "lmw") {
     make_layer(
-      '# Plot lines (linear fit through estimates, weighted by inverse variance)',
+      '# Plot lines (linear fit through estimates, weighted by inverse variance) [lines]',
       f = "stat_smooth",
       aes = c(x$addaes$lines,
               if (!is.null(x$col.lci)) {
@@ -198,11 +214,11 @@ shape.lines <- function(x) {
               'se        = FALSE',
               'colour    = {quote_string(x$plotcolour)}',
               'linetype  = "dashed"',
-              'linewidth = 0.25')
+              'linewidth = {x$base_line_size/2}')
     )
   } else if (x$lines == "lm") {
     make_layer(
-      '# Plot lines (linear fit through estimates, unweighted)',
+      '# Plot lines (linear fit through estimates, unweighted) [lines]',
       f = "stat_smooth",
       aes = c(x$addaes$lines),
       arg = c(x$addarg$lines,
@@ -211,17 +227,17 @@ shape.lines <- function(x) {
               'se        = FALSE',
               'colour    = {quote_string(x$plotcolour)}',
               'linetype  = "dashed"',
-              'linewidth = 0.25')
+              'linewidth = {x$base_line_size/2}')
     )
   } else if (x$lines == "connect") {
     make_layer(
-      '# Plot lines (connect points)',
+      '# Plot lines (connect points) [lines]',
       f = "geom_line",
       aes = c(x$addaes$lines),
       arg = c(x$addarg$lines,
               'colour    = {quote_string(x$plotcolour)}',
               'linetype  = "solid"',
-              'linewidth = 0.25')
+              'linewidth = {x$base_line_size/2}')
     )
   }
 }
@@ -231,11 +247,13 @@ shape.lines <- function(x) {
 #' @noRd
 shape.estimates.points <- function(x) {
   if (!is.null(x$add$estimates.points)) {
-    return(c('# Plot the point estimates', paste(x$add$estimates.points, " +"), ''))
+    return(c('# Plot the point estimates [estimates.points]',
+             paste(x$add$estimates.points, " +"),
+             ''))
   }
 
   make_layer(
-    '# Plot the point estimates',
+    '# Plot the point estimates [estimates.points]',
     f = "geom_point",
     aes = c(x$addaes$estimates.points,
             'size   = {x$size}',
@@ -254,7 +272,9 @@ shape.estimates.points <- function(x) {
 #' @noRd
 shape.estimates.text <- function(x) {
   if (!is.null(x$add$estimates.text)) {
-    return(c('# Plot point estimates text', paste(x$add$estimates.text, " +"), ''))
+    return(c('# Plot point estimates text [estimates.text]',
+             paste(x$add$estimates.text, " +"),
+             ''))
   }
 
   if (x$ylims != "NULL") {
@@ -262,7 +282,7 @@ shape.estimates.text <- function(x) {
   }
 
   make_layer(
-    '# Plot point estimates text',
+    '# Plot point estimates text [estimates.text]',
     f = "geom_text",
     aes = c(x$addaes$estimates.text,
             'y     = {x$uci_string}',
@@ -280,7 +300,7 @@ shape.n.text <- function(x) {
   if (is.null(x$col.n)){return(NULL)}
 
   if (!is.null(x$add$n.text)) {
-    return(c('# Plot n text', paste(x$add$n.text, " +"), ''))
+    return(c('# Plot n text [n.text]', paste(x$add$n.text, " +"), ''))
   }
 
   if (x$ylims != "NULL") {
@@ -288,7 +308,7 @@ shape.n.text <- function(x) {
   }
 
   make_layer(
-    '# Plot n text',
+    '# Plot n text [n.text]',
     f = "geom_text",
     aes = c(x$addaes$n.text,
             'y     = {x$lci_string}',
@@ -313,7 +333,7 @@ shape.ci <- function(x, type = c("all", "before", "after", "null")) {
   }
 
   make_layer(
-    '# Plot the CIs',
+    '# Plot the CIs [ci]',
     f = "geom_linerange",
     aes = c(x$addaes$ci,
             'ymin = {x$lci_string}',
@@ -331,7 +351,7 @@ shape.ci <- function(x, type = c("all", "before", "after", "null")) {
 
 shape.ci.before <- function(x){
   if (!is.null(x$add$ci.before)) {
-    return(c('# Plot the CIs',
+    return(c('# Plot the CIs [ci.before]',
              paste(x$add$ci.before, " +"),
              ''))
   }
@@ -340,7 +360,7 @@ shape.ci.before <- function(x){
 
 shape.ci.after <- function(x){
   if (!is.null(x$add$ci.after)) {
-    return(c('# Plot the CIs',
+    return(c('# Plot the CIs [ci.after]',
              paste(x$add$ci.after, " +"),
              ''))
   }
@@ -354,13 +374,13 @@ shape.arrows <- function(x) {
   if (x$ylims == "NULL"){return(NULL)}
 
   if (!is.null(x$add$arrows)) {
-    return(c('# Add tiny segments with arrows when the CIs go outside axis limits',
+    return(c('# Add tiny segments with arrows when the CIs go outside axis limits [arrows]',
              paste(x$add$arrows, " +"),
              ''))
   }
 
   make_layer(
-    '# Add tiny segments with arrows when the CIs go outside axis limits',
+    '# Add tiny segments with arrows when the CIs go outside axis limits [arrows]',
     f = 'geom_segment',
     aes = c(x$addaes$ci,
             'y = y',
@@ -396,11 +416,13 @@ shape.titles <- function(x) {
 
 shape.ckb.style <- function(x) {
   if (!is.null(x$add$ckb.style)) {
-    return(c('# Plot like a CKB plot', paste(x$add$ckb.style, " +"), ''))
+    return(c('# Plot like a CKB plot [ckb.style]',
+             paste(x$add$ckb.style, " +"),
+             ''))
   }
 
   make_layer(
-    '# Plot like a CKB plot',
+    '# Plot like a CKB plot [ckb.style]',
     f = "ckbplotr::ckb_style",
     arg = c('xlims          = {x$xlims}',
             'ylims          = {x$ylims}',
@@ -425,11 +447,11 @@ shape.theme <- function(x) {
     if (!is.null(x$add$end)) {
       x$add$theme <- paste(x$add$theme, " +")
     }
-    return(c('# Add theme', x$add$theme, ''))
+    return(c('# Add theme [theme]', x$add$theme, ''))
   }
 
   make_layer(
-    '# Add theme',
+    '# Add theme [theme]',
     f = "theme",
     arg = c(x$addarg$theme,
             'legend.position = {x$legend.position}'),
@@ -442,14 +464,16 @@ shape.theme <- function(x) {
 #' @noRd
 shape.add.start <- function(x) {
   if (is.null(x$add$start)){return(NULL)}
-  c("# Additional layer", paste(x$add$start, " +"))
+  c("# Additional [start]",
+    paste(x$add$start, " +"),
+    "")
 }
 
 #' code to add object at end of ggplot
 #' @noRd
 shape.add.end <- function(x) {
   if (is.null(x$add$end)){return(NULL)}
-  c("# Additional layer",
+  c("# Additional [end]",
     x$add$end,
     "")
 }

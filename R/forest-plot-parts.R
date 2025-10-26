@@ -2,11 +2,11 @@
 #' @noRd
 forest.coord <- function(x) {
   if (!is.null(x$add$coord)) {
-    return(c('# Set coordinate system', paste(x$add$coord, " +"), ''))
+    return(c('# Set coordinate system [coord]', paste(x$add$coord, " +"), ''))
   }
 
   make_layer(
-    '# Set coordinate system',
+    '# Set coordinate system [coord]',
     f = 'coord_cartesian',
     arg = c('clip = "off"',
             'xlim = c({x$xfrom}, {x$xto})'))
@@ -17,11 +17,13 @@ forest.coord <- function(x) {
 #' @noRd
 forest.scale.x <- function(x) {
   if (!is.null(x$add$scale.x)) {
-    return(c('# Set the scale for the x axis (the estimates and CIs)', paste(x$add$scale.x, " +"), ''))
+    return(c('# Set the scale for the x axis [scale.x]',
+             paste(x$add$scale.x, " +"),
+             ''))
   }
 
   make_layer(
-    '# Set the scale for the x axis (the estimates and CIs)',
+    '# Set the scale for the x axis [scale.x]',
     f = "scale_x_continuous",
     arg = c('trans  = "{x$axis_scale}"',
             "limits = c({x$xfrom}, {x$xto})",
@@ -34,11 +36,13 @@ forest.scale.x <- function(x) {
 #' @noRd
 forest.scale.y <- function(x) {
   if (!is.null(x$add$scale.y)) {
-    return(c('# Set the scale for the y axis (the rows)', paste(x$add$scale.y, " +"), ''))
+    return(c('# Set the scale for the y axis [scale.y]',
+             paste(x$add$scale.y, " +"),
+             ''))
   }
 
   make_layer(
-    '# Set the scale for the y axis (the rows)',
+    '# Set the scale for the y axis [scale.y]',
     f = "scale_y_continuous",
     arg = c(
       'trans = "reverse"',
@@ -113,11 +117,11 @@ forest.plotdiamondscode <- function(x) {
   if (is.null(x$col.diamond) && is.null(x$diamond)){return(NULL)}
 
   if (!is.null(x$add$diamonds)) {
-    return(c('# Add diamonds', paste(x$add$diamonds, " +"), ''))
+    return(c('# Add diamonds [diamonds]', paste(x$add$diamonds, " +"), ''))
   }
 
   make_layer(
-    '# Add diamonds',
+    '# Add diamonds [diamonds]',
     f = 'geom_polygon',
     aes = c(x$addaes$diamonds,
             'x = x, y = row + y, group = row',
@@ -145,11 +149,13 @@ forest.start.ggplot <- function() {
 #' @noRd
 forest.facet <- function(x) {
   if (!is.null(x$add$facet)) {
-    return(c('# Put the different panels in side-by-side plots using facets', paste(x$add$facet, " +"), ''))
+    return(c('# Put the different panels in side-by-side plots using facets [facet]',
+             paste(x$add$facet, " +"),
+             ''))
   }
 
   make_layer(
-    '# Put the different panels in side-by-side plots using facets',
+    '# Put the different panels in side-by-side plots using facets [facet]',
     f = 'facet_wrap',
     arg = c('vars(panel), nrow = 1')
   )
@@ -159,13 +165,15 @@ forest.facet <- function(x) {
 #' @noRd
 forest.nullline <- function(x) {
   if (!is.null(x$add$nullline)) {
-    return(c('# Add a line at null effect', paste(x$add$nullline, " +"), ''))
+    return(c('# Add a line at null effect [nullline]',
+             paste(x$add$nullline, " +"),
+             ''))
   }
 
   if (is.null(x$nullval)){return(NULL)}
   if (length(x$nullval) == 1) {
     make_layer(
-      '# Add a line at null effect',
+      '# Add a line at null effect [nullline]',
       f = "annotate",
       arg = c(x$addarg$nullline,
               'geom      = "segment"',
@@ -178,7 +186,7 @@ forest.nullline <- function(x) {
     )
   } else {
     make_layer(
-      '# Add a line at null effect',
+      '# Add a line at null effect [nullline]',
       f = 'geom_segment',
       aes = c(x$addaes$nullline,
               'y = 0.7',
@@ -199,11 +207,13 @@ forest.nullline <- function(x) {
 #' @noRd
 forest.points <- function(x) {
   if (!is.null(x$add$points)) {
-    return(c('# Plot the point estimates', paste(x$add$points, " +"), ''))
+    return(c('# Plot the point estimates [points]',
+             paste(x$add$points, " +"),
+             ''))
   }
 
   make_layer(
-    '# Plot points at the transformed estimates',
+    '# Plot points at the transformed estimates [points]',
     f = 'geom_point',
     aes = c(x$addaes$points,
             if (x$scalepoints){
@@ -232,14 +242,16 @@ forest.points <- function(x) {
 #' @noRd
 forest.scale.radius <- function(x) {
   if (!is.null(x$add$scale.radius)) {
-    return(c('# Set the scale for the size of boxes', paste(x$add$scale.radius, " +"), ''))
+    return(c('# Set the scale for the size of boxes [scale.radius]',
+             paste(x$add$scale.radius, " +"),
+             ''))
   }
 
   if (!x$scalepoints){return(NULL)}
 
   make_layer(
-    c('# Scale the size of points by their side length',
-      '# and make the scale range from zero upwards'),
+    c('# Set the scale for the size of boxes [scale.radius]',
+      '# Scale by  side length and make the scale range from zero upwards'),
     f = 'scale_radius',
     arg = c('limits = c(0, 1)',
             'range  = c(0, {x$pointsize})')
@@ -252,9 +264,9 @@ forest.ci <- function(x, type = c("all", "before", "after", "null")) {
   if (type == "null"){return(NULL)}
   make_layer(
     switch(type,
-           "all"    = '# Plot the CIs',
-           "before" = '# Plot the CIs - before plotting points',
-           "after"  = '# Plot the CIs - after plotting points'),
+           "all"    = '# Plot the CIs [ci]',
+           "before" = '# Plot the CIs - before plotting points [ci]',
+           "after"  = '# Plot the CIs - after plotting points [ci]'),
     f = 'geom_errorbar',
     aes = c(x$addaes$ci,
             'xmin = pmin(pmax(lci_transformed, {x$xfrom}), {x$xto})',
@@ -274,7 +286,7 @@ forest.ci <- function(x, type = c("all", "before", "after", "null")) {
 
 forest.ci.before <- function(x){
   if (!is.null(x$add$ci.before)) {
-    return(c('# Plot the CIs',
+    return(c('# Plot the CIs [ci.before]',
              paste(x$add$ci.before, " +"),
              ''))
   }
@@ -283,7 +295,7 @@ forest.ci.before <- function(x){
 
 forest.ci.after <- function(x){
   if (!is.null(x$add$ci.after)) {
-    return(c('# Plot the CIs',
+    return(c('# Plot the CIs [ci.after]',
              paste(x$add$ci.after, " +"),
              ''))
   }
@@ -294,12 +306,14 @@ forest.ci.after <- function(x){
 #' @noRd
 forest.scale.shape <- function(x) {
   if (!is.null(x$add$scale.shape)) {
-    return(c('# Set the scale for shape', paste(x$add$scale.shape, " +"), ''))
+    return(c('# Set the scale for shape [scale.shape]',
+             paste(x$add$scale.shape, " +"),
+             ''))
   }
 
   if(is.null(x$shape_list$aes)){return(NULL)}
 
-  c('# Set the scale for shape',
+  c('# Set the scale for shape [scale.shape]',
     'scale_shape_identity() +',
     '')
 }
@@ -308,13 +322,15 @@ forest.scale.shape <- function(x) {
 #' @noRd
 forest.scale.fill <- function(x) {
   if (!is.null(x$add$scale.fill)) {
-    return(c('# Set the scale for fill', paste(x$add$scale.fill, " +"), ''))
+    return(c('# Set the scale for fill [scale.fill]',
+             paste(x$add$scale.fill, " +"),
+             ''))
   }
 
   fill_scale_needed <- !is.null(x$fill_list$aes) | !is.null(x$fill_list$string_aes)
   if(!fill_scale_needed){return(NULL)}
 
-  c('# Set the scale for shape',
+  c('# Set the scale for shape [scale.fill]',
     'scale_fill_identity() +',
     '')
 }
@@ -323,7 +339,9 @@ forest.scale.fill <- function(x) {
 #' @noRd
 forest.scale.colour <- function(x) {
   if (!is.null(x$add$scale.colour)) {
-    return(c('# Set the scale for colour', paste(x$add$scale.colour, " +"), ''))
+    return(c('# Set the scale for colour [scale.colour]',
+             paste(x$add$scale.colour, " +"),
+             ''))
   }
 
   colour_scale_needed <- any(!is.null(x$colour_list$aes),
@@ -332,7 +350,7 @@ forest.scale.colour <- function(x) {
                              !is.null(x$cicolour_list$string_aes))
   if(!colour_scale_needed){return(NULL)}
 
-  c('# Set the scale for shape',
+  c('# Set the scale for colour [scale.colour]',
     'scale_colour_identity() +',
     '')
 }
@@ -342,13 +360,13 @@ forest.scale.colour <- function(x) {
 forest.arrows <- function(x) {
   if (!x$values_outside_xlim){return(NULL)}
   if (!is.null(x$add$arrows)) {
-    return(c('# Add tiny segments with arrows when the CIs go outside axis limits',
+    return(c('# Add tiny segments with arrows when the CIs go outside axis limits [arrows]',
              paste(x$add$arrows, " +"),
              ''))
   }
 
   make_layer(
-    '# Add tiny segments with arrows when the CIs go outside axis limits',
+    '# Add tiny segments with arrows when the CIs go outside axis limits [arrows]',
     f = 'geom_segment',
     aes = c(x$addaes$ci,
             'y      = row',
@@ -446,7 +464,7 @@ forest.columns.right <- function(x) {
          headingaddaes = if(is.null(x$addaes$heading.right)){""} else{x$addaes$heading.right},
          headingaddarg = if(is.null(x$addarg$heading.right)){""} else{x$addarg$heading.right}),
     forest.columns.code))
-  c('# Add columns to right side of panels', code)
+  c('# Add columns to right side of panels [col.right, heading.right]', code)
 }
 
 #' code for columns to left of panels
@@ -469,7 +487,7 @@ forest.columns.left <- function(x) {
          headingaddaes = if(is.null(x$addaes$heading.left)){""} else{x$addaes$heading.left},
          headingaddarg = if(is.null(x$addarg$heading.left)){""} else{x$addarg$heading.left}),
     forest.columns.code))
-  c('# Add columns to left side of panel', code)
+  c('# Add columns to left side of panel [col.left, heading.left]', code)
 }
 
 #' code for addtext
@@ -477,7 +495,7 @@ forest.columns.left <- function(x) {
 forest.addtext <- function(x) {
   if (is.null(x$addtext)){return(NULL)}
   make_layer(
-    '## addtext',
+    '## Add text [addtext]',
     f = 'ckbplotr::geom_text_move',
     aes = c(x$addaes$addtext,
             'y = row',
@@ -537,11 +555,13 @@ forest.column.headings.rule <- function(x){
 #' @noRd
 forest.xlab <- function(x) {
   if (!is.null(x$add$xlab)) {
-    return(c('# Add xlab below each axis', paste(x$add$xlab, " +"), ''))
+    return(c('# Add xlab below each axis [xlab]',
+             paste(x$add$xlab, " +"),
+             ''))
   }
 
   make_layer(
-    '# Add xlab below each axis',
+    '# Add xlab below each axis [xlab]',
     f = 'ckbplotr::geom_text_move',
     aes = c(x$addaes$xlab,
             'y = Inf',
@@ -563,13 +583,15 @@ forest.xlab <- function(x) {
 #' @noRd
 forest.panel.headings <- function(x) {
   if (!is.null(x$add$panel.headings)) {
-    return(c('# Add panel name above each panel', paste(x$add$panel.headings, " +"), ''))
+    return(c('# Add panel name above each panel [panel.headings]',
+             paste(x$add$panel.headings, " +"),
+             ''))
   }
 
-  if (!all(x$panel.headings == "")){return(NULL)}
+  if (all(x$panel.headings == "")){return(NULL)}
 
   make_layer(
-    '# Add panel name above each panel',
+    '# Add panel name above each panel [panel.headings]',
     f = 'ckbplotr::geom_text_move',
     aes = c(x$addaes$panel.headings,
             'y     = {- x$heading.space}',
@@ -595,12 +617,14 @@ forest.panel.headings <- function(x) {
 #' @noRd
 forest.panel.size <- function(x) {
   if (!is.null(x$add$panel.size)) {
-    return(c('# Fix panel size', paste(x$add$panel.size, " +"), ''))
+    return(c('# Fix panel size [panel.size]',
+             paste(x$add$panel.size, " +"),
+             ''))
   }
 
   if (!x$fixed_panel_width & !x$fixed_panel_height){return(NULL)}
   make_layer(
-    '# Fix panel size',
+    '# Fix panel size [panel.size]',
     f = 'ggh4x::force_panelsizes',
     arg = c('cols = {printunit(x$panel.width)}',
             'rows = {printunit(x$panel.height)}'),
@@ -617,11 +641,13 @@ forest.theme <- function(x) {
     if (!is.null(x$add$end)) {
       x$add$theme <- paste(x$add$theme, " +")
     }
-    return(c('# Control the overall look of the plot', x$add$theme, ''))
+    return(c('# Control the overall look of the plot [theme]',
+             x$add$theme,
+             ''))
   }
 
   make_layer(
-    '# Control the overall look of the plot',
+    '# Control the overall look of the plot [theme]',
     f = 'theme',
     arg = c(x$addarg$theme,
             'text             = element_text(size = {x$base_size}, colour = {quote_string(x$plotcolour)})',
@@ -679,7 +705,7 @@ forest.title <- function(x) {
 #' @noRd
 forest.add.start <- function(x) {
   if (is.null(x$add$start)){return(NULL)}
-  c("# Additional layer",
+  c("# Add to plot [start]",
     paste(c(x$add$start, " +"), collapse = ""),
     "")
 }
@@ -688,7 +714,7 @@ forest.add.start <- function(x) {
 #' @noRd
 forest.add.end <- function(x) {
   if (is.null(x$add$end)){return(NULL)}
-  c("# Additional layer",
+  c("# Add to plot [end] ",
     x$add$end,
     "")
 }
