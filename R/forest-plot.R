@@ -840,7 +840,7 @@ get_horizontal_spacing <- function(right.space,
   if (is.null(right.space)){
     right.space.inner <- unit(column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)], "mm")
     right.space <- unit(column_spacing[length(column_spacing)], "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`right.space   = {printunit(right.space)}`<br>"))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`right.space = {printunit(right.space)}`<br>"))
   } else {
     right.space.inner <- right.space - unit(0.5 * 0.8 * base_size/grid::get.gpar()$fontsize * gettextwidths(right.gap[[2]]), "mm")
   }
@@ -870,14 +870,14 @@ get_horizontal_spacing <- function(right.space,
   if (is.null(left.space)){
     left.space.inner <- unit(column_spacing_half_outer_gap[length(column_spacing_half_outer_gap)], "mm")
     left.space <- unit(column_spacing[length(column_spacing)], "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.space    = {printunit(left.space)}`<br>"))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.space = {printunit(left.space)}`<br>"))
   } else {
     left.space.inner <- left.space - unit(0.5 * 0.8 * base_size/grid::get.gpar()$fontsize * gettextwidths(left.gap[[2]]), "mm")
   }
   if (length(column_spacing) > 1){column_spacing <- column_spacing[-length(column_spacing)]}
   if (is.null(left.pos)){
     left.pos <- unit(column_spacing, "mm")
-    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.pos  = {printunit(left.pos)}`<br>"))
+    text_about_auto_spacing <- c(text_about_auto_spacing, glue::glue("`left.pos = {printunit(left.pos)}`<br>"))
   }
 
   return(list(text_about_auto_spacing = text_about_auto_spacing,
