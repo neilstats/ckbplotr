@@ -129,6 +129,13 @@ ckb_style <- function(
     ink <- colour
   }
 
+  if (!missing(width) && (!grid::is.unit(width) || grid::unitType(width) == "null")) {
+    cli::cli_abort("width must be a unit object (and units must not be 'null')")
+  }
+  if (!missing(height) && (!grid::is.unit(height) || grid::unitType(height) == "null")) {
+    cli::cli_abort("height must be a unit object (and units must not be 'null')")
+  }
+
   # panel sizes
   if (missing(width) & missing(height)){
     full_width <- 1
@@ -218,6 +225,21 @@ ggplot_add.ckbplot <- function(object, plot, ...) {
   limits[["x"]] <- invtf_x(tf_x(limits[["xaxis"]]) + c(-1, 1)*addtox)
   limits[["y"]] <- invtf_y(tf_y(limits[["yaxis"]]) + c(-1, 1)*addtoy)
 
+  ## fix panel sizes
+  sizes_set <- (grid::is.unit(object$full_width) &&
+                  grid::is.unit(object$full_height))
+  ggplot_v4 <- compareVersion(as.character(packageVersion("ggplot2")), "4.0.0") >= 0
+
+  if (ggplot_v4 && sizes_set) {
+    panel_sizes <- theme(panel.widths = object$full_width,
+                         panel.heights = object$full_height)
+  } else if (ggplot_v4) {
+    panel_sizes <- theme(aspect.ratio = as.numeric(object$full_height) / as.numeric(object$full_width))
+  } else {
+    panel_sizes <- ggh4x::force_panelsizes(rows = object$full_height,
+                                           cols = object$full_width,
+                                           respect = TRUE)
+  }
 
   # update plot
   plot <- plot +
@@ -225,9 +247,6 @@ ggplot_add.ckbplot <- function(object, plot, ...) {
                     ylim   = limits[["y"]],
                     expand = FALSE,
                     clip = object$clip) +
-    ggh4x::force_panelsizes(rows = object$full_height,
-                            cols = object$full_width,
-                            respect = TRUE) +
     guides(x = legendry::guide_axis_base(cap = tf_x(limits[["xaxis"]])),
            y = legendry::guide_axis_base(cap = tf_y(limits[["yaxis"]]))) +
     theme_ckb(base_size = object$base_size,
@@ -235,7 +254,8 @@ ggplot_add.ckbplot <- function(object, plot, ...) {
               ink = object$ink,
               paper = object$paper,
               axis.title.margin = object$axis.title.margin,
-              plot.margin = object$plot.margin)
+              plot.margin = object$plot.margin) +
+    panel_sizes
 
   return(plot)
 }
