@@ -17,17 +17,18 @@
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Save plots to files">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Save plots to files">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,9 +42,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/ckb_style.html">CKB style with ggplot</a></li>
+<li><a class="dropdown-item" href="../articles/shape_plots.html">Shape plots</a></li>
     <li><a class="dropdown-item" href="../articles/forest_plots.html">Forest plots</a></li>
-    <li><a class="dropdown-item" href="../articles/shape_plots.html">Shape plots</a></li>
+    <li><a class="dropdown-item" href="../articles/ckb_style.html">CKB style with ggplot</a></li>
     <li><a class="dropdown-item" href="../articles/customising_plots.html">Customising plots</a></li>
     <li><a class="dropdown-item" href="../articles/save_plots.html">Save plots to files</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -80,7 +81,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Save plots to files</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.11.5/vignettes/save_plots.Rmd" class="external-link"><code>vignettes/save_plots.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.12.0/vignettes/save_plots.Rmd" class="external-link"><code>vignettes/save_plots.Rmd</code></a></small>
       <div class="d-none name"><code>save_plots.Rmd</code></div>
     </div>
 
@@ -133,7 +134,7 @@ by 14 cm) in an A4 sized PDF file, with title and footer.</p>
 <span>            title      <span class="op">=</span> <span class="st">"Figure 1: My example shape plot"</span>,</span>
 <span>            footer     <span class="op">=</span> <span class="st">"An example footer text."</span>,</span>
 <span>            size       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">14</span>, <span class="fl">14</span><span class="op">)</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="save_plots_files/figure-html/unnamed-chunk-5-1.png" width="40%" style="margin: auto; display: block; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;"></p>
+<p><img src="save_plots_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="40%" style="margin: auto; display: block; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;"></p>
 <p>The function has several arguments that allow for customization of
 appearance and layout. For example: <code>valign</code> and
 <code>halign</code> to control the position of the plot (if
@@ -166,7 +167,7 @@ saved to a temporary PNG file and shown.)</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

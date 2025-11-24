@@ -1,0 +1,507 @@
+# Make a forest plot with ggplot2
+
+Creates a forest plot with ggplot
+
+## Usage
+
+``` r
+forest_plot(
+  panels,
+  row.labels = NULL,
+  row.labels.levels = NULL,
+  rows = NULL,
+  row.labels.heading = NULL,
+  row.labels.space = c(0, 1, 0, 0),
+  exponentiate = TRUE,
+  logscale = exponentiate,
+  panel.names = NULL,
+  panel.headings = NULL,
+  panel.headings.align = c("panel", "plot"),
+  col.key = "key",
+  col.estimate = c("estimate", "est", "beta", "loghr"),
+  col.stderr = c("stderr", "std.error", "std.err", "se"),
+  col.lci = NULL,
+  col.uci = NULL,
+  col.left = NULL,
+  col.right = NULL,
+  left.parse = FALSE,
+  right.parse = FALSE,
+  left.heading = "",
+  right.heading = as.list(xlab),
+  left.pos = NULL,
+  right.pos = NULL,
+  left.hjust = 1,
+  right.hjust = 0,
+  left.gap = c("I", "W"),
+  right.gap = c("I", "W"),
+  heading.space = 0,
+  heading.rule = FALSE,
+  estcolumn = TRUE,
+  col.keep = NULL,
+  ci.delim = ", ",
+  digits = 2,
+  title = "",
+  xlab = "HR (95% CI)",
+  xlim = NULL,
+  xticks = NULL,
+  nullval = NULL,
+  col.diamond = NULL,
+  diamond = NULL,
+  col.bold = NULL,
+  bold.labels = NULL,
+  scalepoints = FALSE,
+  minse = NULL,
+  pointsize = 3 * base_size/11,
+  shape = 15,
+  plotcolour = "black",
+  colour = plotcolour,
+  cicolour = colour,
+  fill = colour,
+  ciunder = NULL,
+  addtext = NULL,
+  bottom.space = 0.7,
+  left.space = NULL,
+  right.space = NULL,
+  mid.space = unit(5, "mm"),
+  plot.margin = margin(2, 8, 2, 8, "mm"),
+  panel.width = NULL,
+  panel.height = NULL,
+  base_size = 11,
+  base_line_size = base_size/22,
+  stroke = 0,
+  diamonds.linewidth = base_line_size,
+  row.labels.element = "marquee::element_marquee",
+  quiet = FALSE,
+  printplot = !quiet,
+  showcode = !quiet,
+  data.function = NULL,
+  addaes = NULL,
+  addarg = NULL,
+  add = NULL,
+  envir = NULL,
+  blankrows = NULL,
+  col.right.parse = NULL,
+  col.left.heading = NULL,
+  col.right.heading = NULL,
+  col.left.pos = NULL,
+  col.right.pos = NULL,
+  col.left.hjust = NULL,
+  col.right.hjust = NULL,
+  col.left.gap = NULL,
+  col.right.gap = NULL,
+  col.heading.space = NULL,
+  col.heading.rule = NULL
+)
+```
+
+## Arguments
+
+- panels:
+
+  A list of data frames. These should include columns or point
+  estimates, and standard errors or confidence interval limits. If you
+  specify a row.labels data frame, then they must also all contain a key
+  column with the same name (which can be specified by col.key).
+
+- row.labels:
+
+  A data frame that contains the labels to be used for the rows of the
+  plot. Use NA if a lower level heading is not required for a given row.
+
+- row.labels.levels:
+
+  A character vector. The names of columns in row.labels to use as
+  headings/subheadings/labels for labelling rows.
+
+- rows:
+
+  If set, then only rows matching these labels (at the first level) will
+  be included.
+
+- row.labels.heading:
+
+  Title to be placed above row labels.
+
+- row.labels.space:
+
+  A numeric vector specifying the space after a row label heading, at
+  the end of a row label heading 'section'. (Default: c(0, 1, 0, 0))
+
+- exponentiate:
+
+  Exponentiate estimates (and CIs) before plotting. (Default: TRUE)
+
+- logscale:
+
+  Use log scale on the axis, and add a line at null effect. (Default:
+  exponentiate)
+
+- panel.names:
+
+  A character vector. The names to be used for each forest plot panel.
+  If none provided, then they will be numbered 1, 2, 3 ...
+
+- panel.headings:
+
+  Titles to be placed above each forest plot.
+
+- panel.headings.align:
+
+  Panel headings are by default centred over the plotting area
+  ("panel"). Set to "plot" to centre over plotting area and text
+  columns.
+
+- col.key:
+
+  Name of column that links the results given in each data frame
+  provided in panels and the labels given in row.labels. If row.labels
+  data frame is not given, then this column will be used as row labels.
+  (Default: "key")
+
+- col.estimate, col.stderr, col.lci, col.uci:
+
+  Names of columns for: point estimates, standard errors, lower and
+  upper limits of confidence intervals.
+
+- col.left, col.right:
+
+  Names of columns to be printed to the left/right of the plot.
+
+- left.parse, right.parse:
+
+  A character vector, the same length as col.left/col.right (+ 1 if
+  estcolumn = TRUE). Should the contents of the columns be parsed into
+  expressions. Use "col", "heading" or "both" to parse the column
+  content only, heading or both.
+
+- left.heading, right.heading:
+
+  Headings for columns.
+
+- left.pos, right.pos:
+
+  A unit vector to position col.left/col.right columns.
+
+- left.hjust, right.hjust:
+
+  A numeric vector. The horizontal justification of col.left/col.right
+  columns. (Default: 1)
+
+- left.gap, right.gap:
+
+  A character vector of length two. The two characters control the gaps
+  between the first text column and the panel, and successive text
+  columns. (Default: c("I", "W"))
+
+- heading.space:
+
+  Position of the titles given by left.heading and right.heading.
+  Increase to move them up. (Default: 0)
+
+- heading.rule:
+
+  Include a horizontal rule below column headings? (Default: FALSE)
+
+- estcolumn:
+
+  Include column of estimates and confidence intervals to the right of
+  each plot. (Default: TRUE)
+
+- col.keep:
+
+  Names of additional columns to be kept in returned data frame.
+
+- ci.delim:
+
+  Character string to separate lower and upper limits of confidence
+  interval. (Default: ", ")
+
+- digits:
+
+  Number of digits after decimal point to show for estimates and
+  confidence intervals. (Default: 2)
+
+- title:
+
+  Title to appear at the top of the plot.
+
+- xlab:
+
+  Label to appear below the x-axis. (Default: "HR (95% CI)")
+
+- xlim:
+
+  A numeric vector. The limits of the x axis.
+
+- xticks:
+
+  A numeric vector. The tick points of the x axis.
+
+- nullval:
+
+  Add a vertical reference line at this value. (If logscale == TRUE then
+  by default it will be added at 1, but use NA not to plot this line.)
+
+- col.diamond:
+
+  Plot estimates and CIs as diamonds. Name of a column of logical
+  values.
+
+- diamond:
+
+  Alternative to col.diamond. A character vectors identify the rows
+  (using the key values) for which the estimate and CI should be plotted
+  using a diamond.
+
+- col.bold:
+
+  Plot text as bold. Name of a column of logical values.
+
+- bold.labels:
+
+  A character vector identifying row labels (using key values) which
+  should additionally be bold. (Default: NULL)
+
+- scalepoints:
+
+  Should the points be scaled by inverse of the standard error?
+  (Default: FALSE)
+
+- minse:
+
+  Minimum standard error to use when scaling point size. (Default will
+  use minimum in the data.)
+
+- pointsize:
+
+  The (largest) size of box to use for plotting point estimates.
+  (Default: 3 \* base_size / 11)
+
+- shape:
+
+  Shape of points. An integer, or name of a column of integers.
+  (Default: 15 (square))
+
+- plotcolour:
+
+  Colour for all parts of the plot. (Default: "black")
+
+- colour:
+
+  Colour of points. Name of a colour, or name of a column of colour
+  names. Use a list of colour names for different colours on each panel.
+  (Default will use plotcolour.)
+
+- cicolour:
+
+  Colour of CI lines. Name of a colour, or name of a column of colour
+  names. Use a list of colour names for different colours on each panel.
+  Use a vector (or list of vectors) in conjunction with panel.width to
+  set a different colour for narrow confidence interval lines. (Default
+  will use colour.)
+
+- fill:
+
+  Fill colour of points. Name of a colour, or name of a column of colour
+  names. Use a list of colour names for different colours on each panel.
+  (Default will use colour.)
+
+- ciunder:
+
+  Plot CI lines before points. A logical value, or name of a column of
+  logical values. (Default will plot CI lines after points.)
+
+- addtext:
+
+  A list of data frames. List must be the same length as panels. Data
+  frames should contain a column with the name specified in col.key, and
+  one or more of:
+
+  1.  a column named 'text' containing character strings
+
+  2.  columns named 'het_dof', 'het_stat', and 'het_p' containing
+      character strings
+
+  3.  columns names 'trend_stat' and 'trend_p' containing character
+      strings
+
+  The character strings, heterogeneity test, and trend test results will
+  be plotted in the column of estimates and CIs, below the row with the
+  key given in the col.key column.
+
+- bottom.space:
+
+  Space between bottom row and axis. (Default: 0.7)
+
+- left.space, right.space, mid.space:
+
+  Space to the left/right/between panels. (Default mid.space: unit(5,
+  "mm"))
+
+- plot.margin:
+
+  Plot margin, given as margin(top, right, bottom, left, units).
+  (Default: margin(2, 8, 2, 8, "mm"))
+
+- panel.width, panel.height:
+
+  Set width/height of panels. A grid::unit object, if a numeric is given
+  assumed to be in mm. If panel.width is used, will also apply different
+  formatting to narrow CIs.
+
+- base_size:
+
+  base font size, given in pts.
+
+- base_line_size:
+
+  base size for line elements
+
+- stroke:
+
+  Size of outline of shapes. (Default: 0)
+
+- diamonds.linewidth:
+
+  Line width for diamonds. (Default: base_line_size)
+
+- row.labels.element:
+
+  A character string giving the name of the theme element to use for the
+  row labels (axis.text.y). (Default: "marquee::element_marquee")
+
+- quiet:
+
+  Set to TRUE to not print the plot nor show generated code in the
+  RStudio 'Viewer' pane. (Default: FALSE)
+
+- printplot:
+
+  Print the plot. (Default: !quiet)
+
+- showcode:
+
+  Show the ggplot2 code to generate the plot in RStudio 'Viewer' pane.
+  (Default: !quiet)
+
+- data.function:
+
+  Name of a function to apply to data frame before plotting.
+
+- addaes, addarg, add:
+
+  Methods for customising the plot. See documentation for details.
+
+- envir:
+
+  Environment in which to evaluate the plot code. May be useful when
+  calling this function inside another function.
+
+- blankrows:
+
+  DEPRECATED
+
+- col.right.parse:
+
+  Deprecated. Use `right.parse` instead.
+
+- col.left.heading:
+
+  Deprecated. Use `left.heading` instead.
+
+- col.right.heading:
+
+  Deprecated. Use `right.heading` instead.
+
+- col.left.pos:
+
+  Deprecated. Use `left.pos` instead.
+
+- col.right.pos:
+
+  Deprecated. Use `right.pos` instead.
+
+- col.left.hjust:
+
+  Deprecated. Use `left.hjust` instead.
+
+- col.right.hjust:
+
+  Deprecated. Use `right.hjust` instead.
+
+- col.left.gap:
+
+  Deprecated. Use `left.gap` instead.
+
+- col.right.gap:
+
+  Deprecated. Use `right.gap` instead.
+
+- col.heading.space:
+
+  Deprecated. Use `heading.space` instead.
+
+- col.heading.rule:
+
+  Deprecated. Use `heading.rule` instead.
+
+## Value
+
+A list:
+
+- plot:
+
+  the plot
+
+- code:
+
+  ggplot2 code to generate the plot
+
+## Details
+
+The function returns the plot and ggplot2 code to create the plot. In
+RStudio, the ggplot2 code will be shown in the viewer.
+
+## Notes
+
+### Saving forest plots and row labels
+
+From version 0.12.0, the row labels in forest plots are drawn using
+`marquee::theme_element_marquee` to allow for styling using markdown.
+When saving it is best to use a graphics device that supports 'glyph'
+features (see
+<https://marquee.r-lib.org/reference/marquee_grob.html#rendering>). For
+example [`pdf()`](https://rdrr.io/r/grDevices/pdf.html) or the devices
+supplied by the ragg package, which are used as default by `ggsave()`
+and
+[`save_figure()`](https://neilstats.github.io/ckbplotr/reference/save_figure.md).
+
+To return to the old method which used the ggtext package, set
+`row.labels.element = "ggtext::element_markdown"`.
+
+### Spacing
+
+The function attempts to set the positions of columns of text and
+spacing automatically. Where this does not produce a satisfactory
+layout, you can use the arguments `left.pos`, `right.pos`, `left.space`,
+`right.space`, and `mid.space` to control positions and spacing
+manually.
+
+The plot will fill the vertical space available. Use `plot.margin` to
+change the top and bottom margins as needed.
+
+### Confidence intervals
+
+When standard errors are supplied to the
+[`shape_plot()`](https://neilstats.github.io/ckbplotr/reference/shape_plot.md)
+and `forest_plot()` functions, confidence intervals are calculated as
+95\\ using the Normal approximation method (with critical value 1.96).
+
+#### Stroke
+
+The `stroke` argument sets the stroke aesthetic for plotted shapes. See
+<https://ggplot2.tidyverse.org/articles/ggplot2-specs.html> for more
+details. The stroke size adds to the total size of a shape, so unless
+`stroke = 0` the scaling of size by inverse variance will be very
+slightly inaccurate (but there are probably more important things to
+worry about).

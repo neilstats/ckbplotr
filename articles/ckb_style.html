@@ -17,17 +17,18 @@
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="CKB style with ggplot">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="CKB style with ggplot">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,9 +42,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/ckb_style.html">CKB style with ggplot</a></li>
+<li><a class="dropdown-item" href="../articles/shape_plots.html">Shape plots</a></li>
     <li><a class="dropdown-item" href="../articles/forest_plots.html">Forest plots</a></li>
-    <li><a class="dropdown-item" href="../articles/shape_plots.html">Shape plots</a></li>
+    <li><a class="dropdown-item" href="../articles/ckb_style.html">CKB style with ggplot</a></li>
     <li><a class="dropdown-item" href="../articles/customising_plots.html">Customising plots</a></li>
     <li><a class="dropdown-item" href="../articles/save_plots.html">Save plots to files</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -80,7 +81,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>CKB style with ggplot</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.11.5/vignettes/ckb_style.Rmd" class="external-link"><code>vignettes/ckb_style.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.12.0/vignettes/ckb_style.Rmd" class="external-link"><code>vignettes/ckb_style.Rmd</code></a></small>
       <div class="d-none name"><code>ckb_style.Rmd</code></div>
     </div>
 
@@ -89,8 +90,8 @@
 <p><code>+ ckb_style()</code> does three things to a ggplot2 plot:</p>
 <ol style="list-style-type: decimal">
 <li>applies a CKB theme (i.e. change the overall appearance)</li>
-<li>extends the plotting area and manually adds axis lines (so that you
-can have a custom sized gap between the plotting area and the axes)</li>
+<li>extends the plotting area and caps the axis lines (so that you can
+have a custom sized gap between the plotting area and the axes)</li>
 <li>applies a fixed aspect ratio</li>
 </ol>
 <div class="section level2">
@@ -100,28 +101,28 @@ can have a custom sized gap between the plotting area and the axes)</li>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">mpg</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">displ</span>, y <span class="op">=</span> <span class="va">hwy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">plot</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/a-plot-1.png" width="50%" style="display: block; margin: auto;"></p>
-<p>Use <code>+ ckb_style()</code> to apply a CKB theme, add separated
-axis lines and fix the aspect ratio.</p>
+<p><img src="ckb_style_files/figure-html/a-plot-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
+<p>Use <code>+ ckb_style()</code> to apply a CKB theme, cap axis lines
+and fix the aspect ratio.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-0-1.png" width="50%" style="display: block; margin: auto;"></p>
-<p>Or apply just a CKB theme and use axis lines.</p>
+<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-0-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
+<p>Or apply just a CKB theme.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ckb.html">theme_ckb</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">theme</span><span class="op">(</span>axis.line <span class="op">=</span> <span class="fu">element_line</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/theme-1.png" width="50%" style="display: block; margin: auto;"></p>
+<code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/theme_ckb.html">theme_ckb</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ckb_style_files/figure-html/theme-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="axis-limits">Axis limits<a class="anchor" aria-label="anchor" href="#axis-limits"></a>
 </h3>
 <p>Set axis limits.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span>xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-1-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-1-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 <p>If you do not want a gap between the axes, set
 <code>gap = c(0, 0)</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span>xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>, gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-2-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-2-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="aspect-ratio-and-panel-sizes">Aspect ratio and panel sizes<a class="anchor" aria-label="anchor" href="#aspect-ratio-and-panel-sizes"></a>
@@ -131,7 +132,7 @@ axis lines and fix the aspect ratio.</p>
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span>xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>,</span>
 <span>                 ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>                 ratio <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/aspect-ratio-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ckb_style_files/figure-html/aspect-ratio-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 <p>Set the width of the plot (<code>width</code> controls the length of
 the x axis).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -139,19 +140,20 @@ the x axis).</p>
 <span>                 ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>                 ratio <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>                 width <span class="op">=</span> <span class="fu">unit</span><span class="op">(</span><span class="fl">4</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/width-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ckb_style_files/figure-html/width-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="modifying-the-appearance-of-the-plot">Modifying the appearance of the plot<a class="anchor" aria-label="anchor" href="#modifying-the-appearance-of-the-plot"></a>
 </h3>
-<p>The <code>colour</code> arguments of <code><a href="../reference/theme_ckb.html">theme_ckb()</a></code> and
-<code><a href="../reference/ckb_style.html">ckb_style()</a></code> can be used to change the colour of the
-non-data components of the plot.</p>
+<p>The <code>ink</code> and <code>paper</code> arguments of
+<code><a href="../reference/theme_ckb.html">theme_ckb()</a></code> and <code><a href="../reference/ckb_style.html">ckb_style()</a></code> can be used to
+change the colours of the plot.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span>xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>,</span>
 <span>                 ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>,</span>
-<span>                 colour <span class="op">=</span> <span class="st">"darkred"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/colour-1.png" width="50%" style="display: block; margin: auto;"></p>
+<span>                 ink <span class="op">=</span> <span class="st">"darkred"</span>,</span>
+<span>                 paper <span class="op">=</span> <span class="st">"cornsilk"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="ckb_style_files/figure-html/colour-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 <p>The <code>plot.margin</code> arguments of <code><a href="../reference/theme_ckb.html">theme_ckb()</a></code>
 and <code><a href="../reference/ckb_style.html">ckb_style()</a></code> can be used to adjust the margin around the
 plot.</p>
@@ -159,7 +161,7 @@ plot.</p>
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span>xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>,</span>
 <span>                 ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>                 plot.margin <span class="op">=</span> <span class="fu">margin</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">2</span>, unit <span class="op">=</span> <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/plotmargin-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ckb_style_files/figure-html/plotmargin-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 <p>If you wish to override some aspect of the theme applied by
 <code><a href="../reference/ckb_style.html">ckb_style()</a></code> or <code><a href="../reference/theme_ckb.html">theme_ckb()</a></code>, then this can be
 done by adding a theme after <code>+ ckb_style()</code>,</p>
@@ -167,22 +169,18 @@ done by adding a theme after <code>+ ckb_style()</code>,</p>
 <code class="sourceCode R"><span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span>xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">8</span><span class="op">)</span>,</span>
 <span>                 ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>axis.title <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"red"</span>, face <span class="op">=</span> <span class="st">"plain"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-3-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-3-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
-<h3 id="warning-about-axis-limits">Warning about axis limits<a class="anchor" aria-label="anchor" href="#warning-about-axis-limits"></a>
+<h3 id="data-points-outside-axis-limits">Data points outside axis limits<a class="anchor" aria-label="anchor" href="#data-points-outside-axis-limits"></a>
 </h3>
-<p>If any data points you are plotting fall outside the axes, then they
-will still be drawn and may show up in places such as the axes, the
-legend, the plot title, or the plot margins. There is also no warning if
-data points fall outside the whole plot area.</p>
-<p>So it is best to check that your <code>xlim</code> and
-<code>ylim</code> values are suitable for your data before using the
-function.</p>
+<p>There is no warning if data points fall outside the axis limits. So
+check that your <code>xlim</code> and <code>ylim</code> values are
+suitable for your data before using the function.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># The xlim and ylim ranges are too narrow</span></span>
 <span><span class="va">plot</span> <span class="op">+</span> <span class="fu"><a href="../reference/ckb_style.html">ckb_style</a></span><span class="op">(</span>xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4</span><span class="op">)</span>, ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-4-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ckb_style_files/figure-html/plot_like_ckb-example-4-1.png" class="r-plt" width="50%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -196,7 +194,7 @@ function.</p>
 <span>            gap <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.005</span><span class="op">)</span>,</span>
 <span>            ratio <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>axis.ticks.x <span class="op">=</span> <span class="fu">element_blank</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ckb_style_files/figure-html/bar-chart-example-1.png" width="70%" style="display: block; margin: auto;"></p>
+<p><img src="ckb_style_files/figure-html/bar-chart-example-1.png" class="r-plt" width="70%" style="display: block; margin: auto;"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -209,7 +207,7 @@ function.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

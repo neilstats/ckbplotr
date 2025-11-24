@@ -17,17 +17,18 @@
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Shape plots">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Shape plots">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.11.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,9 +42,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/ckb_style.html">CKB style with ggplot</a></li>
+<li><a class="dropdown-item" href="../articles/shape_plots.html">Shape plots</a></li>
     <li><a class="dropdown-item" href="../articles/forest_plots.html">Forest plots</a></li>
-    <li><a class="dropdown-item" href="../articles/shape_plots.html">Shape plots</a></li>
+    <li><a class="dropdown-item" href="../articles/ckb_style.html">CKB style with ggplot</a></li>
     <li><a class="dropdown-item" href="../articles/customising_plots.html">Customising plots</a></li>
     <li><a class="dropdown-item" href="../articles/save_plots.html">Save plots to files</a></li>
     <li><hr class="dropdown-divider"></li>
@@ -80,7 +81,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Shape plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.11.5/vignettes/shape_plots.Rmd" class="external-link"><code>vignettes/shape_plots.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.12.0/vignettes/shape_plots.Rmd" class="external-link"><code>vignettes/shape_plots.Rmd</code></a></small>
       <div class="d-none name"><code>shape_plots.Rmd</code></div>
     </div>
 
@@ -99,8 +100,11 @@ Viewer pane (see [Plot code example] for an example).</p>
 <h2 id="basic-usage">Basic usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
 <p>Supply a data frame of estimates and standard errors to the
-<code><a href="../reference/shape_plot.html">shape_plot()</a></code> function, and specify the column that contains
-x-axis values and axis limits.</p>
+<code><a href="../reference/shape_plot.html">shape_plot()</a></code> function and specify the name of the column
+that contains x-axis values using <code>col.x</code>. Use
+<code>col.estimate</code> and <code>col.stderr</code> to specify the
+names of columns containing estimates and standard errors (some common
+names are found automatically).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  risk_factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>  <span class="fl">17</span>,    <span class="fl">20</span>,  <span class="fl">23.5</span>,    <span class="fl">25</span>,    <span class="fl">29</span><span class="op">)</span>,</span>
@@ -109,21 +113,18 @@ x-axis values and axis limits.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
-<span>           col.x <span class="op">=</span> <span class="st">"risk_factor"</span>,</span>
-<span>           xlims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">30</span><span class="op">)</span>,</span>
-<span>           ylims <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.25</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-2-1.png" width="60%" style="display: block; margin: auto;"></p>
+<span>           col.x <span class="op">=</span> <span class="st">"risk_factor"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
 <p>If your estimates and standard errors are on the log scale (e.g. log
 hazard ratios), then set <code>exponentiate</code> to true. This will
 plot exp(estimates) and use a log scale for the axis.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"risk_factor"</span>,</span>
-<span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">30</span><span class="op">)</span>,</span>
-<span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">1.6</span><span class="op">)</span>,</span>
 <span>           exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-3-1.png" width="60%" style="display: block; margin: auto;"></p>
-<p>Set axis titles using <code>xlab</code> and <code>ylab</code>.</p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p>Set axis limits using <code>xlims</code> and <code>ylims</code>, and
+axis titles using <code>xlab</code> and <code>ylab</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"risk_factor"</span>,</span>
@@ -132,14 +133,25 @@ plot exp(estimates) and use a log scale for the axis.</p>
 <span>           exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           xlab         <span class="op">=</span> <span class="st">"BMI (kg/m\u00B2)"</span>,</span>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p>Setting <code>ylims</code> will also make the function add code to
+show arrows where confidence interval lines exceed the limits.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
+<span>           col.x        <span class="op">=</span> <span class="st">"risk_factor"</span>,</span>
+<span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">30</span><span class="op">)</span>,</span>
+<span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.95</span>, <span class="fl">1.4</span><span class="op">)</span>,</span>
+<span>           exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>           xlab         <span class="op">=</span> <span class="st">"BMI (kg/m\u00B2)"</span>,</span>
+<span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="using-groups">Using groups<a class="anchor" aria-label="anchor" href="#using-groups"></a>
 </h2>
 <p>Use <code>col.group</code> to plot results for different groups
 (using shades of grey for the fill colour).</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  risk_factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">20</span>, <span class="fl">23.5</span>, <span class="fl">25</span>, <span class="fl">29</span>,</span>
 <span>                  <span class="fl">18</span>, <span class="fl">20.5</span>, <span class="fl">22.7</span>, <span class="fl">24.5</span>, <span class="fl">30</span><span class="op">)</span>,</span>
@@ -159,14 +171,19 @@ plot exp(estimates) and use a log scale for the axis.</p>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span>,</span>
 <span>           col.group    <span class="op">=</span> <span class="st">"group"</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="adding-lines">Adding lines<a class="anchor" aria-label="anchor" href="#adding-lines"></a>
 </h2>
-<p>Use <code>lines</code> to add lines (linear fit through estimates on
-plotted scale, weighted by inverse variance) for each group.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<p>Use <code>lines</code> to add lines for each group:</p>
+<ol style="list-style-type: decimal">
+<li>“lmw” = Linear fit through estimates, weighted by inverse
+variance.</li>
+<li>“lm” = Unweighted linear fit through estimates.</li>
+<li>“connect” = Lines connecting each estimate.</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"risk_factor"</span>,</span>
 <span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">15</span>, <span class="fl">30</span><span class="op">)</span>,</span>
@@ -176,17 +193,15 @@ plotted scale, weighted by inverse variance) for each group.</p>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span>,</span>
 <span>           col.group    <span class="op">=</span> <span class="st">"group"</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>           lines        <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-6-1.png" width="60%" style="display: block; margin: auto;"></p>
+<span>           lines        <span class="op">=</span> <span class="st">"lmw"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="categorical-risk-factor">Categorical risk factor<a class="anchor" aria-label="anchor" href="#categorical-risk-factor"></a>
 </h2>
-<p>The risk factor can be a factor. In this case, the x-axis coordinates
-are 1, 2, 3, .. so suitable x-axis limits are 0.5 and number of
-categories plus 0.5. You may need to add position arguments so that
-points, intervals and text do not overlap.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>The risk factor can be a factor. You may need to add position
+arguments so that points, intervals and text do not overlap.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">smoking_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  smk_cat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Never"</span>, <span class="st">"Ex"</span>, <span class="st">"Current"</span><span class="op">)</span>,</span>
 <span>                   levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Never"</span>, <span class="st">"Ex"</span>, <span class="st">"Current"</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -196,13 +211,12 @@ points, intervals and text do not overlap.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">smoking_results</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"smk_cat"</span>,</span>
-<span>           xlims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">3.5</span><span class="op">)</span>,</span>
 <span>           ylims        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>           ybreaks      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, </span>
 <span>           xlab         <span class="op">=</span> <span class="st">"Smoking"</span>,</span>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span>,</span>
 <span>           exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="scaling-point-size">Scaling point size<a class="anchor" aria-label="anchor" href="#scaling-point-size"></a>
@@ -210,7 +224,7 @@ points, intervals and text do not overlap.</p>
 <p>Set <code>scalepoints = TRUE</code> to have point size (area)
 proportional to the inverse of the variance (SE<sup>2</sup>) of the
 estimate.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  risk_factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">24</span>, <span class="fl">29</span><span class="op">)</span>,</span>
 <span>  est         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.095</span>, <span class="fl">0.214</span><span class="op">)</span>,</span>
@@ -225,7 +239,7 @@ estimate.</p>
 <span>           xlab         <span class="op">=</span> <span class="st">"BMI (kg/m\u00B2)"</span>,</span>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-8-1.png" width="60%" style="display: block; margin: auto;">
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="60%" style="display: block; margin: auto;">
 To have consistent scaling across plots, set <code>minse</code> to the
 same value (it must be smaller than the smallest SE). This will ensure
 the same size scaling is used across the plots.</p>
@@ -244,7 +258,7 @@ intervals has has been designed to work for shapes 15/‘square’ (the
 default) and 22/‘square filled’, and for symmetric confidence intervals.
 These may not be completely accurate in all scenarios, so check your
 final output carefully.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  risk_factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">24</span>, <span class="fl">29</span><span class="op">)</span>,</span>
 <span>  est         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.095</span>, <span class="fl">0.214</span><span class="op">)</span>,</span>
@@ -261,27 +275,13 @@ final output carefully.</p>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           pointsize    <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>           height       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-9-1.png" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="customisation">Customisation<a class="anchor" aria-label="anchor" href="#customisation"></a>
 </h2>
 <p>See <a href="customising_plots.html">Customising plots</a> for more
 ways to customise shape plots.</p>
-</div>
-<div class="section level2">
-<h2 id="notes">Notes<a class="anchor" aria-label="anchor" href="#notes"></a>
-</h2>
-<div class="section level4">
-<h4 id="stroke">Stroke<a class="anchor" aria-label="anchor" href="#stroke"></a>
-</h4>
-<p>The <code>stroke</code> argument sets the stroke aesthetic for
-plotted shapes. See <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html" class="external-link uri">https://ggplot2.tidyverse.org/articles/ggplot2-specs.html</a>
-for more details. The stroke size adds to total size of a shape, so
-unless <code>stroke = 0</code> the scaling of size by inverse variance
-will be slightly inaccurate (but there are probably more important
-things to worry about).</p>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -294,7 +294,7 @@ things to worry about).</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
