@@ -146,12 +146,12 @@ shape_plot <- function(data,
 
 
   # Handle old names ----
-  addaes$estimates.points <- addaes$point
-  addarg$estimates.points <- addarg$point
-  addaes$estimates.text <- addaes$estimates
-  addarg$estimates.text <- addarg$estimates
-  addaes$n.text <- addaes$n
-  addarg$n.text <- addarg$n
+  addaes$estimates.points <- c(addaes$estimates.points, addaes[["point"]])
+  addarg$estimates.points <- c(addarg$estimates.points, addarg[["point"]])
+  addaes$estimates.text <- c(addaes$estimates.text, addaes[["estimates"]])
+  addarg$estimates.text <- c(addarg$estimates.text, addarg[["estimates"]])
+  addaes$n.text <- c(addaes$n.text, addaes[["n"]])
+  addarg$n.text <- c(addarg$n.text, addarg[["n"]])
 
   # Check if confidence intervals may be hidden ----
   if (missing(height)){
