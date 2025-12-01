@@ -1,5 +1,9 @@
 # Changelog
 
+## ckbplotr 0.12.2
+
+- Fix handling names for addarg and addaes arguments in shape_plot().
+
 ## ckbplotr 0.12.1
 
 - Fix displaying plot code.
