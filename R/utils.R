@@ -110,6 +110,10 @@ displaycode <- function(plotcode, note = ""){
     return(NULL)
   }
 
+  if (!rmarkdown::pandoc_available()){
+    return(NULL)
+  }
+
   text <- c("---",
             "title: 'Generated R code'",
             "mainfont: sans-serif",
@@ -132,12 +136,16 @@ displaycode <- function(plotcode, note = ""){
     sep = "\n")
   close(con)
 
-  cmd <- paste0(rmarkdown::pandoc_exec(),
+  cmd <- paste0(shQuote(rmarkdown::pandoc_exec()),
                 " ",
                 tempmd,
                 " -o ",
                 file.path(tempdir(), "plotcode.html"),
-                " --syntax-highlighting=kate",
+                if (rmarkdown::pandoc_available("3.8")) {
+                  " --syntax-highlighting=kate"
+                } else {
+                  " --highlight-style=kate"
+                },
                 " --standalone",
                 " --columns=82")
   system(cmd)
