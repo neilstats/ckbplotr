@@ -1,5 +1,9 @@
 # Changelog
 
+## ckbplotr 0.12.1
+
+- Fix displaying plot code.
+
 ## ckbplotr 0.12.0
 
 This update includes many changes both internal and external. Most
