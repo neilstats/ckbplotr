@@ -123,7 +123,7 @@ shape.scale.y <- function(x) {
     x$ybreaks != "NULL" & x$yscale != "identity" ~
       glue::glue('transform = "{x$yscale}", breaks = {x$ybreaks}'),
     x$ybreaks != "NULL" & x$yscale == "identity" ~
-      glue::glue('breaks = {x$xbreaks}')
+      glue::glue('breaks = {x$ybreaks}')
   )
 
   c('# Set the y-axis scale [scale.y]',
