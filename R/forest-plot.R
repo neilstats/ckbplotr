@@ -740,11 +740,13 @@ forest_plot <- function(
   plot.margin <- substitute(plot.margin)
 
   # Deparse add objects ----
+  add_new <- list()
   for (i in names(add)) {
     if (!is.null(add[[i]])){
-      add[[i]] <- deparse1(substitute(add)[[i]])
+      add_new[[i]] <- deparse1(substitute(add)[[i]])
     }
   }
+  add <- add_new
 
   # Create plot specification list ----
   spec <- tibble::lst(

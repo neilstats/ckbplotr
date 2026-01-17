@@ -1,7 +1,7 @@
 Package: ckbplotr
 Title: Create Plots
 Description: Create publication-quality plots for epidemiology.
-Version: 0.12.2
+Version: 0.12.2.9000
 Authors@R: 
     person(given = "Neil",
            family = "Wright",
