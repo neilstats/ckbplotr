@@ -10,7 +10,7 @@ articles:
   ggplot2: ggplot2.html
   save_plots: save_plots.html
   shape_plots: shape_plots.html
-last_built: 2025-12-01T23:08Z
+last_built: 2026-01-17T15:20Z
 urls:
   reference: https://neilstats.github.io/ckbplotr/reference
   article: https://neilstats.github.io/ckbplotr/articles

@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Customising plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.12.2/vignettes/customising_plots.Rmd" class="external-link"><code>vignettes/customising_plots.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.12.3/vignettes/customising_plots.Rmd" class="external-link"><code>vignettes/customising_plots.Rmd</code></a></small>
       <div class="d-none name"><code>customising_plots.Rmd</code></div>
     </div>
 
@@ -214,7 +214,7 @@ the plot:</p>
 <span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>            estcolumn <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>            add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>start <span class="op">=</span> <span class="va">hr_geom</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="customising_plots_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="customising_plots_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>Or to use <code>theme</code> to customise the plot:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_theme</span> <span class="op">&lt;-</span> <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"purple"</span>,</span>
@@ -222,7 +222,7 @@ the plot:</p>
 <span>                                             hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>            add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>end <span class="op">=</span> <span class="va">my_theme</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="customising_plots_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="customising_plots_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>To add multiple objects, use a list:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_parts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">hr_geom</span>,</span>
@@ -230,7 +230,7 @@ the plot:</p>
 <span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>            estcolumn <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>            add <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>end <span class="op">=</span> <span class="va">my_parts</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="customising_plots_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="customising_plots_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="adding-aesthetics-and-arguments">Adding aesthetics and arguments<a class="anchor" aria-label="anchor" href="#adding-aesthetics-and-arguments"></a>
@@ -346,7 +346,7 @@ headings:</p>
 <span>            addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>panel.headings <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"size = 4.5"</span>,</span>
 <span>                                             <span class="st">"colour = 'navyblue'"</span>,</span>
 <span>                                             <span class="st">"hjust = 0"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="customising_plots_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="customising_plots_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 <p>Changing the appearance of the line at the ‘null’:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"a) Observational"</span> <span class="op">=</span> <span class="va">my_resultsA</span>,</span>
@@ -355,7 +355,7 @@ headings:</p>
 <span>            row.labels <span class="op">=</span> <span class="va">row_labels</span>,</span>
 <span>            addarg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>nullline <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"linetype = 'dashed'"</span>,</span>
 <span>                                       <span class="st">"colour = 'darkorange'"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="customising_plots_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="75%" style="display: block; margin: auto;"></p>
+<p><img src="customising_plots_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="75%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="replacing-parts-of-the-plot">Replacing parts of the plot<a class="anchor" aria-label="anchor" href="#replacing-parts-of-the-plot"></a>
@@ -528,7 +528,7 @@ column:</p>
 <span></span>
 <span><span class="fu"><a href="../reference/forest_plot.html">forest_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>            data.function <span class="op">=</span> <span class="st">"my_func"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="customising_plots_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="customising_plots_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

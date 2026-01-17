@@ -164,23 +164,24 @@ pane is:
       ckbplotr::geom_text_move(aes(y = row,
                                    x = 2.2,
                                    label = `auto_estcolumn`),
-                               move_x  = unit(0.9, "mm"),
-                               hjust   = 0,
-                               size    = 3.092846,
-                               colour  = "black",
-                               na.rm   = TRUE,
-                               parse   = FALSE) +
+                               move_x     = unit(0.9, "mm"),
+                               hjust      = 0,
+                               size       = 3.092846,
+                               lineheight = 1,
+                               colour     = "black",
+                               na.rm      = TRUE,
+                               parse      = FALSE) +
       ckbplotr::geom_text_move(aes(y     = - 0,
                                    x     = 2.2,
                                    label = title),
-                               move_x  = unit(0.9, "mm"),
-                               hjust    = 0,
-                               vjust    = 0,
-                               size     = 3.092846,
-                               colour   = "black",
-                               fontface = "bold",
+                               move_x     = unit(0.9, "mm"),
+                               hjust      = 0,
+                               vjust      = 0,
+                               size       = 3.092846,
+                               colour     = "black",
+                               fontface   = "bold",
                                lineheight = 1,
-                               parse    = FALSE,
+                               parse      = FALSE,
                                data = \(x) dplyr::tibble(panel = sort(unique(x[["panel"]])),
                                                       title = "HR (95% CI)")) +
       
@@ -188,12 +189,13 @@ pane is:
       ckbplotr::geom_text_move(aes(y = Inf,
                                    x = 1.32665,
                                    label = xlab),
-                               hjust    = 0.5,
-                               size     = 3.092846,
-                               colour   = "black",
-                               vjust    = 1,
-                               move_y   = unit(-7.4228304, "mm"),
-                               fontface = "bold",
+                               hjust      = 0.5,
+                               size       = 3.092846,
+                               lineheight = 1,
+                               colour     = "black",
+                               vjust      = 1,
+                               move_y     = unit(-7.4228304, "mm"),
+                               fontface   = "bold",
                                data = \(x) dplyr::tibble(panel = sort(unique(x[["panel"]])),
                                                       xlab = "HR (95% CI)")) +
       
@@ -202,17 +204,17 @@ pane is:
                       xlim = c(0.8, 2.2)) +
       
       # Set the scale for the x axis [scale.x]
-      scale_x_continuous(trans  = "log",
-                         limits = c(0.8, 2.2),
-                         breaks = c(0.5, 1, 1.5, 2, 2.5),
-                         expand = c(0,0)) +
+      scale_x_continuous(transform  = "log",
+                         limits     = c(0.8, 2.2),
+                         breaks     = c(0.5, 1, 1.5, 2, 2.5),
+                         expand     = c(0,0)) +
       
       # Set the scale for the y axis [scale.y]
-      scale_y_continuous(trans = "reverse",
-                         breaks = attr(datatoplot, "rowlabels")$row,
-                         labels = attr(datatoplot, "rowlabels")$row.label,
-                         limits = c(max(attr(datatoplot, "rowlabels")$row) + 0.7, NA),
-                         expand = c(0,0)) +
+      scale_y_continuous(transform = "reverse",
+                         breaks    = attr(datatoplot, "rowlabels")$row,
+                         labels    = attr(datatoplot, "rowlabels")$row.label,
+                         limits    = c(max(attr(datatoplot, "rowlabels")$row) + 0.7, NA),
+                         expand    = c(0,0)) +
       
       # Control the overall look of the plot [theme]
       theme(text             = element_text(size = 11, colour = "black"),

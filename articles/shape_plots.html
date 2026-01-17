@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ckbplotr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.12.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Shape plots</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.12.2/vignettes/shape_plots.Rmd" class="external-link"><code>vignettes/shape_plots.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/neilstats/ckbplotr/blob/v0.12.3/vignettes/shape_plots.Rmd" class="external-link"><code>vignettes/shape_plots.Rmd</code></a></small>
       <div class="d-none name"><code>shape_plots.Rmd</code></div>
     </div>
 
@@ -114,7 +114,7 @@ names are found automatically).</p>
 <span></span>
 <span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>           col.x <span class="op">=</span> <span class="st">"risk_factor"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>If your estimates and standard errors are on the log scale (e.g. log
 hazard ratios), then set <code>exponentiate</code> to true. This will
 plot exp(estimates) and use a log scale for the axis.</p>
@@ -122,7 +122,7 @@ plot exp(estimates) and use a log scale for the axis.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/shape_plot.html">shape_plot</a></span><span class="op">(</span><span class="va">my_results</span>,</span>
 <span>           col.x        <span class="op">=</span> <span class="st">"risk_factor"</span>,</span>
 <span>           exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>Set axis limits using <code>xlims</code> and <code>ylims</code>, and
 axis titles using <code>xlab</code> and <code>ylab</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -133,7 +133,7 @@ axis titles using <code>xlab</code> and <code>ylab</code>.</p>
 <span>           exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           xlab         <span class="op">=</span> <span class="st">"BMI (kg/m\u00B2)"</span>,</span>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 <p>Setting <code>ylims</code> will also make the function add code to
 show arrows where confidence interval lines exceed the limits.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -144,7 +144,7 @@ show arrows where confidence interval lines exceed the limits.</p>
 <span>           exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           xlab         <span class="op">=</span> <span class="st">"BMI (kg/m\u00B2)"</span>,</span>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="using-groups">Using groups<a class="anchor" aria-label="anchor" href="#using-groups"></a>
@@ -171,7 +171,7 @@ show arrows where confidence interval lines exceed the limits.</p>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span>,</span>
 <span>           col.group    <span class="op">=</span> <span class="st">"group"</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="adding-lines">Adding lines<a class="anchor" aria-label="anchor" href="#adding-lines"></a>
@@ -194,7 +194,7 @@ variance.</li>
 <span>           col.group    <span class="op">=</span> <span class="st">"group"</span>,</span>
 <span>           ciunder      <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           lines        <span class="op">=</span> <span class="st">"lmw"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="categorical-risk-factor">Categorical risk factor<a class="anchor" aria-label="anchor" href="#categorical-risk-factor"></a>
@@ -216,7 +216,7 @@ arguments so that points, intervals and text do not overlap.</p>
 <span>           xlab         <span class="op">=</span> <span class="st">"Smoking"</span>,</span>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span>,</span>
 <span>           exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="scaling-point-size">Scaling point size<a class="anchor" aria-label="anchor" href="#scaling-point-size"></a>
@@ -239,7 +239,7 @@ estimate.</p>
 <span>           xlab         <span class="op">=</span> <span class="st">"BMI (kg/m\u00B2)"</span>,</span>
 <span>           ylab         <span class="op">=</span> <span class="st">"Hazard Ratio (95% CI)"</span>,</span>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="60%" style="display: block; margin: auto;">
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;">
 To have consistent scaling across plots, set <code>minse</code> to the
 same value (it must be smaller than the smallest SE). This will ensure
 the same size scaling is used across the plots.</p>
@@ -275,7 +275,7 @@ final output carefully.</p>
 <span>           scalepoints  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>           pointsize    <span class="op">=</span> <span class="fl">6</span>,</span>
 <span>           height       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="shape_plots_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="60%" style="display: block; margin: auto;"></p>
+<p><img src="shape_plots_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="60%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="customisation">Customisation<a class="anchor" aria-label="anchor" href="#customisation"></a>
