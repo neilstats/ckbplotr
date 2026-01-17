@@ -299,7 +299,7 @@ In RStudio, the ggplot2 code will be shown in the viewer.
 \subsection{Saving forest plots and row labels}{
 
 From version 0.12.0, the row labels in forest plots are drawn using
-\code{marquee::theme_element_marquee} to allow for styling using markdown. When
+\code{marquee::element_marquee} to allow for styling using markdown. When
 saving it is best to use a graphics device that supports 'glyph' features
 (see \url{https://marquee.r-lib.org/reference/marquee_grob.html#rendering}). For
 example \code{pdf()} or the devices supplied by the ragg package, which are used

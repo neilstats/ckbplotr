@@ -141,7 +141,7 @@
 #'
 #' ## Saving forest plots and row labels
 #' From version 0.12.0, the row labels in forest plots are drawn using
-#' `marquee::theme_element_marquee` to allow for styling using markdown. When
+#' `marquee::element_marquee` to allow for styling using markdown. When
 #' saving it is best to use a graphics device that supports 'glyph' features
 #' (see <https://marquee.r-lib.org/reference/marquee_grob.html#rendering>). For
 #' example `pdf()` or the devices supplied by the ragg package, which are used
