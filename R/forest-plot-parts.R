@@ -25,10 +25,10 @@ forest.scale.x <- function(x) {
   make_layer(
     '# Set the scale for the x axis [scale.x]',
     f = "scale_x_continuous",
-    arg = c('trans  = "{x$axis_scale}"',
-            "limits = c({x$xfrom}, {x$xto})",
-            "breaks = {deparse1(x$xticks, collapse = '')}",
-            'expand = c(0,0)')
+    arg = c('transform  = "{x$axis_scale}"',
+            "limits     = c({x$xfrom}, {x$xto})",
+            "breaks     = {deparse1(x$xticks, collapse = '')}",
+            'expand     = c(0,0)')
   )
 }
 
@@ -45,16 +45,16 @@ forest.scale.y <- function(x) {
     '# Set the scale for the y axis [scale.y]',
     f = "scale_y_continuous",
     arg = c(
-      'trans = "reverse"',
+      'transform = "reverse"',
       if (!is.null(x$row.labels.heading)){
-        c('breaks = c({-x$heading.space}, attr(datatoplot, "rowlabels")$row)',
-          'labels = c({quote_string(glue::glue("**{x$row.labels.heading}**"))}, attr(datatoplot, "rowlabels")$row.label)')
+        c('breaks    = c({-x$heading.space}, attr(datatoplot, "rowlabels")$row)',
+          'labels    = c({quote_string(glue::glue("**{x$row.labels.heading}**"))}, attr(datatoplot, "rowlabels")$row.label)')
       } else {
-        c('breaks = attr(datatoplot, "rowlabels")$row',
-          'labels = attr(datatoplot, "rowlabels")$row.label')
+        c('breaks    = attr(datatoplot, "rowlabels")$row',
+          'labels    = attr(datatoplot, "rowlabels")$row.label')
       },
-      'limits = c(max(attr(datatoplot, "rowlabels")$row) + {deparse1(x$bottom.space)}, {if (!is.null(x$row.labels.heading)) -{x$heading.space} else "NA"})',
-      'expand = c(0,0)')
+      'limits    = c(max(attr(datatoplot, "rowlabels")$row) + {deparse1(x$bottom.space)}, {if (!is.null(x$row.labels.heading)) -{x$heading.space} else "NA"})',
+      'expand    = c(0,0)')
   )
 }
 
