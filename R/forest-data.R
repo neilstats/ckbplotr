@@ -283,7 +283,7 @@ forest_data <- function(
   }
 
   # handle row.labels that start with "+"
-  out$row.label <- gsub("^\\+", "&plus;", out$row.label)
+  out$row.label <- gsub("(^|[[:space:]])\\+", "\\1\\\\+", out$row.label)
 
   # create row number and select only needed rows and columns
   out <- out |>
