@@ -1,10 +1,20 @@
+# ckbplotr 0.12.3
+
+* forest_plot() text now uses lineheight = 1 throughout.
+* Moved 'gridtext', 'knitr', and 'rmarkdown' from Imports to Suggests, to reduce required package dependencies.
+* Fixed use of add argument in forest_plot().
+* Fixed y-axis breaks in shape_plot() when there is no transform.
+* Fixed handling row labels starting with '+' in forest_plot().
+* Updated use of scale argument names.
+* Fixed typos.
+
 # ckbplotr 0.12.2
 
-* Fix handling names for addarg and addaes arguments in shape_plot().
+* Fixed handling names for addarg and addaes arguments in shape_plot().
 
 # ckbplotr 0.12.1
 
-* Fix displaying plot code.
+* Fixed displaying plot code.
 
 # ckbplotr 0.12.0
 
