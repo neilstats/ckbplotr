@@ -106,7 +106,29 @@ make_layer <- function(name       = NULL,
 #'
 displaycode <- function(plotcode, note = ""){
 
-  if (!is.null(knitr::opts_knit$get("out.format"))){
+  if (requireNamespace("knitr") &&
+      !is.null(knitr::opts_knit$get("out.format"))){
+    return(NULL)
+  }
+
+  if (!requireNamespace("rmarkdown", quietly = TRUE)) {
+    text <- c("# Generated R code",
+              "# (Install package rmarkdown for code highlighting)",
+              "",
+              paste("#", gsub("<br>$", "", note)),
+              "",
+              plotcode)
+
+    tempmd <- tempfile(fileext = ".R")
+    con <- file(tempmd, open = "w", encoding = "UTF-8")
+    writeLines(
+      text,
+      con = con,
+      sep = "\n")
+    close(con)
+
+    viewer <- getOption("viewer", default = function(url){})
+    viewer(file.path(tempmd))
     return(NULL)
   }
 

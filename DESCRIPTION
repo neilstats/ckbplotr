@@ -23,9 +23,6 @@ Imports:
     grid,
     gridExtra,
     marquee,
-    gridtext (>= 0.1.5),
-    knitr,
-    rmarkdown,
     ragg,
     ggh4x,
     legendry,
@@ -35,8 +32,11 @@ Imports:
 RoxygenNote: 7.3.3
 Roxygen: list(markdown = TRUE)
 Suggests:
+    gridtext (>= 0.1.5),
     ggtext,
     patchwork,
+    rmarkdown,
+    knitr,
     testthat
 VignetteBuilder: knitr
 URL: https://neilstats.github.io/ckbplotr/, https://doi.org/10.5281/zenodo.6382217
